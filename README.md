@@ -10,6 +10,7 @@ Personal_Icon [Category] Summary
 
 # Categories
 * FEAT: 기능 생성 (새로운 기능)
+* UPDATE: 기능 수정 (요구사항 변경 등)
 * FIX: 버그 수정
 * REFACTOR: 리팩토링
 * CHORE: (코드 수정 없는) 설정 변경
