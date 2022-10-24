@@ -4,3 +4,5 @@ Redis 문제점
 - 디스크에 백업 시 성능이 많이 떨어짐
 
 대체 방안 : Couchbase
+
+Minikube Test
