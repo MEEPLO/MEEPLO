@@ -1,1 +1,22 @@
-
+spring:
+  profiles:
+    active: server
+    include: private
+  config:
+    import:
+      - classpath:/application-oauth.yml
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show_sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        format_sql: true
+        enable_lazy_load_no_trans: true
