@@ -37,6 +37,12 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.7.1'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '2.7.2'
+
+	// Log(AOP)
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+
 }
 
 tasks.named('test') {
