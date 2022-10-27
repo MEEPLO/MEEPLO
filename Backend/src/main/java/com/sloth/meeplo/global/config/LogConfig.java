@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class LogConfig {
 
-    @Around("within(com.sloth.meeplo..controller..*)) && @target()") // ex. within(me.shinsunyoung.demo..*)) 1
+    @Around("within(com.sloth.meeplo..controller..*)) && @target()") // 1
     public Object logging(ProceedingJoinPoint pjp) throws Throwable { // 2
 
         String params = getRequestParams(pjp); // request 값 가져오기
@@ -37,7 +37,7 @@ public class LogConfig {
     private String getControllerName(String declaringTypeName){
         return declaringTypeName.split("[.]")[(int)declaringTypeName.chars().filter(c->c=='.').count()];
     }
-    private String getRequestParams(JoinPoint pjp) {
+    private String getRequestParams(JoinPoint pjp) { // 3
 
         CodeSignature signature = (CodeSignature) pjp.getSignature();
         String[] paramsName = signature.getParameterNames();
