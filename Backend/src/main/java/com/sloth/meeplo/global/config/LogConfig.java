@@ -1,6 +1,5 @@
 package com.sloth.meeplo.global.config;
 
-import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -8,13 +7,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -38,14 +31,6 @@ public class LogConfig {
                 pjp.getSignature().getName(), result, endAt - startAt);
 
         return result;
-    }
-
-
-    private String paramMapToString(Map<String, String[]> paramMap) {
-        return paramMap.entrySet().stream()
-                .map(entry -> String.format("%s -> (%s)",
-                        entry.getKey(), Joiner.on(",").join(entry.getValue())))
-                .collect(Collectors.joining(", "));
     }
 
     // Get request values
