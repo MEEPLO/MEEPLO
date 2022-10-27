@@ -29,7 +29,7 @@ public class SwaggerConfig {
                 .produces(getProduceContentTypes())
                 .apiInfo(swaggerInfo()).select()
 //                해당 패키지 내에 있는 restApi들만 swagger에 나온다.
-                .apis(RequestHandlerSelectors.basePackage("com.sloth.meeplo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sloth.meeplo"))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false);
