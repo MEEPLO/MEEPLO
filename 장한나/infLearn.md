@@ -143,6 +143,11 @@ export default App;
 ```
 
 
+```bash
+npm install @react-navigation/bottom-tabs
+```
+
+말 그대로 bottom tabs를 만들어주는 멋진 도구.
 
 
 
