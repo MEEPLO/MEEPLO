@@ -1,24 +1,29 @@
 package com.sloth.meeplo.member.controller;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import com.sloth.meeplo.member.dto.response.MemberResponse;
+import com.sloth.meeplo.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Controller
+@RequiredArgsConstructor
 public class MemberController {
 
-    @GetMapping("/login/oauth")
-    @ResponseBody
-    public String oAuthLoginInfo(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth2UserPrincipal) {
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        System.out.println(attributes);
+    private final MemberService memberService;
 
-        return attributes.toString();
+    /**
+     * @param authorization 카카오에서 발급한 토큰
+     * @return : accessToken, refreshToken, 신규 회원 여부
+     */
+    @GetMapping("/kakao/token")
+    public ResponseEntity<MemberResponse.MemberToken> getAppTokenForKakaoLogin(@RequestHeader("Authorization") String authorization) {
+        MemberResponse.MemberToken memberToken = memberService.getKakaoMemberToken(authorization);
+
+        return new ResponseEntity<>(memberToken, HttpStatus.OK);
     }
+
 }
