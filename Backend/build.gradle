@@ -29,6 +29,8 @@ dependencies {
 //	Swagger
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -39,7 +41,6 @@ dependencies {
 
 	// Log(AOP)
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
-
 
 }
 
