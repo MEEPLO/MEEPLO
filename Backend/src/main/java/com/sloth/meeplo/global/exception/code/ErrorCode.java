@@ -1,8 +1,8 @@
-package com.sloth.meeplo.global.exception.data;
+package com.sloth.meeplo.global.exception.code;
 
 import org.springframework.http.HttpStatus;
 
-public interface ExceptionData {
+public interface ErrorCode {
     String name();
     HttpStatus getHttpStatus();
     String getMessage();
