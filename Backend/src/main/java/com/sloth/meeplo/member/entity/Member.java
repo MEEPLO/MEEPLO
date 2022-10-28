@@ -26,7 +26,7 @@ public class Member extends BaseTimeEntity {
     /**
      * 닉네임
      */
-    private String username;
+    private String username;    // nickname
 
     /**
      * 프로필 사진
@@ -37,7 +37,7 @@ public class Member extends BaseTimeEntity {
      * 로그인 수단
      * ex) kakao
      */
-    private String provider;
+    private String provider;    // enum type
 
     /**
      * 로그인 수단에서의 고유 ID
@@ -48,7 +48,7 @@ public class Member extends BaseTimeEntity {
     /**
      * 탈퇴 여부
      */
-    private boolean isUnactivated;
+    private boolean isUnactivated;  // enum type
 
     @Builder
     public Member(String username, String profilePhoto, String provider, String providerId) {
