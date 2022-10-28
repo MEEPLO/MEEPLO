@@ -27,12 +27,12 @@ public class MemberServiceImpl implements MemberService {
         // 추후 Exception Handling 관련 refactoring 필요
         try {
             if(Pattern.matches("^Bearer .*", authorization)) {
-                System.out.println("Valid Token");
+//                System.out.println("Valid Token");
                 memberInfo = externalAPIRequest.getKakaoMemberInfo(authorization);
                 member = memberRepository.findByProviderAndProviderId(memberInfo.getProvider(), memberInfo.getProviderId()).orElse(null);
             } else {
                 // 토큰이 "Bearer " 로 시작하지 않는 경우 -> Exception?
-                System.out.println("Invalid Token");
+//                System.out.println("Invalid Token");
             }
         } catch(IOException e) {
             e.printStackTrace();

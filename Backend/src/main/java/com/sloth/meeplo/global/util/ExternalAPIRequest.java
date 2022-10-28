@@ -31,6 +31,8 @@ public class ExternalAPIRequest {
             sb.append(line);
         }
 
+        // -----------------분리-----------------
+
         JsonObject response = JsonParser.parseString(sb.toString()).getAsJsonObject();
         JsonObject kakaoAccount = response.get("kakao_account").getAsJsonObject();
         JsonObject profile = kakaoAccount.get("profile").getAsJsonObject();
@@ -41,7 +43,7 @@ public class ExternalAPIRequest {
         return MemberRequest.MemberInfo.builder()
                 .username(nickname)
                 .profilePhoto(profileImageUrl)
-                .provider("kakao")
+                .provider("kakao")      // const
                 .providerId(id)
                 .build();
     }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+// static inner class 지양 * 검색
 public class MemberRequest {
 
     @Getter
