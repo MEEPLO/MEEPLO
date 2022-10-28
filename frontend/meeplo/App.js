@@ -7,7 +7,6 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -18,7 +17,7 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
