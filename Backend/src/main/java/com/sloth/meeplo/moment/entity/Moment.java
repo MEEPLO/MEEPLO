@@ -1,6 +1,7 @@
 package com.sloth.meeplo.moment.entity;
 
 import com.sloth.meeplo.common.BaseTimeEntity;
+import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.type.MomentType;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
@@ -33,10 +34,13 @@ public class Moment extends BaseTimeEntity {
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "MomentReaction",
             joinColumns = @JoinColumn(name="moment_id"),
             inverseJoinColumns = @JoinColumn(name="member_id")
     )
     private List<Member> members = new ArrayList<>();
+
+    @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL)
+    private List<MomentComment> momentComments;
 }
