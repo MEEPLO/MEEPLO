@@ -4,6 +4,7 @@ import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.member.entity.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,13 @@ public class GroupMember {
     @ManyToOne
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
+
+    @Builder
+    public GroupMember(Role role, Group group, Member member){
+        this.group = group;
+        this.member = member;
+        this.role = role;
+        this.status = GroupMemberStatus.ACTIVATED;
+        this.Nickname = member.getUsername();
+    }
 }
