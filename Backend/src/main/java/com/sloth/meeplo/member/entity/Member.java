@@ -17,16 +17,40 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
+    /**
+     * 고유 ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    /**
+     * 닉네임
+     */
+    private String username;    // nickname
 
+    /**
+     * 프로필 사진
+     */
     private String profilePhoto;
 
-    private String provider;
+    /**
+     * 로그인 수단
+     * ex) kakao
+     */
+    private String provider;    // enum type
+
+    /**
+     * 로그인 수단에서의 고유 ID
+     * ex) 2500345456
+     */
     private String providerId;
+
+    /**
+     * 탈퇴 여부
+     */
+    private boolean isUnactivated;  // enum type
+
 
     @OneToMany(mappedBy = "member")
     private List<GroupMember> groupMembers;
@@ -40,7 +64,8 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     private List<Moment> moments;
 
-    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oAuth2Register")
+
+    @Builder
     public Member(String username, String profilePhoto, String provider, String providerId) {
         this.username = username;
         this.profilePhoto = profilePhoto;
