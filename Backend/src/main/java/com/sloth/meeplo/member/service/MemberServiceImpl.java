@@ -1,5 +1,7 @@
 package com.sloth.meeplo.member.service;
 
+import com.sloth.meeplo.global.exception.MeeploException;
+import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.TokenType;
 import com.sloth.meeplo.global.util.ExternalAPIRequest;
 import com.sloth.meeplo.global.util.JwtUtil;
@@ -11,7 +13,6 @@ import com.sloth.meeplo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 @Service
@@ -29,18 +30,11 @@ public class MemberServiceImpl implements MemberService {
         MemberRequest.MemberInfo memberInfo = null;
         Member member = null;
 
-        // 추후 Exception Handling 관련 refactoring 필요
-        try {
-            if(Pattern.matches("^Bearer .*", authorization)) {
-//                System.out.println("Valid Token");
-                memberInfo = externalAPIRequest.getKakaoMemberInfo(authorization);
-                member = memberRepository.findByProviderAndProviderId(memberInfo.getProvider(), memberInfo.getProviderId()).orElse(null);
-            } else {
-                // 토큰이 "Bearer " 로 시작하지 않는 경우 -> Exception?
-//                System.out.println("Invalid Token");
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
+        if(Pattern.matches("^Bearer .*", authorization)) {
+            memberInfo = externalAPIRequest.getKakaoMemberInfo(authorization);
+            member = memberRepository.findByProviderAndProviderId(memberInfo.getProvider(), memberInfo.getProviderId()).orElse(null);
+        } else {
+            throw new MeeploException(CommonErrorCode.WRONG_TOKEN);
         }
 
         boolean isNewMember = false;

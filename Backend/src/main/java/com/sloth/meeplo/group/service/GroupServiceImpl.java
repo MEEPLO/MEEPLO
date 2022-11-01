@@ -37,7 +37,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Long makeGroup(Map<String, Object> token, GroupRequest.GroupInput groupInput) {
         Group group = groupRepository.save(groupInput.toEntity());
-        Member member;
+        Member member = null;
         // TODO: 2022-10-31 jwt token 인식 이후 member데이터 접근 추가
         joinGroup(group, member, Role.LEADER);
         return group.getId();
@@ -47,7 +47,7 @@ public class GroupServiceImpl implements GroupService{
     public void updateGroup(Map<String, Object> token, Long groupId, GroupRequest.GroupInput groupInput) {
         Group group = groupRepository.findById(groupId).
                 orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
-        Member member;
+        Member member = null;
 
 
         if(isGroupLeader(group, member)){
@@ -59,7 +59,7 @@ public class GroupServiceImpl implements GroupService{
     public void deleteGroup(Map<String, Object> token, Long groupId) {
         Group group = groupRepository.findById(groupId).
                 orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
-        Member member;
+        Member member = null;
         if(isGroupLeader(group, member)){
             groupRepository.delete(group);
         }
@@ -67,7 +67,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public List<GroupResponse.JoinedGroupSummary> joinedGroupList(Map<String, Object> token) {
-        Member member;
+        Member member = null;
 
         List<GroupMember> groupMemberList = groupMemberRepository.findByMemberAndStatus(member, GroupMemberStatus.ACTIVATED);
 
