@@ -14,12 +14,16 @@ import java.util.Optional;
 @Repository
 public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> {
 
-    Optional<GroupMember> findByGroupAndMember(Group group, Member member);
+    Optional<GroupMember> findByGroupAndMemberAndStatus(Group group, Member member, GroupMemberStatus groupMemberStatus);
 
     List<GroupMember> findByMemberAndStatus(Member member, GroupMemberStatus groupMemberStatus);
+
+    List<GroupMember> findByGroupAndStatus(Group group, GroupMemberStatus groupMemberStatus);
 
     Integer countByGroupAndStatus(Group group, GroupMemberStatus groupMemberStatus);
 
     Optional<GroupMember> findByGroupAndRoleAndStatus(Group group, Role role, GroupMemberStatus groupMemberStatus);
+
+    Optional<GroupMember> findByGroupAndMember(Group group, Member member);
 
 }
