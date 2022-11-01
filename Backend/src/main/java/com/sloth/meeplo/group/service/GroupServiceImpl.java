@@ -38,7 +38,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Long makeGroup(String authorization, GroupRequest.GroupInput groupInput) {
         Group group = groupRepository.save(groupInput.toEntity());
-        Member member;
+        Member member = null;
         // TODO: 2022-10-31 jwt token 인식 이후 member데이터 접근 추가
         joinGroup(group, member, Role.LEADER);
         return group.getId();

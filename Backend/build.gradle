@@ -21,11 +21,12 @@ repositories {
 dependencies {
 	// jwt
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
 	// springboot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-	//	Swagger
+	//Swagger
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 
 	// spring security
@@ -38,7 +39,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	//JDBC
+	// JDBC
 	runtimeOnly 'mysql:mysql-connector-java'
 
 	// Log(AOP)
@@ -47,6 +48,9 @@ dependencies {
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// Redis
+	compileOnly 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
