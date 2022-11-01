@@ -39,3 +39,6 @@ out/
 
 ### application- ** .yml
 application-*.yml
+
+### commit template ###
+/.gitmessage.txt

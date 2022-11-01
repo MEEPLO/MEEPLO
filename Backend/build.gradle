@@ -19,21 +19,38 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// jwt
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'com.google.code.gson:gson'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// springboot
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	//Swagger
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
+	// spring security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// json
+	implementation 'com.google.code.gson:gson'
+
+	// lombok
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// JDBC
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	// Log(AOP)
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// Redis
+	compileOnly 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
