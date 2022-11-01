@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,31 +19,52 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping
-    public ResponseEntity<Long> createGroup(@RequestHeader Map<String, Object> token, @RequestBody GroupRequest.GroupInput groupInput){
-        Long groupId = groupService.makeGroup(token, groupInput);
-
-        return new ResponseEntity<>(groupId, HttpStatus.OK);
+    public ResponseEntity<Map<String, Long>> createGroup(@RequestHeader("Authorization") String authorization, @RequestBody GroupRequest.GroupInput groupInput){
+        Map<String, Long> resultMap = new HashMap<>();
+        Long groupId = groupService.makeGroup(authorization, groupInput);
+        resultMap.put("groupId", groupId);
+        return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
 
     @PutMapping("/{groupId}")
-    public ResponseEntity<Void> updateGroup(@RequestHeader Map<String, Object> token, @PathVariable Long groupId, @RequestBody GroupRequest.GroupInput groupInput){
+    public ResponseEntity<Void> updateGroup(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId, @RequestBody GroupRequest.GroupInput groupInput){
 
-        groupService.updateGroup(token,groupId,groupInput);
+        groupService.updateGroup(authorization,groupId,groupInput);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{groupId}")
-    public ResponseEntity<Void> deleteGroup(@RequestHeader Map<String, Object> token, @PathVariable Long groupId){
-        groupService.deleteGroup(token,groupId);
+    public ResponseEntity<Void> deleteGroup(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        groupService.deleteGroup(authorization,groupId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, String>> getGroupList(@RequestHeader Map<String, Object> token){
-        Map<String, String> resultMap = new HashMap<>();
+    public ResponseEntity<Map<String, List>> getGroupList(@RequestHeader("Authorization") String authorization){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("group", groupService.joinedGroupList(authorization));
+        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/{groupId}")
+    public ResponseEntity<Map<String, Object>> getGroupDetail(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("group", groupService.getJoinedGroupDetail(authorization,groupId));
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
 
 
-        return new ResponseEntity<Map<String, String>>(resultMap, HttpStatus.OK);
+    @GetMapping("/{groupId/member}")
+    public ResponseEntity<Map<String, List>> getGroupMembers(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("members", groupService.getGroupMembers(authorization,groupId));
+        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{groupId}/member")
+    public ResponseEntity<Void> exitGroupMember(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        groupService.exitGroupMember(authorization,groupId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
