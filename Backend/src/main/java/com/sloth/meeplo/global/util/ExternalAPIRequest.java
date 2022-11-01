@@ -2,6 +2,8 @@ package com.sloth.meeplo.global.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sloth.meeplo.global.exception.MeeploException;
+import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.member.dto.request.MemberRequest;
 import org.springframework.stereotype.Component;
 
@@ -14,36 +16,53 @@ import java.net.URL;
 @Component
 public class ExternalAPIRequest {
 
-    public MemberRequest.MemberInfo getKakaoMemberInfo(String token) throws IOException {
-        URL url = new URL("https://kapi.kakao.com/v2/user/me");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Authorization", token);
+    public String getHttpResponse(URL url, String token) {
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", token);
 
-        // log 관련 처리
+            // log 관련 처리
 //        int responseCode = conn.getResponseCode();
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb = new StringBuilder();
 
-        String line = null;
-        while((line = br.readLine()) != null) {
-            sb.append(line);
+            String line = null;
+            while((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            return sb.toString();
+        } catch(IOException e) {
+            throw new MeeploException(CommonErrorCode.HTTP_RESPONSE_ERROR);
+        }
+    }
+
+    public MemberRequest.MemberInfo getKakaoMemberInfo(String token) {
+        URL url;
+
+        try {
+            url = new URL("https://kapi.kakao.com/v2/user/me");
+        } catch(IOException e) {
+            throw new MeeploException(CommonErrorCode.WRONG_URL);
         }
 
-        // -----------------분리-----------------
+        String response = getHttpResponse(url, token);
 
-        JsonObject response = JsonParser.parseString(sb.toString()).getAsJsonObject();
-        JsonObject kakaoAccount = response.get("kakao_account").getAsJsonObject();
+        JsonObject fullResponse = JsonParser.parseString(response).getAsJsonObject();
+        JsonObject kakaoAccount = fullResponse.get("kakao_account").getAsJsonObject();
         JsonObject profile = kakaoAccount.get("profile").getAsJsonObject();
-        String id = response.get("id").toString();
+
+        String id = fullResponse.get("id").toString();
         String nickname = profile.get("nickname").toString().replaceAll("\"","");
         String profileImageUrl = profile.get(("profile_image_url")).toString().replaceAll("\"", "");
+        final String provider = "kakao";
 
         return MemberRequest.MemberInfo.builder()
                 .username(nickname)
                 .profilePhoto(profileImageUrl)
-                .provider("kakao")      // const
+                .provider(provider)
                 .providerId(id)
                 .build();
     }
