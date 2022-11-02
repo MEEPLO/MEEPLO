@@ -24,6 +24,12 @@ public class MemberServiceImpl implements MemberService {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
 
+
+    @Override
+    public Member getMemberById(long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new MeeploException(CommonErrorCode.MEMBER_NOT_FOUND));
+    }
+
     @Override
     public MemberResponse.MemberToken getKakaoMemberToken(String authorization) {
 
