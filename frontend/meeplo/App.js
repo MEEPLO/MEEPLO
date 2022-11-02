@@ -1,27 +1,20 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, Text, useColorScheme, View } from 'react-native';
 import { Provider } from 'react-redux';
+import { StatusBar } from 'react-native';
 import { store } from './src/redux/store';
-
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { ThemeProvider } from 'styled-components';
 import HeaderTitle from './src/components/header/HeaderTitle';
 import HeaderRight from './src/components/header/HeaderRight';
-
-import Home from './src/screens/Home';
-import Details from './src/screens/Details';
+import HomeScreen from './src/screens/HomeScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import SplashScreen from './src/screens/SplashScreen';
+import { theme } from './src/assets/constant/DesignTheme';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   const headerSytle = {
     headerStyle: {
       backgroundColor: '#fff',
@@ -36,20 +29,19 @@ const App = () => {
   return (
     <NavigationContainer>
       <Provider store={store}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <Stack.Navigator
-          initialRouteName="home"
-          screenOptions={{
-            ...headerSytle,
-            headerTitle: () => <HeaderTitle />,
-            headerRight: () => <HeaderRight />,
-          }}>
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="Details" component={Details} />
-        </Stack.Navigator>
+        <ThemeProvider theme={theme}>
+          <Stack.Navigator
+            initialRouteName="Splash"
+            screenOptions={{
+              ...headerSytle,
+              headerTitle: () => <HeaderTitle />,
+              headerRight: () => <HeaderRight />,
+            }}>
+            <Stack.Screen options={{ headerShown: false }} name="Splash" component={SplashScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+          </Stack.Navigator>
+        </ThemeProvider>
       </Provider>
     </NavigationContainer>
   );
