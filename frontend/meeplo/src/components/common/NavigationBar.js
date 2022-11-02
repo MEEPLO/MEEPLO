@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 
 const NavigationBar = () => {
-  return <View></View>;
+  return <></>;
 };
 
 export default NavigationBar;
