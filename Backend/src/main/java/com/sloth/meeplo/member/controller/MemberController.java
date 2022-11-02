@@ -1,17 +1,16 @@
 package com.sloth.meeplo.member.controller;
 
-import com.sloth.meeplo.global.util.JwtUtil;
+import com.sloth.meeplo.member.dto.request.MemberRequest;
 import com.sloth.meeplo.member.dto.response.MemberResponse;
-import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-    private final JwtUtil jwtUtil;
 
     /**
      * @param authorization 카카오에서 발급한 토큰
@@ -35,6 +33,44 @@ public class MemberController {
         MemberResponse.MemberToken memberToken = memberService.getKakaoMemberToken(authorization);
 
         return new ResponseEntity<>(memberToken, HttpStatus.OK);
+    }
+
+    @GetMapping("/member")
+    public ResponseEntity<Map<String, Object>> getMemberDetail(@RequestHeader("Authorization") String authorization){
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("memberDetail", memberService.getMemberDetail(authorization));
+        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    }
+
+    @PutMapping("/member")
+    public ResponseEntity<Void> updateMemberInfo(@RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberUpdateInfo memberUpdateInfo){
+        memberService.updateMemberInfo(authorization,memberUpdateInfo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/member")
+    public ResponseEntity<Void> quitMember(@RequestHeader("Authorization") String authorization){
+        memberService.quitMember(authorization);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/member/location")
+    public ResponseEntity<Map<String, List>> getMemberStartLocations(@RequestHeader("Authorization") String authorization){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("startLocations", memberService.getMemberStartLocations(authorization));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/member/location")
+    public ResponseEntity<Void> addMemberStartLocation(@RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberLocationAddInfo memberLocationAddInfo){
+        memberService.addMemberStartLocation(authorization,memberLocationAddInfo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/member/location/{id}")
+    public ResponseEntity<Void> deleteMemberStartLocation(@RequestHeader("Authorization") String authorization, @PathVariable Long id){
+        memberService.deleteMemberStartLocation(authorization,id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

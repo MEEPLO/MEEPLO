@@ -20,6 +20,7 @@ public class GroupController {
 
     @PostMapping
     public ResponseEntity<Map<String, Long>> createGroup(@RequestHeader("Authorization") String authorization, @RequestBody GroupRequest.GroupInput groupInput){
+        authorization = authorization.replaceFirst("Bearer ", "");
         Map<String, Long> resultMap = new HashMap<>();
         Long groupId = groupService.makeGroup(authorization, groupInput);
         resultMap.put("groupId", groupId);

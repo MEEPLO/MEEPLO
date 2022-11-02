@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,18 +29,10 @@ public class WebSecurityConfig {
                 .antMatchers("/meeplo/api/v1/auth/**").permitAll()
                 .antMatchers("/error").permitAll()
                 .antMatchers("/meeplo/api/v1/**").authenticated()
-//                .anyRequest().authenticated()
-//                .anyRequest().permitAll()
-//        ;
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        log.info(authenticationConfiguration.toString());
-        return authenticationConfiguration.getAuthenticationManager();
     }
 }

@@ -28,8 +28,14 @@ public class Location extends GeoDataEntity {
     @Column(length = 13)
     private String phoneNumber;
 
+    @Column(length = 10000)
+    private String description;
+
     @OneToMany(mappedBy = "location")
     private List<LocationPhoto> locationPhotos;
+
+    @OneToMany(mappedBy = "location")
+    private List<LocationTime> locationTimes;
 
     @OneToMany(mappedBy = "location")
     private List<LocationKeyword> locationKeywords;

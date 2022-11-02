@@ -13,6 +13,7 @@ import com.sloth.meeplo.group.repository.GroupRepository;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.repository.MemberRepository;
+import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,8 @@ public class GroupServiceImpl implements GroupService{
     private final GroupMemberRepository groupMemberRepository;
     private final ScheduleRepository scheduleRepository;
 
+    private final MemberService memberService;
+
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
 
@@ -42,7 +45,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Long makeGroup(String authorization, GroupRequest.GroupInput groupInput) {
         Group group = groupRepository.save(groupInput.toEntity());
-        Member member = null;
+        Member member = memberService.getMemberByAuthorization(authorization);
         joinGroup(group, member, Role.LEADER);
         return group.getId();
     }
@@ -50,7 +53,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public void updateGroup(String authorization, Long groupId, GroupRequest.GroupInput groupInput) {
         Group group = getGroupEntityByGroupId(groupId);
-        Member member = getMemberByAuthorization(authorization);
+        Member member = memberService.getMemberByAuthorization(authorization);
 // TODO: 2022-11-01 ID만 바꿔서 가능한지 확인필요
         if(isGroupLeader(group, member)){
             group = groupInput.toEntity();
@@ -62,7 +65,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public void deleteGroup(String authorization, Long groupId) {
         Group group = getGroupEntityByGroupId(groupId);
-        Member member = getMemberByAuthorization(authorization);
+        Member member = memberService.getMemberByAuthorization(authorization);
         if(isGroupLeader(group, member)){
             groupRepository.delete(group);
         }
@@ -70,7 +73,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public List<GroupResponse.JoinedGroupSummary> joinedGroupList(String authorization) {
-        Member member = getMemberByAuthorization(authorization);
+        Member member = memberService.getMemberByAuthorization(authorization);
 
         List<GroupMember> groupMemberList = groupMemberRepository.findByMemberAndStatus(member, GroupMemberStatus.ACTIVATED);
 
@@ -136,7 +139,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public void exitGroupMember(String authorization, Long groupId) {
-        Member member = getMemberByAuthorization(authorization);
+        Member member = memberService.getMemberByAuthorization(authorization);
         Group group = getGroupEntityByGroupId(groupId);
         GroupMember groupMember= groupMemberRepository.findByGroupAndMember(group, member)
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
@@ -145,12 +148,6 @@ public class GroupServiceImpl implements GroupService{
 
     private Group getGroupEntityByGroupId(Long groupId){
         return groupRepository.findById(groupId)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
-    }
-
-    private Member getMemberByAuthorization(String authorization){
-
-        return memberRepository.findById(jwtUtil.getUserIdFromToken(authorization))
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
     }
 
