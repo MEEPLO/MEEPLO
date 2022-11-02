@@ -34,4 +34,14 @@ public class MemberRequest {
                     .build();
         }
     }
+
+    @Getter
+    @ToString
+    @Builder
+    public static class MemberUpdateInfo{
+        private String nickname;
+        private String profilePhoto;
+
+    }
+
 }
