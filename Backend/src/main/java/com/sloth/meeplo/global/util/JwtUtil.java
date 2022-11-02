@@ -57,6 +57,7 @@ public class JwtUtil {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch(Exception e) {
+            e.printStackTrace();
             throw new MeeploException(CommonErrorCode.WRONG_TOKEN);
         }
     }

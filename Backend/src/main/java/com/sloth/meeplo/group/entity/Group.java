@@ -30,6 +30,10 @@ public class Group extends BaseTimeEntity {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupMember> groupMembers;
 
+    public void updateGroupId(Long id) {
+        this.id = id;
+    }
+
     @Builder
     public Group(String name, String description, String groupPhoto){
         this.name = name;

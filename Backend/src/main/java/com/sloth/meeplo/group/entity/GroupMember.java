@@ -33,6 +33,14 @@ public class GroupMember {
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
+    public void activateMember() {
+        this.status = GroupMemberStatus.ACTIVATED;
+    }
+
+    public void unactivateMember() {
+        this.status = GroupMemberStatus.UNACTIVATED;
+    }
+
     @Builder
     public GroupMember(Role role, Group group, Member member){
         this.group = group;
