@@ -1,111 +1,76 @@
-import React from 'react';
+import { useState } from 'react';
 import {View, Text, Pressable, Button, Image} from 'react-native';
 import {WebView} from 'react-native-webview';
-import {launchImageLibrary} from 'react-native-image-picker';
 import styled from 'styled-components';
-import {PermissionsAndroid} from 'react-native';
+import mergeAndUpload from './mergeAndUpload';
+import AWS from 'aws-sdk';
 
 // npm install react-native-webview --legacy-peer-deps
+// npm i react-native-dotenv --legacy-peer-deps
+// yarn add aws-sdk
 
-const maxLength = {
-  1: 1,
-  2: 2,
-  3: 4,
-}
+const getImageTitle = date => {
+  let year = date.getFullYear().toString().substring(2);
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let second = date.getSeconds();
 
-const html = `
-<div class="upload-control">
-<div class="gallary">
-  사진 추가하기
-  <input
-  type="file"
-  accept="image/jpeg, image/jpg, image/png"
-  multiple
-  id="review-upload-input"
-  >
-</div>
-<div id="download" onclick="getImage()">
-  저장하기
-</div>
-<div class="reset" onclick="resetGallery()">
-  다시하기
-</div>
-</div>
-<div class="canvas-container">
-<canvas id="my-canvas" width="360" height="1300" style="background-color: #000;"></canvas>
-</div>
+  month = month >= 10 ? month : '0' + month;
+  day = day >= 10 ? day : '0' + day;
+  hour = hour >= 10 ? hour : '0' + hour;
+  minute = minute >= 10 ? minute : '0' + minute;
+  second = second >= 10 ? second : '0' + second;
 
-<script>
-const getContext = () => document.getElementById('my-canvas').getContext('2d');
-
-const mergePics = (event, index) => {
-  const pic = event.target.files[index]
-  var reader = new FileReader()
-  reader.readAsDataURL(pic);
-  
-  reader.onload = function (e) {
-    var image = new Image();
-    image.src = e.target.result;
-
-    image.onload = function() {
-      originalWidth = this.width
-      originalHeight = this.height
-
-      var picW = 0
-      var picH = 0
-
-      if (originalWidth * 0.75 < originalHeight) {
-        picW = originalWidth
-        picH = originalWidth * 0.75
-      } else {
-        picW = originalHeight * 1.30
-        picH = originalHeight
-      }
-      const picX = (originalWidth - picW) / 2
-      const picY = (originalHeight - picH) / 2
-
-      const resultX = 20
-      const resultY = index * (240 + 20) + 20
-      document.getElementById('my-canvas').getContext('2d').drawImage(image, picX, picY, picW, picH, resultX, resultY, 320, 240)
-    }
-  }
-}
-
-const picInput = document.getElementById('review-upload-input')
-
-picInput.addEventListener('change', (event) => {
-  if (event.target.files.length > ${maxLength[3]}) {
-    alert("사진은 최대 ${maxLength[3]}개까지 첨부가 가능합니다.")
-  } else if (event.target.files.length < ${maxLength[3]}) {
-    alert("사진 ${maxLength[3]}개를 선택해주세요!")
-  } else if (event.target.files.length == ${maxLength[3]}) {
-    for (let index = 0; index < event.target.files.length; index++) {
-      mergePics(event, index)
-    }
-  }
-});
-
-const resetGallery = () => {
-  document.getElementById("my-canvas").remove()
-  var canvas = document.createElement("canvas")
-  canvas.id = "my-canvas"
-  canvas.setAttribute("width", "360")
-  canvas.setAttribute("height", "1300")
-  canvas.setAttribute("style", "background-color: #000;")
-
-  var container = document.querySelector(".canvas-container")
-  container.appendChild(canvas)
-}
-
-</script>
-`;
+  return 'ourMoment' + year + month + day + hour + minute + second + '.jpg';
+};
 
 
 const MomentsCreate = () => {
 
+  const uploadToS3 = (dataString) => {
+    let now = new Date();
+    const imageTitle = getImageTitle(now);
+
+    const data = JSON.parse(dataString);
+    var blobData = new Blob([data], {type: 'image/jpg'});
+
+    AWS.config.update({
+      region: bucketRegion,
+      credentials: new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: IdentityPoolId
+      })
+    });
+
+    var s3 = new AWS.S3({
+      apiVersion: '2006-03-01',
+      params: {Bucket: albumBucketName}
+    });
+
+    var params = {
+      Key: imageTitle,
+      ContentType: 'image/jpg',
+      Body: blobData,
+    };
+
+    console.log(s3)
+    s3.upload(params, function (err, data) {
+      if (err) {
+        return alert(err.stack);
+      }
+      alert('Successfully uploaded photo.');
+      console.log(data.Location);
+    });
+  };
+
+  function onMessage(event) {
+    uploadToS3(event.nativeEvent.data);
+  }
+
   return (
-    <View style={{ height: 550 }}>
-      <WebView source={{ html: html }} />
+    <View style={{height: 550}}>
+      <WebView source={{html: mergeAndUpload}} onMessage={onMessage} />
     </View>
   );
 };
