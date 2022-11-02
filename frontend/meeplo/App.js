@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   SafeAreaView,
@@ -19,6 +11,8 @@ import {store} from './src/redux/store';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
+import {NavigationContainer} from '@react-navigation/native';
+
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -27,17 +21,19 @@ const App = () => {
   };
 
   return (
-    <Provider store={store}>
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <View style={backgroundStyle}>
-          <Text>Hello Meeplo app!</Text>
-        </View>
-      </SafeAreaView>
-    </Provider>
+    <NavigationContainer>
+      <Provider store={store}>
+        <SafeAreaView style={backgroundStyle}>
+          <StatusBar
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor={backgroundStyle.backgroundColor}
+          />
+          <View style={backgroundStyle}>
+            <Text>Hello Meeplo app!</Text>
+          </View>
+        </SafeAreaView>
+      </Provider>
+    </NavigationContainer>
   );
 };
 
