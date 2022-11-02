@@ -2,7 +2,9 @@ package com.sloth.meeplo.member.entity;
 
 import com.sloth.meeplo.common.GeoDataEntity;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.member.dto.request.MemberRequest;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +25,14 @@ public class MemberLocation extends GeoDataEntity {
     @ManyToOne
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
+
+    @Builder
+    public MemberLocation(MemberRequest.MemberLocationAddInfo memberLocationAddInfo, Member member){
+        this.member = member;
+        this.name = memberLocationAddInfo.getName();
+        this.address= memberLocationAddInfo.getAddress();
+        this.lat = memberLocationAddInfo.getLat();
+        this.lng = memberLocationAddInfo.getLng();
+
+    }
 }

@@ -56,10 +56,10 @@ public class MemberController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
-    // TODO: 2022-11-02 사용자 출발지 생성
-//    @PostMapping("/member/location")
-//    public ResponseEntity<Void> addMemberStartLocation(@RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberUpdateInfo memberUpdateInfo){
-//
-//    }
-    
+    @PostMapping("/member/location")
+    public ResponseEntity<Void> addMemberStartLocation(@RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberLocationAddInfo memberLocationAddInfo){
+        memberService.addMemberStartLocation(authorization,memberLocationAddInfo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

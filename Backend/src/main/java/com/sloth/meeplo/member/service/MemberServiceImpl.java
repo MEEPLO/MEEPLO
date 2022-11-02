@@ -9,6 +9,7 @@ import com.sloth.meeplo.global.util.RedisUtil;
 import com.sloth.meeplo.member.dto.request.MemberRequest;
 import com.sloth.meeplo.member.dto.response.MemberResponse;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.member.entity.MemberLocation;
 import com.sloth.meeplo.member.repository.MemberLocationRepository;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -103,5 +104,15 @@ public class MemberServiceImpl implements MemberService {
     public Member getMemberByAuthorization(String authorization){
         return memberRepository.findById(jwtUtil.getUserIdFromToken(authorization))
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+    }
+
+    @Override
+    public void addMemberStartLocation(String authorization, MemberRequest.MemberLocationAddInfo memberLocationAddInfo) {
+        Member member = getMemberByAuthorization(authorization);
+        memberLocationRepository.save(MemberLocation.builder()
+                .memberLocationAddInfo(memberLocationAddInfo)
+                .member(member)
+                .build()
+        );
     }
 }

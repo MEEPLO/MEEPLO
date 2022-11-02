@@ -44,4 +44,14 @@ public class MemberRequest {
 
     }
 
+    @Getter
+    @ToString
+    @Builder
+    public static class MemberLocationAddInfo{
+        private String name;
+        private String address;
+        private Double lat;
+        private Double lng;
+    }
+
 }

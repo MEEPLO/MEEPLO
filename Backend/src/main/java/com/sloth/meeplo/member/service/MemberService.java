@@ -21,4 +21,6 @@ public interface MemberService {
     List<MemberResponse.MemberDetailStartLocation> getMemberStartLocations(String authorization);
 
     Member getMemberByAuthorization(String authorization);
+
+    void addMemberStartLocation(String authorization, MemberRequest.MemberLocationAddInfo memberLocationAddInfo);
 }
