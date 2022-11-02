@@ -6,7 +6,6 @@ import com.sloth.meeplo.global.util.JwtUtil;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -34,7 +33,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(!customFilterUrl.matches((HttpServletRequest) request)) {
 //        if(!((HttpServletRequest)request).getServletPath().startsWith("/meeplo/api/v1/auth/")) {
-            logger.info("in doFilter()");
             String token = jwtUtil.resolveToken((HttpServletRequest) request);
 
             if(token == null || !jwtUtil.validateToken(token)) {
@@ -43,12 +41,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
             Member member = memberService.getMemberById(jwtUtil.getUserIdFromToken(token));
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member, null, member.getAuthority());
-//            authenticationToken.setAuthenticated(true);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
-        logger.info("out of doFilter()");
-        logger.info("response -> " + response);
+//        logger.info("response -> " + response);
         chain.doFilter(request, response);
     }
 }

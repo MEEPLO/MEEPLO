@@ -13,11 +13,11 @@ import javax.persistence.MappedSuperclass;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class GeoDataEntity {
 
-    private Double lat;
+    protected Double lat;
 
-    private Double lng;
+    protected Double lng;
 
     @Column(length = 200)
-    private String address;
+    protected String address;
 
 }

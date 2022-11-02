@@ -71,6 +71,22 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     private List<Moment> moments;
 
+    public void updateProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public void updateUsername(String username) {
+        this.username = username;
+    }
+
+    public void unactivated() {
+        isUnactivated = true;
+    }
+
+    public void activated() {
+        isUnactivated = false;
+    }
+
 
     @Builder
     public Member(String username, String profilePhoto, String provider, String providerId) {
