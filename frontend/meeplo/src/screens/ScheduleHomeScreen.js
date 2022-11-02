@@ -26,6 +26,9 @@ const ScheduleHomeScreen = () => {
       <View style={{ borderWidth: 4, borderColor: 'black' }}>
         <Calendar
           {...config.calendar.meeploCalendarParam}
+          theme={{
+            ...config.calendar.meeploCalendarParamTheme,
+          }}
           onDayPress={day => console.log(day)}
           onDayLongPress={day => console.log('long', day)}
         />
