@@ -4,6 +4,7 @@ import com.sloth.meeplo.common.GeoDataEntity;
 import com.sloth.meeplo.location.type.LocationType;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +28,14 @@ public class Location extends GeoDataEntity {
     @Column(length = 13)
     private String phoneNumber;
 
+    @Column(length = 10000)
+    private String description;
+
     @OneToMany(mappedBy = "location")
     private List<LocationPhoto> locationPhotos;
+
+    @OneToMany(mappedBy = "location")
+    private List<LocationTime> locationTimes;
 
     @OneToMany(mappedBy = "location")
     private List<LocationKeyword> locationKeywords;
@@ -42,6 +49,10 @@ public class Location extends GeoDataEntity {
     @OneToOne(mappedBy = "location")
     private Schedule schedule;
 
+    @Builder
+    Location(String name){
+        this.name = name;
+    }
 
 
 }

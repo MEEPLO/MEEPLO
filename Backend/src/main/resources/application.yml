@@ -1,4 +1,4 @@
 spring:
   profiles:
-    active: server
-    include: private
+    active: private
+    include: server

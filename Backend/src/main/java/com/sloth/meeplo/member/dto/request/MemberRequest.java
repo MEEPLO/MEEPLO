@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-// static inner class 지양 * 검색
 public class MemberRequest {
 
     @Getter
@@ -34,4 +33,24 @@ public class MemberRequest {
                     .build();
         }
     }
+
+    @Getter
+    @ToString
+    @Builder
+    public static class MemberUpdateInfo{
+        private String nickname;
+        private String profilePhoto;
+
+    }
+
+    @Getter
+    @ToString
+    @Builder
+    public static class MemberLocationAddInfo{
+        private String name;
+        private String address;
+        private Double lat;
+        private Double lng;
+    }
+
 }
