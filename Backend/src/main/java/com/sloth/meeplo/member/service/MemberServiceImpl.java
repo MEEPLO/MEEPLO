@@ -115,4 +115,14 @@ public class MemberServiceImpl implements MemberService {
                 .build()
         );
     }
+
+    @Override
+    public void deleteMemberStartLocation(String authorization, Long id) {
+        Member member = getMemberByAuthorization(authorization);
+        if(memberLocationRepository.findById(id)
+                .orElseThrow(()-> new MeeploException(CommonErrorCode.UNAUTHORIZED))
+                .getMember().equals(member)){
+            memberLocationRepository.deleteById(id);
+        }
+    }
 }

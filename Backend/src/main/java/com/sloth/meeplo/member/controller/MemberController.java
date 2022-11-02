@@ -62,4 +62,10 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/member/location/{id}")
+    public ResponseEntity<Void> deleteMemberStartLocation(@RequestHeader("Authorization") String authorization, @PathVariable Long id){
+        memberService.deleteMemberStartLocation(authorization,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
