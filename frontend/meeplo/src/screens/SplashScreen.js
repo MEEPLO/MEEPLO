@@ -22,10 +22,11 @@ const SplashScreen = ({ navigation }) => {
   // TODO: login 된 사용자면 바로 Home으로 넘김
   // TODO: login 되지 않은 사용자면 LoginScreen으로 넘김
   useEffect(() => {
-    const getIsLogin = () => {
-      // if ((await AsyncStorage.getItem('accessToken')) !== null) {
-      setIsLogin(true);
-      // }
+    const getIsLogin = async () => {
+      if ((await AsyncStorage.getItem('accessToken')) !== null) {
+        console.log('로그인된 사용자!');
+        setIsLogin(true);
+      }
     };
     getIsLogin();
 

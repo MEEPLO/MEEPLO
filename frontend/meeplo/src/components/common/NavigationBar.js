@@ -1,9 +1,97 @@
 import React from 'react';
-import { View } from 'react-native';
-import styled from 'styled-components';
+import { View, Text } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHouseChimney } from '@fortawesome/free-solid-svg-icons/faHouseChimney';
+import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons/faCalendarDays';
+import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
+import HomeStackScreen from '../../screens/HomeStackScreen';
+import GroupHomeScreen from '../../screens/GroupHomeScreen';
+import GroupStackScreen from '../../screens/GroupStackScreen';
+import MemoryStackScreen from '../../screens/MemoryStackScreen';
+import HomeScreen from '../../screens/HomeScreen';
+import { theme } from '../../assets/constant/DesignTheme';
+import AddButonTabBar from './AddButonTabBar';
+
+const Tab = createBottomTabNavigator();
 
 const NavigationBar = () => {
-  return <></>;
+  return (
+    <Tab.Navigator
+      initialRouteName="HomeStack"
+      screenOptions={{
+        tabBarStyle: {
+          position: 'absolute',
+          paddingBottom: 10,
+          elevation: 0,
+          backgroundColor: '#ffffff',
+          height: 70,
+        },
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: theme.color.disabled,
+        tabBarShowLabel: false,
+      }}>
+      <Tab.Screen
+        name="HomeStack"
+        component={HomeStackScreen}
+        options={{
+          // tabBarShowLabel: false,
+          tabBarLabel: '홈',
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faHouseChimney} color={color} size={size} />
+              <Text style={{ color }}>홈</Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="GroupHome"
+        component={GroupHomeScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faUsers} color={color} size={size} />
+              <Text style={{ color }}>그룹</Text>
+            </View>
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Add"
+        component={HomeScreen}
+        options={{
+          tabBarButton: props => <AddButonTabBar {...props} />,
+        }}
+      />
+      <Tab.Screen
+        name="TestOne"
+        component={GroupStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faCalendarDays} color={color} size={size} />
+              <Text style={{ color }}>약속</Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="TestTwo"
+        component={MemoryStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faCameraRetro} color={color} size={size} />
+              <Text style={{ color }}>추억</Text>
+            </View>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
 };
 
 export default NavigationBar;
