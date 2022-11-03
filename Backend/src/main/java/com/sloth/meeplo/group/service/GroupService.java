@@ -23,4 +23,6 @@ public interface GroupService {
     List<GroupResponse.GroupDetailMember> getGroupMembers (String authorization,  Long groupId);
 
     void exitGroupMember(String authorization, Long groupId);
+
+    void joinToGroup(String authorization, Long groupId);
 }
