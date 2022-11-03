@@ -92,7 +92,7 @@ public class GroupServiceImpl implements GroupService{
             String leaderName = groupMemberRepository.findByGroupAndRoleAndStatus(groupMember.getGroup(), Role.LEADER, GroupMemberStatus.ACTIVATED)
                     .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)).getNickname();
             LocalDateTime lastSchedule = scheduleRepository.findFirstByGroupOrderByIdDesc(groupMember.getGroup())
-                    .orElse(Schedule.builder()
+                    .orElse(Schedule.EmptyBuilder()
                             .date(LocalDateTime.of(date,time))
                             .build())
                     .getDate();
