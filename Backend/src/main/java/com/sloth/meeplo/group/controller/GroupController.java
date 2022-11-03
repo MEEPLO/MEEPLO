@@ -73,4 +73,10 @@ public class GroupController {
         groupService.joinToGroup(authorization, groupId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("{groupId}/member/{memberId}")
+    public ResponseEntity<Void> kickGroupMember(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId, @PathVariable Long memberId){
+        groupService.kickGroupMember(authorization,groupId, memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
