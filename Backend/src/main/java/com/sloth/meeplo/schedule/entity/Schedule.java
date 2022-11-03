@@ -3,6 +3,7 @@ package com.sloth.meeplo.schedule.entity;
 import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,8 +40,13 @@ public class Schedule extends BaseTimeEntity {
     @OneToMany(mappedBy = "schedule")
     private List<ScheduleLocation> scheduleLocations;
 
-    @Builder
+    @Builder(builderMethodName = "EmptyBuilder")
     Schedule(LocalDateTime date){
         this.date = date;
+    }
+
+    @Builder(builderMethodName = "CreateSchedule")
+    Schedule(ScheduleRequest.ScheduleCreateInput scheduleCreateInput){
+
     }
 }
