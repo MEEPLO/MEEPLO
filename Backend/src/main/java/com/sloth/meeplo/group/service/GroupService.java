@@ -25,4 +25,6 @@ public interface GroupService {
     void exitGroupMember(String authorization, Long groupId);
 
     void joinToGroup(String authorization, Long groupId);
+
+    void kickGroupMember(String authorization, Long groupId, Long memberId);
 }
