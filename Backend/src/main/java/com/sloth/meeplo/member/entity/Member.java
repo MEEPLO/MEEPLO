@@ -4,18 +4,25 @@ import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.schedule.entity.ScheduleMember;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
+
+    @Transient
+    private final Set<GrantedAuthority> authority = new HashSet<>();
+
+    public Member() {
+        this.authority.add(new SimpleGrantedAuthority("USER"));
+    }
 
     /**
      * 고유 ID
@@ -63,6 +70,22 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Moment> moments;
+
+    public void updateProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public void updateUsername(String username) {
+        this.username = username;
+    }
+
+    public void unactivated() {
+        isUnactivated = true;
+    }
+
+    public void activated() {
+        isUnactivated = false;
+    }
 
 
     @Builder
