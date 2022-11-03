@@ -57,6 +57,12 @@ const LoginScreen = ({ navigation }) => {
           navigation.replace('Home');
         }}
       />
+      <Button
+        title="Loading"
+        onPress={() => {
+          navigation.navigate('Loading');
+        }}
+      />
     </LoginView>
   );
 };
