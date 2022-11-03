@@ -20,7 +20,7 @@ const theme = {
     },
     background: '#FFFFFF',
     border: '#585858',
-    disabled: 'E9E9E9',
+    disabled: '#E9E9E9',
     alert: '#F45151',
   },
   font: {
