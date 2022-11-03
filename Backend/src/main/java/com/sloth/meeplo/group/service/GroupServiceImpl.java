@@ -167,6 +167,30 @@ public class GroupServiceImpl implements GroupService{
         joinGroup(group, member, Role.MEMBER);
     }
 
+    @Override
+    @Transactional
+    public void kickGroupMember(String authorization, Long groupId, Long targetId) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Group group = getGroupEntityByGroupId(groupId);
+
+        checkKickable(group, member, targetId);
+
+        Member target = memberRepository.findById(targetId)
+                .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+
+        GroupMember groupMember =  groupMemberRepository
+                .findByGroupAndMemberAndStatus(group, target, GroupMemberStatus.ACTIVATED)
+                .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+
+        groupMember.unactivateMember();
+        groupMemberRepository.save(groupMember);
+
+    }
+
+    private void checkKickable(Group group, Member member, Long targetId){
+        if(!isGroupLeader(group, member)) throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
+        if(member.getId().equals(targetId)) throw new MeeploException(GroupErrorCode.KICK_UNABLE);
+    }
     private Group getGroupEntityByGroupId(Long groupId){
         return groupRepository.findById(groupId)
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
