@@ -22,9 +22,6 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private final long ACCESS_TOKEN_VALIDITY = 60 * 60L;
-    private final long REFRESH_TOKEN_VALIDITY = 30 * 24 * 60 * 60L;
-
     public String generateJwtToken(Member member, TokenType tokenType) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + tokenType.getExpiration());
@@ -60,6 +57,7 @@ public class JwtUtil {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch(Exception e) {
+//            e.printStackTrace();
             throw new MeeploException(CommonErrorCode.WRONG_TOKEN);
         }
     }

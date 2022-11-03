@@ -3,6 +3,7 @@ package com.sloth.meeplo.schedule.entity;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.moment.entity.Moment;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,5 +30,8 @@ public class ScheduleLocation {
     @OneToMany(mappedBy = "scheduleLocation")
     private List<Moment> moments;
 
-
+    @Builder
+    ScheduleLocation(Location location){
+        this.location = location;
+    }
 }
