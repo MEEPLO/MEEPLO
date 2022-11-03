@@ -7,6 +7,7 @@ const Home = ({ navigation }) => {
       <Text>Home Screen</Text>
       <Button title="Go to Details" onPress={() => navigation.navigate('Details')} />
       <Button title="Go to ScheduleHome" onPress={() => navigation.navigate('ScheduleHome')} />
+      <Button title="Go to ScheduleCreate" onPress={() => navigation.navigate('ScheduleCreate')} />
     </View>
   );
 };
