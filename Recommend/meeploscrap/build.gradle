@@ -26,7 +26,11 @@ dependencies {
 	implementation 'org.seleniumhq.selenium:selenium-java:4.5.3'
 	implementation 'org.seleniumhq.selenium:selenium-api:4.5.3'
 	implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.5.3'
+	implementation 'org.seleniumhq.selenium:selenium-remote-driver:4.5.3'
+	implementation 'org.seleniumhq.selenium:selenium-support:4.5.3'
 
+	// JSoup
+	implementation 'org.jsoup:jsoup:1.15.3'
 
 	compileOnly 'org.projectlombok:lombok'
 
