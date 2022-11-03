@@ -3,8 +3,6 @@ import { View, Dimensions } from 'react-native';
 import styled from 'styled-components';
 import AutoHeightImage from 'react-native-auto-height-image';
 
-// yarn add react-native-auto-height-image
-
 const MomentsCol = styled.View`
   height: ${({ height }) => height}px;
   padding-left: ${({ paddLeft }) => paddLeft}px;
@@ -16,8 +14,8 @@ const MomentPic = ({ uri, type, direction }) => {
   var imgWidth = windowWidth * 0.5 - 30;
 
   const viewHeight = {
-    1: imgWidth * 1.2,
-    2: imgWidth * 0.9,
+    1: imgWidth * 1.17,
+    2: imgWidth * 0.8,
     3: imgWidth * 3.61,
   };
 

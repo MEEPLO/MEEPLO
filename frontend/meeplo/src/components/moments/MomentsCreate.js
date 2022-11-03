@@ -23,7 +23,7 @@ const getImageTitle = date => {
   minute = minute >= 10 ? minute : '0' + minute;
   second = second >= 10 ? second : '0' + second;
 
-  return 'ourMoment' + year + month + day + hour + minute + second + '.jpg';
+  return 'ourmoment' + year + month + day + hour + minute + second + '.jpg';
 };
 
 
@@ -54,7 +54,6 @@ const MomentsCreate = () => {
       Body: blobData,
     };
 
-    console.log(s3)
     s3.upload(params, function (err, data) {
       if (err) {
         return alert(err.stack);
