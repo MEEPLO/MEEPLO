@@ -48,7 +48,6 @@ const ContentText = styled.Text`
 `;
 
 const CalendarScheduleListItem = ({ item }) => {
-  console.log(item);
   return (
     <ItemView>
       <TitleView>
