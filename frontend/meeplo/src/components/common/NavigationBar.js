@@ -7,8 +7,8 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons/faCalendarDays';
 import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import HomeStackScreen from '../../screens/HomeStackScreen';
-import GroupHomeScreen from '../../screens/GroupHomeScreen';
 import GroupStackScreen from '../../screens/GroupStackScreen';
+import ScheduleStackScreen from '../../screens/ScheduleStackScreen';
 import MemoryStackScreen from '../../screens/MemoryStackScreen';
 import HomeScreen from '../../screens/HomeScreen';
 import { theme } from '../../assets/constant/DesignTheme';
@@ -21,6 +21,7 @@ const NavigationBar = () => {
     <Tab.Navigator
       initialRouteName="HomeStack"
       screenOptions={{
+        headerShown: false,
         tabBarStyle: {
           position: 'absolute',
           paddingBottom: 10,
@@ -47,8 +48,8 @@ const NavigationBar = () => {
         }}
       />
       <Tab.Screen
-        name="GroupHome"
-        component={GroupHomeScreen}
+        name="GroupStack"
+        component={GroupStackScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -67,8 +68,8 @@ const NavigationBar = () => {
         }}
       />
       <Tab.Screen
-        name="TestOne"
-        component={GroupStackScreen}
+        name="ScheduleStack"
+        component={ScheduleStackScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -79,7 +80,7 @@ const NavigationBar = () => {
         }}
       />
       <Tab.Screen
-        name="TestTwo"
+        name="MemoryStack"
         component={MemoryStackScreen}
         options={{
           tabBarIcon: ({ color, size }) => (

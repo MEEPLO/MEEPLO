@@ -13,18 +13,17 @@ const AddButonTabBar = props => {
     outputRange: ['0deg', '45deg'],
   });
 
-  const itemOneX = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-24, -100],
-  });
+  // const itemOneX = mode.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: [-24, -100],
+  // });
 
-  const itemOneY = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-50, -100],
-  });
+  // const itemOneY = mode.interpolate({
+  //   inputRange: [0, 1],
+  //   outputRange: [-50, -100],
+  // });
 
   const handlePress = async () => {
-    console.log(mode._value);
     Animated.timing(mode, {
       toValue: mode._value === 0 ? 1 : 0,
       duration: 500,
