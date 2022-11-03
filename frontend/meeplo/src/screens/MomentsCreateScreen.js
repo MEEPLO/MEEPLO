@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-// import { WebView } from 'react-native-webview';
 import styled from 'styled-components';
 
 import MomentsCreate from '../components/moments/MomentsCreate';
