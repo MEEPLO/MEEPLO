@@ -25,13 +25,14 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     RequestMatcher customFilterUrl = new AntPathRequestMatcher("/meeplo/api/v1/auth/**");
+    RequestMatcher authRequiredUrl = new AntPathRequestMatcher("/meeplo/api/v1/**");
 
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if(!customFilterUrl.matches((HttpServletRequest) request)) {
+        if(authRequiredUrl.matches((HttpServletRequest) request) && !customFilterUrl.matches((HttpServletRequest) request)) {
 //        if(!((HttpServletRequest)request).getServletPath().startsWith("/meeplo/api/v1/auth/")) {
             String token = jwtUtil.resolveToken((HttpServletRequest) request);
 
