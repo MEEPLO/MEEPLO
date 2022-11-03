@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Slf4j
 @Configuration
@@ -29,10 +30,15 @@ public class WebSecurityConfig {
                 .antMatchers("/meeplo/api/v1/auth/**").permitAll()
                 .antMatchers("/error").permitAll()
                 .antMatchers("/meeplo/api/v1/**").authenticated()
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public InternalResourceViewResolver defaultViewResolver() {
+        return new InternalResourceViewResolver();
     }
 }
