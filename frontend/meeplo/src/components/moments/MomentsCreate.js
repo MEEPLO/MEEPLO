@@ -1,13 +1,10 @@
 import { useState } from 'react';
-import {View, Text, Pressable, Button, Image} from 'react-native';
-import {WebView} from 'react-native-webview';
+import { View, Text, Pressable, Button, Image } from 'react-native';
+import { WebView } from 'react-native-webview';
 import styled from 'styled-components';
 import mergeAndUpload from './mergeAndUpload';
 import AWS from 'aws-sdk';
-
-// npm install react-native-webview --legacy-peer-deps
-// npm i react-native-dotenv --legacy-peer-deps
-// yarn add aws-sdk
+import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 
 const getImageTitle = date => {
   let year = date.getFullYear().toString().substring(2);
@@ -26,26 +23,24 @@ const getImageTitle = date => {
   return 'ourmoment' + year + month + day + hour + minute + second + '.jpg';
 };
 
-
 const MomentsCreate = () => {
-
-  const uploadToS3 = (dataString) => {
+  const uploadToS3 = dataString => {
     let now = new Date();
     const imageTitle = getImageTitle(now);
 
     const data = JSON.parse(dataString);
-    var blobData = new Blob([data], {type: 'image/jpg'});
+    var blobData = new Blob([data], { type: 'image/jpg' });
 
     AWS.config.update({
-      region: bucketRegion,
+      region: MEEPLO_APP_BUCKET_REGION,
       credentials: new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: IdentityPoolId
-      })
+        IdentityPoolId: MEEPLO_APP_IDENTITY_POOL_ID,
+      }),
     });
 
     var s3 = new AWS.S3({
       apiVersion: '2006-03-01',
-      params: {Bucket: albumBucketName}
+      params: { Bucket: MEEPLO_APP_ALBUM_BUCKET_NAME },
     });
 
     var params = {
@@ -68,8 +63,8 @@ const MomentsCreate = () => {
   }
 
   return (
-    <View style={{height: 550}}>
-      <WebView source={{html: mergeAndUpload}} onMessage={onMessage} />
+    <View style={{ height: 550 }}>
+      <WebView source={{ html: mergeAndUpload }} onMessage={onMessage} />
     </View>
   );
 };
