@@ -15,7 +15,7 @@ const MomentsListHalf = styled.View`
 const moments = {
   momentsLeft: [
     {
-      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103103249.jpg',
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103160512.jpg',
       type: 1,
       id: 1,
     },
@@ -25,7 +25,7 @@ const moments = {
       id: 2,
     },
     {
-      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103103249.jpg',
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103163427.jpg',
       type: 2,
       id: 3,
     },
@@ -40,13 +40,13 @@ const moments = {
       id: 5,
     },
     {
-      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103103249.jpg',
-      type: 3,
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103160512.jpg',
+      type: 1,
       id: 6,
     },
     {
-      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103103249.jpg',
-      type: 3,
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103163427.jpg',
+      type: 2,
       id: 7,
     },
     {
@@ -62,7 +62,7 @@ const moments = {
       id: 9,
     },
     {
-      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103103249.jpg',
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103160512.jpg',
       type: 1,
       id: 10,
     },
@@ -77,12 +77,12 @@ const moments = {
       id: 12,
     },
     {
-      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103103249.jpg',
-      type: 3,
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103160512.jpg',
+      type: 1,
       id: 13,
     },
     {
-      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103103249.jpg',
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221103163427.jpg',
       type: 2,
       id: 14,
     },

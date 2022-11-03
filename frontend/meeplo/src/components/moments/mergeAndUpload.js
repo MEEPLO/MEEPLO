@@ -1,10 +1,8 @@
-// import {albumBucketName, bucketRegion, IdentityPoolId} from "@env"
-
 const maxLength = {
   1: 1,
   2: 2,
   3: 4,
-}
+};
 
 const mergeAndUpload = `
 <div class="upload-control">
@@ -31,9 +29,13 @@ const mergeAndUpload = `
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
 
 <script>
-const getContext = () => document.getElementById('my-canvas').getContext('2d');
 
 const mergePics = (event, index) => {
+
+  document.getElementById('my-canvas').getContext('2d').fillStyle = "black"
+  document.getElementById('my-canvas').getContext('2d').fillRect(0, 0, 360, 1300)  
+
+
   const pic = event.target.files[index]
   var reader = new FileReader()
   reader.readAsDataURL(pic);
@@ -109,7 +111,7 @@ const getImageTitle = (date) => {
   minute = minute >= 10 ? minute : '0' + minute;
   second = second >= 10 ? second : '0' + second;
 
-  return "ourMoment" + year + month + day + hour + minute + second + ".jpg";
+  return "ourmoment" + year + month + day + hour + minute + second + ".jpg";
 } 
 
 function dataURItoBlob(dataURI) {
@@ -137,4 +139,4 @@ const sendDataToReactNativeApp = () => {
 </script>
 `;
 
-export default mergeAndUpload
+export default mergeAndUpload;
