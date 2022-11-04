@@ -3,17 +3,16 @@ package com.sloth.meeplo.schedule.entity;
 import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.location.entity.Location;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Schedule extends BaseTimeEntity {
     @Id
@@ -39,8 +38,24 @@ public class Schedule extends BaseTimeEntity {
     @OneToMany(mappedBy = "schedule")
     private List<ScheduleLocation> scheduleLocations;
 
-    @Builder
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "ScheduleKeywordRelaction",
+            joinColumns = @JoinColumn(name="schedule_id"),
+            inverseJoinColumns = @JoinColumn(name="schedule_keyword_id")
+    )
+    private List<ScheduleKeyword> scheduleKeywords = new ArrayList<>();
+
+    @Builder(builderClassName = "EmptyBuilder",builderMethodName = "EmptyBuilder")
     Schedule(LocalDateTime date){
         this.date = date;
+    }
+
+    @Builder(builderClassName = "CreateSchedule",builderMethodName = "CreateSchedule")
+    Schedule(LocalDateTime date, String name, Group group, Location location){
+        this.date = date;
+        this.name =name;
+        this.group = group;
+        this.location = location;
+
     }
 }
