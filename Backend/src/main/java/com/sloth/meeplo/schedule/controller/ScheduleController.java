@@ -25,4 +25,10 @@ public class ScheduleController {
         resultMap.put("scheduleId", scheduleId);
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
+
+    @PutMapping
+    public ResponseEntity<Void> updateSchedule(@RequestHeader("Authorization") String authorization, @RequestBody ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput){
+        scheduleService.updateSchedule(authorization, scheduleUpdateInput);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 }

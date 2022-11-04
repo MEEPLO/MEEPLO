@@ -20,28 +20,43 @@ public class ScheduleRequest {
         private String name;
         private Long groupId;
         private Long meetLocationId;
-        private List<ScheduleCreateInputKeyword> keywords;
-        private List<ScheduleCreateInputMember> members;
-        private List<ScheduleCreateInputAmuse> amuses;
+        private List<ScheduleInputKeyword> keywords;
+        private List<ScheduleInputMember> members;
+        private List<ScheduleInputAmuse> amuses;
 
     }
 
     @Getter
     @ToString
     @NoArgsConstructor
-    public static class ScheduleCreateInputKeyword{
+    public static class ScheduleInputKeyword{
         private Long id;
     }
     @Getter
     @ToString
     @NoArgsConstructor
-    public static class ScheduleCreateInputMember{
+    public static class ScheduleInputMember{
         private Long id;
     }
     @Getter
     @ToString
     @NoArgsConstructor
-    public static class ScheduleCreateInputAmuse{
+    public static class ScheduleInputAmuse{
         private Long id;
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class ScheduleUpdateInput{
+        private Long id;
+        @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm")
+        private LocalDateTime date;
+        private String name;
+        private Long groupId;
+        private Long meetLocationId;
+        private List<ScheduleInputKeyword> keywords;
+        private List<ScheduleInputMember> members;
+        private List<ScheduleInputAmuse> amuses;
     }
 }

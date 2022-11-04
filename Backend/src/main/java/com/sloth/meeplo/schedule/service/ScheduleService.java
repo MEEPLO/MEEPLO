@@ -6,4 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ScheduleService {
 
     Long createSchedule(String authorization, ScheduleRequest.ScheduleCreateInput scheduleCreateInput);
+
+    void updateSchedule(String authorization, ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput);
 }
