@@ -2,6 +2,7 @@ package com.sloth.meeplo.group.service;
 
 import com.sloth.meeplo.group.dto.request.GroupRequest;
 import com.sloth.meeplo.group.dto.response.GroupResponse;
+import com.sloth.meeplo.group.entity.Group;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -27,4 +28,6 @@ public interface GroupService {
     void joinToGroup(String authorization, Long groupId);
 
     void kickGroupMember(String authorization, Long groupId, Long memberId);
+
+    Group getGroupEntityByGroupId(Long groupId);
 }
