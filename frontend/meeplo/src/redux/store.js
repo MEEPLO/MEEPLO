@@ -1,14 +1,14 @@
-import {configureStore, combineReducers} from '@reduxjs/toolkit';
-
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import memoryReducer from './memorySlice';
-import groupReducer from './groupSlice';
 import scheduleReducer from './scheduleSlice';
+import { groupListSlice, groupDetailSlice } from './groupSlice';
 
 // TODO: import redux-persist
 
 const rootReducer = combineReducers({
   memory: memoryReducer,
-  group: groupReducer,
+  groupList: groupListSlice.reducer,
+  group: groupDetailSlice.reducer,
   schedule: scheduleReducer,
 });
 

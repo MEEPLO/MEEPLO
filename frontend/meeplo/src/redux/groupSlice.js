@@ -1,35 +1,95 @@
 import axios from 'axios';
-import {
-  createAsyncThunk,
-  createSlice,
-  isRejectedWithValue,
-} from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 
-// TODO: create thunk using axios
-
-// 예시: 스터디 상세 보기
-export const getMemory = createAsyncThunk('memory/getMemory', async () => {
+export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
   try {
-    const response = await axios.get();
-    // 서버 url, headers 객체
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get('http://meeplo.co.kr/meeplo/api/v1/group', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response.data;
   } catch (err) {
-    // navigate('/notfound');
+    console.error('ERROR in getGroupList!', err);
     return isRejectedWithValue(err.response.data);
   }
 });
 
-const initialState = {
-  // TODO: API 명세에 적혀있는대로 초기값 설정
-  value: '초기그룹',
-};
-const groupSlice = createSlice({
-  name: 'group',
-  initialState,
+// TODO: hrookim groupId 인자 받기!
+export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({ groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error('ERROR in getGroupDetail!', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+const groupListSlice = createSlice({
+  name: 'groupList',
+  initialState: {
+    group: [
+      {
+        id: -1,
+        name: 'string',
+        photo: 'photo url',
+        memberCount: -1,
+        leaderName: 'string',
+        lastSchedule: 'string',
+      },
+    ],
+  },
   reducers: {},
   extraReducers: {
-    // [getGroup.fulfilled]: (staet, {payload}) => payload
+    [getGroupList.fulfilled]: (state, { payload }) => payload,
   },
 });
 
-export default groupSlice.reducer;
+const groupDetailSlice = createSlice({
+  name: 'group',
+  initialState: {
+    group: [
+      {
+        id: -1,
+        name: 'string',
+        description: 'string',
+        photo: 'photo url',
+        leader: 'string',
+        members: [
+          {
+            id: -1,
+            nickname: 'string',
+            photo: 'string',
+          },
+        ],
+        schedules: [
+          {
+            id: -1,
+            name: 'string',
+            date: 'string',
+            memberCount: -1,
+            location: {
+              meetName: 'string',
+              amuseName: 'string',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  reducers: {},
+  extraReducers: {
+    [getGroupDetail.fulfilled]: (state, { payload }) => payload,
+  },
+});
+
+// export default groupListSlice.reducer;
+export { groupDetailSlice, groupListSlice };
