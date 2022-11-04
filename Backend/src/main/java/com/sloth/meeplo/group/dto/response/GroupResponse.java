@@ -30,7 +30,7 @@ public class GroupResponse {
         private int memberCount;
         private String leaderName;
         @Nullable
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime lastSchedule;
     }
 
@@ -78,7 +78,7 @@ public class GroupResponse {
     public static class GroupDetailSchedule{
         private Long id;
         private String name;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
         private Long memberCount;
         private GroupDetailScheduleLocation location;
@@ -103,7 +103,7 @@ public class GroupResponse {
         GroupDetailScheduleLocation(Schedule schedule){
             this.meetName = schedule.getLocation().getName();
             this.amuseName = schedule.getScheduleLocations().stream().findFirst()
-                    .orElseGet(() -> ScheduleLocation.builder()
+                    .orElseGet(() -> ScheduleLocation.EmptyScheduleLocation()
                             .location(Location.builder().name("미정").build())
                             .build())
                     .getLocation().getName();

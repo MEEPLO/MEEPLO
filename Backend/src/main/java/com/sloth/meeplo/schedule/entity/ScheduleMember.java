@@ -5,6 +5,7 @@ import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,17 @@ public class ScheduleMember extends GeoDataEntity {
     @ManyToOne
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
+
+    @Builder
+    ScheduleMember(Schedule schedule, Member member, Role role){
+        if(role.equals(Role.LEADER)){
+            this.role = Role.LEADER;
+            this.status = ScheduleMemberStatus.JOINED;
+        }else{
+            this.role = Role.MEMBER;
+            this.status = ScheduleMemberStatus.PENDING;
+        }
+        this.schedule = schedule;
+        this.member = member;
+    }
 }
