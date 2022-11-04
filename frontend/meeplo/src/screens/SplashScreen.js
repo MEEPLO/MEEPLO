@@ -23,8 +23,9 @@ const SplashScreen = ({ navigation }) => {
   // TODO: login 되지 않은 사용자면 LoginScreen으로 넘김
   useEffect(() => {
     const getIsLogin = async () => {
-      if ((await AsyncStorage.getItem('accessToken')) !== null) {
-        console.log('로그인된 사용자!');
+      const v = await AsyncStorage.getItem('@accessToken');
+      console.log('splashScreen: ', v);
+      if (v !== null) {
         setIsLogin(true);
       }
     };

@@ -12,9 +12,9 @@ async function userLogin(kakaoAccessToken) {
       },
     });
     // 백에서 전달받은 accessToken refreshToken AsyncStorage에 저장
-    AsyncStorage.setItem('accessToken', tokens.data.accessToken);
-    AsyncStorage.setItem('refreshToken', tokens.data.refreshToken);
-    console.log('성공!', tokens.data);
+    console.log('백에서 받아온 데이터: ', tokens.data);
+    await AsyncStorage.setItem('@accessToken', tokens.data.accessToken);
+    await AsyncStorage.setItem('@refreshToken', tokens.data.refreshToken);
   } catch (err) {
     console.error("CAN'T SAVE TOKEN");
   }
@@ -29,9 +29,6 @@ export const logInWithKakao = async () => {
     const kakaoToken = await login();
     const { accessToken } = kakaoToken;
     userLogin(accessToken);
-    console.log('카카오로그인성공', kakaoToken);
-
-    // return message;
   } catch (err) {
     console.error('login err =======', err);
   }
