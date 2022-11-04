@@ -34,6 +34,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     private final MemberService memberService;
     private final GroupService groupService;
+
     private final ScheduleRepository scheduleRepository;
     private final ScheduleLocationRepository scheduleLocationRepository;
     private final MemberRepository memberRepository;

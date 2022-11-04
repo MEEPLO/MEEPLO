@@ -33,6 +33,7 @@ public class ScheduleMember extends GeoDataEntity {
 
     @Builder
     ScheduleMember(Schedule schedule, Member member, Role role){
+//          해당 약속의 Leader / Member 를 구분한다.
         if(role.equals(Role.LEADER)){
             this.role = Role.LEADER;
             this.status = ScheduleMemberStatus.JOINED;
