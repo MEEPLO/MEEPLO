@@ -26,6 +26,7 @@ const HomeStackScreen = () => {
         name="Home"
         component={HomeScreen}
         options={{
+          headerShadowVisible: false,
           headerShown: true,
           headerTitleAlign: 'center',
           headerLeft: props => {
