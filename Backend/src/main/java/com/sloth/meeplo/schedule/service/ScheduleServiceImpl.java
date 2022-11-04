@@ -55,13 +55,13 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .build()
         );
-        scheduleCreateInput.getKeywords().stream().map(ScheduleRequest.ScheduleCreateInputKeyword::getId)
+        scheduleCreateInput.getKeywords().stream().map(ScheduleRequest.ScheduleInputKeyword::getId)
                 .map(id -> scheduleKeywordRepository.findById(id)
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .forEach(k-> newSchedule.getScheduleKeywords().add(k));
 
         scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
-        scheduleCreateInput.getMembers().stream().map(ScheduleRequest.ScheduleCreateInputMember::getId)
+        scheduleCreateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
                 .map(id -> memberRepository.findById(id)
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .forEach(m -> scheduleMemberRepository
@@ -74,7 +74,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                         )
                 );
 
-        scheduleCreateInput.getAmuses().stream().map(ScheduleRequest.ScheduleCreateInputAmuse::getId)
+        scheduleCreateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
                 .map(id -> locationRepository.findById(id)
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .forEach(location -> scheduleLocationRepository
@@ -86,5 +86,57 @@ public class ScheduleServiceImpl implements ScheduleService{
                         )
                 );
         return newSchedule.getId();
+    }
+
+    @Override
+    @Transactional
+    public void updateSchedule(String authorization, ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Group group = groupService.getGroupEntityByGroupId(scheduleUpdateInput.getGroupId());
+        Schedule schedule = scheduleRepository.findById(scheduleUpdateInput.getId())
+                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+
+
+        //내부값 수정
+//        schedule
+//                .name(scheduleCreateInput.getName())
+//                .date(scheduleCreateInput.getDate())
+//        // TODO: 2022-11-04 리더인경우만 수정가능하도록
+////        if(scheduleMemberRepository.)
+//
+//        // TODO: 2022-11-04 clear로 삭제 가능한가 확인
+//        schedule.getScheduleKeywords().clear();
+//        scheduleUpdateInput.getKeywords().stream().map(ScheduleRequest.ScheduleInputKeyword::getId)
+//                .map(id -> scheduleKeywordRepository.findById(id)
+//                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+//                .forEach(k-> schedule.getScheduleKeywords().add(k));
+//
+//        // TODO: 2022-11-04 member삭제의 경우 unactivated로
+//        scheduleUpdateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
+//                .map(id -> memberRepository.findById(id)
+//                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+//                .forEach(m -> scheduleMemberRepository
+//                        .save(ScheduleMember
+//                                .builder()
+//                                .schedule(newSchedule)
+//                                .member(m)
+//                                .role(Role.MEMBER)
+//                                .build()
+//                        )
+//                );
+//// TODO: 2022-11-04
+//        scheduleUpdateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
+//                .map(id -> locationRepository.findById(id)
+//                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+//                .forEach(location -> scheduleLocationRepository
+//                        .save(ScheduleLocation
+//                                .createScheduleLocation()
+//                                .schedule(newSchedule)
+//                                .location(location)
+//                                .build()
+//                        )
+//                );
+//
+        scheduleRepository.save(schedule);
     }
 }
