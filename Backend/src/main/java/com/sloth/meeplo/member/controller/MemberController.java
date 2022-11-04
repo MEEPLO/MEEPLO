@@ -36,10 +36,8 @@ public class MemberController {
     }
 
     @GetMapping("/member")
-    public ResponseEntity<Map<String, Object>> getMemberDetail(@RequestHeader("Authorization") String authorization){
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("memberDetail", memberService.getMemberDetail(authorization));
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+    public ResponseEntity<MemberResponse.MemberDetail> getMemberDetail(@RequestHeader("Authorization") String authorization){
+        return new ResponseEntity<MemberResponse.MemberDetail>(memberService.getMemberDetail(authorization), HttpStatus.OK);
     }
 
     @PutMapping("/member")
