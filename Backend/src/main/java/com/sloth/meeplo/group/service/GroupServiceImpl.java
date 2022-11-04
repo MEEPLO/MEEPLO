@@ -164,6 +164,8 @@ public class GroupServiceImpl implements GroupService{
     public void joinToGroup(String authorization, Long groupId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Group group = getGroupEntityByGroupId(groupId);
+        if(groupMemberRepository.countByGroupAndStatus(group, GroupMemberStatus.ACTIVATED)>10)
+            throw new MeeploException(GroupErrorCode.NO_MORE_MEMBER);
         joinGroup(group, member, Role.MEMBER);
     }
 
