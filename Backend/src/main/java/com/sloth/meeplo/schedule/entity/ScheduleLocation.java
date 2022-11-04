@@ -30,8 +30,14 @@ public class ScheduleLocation {
     @OneToMany(mappedBy = "scheduleLocation")
     private List<Moment> moments;
 
-    @Builder
+    @Builder(builderClassName = "EmptyScheduleLocation",builderMethodName = "EmptyScheduleLocation")
     ScheduleLocation(Location location){
+        this.location = location;
+    }
+
+    @Builder(builderClassName = "createScheduleLocation",builderMethodName = "createScheduleLocation")
+    ScheduleLocation(Schedule schedule, Location location){
+        this.schedule = schedule;
         this.location = location;
     }
 }
