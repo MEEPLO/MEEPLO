@@ -191,6 +191,7 @@ public class GroupServiceImpl implements GroupService{
         if(!isGroupLeader(group, member)) throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
         if(member.getId().equals(targetId)) throw new MeeploException(GroupErrorCode.KICK_UNABLE);
     }
+    @Override
     public Group getGroupEntityByGroupId(Long groupId){
         return groupRepository.findById(groupId)
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
