@@ -4,9 +4,9 @@ import CheckBox from '@react-native-community/checkbox';
 import styled from 'styled-components/native';
 
 import { Calendar } from 'react-native-calendars';
-import config from '../config';
+import config from '../../config';
 
-import CalendarScheduleList from '../components/calendar/CalendarScheduleList';
+import CalendarScheduleList from '../../components/calendar/CalendarScheduleList';
 
 const TitleView = styled.View``;
 const FilterView = styled.View``;
