@@ -1,7 +1,7 @@
 const theme = {
   color: {
     bright: {
-      red: '#FFC5C5',
+      red: '#FFA0A0',
       orange: '#FFDB7E',
       yellow: '#FFED8C',
       green: '#D1F077',
@@ -10,7 +10,7 @@ const theme = {
       purple: '#D5CFFA',
     },
     pale: {
-      red: '#FEE6E6',
+      red: '#FFD3D3',
       orange: '#FFEDD8',
       yellow: '#FFF0B9',
       green: '#E4F3B9',
