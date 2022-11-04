@@ -43,7 +43,7 @@ const groupListSlice = createSlice({
         photo: 'photo url',
         memberCount: -1,
         leaderName: 'string',
-        lastSchedule: 'string',
+        lastSchedule: 'YYYY-MM-DD hh:mm',
       },
     ],
   },
@@ -91,5 +91,4 @@ const groupDetailSlice = createSlice({
   },
 });
 
-// export default groupListSlice.reducer;
 export { groupDetailSlice, groupListSlice };
