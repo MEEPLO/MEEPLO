@@ -1,4 +1,4 @@
-package com.sloth.meeploscrap.util.scraper;
+package com.sloth.meeploscrap.util;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 @Getter
 public class SeleniumScraper implements Scraper{
     private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-    private static final String WEB_DRIVER_PATH = "C:\\Users\\SSAFY\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\chromedriver.exe";
+    private static final String WEB_DRIVER_PATH = "C:\\Users\\minah\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\chromedriver.exe";
 
     private static final String BASE_URL = "https://map.naver.com/v5/search/";
 
     private static final String CLICKABLE_SUFFIX_TAG = " > div > a";
 
     private WebDriver driver;
-    private String url;
+    private final String url;
 
     @Builder
     public SeleniumScraper(String location) {
@@ -68,6 +68,10 @@ public class SeleniumScraper implements Scraper{
 
             return null;
         }
+    }
+
+    public void closeDriver() {
+        driver.close();
     }
 
     private Map<String, String> initClickableMap() {
