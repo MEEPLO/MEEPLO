@@ -3,13 +3,12 @@ package com.sloth.meeplo.member.service;
 import com.sloth.meeplo.member.dto.request.MemberRequest;
 import com.sloth.meeplo.member.dto.response.MemberResponse;
 import com.sloth.meeplo.member.entity.Member;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
 public interface MemberService {
+
+    Member getMemberById(long id);
 
     MemberResponse.MemberToken getKakaoMemberToken(String token);
 

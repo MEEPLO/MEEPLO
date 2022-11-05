@@ -1,5 +1,6 @@
 package com.sloth.meeplo.group.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
@@ -29,6 +30,7 @@ public class GroupResponse {
         private int memberCount;
         private String leaderName;
         @Nullable
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime lastSchedule;
     }
 
@@ -76,6 +78,7 @@ public class GroupResponse {
     public static class GroupDetailSchedule{
         private Long id;
         private String name;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
         private Long memberCount;
         private GroupDetailScheduleLocation location;
@@ -100,7 +103,7 @@ public class GroupResponse {
         GroupDetailScheduleLocation(Schedule schedule){
             this.meetName = schedule.getLocation().getName();
             this.amuseName = schedule.getScheduleLocations().stream().findFirst()
-                    .orElseGet(() -> ScheduleLocation.builder()
+                    .orElseGet(() -> ScheduleLocation.EmptyScheduleLocation()
                             .location(Location.builder().name("미정").build())
                             .build())
                     .getLocation().getName();

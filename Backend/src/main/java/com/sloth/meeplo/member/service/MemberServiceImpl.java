@@ -13,12 +13,15 @@ import com.sloth.meeplo.member.entity.MemberLocation;
 import com.sloth.meeplo.member.repository.MemberLocationRepository;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -28,6 +31,12 @@ public class MemberServiceImpl implements MemberService {
     private final MemberLocationRepository memberLocationRepository;
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
+
+
+    @Override
+    public Member getMemberById(long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new MeeploException(CommonErrorCode.MEMBER_NOT_FOUND));
+    }
 
     @Override
     public MemberResponse.MemberToken getKakaoMemberToken(String authorization) {
@@ -71,21 +80,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void updateMemberInfo(String authorization, MemberRequest.MemberUpdateInfo memberUpdateInfo) {
         Member member = getMemberByAuthorization(authorization);
         member.updateUsername(memberUpdateInfo.getNickname());
         member.updateProfilePhoto(memberUpdateInfo.getProfilePhoto());
-
-        // TODO: 2022-11-02 save가 필요한가 확인
-//        memberRepository.save(member);
+        memberRepository.save(member);
     }
 
     @Override
+    @Transactional
     public void quitMember(String authorization) {
         Member member = getMemberByAuthorization(authorization);
         member.unactivated();
-
-//        memberRepository.save(member);
+        memberRepository.save(member);
     }
 
     @Override
@@ -102,11 +110,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public Member getMemberByAuthorization(String authorization){
+        authorization = authorization.replaceFirst("Bearer ", "");
         return memberRepository.findById(jwtUtil.getUserIdFromToken(authorization))
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
     }
 
     @Override
+    @Transactional
     public void addMemberStartLocation(String authorization, MemberRequest.MemberLocationAddInfo memberLocationAddInfo) {
         Member member = getMemberByAuthorization(authorization);
         memberLocationRepository.save(MemberLocation.builder()
@@ -117,6 +127,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void deleteMemberStartLocation(String authorization, Long id) {
         Member member = getMemberByAuthorization(authorization);
         if(memberLocationRepository.findById(id)

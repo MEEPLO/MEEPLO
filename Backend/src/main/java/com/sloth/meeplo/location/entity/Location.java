@@ -25,11 +25,9 @@ public class Location extends GeoDataEntity {
 
     private LocationType type;
 
-    @Column(length = 13)
-    private String phoneNumber;
+    @Column(length = 200)
+    private String category;
 
-    @Column(length = 10000)
-    private String description;
 
     @OneToMany(mappedBy = "location")
     private List<LocationPhoto> locationPhotos;
@@ -44,7 +42,7 @@ public class Location extends GeoDataEntity {
     private List<LocationContent> locationContents;
 
     @OneToOne(mappedBy = "location")
-    private LocationCategory locationCategory;
+    private LocationInfo locationInfo;
 
     @OneToOne(mappedBy = "location")
     private Schedule schedule;

@@ -1,11 +1,8 @@
 package com.sloth.meeplo.member.dto.request;
 
 import com.sloth.meeplo.member.entity.Member;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
-// static inner class 지양 * 검색
 public class MemberRequest {
 
     @Getter
@@ -37,21 +34,35 @@ public class MemberRequest {
 
     @Getter
     @ToString
-    @Builder
+    @NoArgsConstructor
     public static class MemberUpdateInfo{
         private String nickname;
         private String profilePhoto;
+
+        @Builder
+        public MemberUpdateInfo(String nickname, String profilePhoto){
+            this.nickname = nickname;
+            this.profilePhoto = profilePhoto;
+        }
 
     }
 
     @Getter
     @ToString
-    @Builder
+    @NoArgsConstructor
     public static class MemberLocationAddInfo{
         private String name;
         private String address;
         private Double lat;
         private Double lng;
+
+        @Builder
+        public MemberLocationAddInfo(String name, String address, Double lat, Double lng){
+            this.name = name;
+            this.address= address;
+            this.lat=lat;
+            this.lng=lng;
+        }
     }
 
 }
