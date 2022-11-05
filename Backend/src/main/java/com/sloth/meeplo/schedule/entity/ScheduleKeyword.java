@@ -21,10 +21,5 @@ public class ScheduleKeyword {
 
     private ScheduleKeywordClassification classification;
 
-    @ManyToOne
-    @JoinColumn(name = "schedule_id", referencedColumnName = "id")
-    private Schedule schedule;
-
-
 
 }

@@ -46,7 +46,7 @@ public class GroupMember {
         this.group = group;
         this.member = member;
         this.role = role;
-        this.status = GroupMemberStatus.ACTIVATED;
+        this.status = GroupMemberStatus.UNACTIVATED;
         this.Nickname = member.getUsername();
     }
 }

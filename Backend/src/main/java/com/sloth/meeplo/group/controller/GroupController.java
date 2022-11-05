@@ -55,7 +55,7 @@ public class GroupController {
     }
 
 
-    @GetMapping("/{groupId/member}")
+    @GetMapping("/{groupId}/member")
     public ResponseEntity<Map<String, List>> getGroupMembers(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("members", groupService.getGroupMembers(authorization,groupId));
@@ -65,6 +65,18 @@ public class GroupController {
     @DeleteMapping("{groupId}/member")
     public ResponseEntity<Void> exitGroupMember(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         groupService.exitGroupMember(authorization,groupId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("{groupId}/member")
+    public ResponseEntity<Void> joinToGroup(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        groupService.joinToGroup(authorization, groupId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("{groupId}/member/{memberId}")
+    public ResponseEntity<Void> kickGroupMember(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId, @PathVariable Long memberId){
+        groupService.kickGroupMember(authorization,groupId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

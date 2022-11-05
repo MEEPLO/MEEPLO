@@ -3,12 +3,14 @@ package com.sloth.meeplo.group.dto.request;
 import com.sloth.meeplo.group.entity.Group;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 public class GroupRequest {
 
     @Getter
     @ToString
+    @NoArgsConstructor
     public static class GroupInput {
         private String name;
         private String description;
