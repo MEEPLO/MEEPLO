@@ -4,11 +4,13 @@ import com.sloth.meeploscrap.location.entity.type.LocationType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Location extends GeoDataEntity {
 

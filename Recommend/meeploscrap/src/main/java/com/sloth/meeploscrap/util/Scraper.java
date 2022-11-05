@@ -1,4 +1,4 @@
-package com.sloth.meeploscrap.util.scraper;
+package com.sloth.meeploscrap.util;
 
 public interface Scraper {
     String DETAIL_DATA_CSS_SELECTOR = "#app-root > div > div > div > div:nth-child(6) > div > div.place_section.no_margin.vKA6F > div > ul > ";
