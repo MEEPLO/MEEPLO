@@ -6,6 +6,7 @@ import StepDot from './StepDot';
 const StepIndicatorView = styled.View`
   display: flex;
   flex-direction: row;
+  justify-content: center;
 `;
 
 const StepIndicator = ({ stepCount, currentStep }) => {

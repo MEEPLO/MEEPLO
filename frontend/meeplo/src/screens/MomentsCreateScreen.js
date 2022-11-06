@@ -8,9 +8,7 @@ import MomentsFrame from '../components/moments/MomentsFrame';
 const MomentsCreateScreen = () => {
   return (
   <View>
-    <Text>위치체크</Text>
-    <MomentsFrame />
-    <Text>체크합니다용</Text>
+    <MomentsCreate />
   </View>
   );
 };
