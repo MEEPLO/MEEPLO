@@ -9,7 +9,9 @@ import com.sloth.meeplo.location.repository.LocationRepository;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
+import com.sloth.meeplo.moment.dto.response.MomentResponse;
 import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
+import com.sloth.meeplo.schedule.dto.response.KeywordResponse;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
@@ -187,6 +189,26 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .findByGroupAndDate(gm.getGroup(),targetDate).stream())
                 .map(s -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(s)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<KeywordResponse.KeyWordListInfo> getKeywordList() {
+        return scheduleKeywordRepository.findAll().stream()
+                .map(sk-> KeywordResponse.KeyWordListInfo.builder()
+                        .scheduleKeyword(sk)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MomentResponse.MomentSimpleList> getMomentListBySchedule(String authorization, Long scheduleId) {
+        return getScheduleByScheduleId(scheduleId)
+                .getScheduleLocations().stream()
+                .flatMap(sl->sl.getMoments().stream())
+                .map(m-> MomentResponse.MomentSimpleList.builder()
+                        .moment(m)
                         .build())
                 .collect(Collectors.toList());
     }

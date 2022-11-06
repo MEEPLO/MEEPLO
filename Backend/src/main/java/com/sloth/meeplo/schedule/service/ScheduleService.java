@@ -1,12 +1,17 @@
 package com.sloth.meeplo.schedule.service;
 
+import com.sloth.meeplo.moment.dto.response.MomentResponse;
 import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
+import com.sloth.meeplo.schedule.dto.response.KeywordResponse;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleService {
 
@@ -27,4 +32,9 @@ public interface ScheduleService {
 
     List<ScheduleResponse.ScheduleListInfo> getScheduleDailyList(String authorization, String date);
 
-}
+    List<KeywordResponse.KeyWordListInfo> getKeywordList();
+
+    List<MomentResponse.MomentSimpleList> getMomentListBySchedule(String authorization, Long scheduleId);
+
+
+    }
