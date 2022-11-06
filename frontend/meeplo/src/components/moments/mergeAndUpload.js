@@ -15,12 +15,9 @@ const mergeAndUpload = `
   id="review-upload-input"
   >
 </div>
-<button id="download" onclick="uploadImage()">
-  업로드하기
+<button class="reset" onclick="sendDataToReactNativeApp()">
+  만들기
 </button>
-<div class="reset" onclick="sendDataToReactNativeApp()">
-  다시하기
-</div>
 </div>
 <div class="canvas-container">
 <canvas id="my-canvas" width="360" height="1300" style="background-color: #000;"></canvas>
@@ -80,8 +77,6 @@ picInput.addEventListener('change', (event) => {
     for (let index = 0; index < event.target.files.length; index++) {
       mergePics(event, index)
     }
-    var dataUrl = document.getElementById("my-canvas").toDataURL("image/jpg");
-    imgAToB = dataURItoBlob(dataUrl)
   }
 });
 
@@ -127,15 +122,26 @@ function dataURItoBlob(dataURI) {
 }
 
 
+const convertTobase64 = (url) => {
+  return url.replace(/^data:image\/(png|jpg);base64,/, "");
+}
+
+
 alert("js running")
 
 
 const sendDataToReactNativeApp = () => {
+  var dataUrl = document.getElementById("my-canvas").toDataURL("image/jpg");
+  imgAToB = dataURItoBlob(dataUrl)
+
+  var base64String = convertTobase64(dataUrl)
 
   window.ReactNativeWebView.postMessage(
-    JSON.stringify(imgAToB)
+    // JSON.stringify(imgAToB)
+    base64String
   )
 }
+
 </script>
 `;
 

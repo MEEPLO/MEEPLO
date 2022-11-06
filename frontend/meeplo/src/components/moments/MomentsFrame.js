@@ -28,8 +28,12 @@ const MomentsFrame = () => {
     let now = new Date();
     const imageTitle = getImageTitle(now);
 
-    const data = JSON.parse(dataString);
+    const data = Object.values(JSON.parse(dataString));
+
+    console.log(data);
     var blobData = new Blob([data], { type: 'image/jpg' });
+
+    console.log(blobData);
 
     AWS.config.update({
       region: MEEPLO_APP_BUCKET_REGION,
@@ -49,13 +53,13 @@ const MomentsFrame = () => {
       Body: blobData,
     };
 
-    s3.upload(params, function (err, data) {
-      if (err) {
-        return alert(err.stack);
-      }
-      alert('Successfully uploaded photo.');
-      console.log(data.Location);
-    });
+    // s3.upload(params, function (err, data) {
+    //   if (err) {
+    //     return alert(err.stack);
+    //   }
+    //   alert('Successfully uploaded photo.');
+    //   console.log(data.Location);
+    // });
   };
 
   function onMessage(event) {
