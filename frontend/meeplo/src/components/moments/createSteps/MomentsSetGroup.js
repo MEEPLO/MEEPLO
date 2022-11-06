@@ -27,7 +27,7 @@ const MomentsSetGroup = () => {
 
   return (
     <View>
-      <SelectDropdown type="모임" data={data} />
+      <SelectDropdown type="모임" data={data} required={true} />
     </View>
   );
 };
