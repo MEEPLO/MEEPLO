@@ -3,9 +3,11 @@ package com.sloth.meeplo.moment.entity;
 import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.moment.dto.request.MomentRequest;
 import com.sloth.meeplo.moment.type.MomentType;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,4 +45,16 @@ public class Moment extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL)
     private List<MomentComment> momentComments;
+
+//    @Builder
+//    public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member){
+//        this.momentPhoto = createMomentInfo.getPhotoUrl();
+//        this.member = member;
+//        this.type = createMomentInfo.getType();
+//        if(createMomentInfo.getSchedulePlaceId()!=null && createMomentInfo.getSchedulePlaceId()>0){
+//            this.scheduleLocation =
+//        }else{
+//
+//        }
+//    }
 }
