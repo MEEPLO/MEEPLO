@@ -25,8 +25,7 @@ public class MomentServiceImpl implements MomentService{
     @Override
     public MomentResponse.MomentDetail getMomentDetail(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        Moment moment = momentRepository.findById(momentId)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+        Moment moment = getMomentByMomentId(momentId);
 
         return MomentResponse.MomentDetail.builder().moment(moment).member(member).build();
     }
@@ -37,5 +36,22 @@ public class MomentServiceImpl implements MomentService{
     public Long createMoment(String authorization, MomentRequest.CreateMomentInfo createMomentInfo) {
 //        Moment moment = momentRepository.save(Moment.)
         return null;
+    }
+
+    @Override
+    @Transactional
+    public Long createReaction(String authorization, Long momentId) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Moment moment = getMomentByMomentId(momentId);
+
+        moment.getMembers().add(member);
+        momentRepository.save(moment);
+        return (long) moment.getMembers().size();
+    }
+
+    @Override
+    public Moment getMomentByMomentId(Long momentId){
+        return momentRepository.findById(momentId)
+                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
     }
 }

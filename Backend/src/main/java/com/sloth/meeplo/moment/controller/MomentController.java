@@ -29,4 +29,11 @@ public class MomentController {
         resultMap.put("momentId", momentService.createMoment(authorization, createMomentInfo));
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
+
+    @PostMapping("/{momentId}/reaction")
+    public ResponseEntity<Map<String,Long>> createReaction(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+        Map<String, Long> resultMap = new HashMap<>();
+        resultMap.put("reactionCount", momentService.createReaction(authorization, momentId));
+        return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
+    }
 }
