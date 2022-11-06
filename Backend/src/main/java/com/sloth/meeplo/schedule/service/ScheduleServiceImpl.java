@@ -10,6 +10,7 @@ import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
+import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
@@ -93,8 +94,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void updateSchedule(String authorization, ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Group group = groupService.getGroupEntityByGroupId(scheduleUpdateInput.getGroupId());
-        Schedule schedule = scheduleRepository.findById(scheduleUpdateInput.getId())
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+        Schedule schedule = getScheduleByScheduleId(scheduleUpdateInput.getId());
 
 
         //내부값 수정
@@ -138,5 +138,32 @@ public class ScheduleServiceImpl implements ScheduleService{
 //                );
 //
         scheduleRepository.save(schedule);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSchedule(String authorization, Long scheduleId) {
+        // TODO: 2022-11-05 약속 삭제시cascade? 또는 시작하지 않은 약속만? 
+    }
+
+    @Override
+    public ScheduleResponse.ScheduleDetailInfo getScheduleDetail(String authorization, Long scheduleId) {
+        Schedule schedule = getScheduleByScheduleId(scheduleId);
+        return ScheduleResponse.ScheduleDetailInfo.builder().schedule(schedule).build();
+    }
+
+    public Schedule getScheduleByScheduleId(Long scheduleId){
+        return scheduleRepository.findById(scheduleId)
+                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+    }
+
+    @Override
+    public List<ScheduleResponse.ScheduleListInfo> getScheduleList(String authorization) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        return member.getScheduleMembers().stream()
+                .map(sm -> ScheduleResponse.ScheduleListInfo.builder()
+                        .schedule(sm.getSchedule())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.sloth.meeplo.schedule.dto.request;
 
+import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,4 +60,6 @@ public class ScheduleRequest {
         private List<ScheduleInputMember> members;
         private List<ScheduleInputAmuse> amuses;
     }
+
+
 }
