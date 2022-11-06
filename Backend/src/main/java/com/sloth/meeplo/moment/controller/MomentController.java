@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -42,5 +43,12 @@ public class MomentController {
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("reactionCount", momentService.deleteReaction(authorization, momentId));
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/{momentId}/comment")
+    public ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>> createComment(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId, @RequestBody MomentRequest.CreateMomentCommentInfo createMomentCommentInfo){
+        Map<String, List<MomentResponse.MomentDetailComment>> resultMap = new HashMap<>();
+        resultMap.put("comments", momentService.createComment(authorization, momentId,createMomentCommentInfo));
+        return new ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>>(resultMap, HttpStatus.OK);
     }
 }

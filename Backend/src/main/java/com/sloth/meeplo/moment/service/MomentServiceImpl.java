@@ -7,12 +7,15 @@ import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.moment.dto.request.MomentRequest;
 import com.sloth.meeplo.moment.dto.response.MomentResponse;
 import com.sloth.meeplo.moment.entity.Moment;
+import com.sloth.meeplo.moment.entity.MomentComment;
+import com.sloth.meeplo.moment.repository.MomentCommentRepository;
 import com.sloth.meeplo.moment.repository.MomentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,6 +26,7 @@ public class MomentServiceImpl implements MomentService{
     private final MemberService memberService;
 
     private final MomentRepository momentRepository;
+    private final MomentCommentRepository momentCommentRepository;
 
     @Override
     public MomentResponse.MomentDetail getMomentDetail(String authorization, Long momentId) {
@@ -56,10 +60,32 @@ public class MomentServiceImpl implements MomentService{
     public Long deleteReaction(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-
-        moment.getMembers().stream().filter(m->!(m.getId().equals(member.getId()))).collect(Collectors.toList());
+// TODO: 2022-11-07 리스트 삭제, 입력으로 삭제되는가 확인
+//        moment.getMembers().stream().filter(m->!(m.getId().equals(member.getId()))).collect(Collectors.toList());
+        int idx = moment.getMembers().indexOf(member);
+        if(idx>0){
+            moment.getMembers().remove(idx);
+        }
         momentRepository.save(moment);
         return (long) moment.getMembers().size();
+    }
+
+    @Override
+    @Transactional
+    public List<MomentResponse.MomentDetailComment> createComment(String authorization, Long momentId, MomentRequest.CreateMomentCommentInfo createMomentCommentInfo) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Moment moment = getMomentByMomentId(momentId);
+        momentCommentRepository.save(MomentComment.builder()
+                .createMomentCommentInfo(createMomentCommentInfo)
+                .moment(moment)
+                .build());
+        // TODO: 2022-11-07 다시해야하는가 확인필요
+//        moment = getMomentByMomentId(momentId);
+        return moment.getMomentComments().stream()
+                .map(mc -> MomentResponse.MomentDetailComment.builder()
+                        .momentComment(mc)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override

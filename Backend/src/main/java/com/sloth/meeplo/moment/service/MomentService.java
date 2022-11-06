@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.util.List;
+
 public interface MomentService {
     MomentResponse.MomentDetail getMomentDetail(String authorization, Long momentId);
 
@@ -16,6 +18,8 @@ public interface MomentService {
     Long createReaction(String authorization, Long momentId);
 
     Long deleteReaction(String authorization, Long momentId);
+
+    List<MomentResponse.MomentDetailComment> createComment(String authorization, Long momentId, MomentRequest.CreateMomentCommentInfo createMomentCommentInfo);
 
     Moment getMomentByMomentId(Long momentId);
 
