@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -45,6 +47,17 @@ public class MomentServiceImpl implements MomentService{
         Moment moment = getMomentByMomentId(momentId);
 
         moment.getMembers().add(member);
+        momentRepository.save(moment);
+        return (long) moment.getMembers().size();
+    }
+
+    @Override
+    @Transactional
+    public Long deleteReaction(String authorization, Long momentId) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Moment moment = getMomentByMomentId(momentId);
+
+        moment.getMembers().stream().filter(m->!(m.getId().equals(member.getId()))).collect(Collectors.toList());
         momentRepository.save(moment);
         return (long) moment.getMembers().size();
     }

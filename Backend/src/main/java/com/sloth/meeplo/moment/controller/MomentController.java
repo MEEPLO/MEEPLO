@@ -36,4 +36,11 @@ public class MomentController {
         resultMap.put("reactionCount", momentService.createReaction(authorization, momentId));
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{momentId}/reaction/{reactionId}")
+    public ResponseEntity<Map<String,Long>> deleteReaction(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+        Map<String, Long> resultMap = new HashMap<>();
+        resultMap.put("reactionCount", momentService.deleteReaction(authorization, momentId));
+        return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
+    }
 }

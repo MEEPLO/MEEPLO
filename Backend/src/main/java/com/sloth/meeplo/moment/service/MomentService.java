@@ -15,6 +15,8 @@ public interface MomentService {
 
     Long createReaction(String authorization, Long momentId);
 
+    Long deleteReaction(String authorization, Long momentId);
+
     Moment getMomentByMomentId(Long momentId);
 
 }
