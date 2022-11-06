@@ -1,6 +1,7 @@
 package com.sloth.meeplo.schedule.controller;
 
 
+import com.sloth.meeplo.moment.dto.response.MomentResponse;
 import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.service.ScheduleService;
@@ -63,6 +64,13 @@ public class ScheduleController {
     public ResponseEntity<Map<String, List<ScheduleResponse.ScheduleListInfo>>> getScheduleDailyList(@RequestHeader("Authorization") String authorization, @PathVariable String date){
         Map<String, List<ScheduleResponse.ScheduleListInfo>> resultMap = new HashMap<>();
         resultMap.put("scheduledDates", scheduleService.getScheduleDailyList(authorization, date));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/{scheduleId}/moment")
+    public ResponseEntity<Map<String, List<MomentResponse.MomentSimpleList>>> getMomentListBySchedule(@RequestHeader("Authorization") String authorization, @PathVariable Long scheduleId){
+        Map<String, List<MomentResponse.MomentSimpleList>> resultMap = new HashMap<>();
+        resultMap.put("moments", scheduleService.getMomentListBySchedule(authorization, scheduleId));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }
