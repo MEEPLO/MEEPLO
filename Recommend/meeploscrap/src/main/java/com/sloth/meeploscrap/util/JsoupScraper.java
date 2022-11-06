@@ -67,6 +67,8 @@ public class JsoupScraper implements Scraper{
                                 .build())
                         .collect(Collectors.toList()));
 
+
+
         log.info(parsedHTML.select(LocationListSelector.OPERATION_DAY.getSelector()).text());
         log.info(parsedHTML.select(LocationListSelector.OPERATION_TIME.getSelector()).text());
     }
