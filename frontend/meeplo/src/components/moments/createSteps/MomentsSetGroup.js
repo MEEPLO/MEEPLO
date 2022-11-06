@@ -1,13 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
-import { theme } from '../../../assets/constant/DesignTheme';
-import SelectList from 'react-native-dropdown-select-list';
-import MomentsSetFrame from './MomentsSetFrame';
-const MomentsSetGroup = () => {
-  const [selected, setSelected] = React.useState('');
+import { View } from 'react-native';
+import SelectDropdown from '../../common/SelectDropdown';
 
-  const windowHeight = Dimensions.get('window').height;
+const MomentsSetGroup = () => {
+  // const [selected, setSelected] = React.useState('');
 
   const data = [
     { key: '1', value: '장한나와 아이들' },
@@ -28,24 +24,10 @@ const MomentsSetGroup = () => {
     { key: '16', value: '청춘은 바로 지금부터~' },
     { key: '17', value: '청춘은 바로 지금부터~' },
   ];
+
   return (
-    <View style={{ marginHorizontal: 40 }}>
-      <Text>step1</Text>
-      <OutlinedTextField tintColor={theme.color.bright.red} lineWidth={3} containerStyle={{ backgroundColor: "#a9f295"}} />
-      <View style={{borderBottomWidth: 1, borderBottomColor: theme.color.bright.red }}>
-        <SelectList
-          placeholder=""
-          setSelected={setSelected}
-          data={data}
-          onSelect={() => alert(selected)}
-          maxHeight={windowHeight * 0.4}
-          boxStyles={{ borderRadius: 0, borderWidth: 0 }}
-          dropdownStyles={{ borderTopRightRadius: 0, borderTopLeftRadius: 0, backgroundColor: theme.color.pale.red }}
-          dropdownTextStyles={{ fontSize: 15, fontColor: "#000", lineHeight: 30 }}
-        />
-      </View>
-      <MomentsSetFrame />
-      <Text>엥??ㅇ</Text>
+    <View>
+      <SelectDropdown type="모임" data={data} />
     </View>
   );
 };

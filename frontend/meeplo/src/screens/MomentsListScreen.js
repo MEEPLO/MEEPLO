@@ -6,18 +6,10 @@ import { Dropdown } from 'react-native-material-dropdown';
 
 import MomentsList from '../components/moments/MomentsList';
 
-let data = [{
-  value: 'Banana',
-}, {
-  value: 'Mango',
-}, {
-  value: 'Pear',
-}];
-
 const MomentsListScreen = ({ navigation }) => {
   const linkTo = React.useCallback(nextPage => {
     navigation.push(nextPage);
-  });
+  }, []);
 
   const [isMine, setIsMine] = React.useState(false);
   const toggleSwitch = () => setIsMine(previousState => !previousState);
@@ -42,7 +34,6 @@ const MomentsListScreen = ({ navigation }) => {
           <View>
             <Text style={{ textAlign: 'right' }}>그룹 선택 selet options</Text>
             {/* <Dropdown label="Favorite Fruit" data={data} /> */}
-            <TextInput />
           </View>
         </View>
         <Pressable onPress={() => linkTo('MomentsCreate')}>
