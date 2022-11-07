@@ -9,7 +9,7 @@ import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import HomeStackScreen from '../../screens/HomeStackScreen';
 import GroupStackScreen from '../../screens/GroupStackScreen';
 import ScheduleStackScreen from '../../screens/ScheduleStackScreen';
-import MemoryStackScreen from '../../screens/MemoryStackScreen';
+import MomentsStackScreen from '../../screens/MomentsStackScreen';
 import HomeScreen from '../../screens/HomeScreen';
 import { theme } from '../../assets/constant/DesignTheme';
 import AddButonTabBar from './AddButonTabBar';
@@ -80,8 +80,8 @@ const NavigationBar = () => {
         }}
       />
       <Tab.Screen
-        name="MemoryStack"
-        component={MemoryStackScreen}
+        name="MomentsStack"
+        component={MomentsStackScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
