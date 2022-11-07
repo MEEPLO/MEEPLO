@@ -8,3 +8,5 @@ Redis 문제점
 Minikube Test
 
 RXJava, Observer, Mono, Flux
+
+kubeadm, kubectl, etcd
