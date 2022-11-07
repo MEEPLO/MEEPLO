@@ -19,14 +19,15 @@ public class LocationContent {
     @Column(length = 200)
     private String content;
 
-    private Integer price;
+    @Column(length = 50)
+    private String price;
 
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
     @Builder
-    LocationContent(Location location, String content, Integer price) {
+    LocationContent(Location location, String content, String price) {
         this.location = location;
         this.content = content;
         this.price = price;
