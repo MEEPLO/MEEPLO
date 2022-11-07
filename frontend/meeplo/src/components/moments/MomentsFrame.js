@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import mergeAndUpload from './mergeAndUpload';
 import AWS from 'aws-sdk';
 // import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
+import { decode } from 'base64-arraybuffer';
 
 const getImageTitle = date => {
   let year = date.getFullYear().toString().substring(2);
@@ -20,20 +21,16 @@ const getImageTitle = date => {
   minute = minute >= 10 ? minute : '0' + minute;
   second = second >= 10 ? second : '0' + second;
 
-  return 'ourmoment' + year + month + day + hour + minute + second + '.jpg';
+  return 'ourmoment' + year + month + day + hour + minute + second + '.png';
 };
 
 const MomentsFrame = () => {
+  const html = mergeAndUpload(3);
   const uploadToS3 = dataString => {
     let now = new Date();
     const imageTitle = getImageTitle(now);
-
-    const data = Object.values(JSON.parse(dataString));
-
-    console.log(data);
-    var blobData = new Blob([data], { type: 'image/jpg' });
-
-    console.log(blobData);
+    const base64 = dataString.split(',')[1];
+    const arrayBuffer = decode(base64);
 
     AWS.config.update({
       region: MEEPLO_APP_BUCKET_REGION,
@@ -49,17 +46,17 @@ const MomentsFrame = () => {
 
     var params = {
       Key: imageTitle,
-      ContentType: 'image/jpg',
-      Body: blobData,
+      ContentType: 'image/png',
+      Body: arrayBuffer,
     };
 
-    // s3.upload(params, function (err, data) {
-    //   if (err) {
-    //     return alert(err.stack);
-    //   }
-    //   alert('Successfully uploaded photo.');
-    //   console.log(data.Location);
-    // });
+    s3.upload(params, function (err, data) {
+      if (err) {
+        return alert(err.stack);
+      }
+      alert('Successfully uploaded photo.');
+      console.log(data.Location);
+    });
   };
 
   function onMessage(event) {
@@ -68,7 +65,7 @@ const MomentsFrame = () => {
 
   return (
     <View style={{ height: 550 }}>
-      <WebView source={{ html: mergeAndUpload }} onMessage={onMessage} />
+      <WebView source={{ html: html }} onMessage={onMessage} />
     </View>
   );
 };
