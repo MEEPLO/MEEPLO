@@ -1,23 +1,119 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
-// import styled from 'styled-components';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import HomeGroup from '../components/Home/HomeGroup';
+import HomeMemory from '../components/Home/HomeMemory';
+import HomeSchedule from '../components/Home/HomeSchedule';
+import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+  // TODO: hrookim Change dummy data to redux state data
+  const data = [
+    {
+      id: 1,
+      title: '하나',
+      date: '2022.10.20',
+      group: '아아아그룹',
+      people: 5,
+      place: '역삼역',
+    },
+    {
+      id: 2,
+      title: '둘',
+      date: '2022.10.30',
+      group: '근데 다른 그룹',
+      people: 4,
+      place: '강남역',
+    },
+    {
+      id: 3,
+      title: '셋',
+      date: '2022.11.06',
+      group: 'another group',
+      people: 6,
+      place: '모르는역',
+    },
+  ];
+
+  const onPressMoreSchedule = () => {
+    // TODO: navigation으로 페이지 옮기기
+    console.log('무브무브');
+  };
+  const onPressMoreGroup = () => {
+    // TODO: navigation으로 페이지 옮기기
+    console.log('이동이동');
+  };
+  const onPressMoreMoment = () => {
+    // TODO: navigation으로 페이지 옮기기
+    console.log('무브이동');
+  };
+
   return (
-    <>
-      <View>
-        <Text>여기는 예정된 약속</Text>
+    <ScrollView>
+      <View
+        style={{
+          margin: 20,
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'baseline',
+        }}>
+        <Text style={{ fontSize: 24, fontWeight: '900' }}>예정된 약속</Text>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={onPressMoreSchedule}
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text>더보기</Text>
+          <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
+        </TouchableOpacity>
       </View>
-      <View>
-        <Text>여기는 내가 속한 그룹</Text>
+      <HomeSchedule data={data} />
+      <View
+        style={{
+          margin: 20,
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'baseline',
+        }}>
+        <Text style={{ fontSize: 24, fontWeight: '900' }}>내가 속한 그룹</Text>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={onPressMoreGroup}
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text>더보기</Text>
+          <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
+        </TouchableOpacity>
       </View>
-      <View>
-        <Text>여기는 기록 남길 약속</Text>
+      <HomeGroup></HomeGroup>
+      <View
+        style={{
+          margin: 20,
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'baseline',
+        }}>
+        <Text style={{ fontSize: 24, fontWeight: '900' }}>추억 남기기</Text>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={onPressMoreMoment}
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text>더보기</Text>
+          <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
+        </TouchableOpacity>
       </View>
-      <View>
-        <Text>여기는 추천</Text>
+      <HomeMemory data={data} />
+      <View
+        style={{
+          margin: 20,
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          alignItems: 'baseline',
+        }}>
+        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>어디서 놀지 모르겠다면 추천 받아 보세요</Text>
       </View>
-    </>
+      <HomePlaceRecommendation />
+      <View style={{ height: 90 }} />
+    </ScrollView>
   );
 };
 
