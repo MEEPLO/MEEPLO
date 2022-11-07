@@ -36,6 +36,33 @@ const HomeScreen = ({ navigation }) => {
     },
   ];
 
+  const groupData = [
+    {
+      id: 1,
+      name: '나무늘보',
+      photo: 'https://image.msscdn.net/images/goods_img/20220324/2442488/2442488_6_500.jpg',
+      memberCount: 6,
+      leaderName: '김혜림',
+      lastSchedule: '2022.11.04',
+    },
+    {
+      id: 2,
+      name: '호사스',
+      photo: 'http://www.pharmnews.com/news/photo/202206/205376_75336_1939.png',
+      memberCount: 7,
+      leaderName: '곡호유',
+      lastSchedule: '2022.11.04',
+    },
+    {
+      id: 3,
+      name: 'SSDC',
+      photo: 'https://image.msscdn.net/images/goods_img/20220324/2442488/2442488_6_500.jpg',
+      memberCount: 6,
+      leaderName: '조준식',
+      lastSchedule: '2022.11.16',
+    },
+  ];
+
   const onPressMoreSchedule = () => {
     // TODO: navigation으로 페이지 옮기기
     console.log('무브무브');
@@ -84,7 +111,7 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
-      <HomeGroup></HomeGroup>
+      <HomeGroup data={groupData} />
       <View
         style={{
           margin: 20,
@@ -105,11 +132,11 @@ const HomeScreen = ({ navigation }) => {
       <View
         style={{
           margin: 20,
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'baseline',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>어디서 놀지 모르겠다면 추천 받아 보세요</Text>
+        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>어디서 놀지 모르겠다면</Text>
+        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}> 추천 받아 보세요</Text>
       </View>
       <HomePlaceRecommendation />
       <View style={{ height: 90 }} />
