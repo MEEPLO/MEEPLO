@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -13,10 +14,16 @@ import MemoryStackScreen from '../../screens/MemoryStackScreen';
 import HomeScreen from '../../screens/HomeScreen';
 import { theme } from '../../assets/constant/DesignTheme';
 import AddButonTabBar from './AddButonTabBar';
+import { getUserInfo } from '../../redux/userSlice';
 
 const Tab = createBottomTabNavigator();
 
 const NavigationBar = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
