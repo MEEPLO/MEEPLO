@@ -13,11 +13,11 @@ const MomentsCreate = () => {
   const STEP_COUNT = stepItems.length;
 
   const toNext = (type, payload) => {
-    dispatch({ type: type, payload: payload });
-    setStep(helper.number.clamp(step + 1, 0, STEP_COUNT - 1));
+    // dispatch({ type: type, payload: payload });
+    // setStep(helper.number.clamp(step + 1, 0, STEP_COUNT - 1));
   };
   const toPrev = () => {
-    setStep(helper.number.clamp(step - 1, 0, STEP_COUNT - 1));
+    // setStep(helper.number.clamp(step - 1, 0, STEP_COUNT - 1));
   };
   const onFinish = () => {
     // submit state

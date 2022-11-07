@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview';
 import styled from 'styled-components';
 import mergeAndUpload from './mergeAndUpload';
 import AWS from 'aws-sdk';
-// import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
+import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { decode } from 'base64-arraybuffer';
 
 const getImageTitle = date => {
