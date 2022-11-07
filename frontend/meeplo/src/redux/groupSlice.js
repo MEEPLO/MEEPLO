@@ -10,14 +10,13 @@ export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    return response.data;
+    return response.data.group;
   } catch (err) {
     console.error('ERROR in getGroupList!', err);
     return isRejectedWithValue(err.response.data);
   }
 });
 
-// TODO: hrookim groupId 인자 받기!
 export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({ groupId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
@@ -26,12 +25,103 @@ export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    return response.data;
+    return response.data.group;
   } catch (err) {
     console.error('ERROR in getGroupDetail!', err);
     return isRejectedWithValue(err.response.data);
   }
 });
+
+export const createGroup = createAsyncThunk('group/createGroup', async ({ form }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.post(
+      'http://meeplo.co.kr/meeplo/api/v1/group',
+      { ...form },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    console.log('group CREATED!');
+    return response.data;
+  } catch (err) {
+    console.error('ERROR in createGroup!', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const editGroup = createAsyncThunk('group/editGroup', async ({ form, groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.put(
+      `http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`,
+      { ...form },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    console.log('group EDITED!');
+    return response.data;
+  } catch (err) {
+    console.error('ERROR in editGroup!', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+// Only available to LEADER
+export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error('ERROR in getGroupList!', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log('group EXITED!');
+    return response.data;
+  } catch (err) {
+    console.error('ERROR in exitGroup!', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+// Only available to LEADER
+export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async ({ groupId, memberId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/member/${memberId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log('group member EXITED');
+    return response.data;
+  } catch (err) {
+    console.error('ERROR in exitGroupMember', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+// TODO: hrookim 그룹 초대 링크
 
 const groupListSlice = createSlice({
   name: 'groupList',
@@ -56,32 +146,28 @@ const groupListSlice = createSlice({
 const groupDetailSlice = createSlice({
   name: 'group',
   initialState: {
-    group: [
+    id: -1,
+    name: 'string',
+    description: 'string',
+    photo: 'photo url',
+    leader: 'string',
+    members: [
+      {
+        id: -1,
+        nickname: 'string',
+        photo: 'string',
+      },
+    ],
+    schedules: [
       {
         id: -1,
         name: 'string',
-        description: 'string',
-        photo: 'photo url',
-        leader: 'string',
-        members: [
-          {
-            id: -1,
-            nickname: 'string',
-            photo: 'string',
-          },
-        ],
-        schedules: [
-          {
-            id: -1,
-            name: 'string',
-            date: 'string',
-            memberCount: -1,
-            location: {
-              meetName: 'string',
-              amuseName: 'string',
-            },
-          },
-        ],
+        date: 'string',
+        memberCount: -1,
+        location: {
+          meetName: 'string',
+          amuseName: 'string',
+        },
       },
     ],
   },
