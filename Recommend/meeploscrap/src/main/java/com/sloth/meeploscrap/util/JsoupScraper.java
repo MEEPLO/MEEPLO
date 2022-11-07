@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,14 +68,14 @@ public class JsoupScraper implements Scraper{
                                 .build())
                         .collect(Collectors.toList()));
 
+        Stream.of(new String[]{".ihmWt", ".awlpp", ".MENyI", ".gl2cc"})
+                .forEach(c -> log.info(parsedHTML.select(c).stream()
+                            .map(Element::text)
+                            .collect(Collectors.toList()).toString())
+                );
+
         locationTimeRepository.saveAll(extractOperationData(parsedHTML, location));
 
-    }
-
-    @Transactional
-    public void scrapMenus(String html, Location location) {
-        if(html == null)
-            return;
     }
 
     @Transactional
@@ -84,13 +85,19 @@ public class JsoupScraper implements Scraper{
 
         Document parsedHTML = Jsoup.parse(html);
 
-        locationKeywordRepository.saveAll(parsedHTML.select(".YwgDA > .PaWWQ:nth-child(1) .cbqXB span:nth-child(1)").stream()
+        locationKeywordRepository.saveAll(parsedHTML.select(LocationListSelector.REVIEW_TAG.getSelector()).stream()
+                .map(r -> LocationKeyword.builder()
+                        .location(location)
+                        .keyword(r.text().replace("\"", ""))
+                        .build())
+                .collect(Collectors.toList()));
+
+        locationKeywordRepository.saveAll(parsedHTML.select(LocationListSelector.REVIEW_MENU_KEYWORD.getSelector()).stream()
                 .map(c -> LocationKeyword.builder()
                         .location(location)
                         .keyword(c.text())
                         .build())
                 .collect(Collectors.toList()));
-
     }
 
     private String extractFirstText(Document doc, LocationInfoSelector selector) {

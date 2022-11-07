@@ -3,7 +3,6 @@ package com.sloth.meeploscrap.util;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
@@ -28,7 +27,7 @@ public class SeleniumScraper implements Scraper{
 
     private static final String TABS_CLASS = ".tpj9w";
 
-    private WebDriver driver;
+    private final WebDriver driver;
 
     @Builder
     public SeleniumScraper() {
@@ -77,13 +76,12 @@ public class SeleniumScraper implements Scraper{
         try {
             driver.findElements(By.cssSelector((TABS_CLASS))).stream()
                     .filter(e -> elementText.equals(e.getText()))
-                    .findFirst()
-                    .ifPresent(WebElement::click);
+                    .forEach(WebElement::click);
 
             // 왜 이걸 찍어야 Jsoup에서 값을 가져올 수 있는걸까
-            driver.findElements(By.cssSelector(".cbqXB")).stream()
-                    .map(WebElement::getText)
-                    .collect(Collectors.toList()).toString();
+            log.info(driver.findElements(By.cssSelector(".cbqXB")).stream()
+                        .map(WebElement::getText)
+                        .collect(Collectors.toList()).toString());
 
             return driver.getPageSource();
 
