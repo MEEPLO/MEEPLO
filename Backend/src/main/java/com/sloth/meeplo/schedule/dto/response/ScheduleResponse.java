@@ -1,6 +1,8 @@
 package com.sloth.meeplo.schedule.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sloth.meeplo.global.exception.MeeploException;
+import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.schedule.entity.Schedule;
@@ -85,7 +87,7 @@ public class ScheduleResponse {
         @Builder
         ScheduleDetailMemberInfo(ScheduleMember scheduleMember){
             this.id = scheduleMember.getId();
-            this.nickname = scheduleMember.getMember().getGroupMembers().stream().filter(gm -> gm.getMember().equals(scheduleMember.getMember())).map(gm -> gm.getNickname()).collect(Collectors.toList()).get(0);
+            this.nickname = scheduleMember.getMember().getGroupMembers().stream().filter(gm -> gm.getMember().getId().equals(scheduleMember.getMember().getId())).findFirst().orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)).getNickname();
             this.photo = scheduleMember.getMember().getProfilePhoto();
             this.status = scheduleMember.getStatus();
         }

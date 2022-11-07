@@ -28,7 +28,7 @@ public class Schedule extends BaseTimeEntity {
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group group;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
