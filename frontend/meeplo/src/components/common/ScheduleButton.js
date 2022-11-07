@@ -11,7 +11,7 @@ const ScheduleButton = props => {
     var picture = Images.scheduleButton.picYellow;
   }
 
-  if (!props.data) {
+  if (!props.isData) {
     return (
       <View
         style={{
