@@ -120,13 +120,18 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .forEach(k-> schedule.getScheduleKeywords().add(k));
 
         // TODO: 2022-11-04 member삭제의 경우 unactivated로
-        Map<Long, ScheduleMember> beforeMembers = schedule.getScheduleMembers().stream()
-                .collect(Collectors.toMap(i1-> i1.getMember().getId(), i2->i2));
-        scheduleUpdateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
-                .map(id -> memberRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                .forEach(m -> schedule.getScheduleMembers().stream().
-                );
+//        Map<Long, ScheduleMember> beforeMembers = schedule.getScheduleMembers().stream()
+//                .collect(Collectors.toMap(i1-> i1.getMember().getId(), i2->i2));
+        log.info(schedule.getScheduleMembers().toString());
+        schedule.getScheduleMembers().stream()
+                .filter(sm -> scheduleUpdateInput.getMembers().stream().noneMatch(o-> o.getId().equals(sm.getId())))
+                .forEach(ScheduleMember::unactivateStatus);
+        log.info(schedule.getScheduleMembers().toString());
+        scheduleUpdateInput.getMembers().stream().filter(i -> schedule.getScheduleMembers().stream().noneMatch(o->o.getMember().getId().equals(i.getId())))
+                .map(i -> memberRepository.findById(i.getId()).orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .forEach(m -> ScheduleMember.builder().schedule(schedule).member(m).build());
+        
+        log.info(schedule.getScheduleMembers().toString());
 // TODO: 2022-11-04
         schedule.getScheduleLocations().clear();
         scheduleUpdateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
