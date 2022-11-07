@@ -31,6 +31,10 @@ public class ScheduleMember extends GeoDataEntity {
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
+    public void unactivateStatus(){
+        this.status = ScheduleMemberStatus.UNACTIVATED;
+    }
+
     @Builder
     ScheduleMember(Schedule schedule, Member member, Role role){
 //          해당 약속의 Leader / Member 를 구분한다.
