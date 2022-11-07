@@ -1,9 +1,6 @@
 package com.sloth.meeploscrap.util;
 
-import com.sloth.meeploscrap.location.entity.Location;
-import com.sloth.meeploscrap.location.entity.LocationInfo;
-import com.sloth.meeploscrap.location.entity.LocationKeyword;
-import com.sloth.meeploscrap.location.entity.LocationPhoto;
+import com.sloth.meeploscrap.location.entity.*;
 import com.sloth.meeploscrap.location.repository.LocationInfoRepository;
 import com.sloth.meeploscrap.location.repository.LocationKeywordRepository;
 import com.sloth.meeploscrap.location.repository.LocationPhotoRepository;
@@ -15,9 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.openqa.selenium.By;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,10 +67,30 @@ public class JsoupScraper implements Scraper{
                                 .build())
                         .collect(Collectors.toList()));
 
+        locationTimeRepository.saveAll(extractOperationData(parsedHTML, location));
 
+    }
 
-        log.info(parsedHTML.select(LocationListSelector.OPERATION_DAY.getSelector()).text());
-        log.info(parsedHTML.select(LocationListSelector.OPERATION_TIME.getSelector()).text());
+    @Transactional
+    public void scrapMenus(String html, Location location) {
+        if(html == null)
+            return;
+    }
+
+    @Transactional
+    public void scrapReviews(String html, Location location) {
+        if(html == null)
+            return;
+
+        Document parsedHTML = Jsoup.parse(html);
+
+        locationKeywordRepository.saveAll(parsedHTML.select(".YwgDA > .PaWWQ:nth-child(1) .cbqXB span:nth-child(1)").stream()
+                .map(c -> LocationKeyword.builder()
+                        .location(location)
+                        .keyword(c.text())
+                        .build())
+                .collect(Collectors.toList()));
+
     }
 
     private String extractFirstText(Document doc, LocationInfoSelector selector) {
@@ -84,5 +104,28 @@ public class JsoupScraper implements Scraper{
         String detail = extractFirstText(doc, LocationInfoSelector.DETAIL_DESCRIPTION);
 
         return !detail.isEmpty() ? detail : extractFirstText(doc, LocationInfoSelector.SIMPLE_DESCRIPTION);
+    }
+
+    private List<LocationTime> extractOperationData(Document doc, Location location) {
+        List<String> opDay = doc.select(LocationListSelector.OPERATION_DAY.getSelector()).stream()
+                .map(Element::text)
+                .collect(Collectors.toList());
+
+        List<String> opTime = doc.select(LocationListSelector.OPERATION_TIME.getSelector()).stream()
+                .map(Element::text)
+                .collect(Collectors.toList());
+
+        List<LocationTime> opData = new ArrayList<>();
+
+        // TODO : stream을 이용하여 반환하도록 바꿔보기
+        for(int i=0;i<opDay.size();i++) {
+            opData.add(LocationTime.builder()
+                    .location(location)
+                    .day(opDay.get(i))
+                    .content(opTime.get(i))
+                    .build());
+        }
+
+        return opData;
     }
 }
