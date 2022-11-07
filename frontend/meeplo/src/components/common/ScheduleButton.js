@@ -10,35 +10,67 @@ const ScheduleButton = props => {
   } else if (props.picture === 'yellow') {
     var picture = Images.scheduleButton.picYellow;
   }
-  return (
-    <View
-      style={{
-        marginHorizontal: 20,
-        width: imageWidth,
-        borderRadius: 20,
-        overflow: 'hidden',
-        borderColor: theme.color.border,
-        borderWidth: 3,
-      }}>
-      <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
-        <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
-          <View style={{ marginBottom: 5 }}>
-            <Text style={{ color: theme.font.color, fontWeight: '800', fontSize: 18 }}>
-              {props.date} <Text> {props.place}</Text>
-            </Text>
+
+  if (!props.data) {
+    return (
+      <View
+        style={{
+          marginHorizontal: 20,
+          width: imageWidth,
+          borderRadius: 20,
+          overflow: 'hidden',
+          borderColor: theme.color.border,
+          borderWidth: 3,
+        }}>
+        <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
+          <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
+            <View style={{ marginBottom: 5 }}>
+              <Text
+                style={{
+                  color: theme.font.color,
+                  fontWeight: '800',
+                  fontSize: 19,
+                  textAlign: 'center',
+                  lineHeight: imageWidth * 0.21,
+                }}>
+                {props.empty}
+              </Text>
+            </View>
           </View>
-          <View style={{ marginBottom: 5 }}>
-            <Text>{props.title}</Text>
+        </ImageBackground>
+      </View>
+    );
+  } else {
+    return (
+      <View
+        style={{
+          marginHorizontal: 20,
+          width: imageWidth,
+          borderRadius: 20,
+          overflow: 'hidden',
+          borderColor: theme.color.border,
+          borderWidth: 3,
+        }}>
+        <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
+          <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
+            <View style={{ marginBottom: 5 }}>
+              <Text style={{ color: theme.font.color, fontWeight: '800', fontSize: 18 }}>
+                {props.date} <Text> {props.place}</Text>
+              </Text>
+            </View>
+            <View style={{ marginBottom: 5 }}>
+              <Text>{props.title}</Text>
+            </View>
+            <View>
+              <Text>
+                아직20대초딩들 <Text> | </Text> {props.people}명
+              </Text>
+            </View>
           </View>
-          <View>
-            <Text>
-              아직20대초딩들 <Text> | </Text> {props.people}명
-            </Text>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
-  );
+        </ImageBackground>
+      </View>
+    );
+  }
 };
 
 export default ScheduleButton;
