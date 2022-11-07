@@ -113,4 +113,11 @@ public class MomentServiceImpl implements MomentService{
 
         momentRepository.delete(moment);
     }
+
+    @Override
+    public List<MomentResponse.MomentDetailComment> getComments(String authorization, Long momentId) {
+        Moment moment = getMomentByMomentId(momentId);
+//        Member member = memberService.getMemberByAuthorization(authorization);
+        return moment.getMomentComments().stream().map(mc -> MomentResponse.MomentDetailComment.builder().momentComment(mc).build()).collect(Collectors.toList());
+    }
 }

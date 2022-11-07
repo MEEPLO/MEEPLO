@@ -25,7 +25,7 @@ public class MomentResponse {
         MomentSimpleList(Moment moment){
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
-            this.reactionCount = (long) moment.getMomentComments().size();
+            this.reactionCount = (long) moment.getMembers().size();
         }
     }
     @Getter
