@@ -1,19 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
-import { View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import MapView from '../components/map/MapView';
+import ScheduleTestScreen from './ScheduleTestScreen';
 
 const ScheduleStack = createNativeStackNavigator();
 
 const ScheduleStackScreen = () => {
   return (
-    <>
-      <View style={{ flex: 1, backgroundColor: 'green' }}>
-        <MapView />
-      </View>
-    </>
+    <ScheduleStack.Navigator
+      initialRouteName="Test"
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <ScheduleStack.Screen name="Test" component={ScheduleTestScreen} />
+    </ScheduleStack.Navigator>
   );
 };
 
