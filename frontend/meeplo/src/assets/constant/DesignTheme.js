@@ -1,16 +1,16 @@
 const theme = {
   color: {
     bright: {
-      red: '#FFC5C5',
+      red: '#FF8E8E',
       orange: '#FFDB7E',
       yellow: '#FFED8C',
       green: '#D1F077',
-      blue: '#D1F3FF',
+      blue: '#C5D1FF',
       navy: '#D1DBFF',
-      purple: '#D5CFFA',
+      purple: '#D3CCFF',
     },
     pale: {
-      red: '#FEE6E6',
+      red: '#FFD3D3',
       orange: '#FFEDD8',
       yellow: '#FFF0B9',
       green: '#E4F3B9',

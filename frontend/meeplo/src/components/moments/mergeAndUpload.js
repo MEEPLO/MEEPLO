@@ -1,10 +1,49 @@
-const maxLength = {
-  1: 1,
-  2: 2,
-  3: 4,
+const picType = {
+  1: {
+    maxLength: 1,
+    picWidth: 600,
+    picHeight: 710,
+    heightRatio: 1,
+    widthRatio: 1,
+    xStart: 30,
+    xPower: 0,
+    yStart: 30,
+    yPower: 0,
+    resizedwidth: 540,
+    resizedHeight: 540,
+    bgColor: 'rgb(255, 255, 255)',
+  },
+  2: {
+    maxLength: 2,
+    picWidth: 810,
+    picHeight: 630,
+    heightRatio: 1.3,
+    widthRatio: 0.75,
+    xStart: 30,
+    xPower: 390,
+    yStart: 120,
+    yPower: 0,
+    resizedwidth: 360,
+    resizedHeight: 480,
+    bgColor: 'rgb(255, 255, 255)',
+  },
+  3: {
+    maxLength: 4,
+    picWidth: 360,
+    picHeight: 1300,
+    heightRatio: 0.75,
+    widthRatio: 1.3,
+    xStart: 20,
+    xPower: 0,
+    yStart: 20,
+    yPower: 260,
+    resizedwidth: 320,
+    resizedHeight: 240,
+    bgColor: 'rgb(0, 0, 0)',
+  },
 };
 
-const mergeAndUpload = `
+const mergeAndUpload = type => `
 <div class="upload-control">
 <div class="gallary">
   사진 추가하기
@@ -15,27 +54,22 @@ const mergeAndUpload = `
   id="review-upload-input"
   >
 </div>
-<button id="download" onclick="uploadImage()">
-  업로드하기
+<button class="reset" onclick="sendDataToReactNativeApp()">
+  만들기
 </button>
-<div class="reset" onclick="sendDataToReactNativeApp()">
-  다시하기
-</div>
+<button onclick="resetGallery()">
+다시하기
+</button>
 </div>
 <div class="canvas-container">
-<canvas id="my-canvas" width="360" height="1300" style="background-color: #000;"></canvas>
+<canvas id="my-canvas" width="${picType[type].picWidth}" height="${picType[type].picHeight}" style="background-color: ${picType[type].bgColor};"></canvas>
 </div>
 
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
-
 <script>
-
 const mergePics = (event, index) => {
-
-  document.getElementById('my-canvas').getContext('2d').fillStyle = "black"
-  document.getElementById('my-canvas').getContext('2d').fillRect(0, 0, 360, 1300)  
-
-
+  document.getElementById('my-canvas').getContext('2d').fillStyle = "${picType[type].bgColor}"
+  document.getElementById('my-canvas').getContext('2d').fillRect(0, 0, ${picType[type].picWidth}, ${picType[type].picHeight})
+  
   const pic = event.target.files[index]
   var reader = new FileReader()
   reader.readAsDataURL(pic);
@@ -51,19 +85,19 @@ const mergePics = (event, index) => {
       var picW = 0
       var picH = 0
 
-      if (originalWidth * 0.75 < originalHeight) {
+      if (originalWidth * ${picType[type].heightRatio} < originalHeight) {
         picW = originalWidth
-        picH = originalWidth * 0.75
+        picH = originalWidth * ${picType[type].heightRatio}
       } else {
-        picW = originalHeight * 1.30
+        picW = originalHeight * ${picType[type].widthRatio}
         picH = originalHeight
       }
       const picX = (originalWidth - picW) / 2
       const picY = (originalHeight - picH) / 2
 
-      const resultX = 20
-      const resultY = index * (240 + 20) + 20
-      document.getElementById('my-canvas').getContext('2d').drawImage(image, picX, picY, picW, picH, resultX, resultY, 320, 240)
+      const resultX = index * (${picType[type].xPower}) + ${picType[type].xStart}
+      const resultY = index * (${picType[type].yPower}) + ${picType[type].yStart}
+      document.getElementById('my-canvas').getContext('2d').drawImage(image, picX, picY, picW, picH, resultX, resultY, ${picType[type].resizedwidth}, ${picType[type].resizedHeight})
     }
   }
 }
@@ -72,16 +106,14 @@ const picInput = document.getElementById('review-upload-input')
 var imgAToB = []
 
 picInput.addEventListener('change', (event) => {
-  if (event.target.files.length > ${maxLength[3]}) {
-    alert("사진은 최대 ${maxLength[3]}개까지 첨부가 가능합니다.")
-  } else if (event.target.files.length < ${maxLength[3]}) {
-    alert("사진 ${maxLength[3]}개를 선택해주세요!")
-  } else if (event.target.files.length == ${maxLength[3]}) {
+  if (event.target.files.length > ${picType[type].maxLength}) {
+    alert("사진은 ${picType[type].maxLength}개까지 첨부가 가능합니다.")
+  } else if (event.target.files.length < ${picType[type].maxLength}) {
+    alert("사진 ${picType[type].maxLength}개를 선택해주세요!")
+  } else if (event.target.files.length == ${picType[type].maxLength}) {
     for (let index = 0; index < event.target.files.length; index++) {
       mergePics(event, index)
     }
-    var dataUrl = document.getElementById("my-canvas").toDataURL("image/jpg");
-    imgAToB = dataURItoBlob(dataUrl)
   }
 });
 
@@ -89,30 +121,13 @@ const resetGallery = () => {
   document.getElementById("my-canvas").remove()
   var canvas = document.createElement("canvas")
   canvas.id = "my-canvas"
-  canvas.setAttribute("width", "360")
-  canvas.setAttribute("height", "1300")
-  canvas.setAttribute("style", "background-color: #000;")
+  canvas.setAttribute("width", "${picType[type].picWidth}")
+  canvas.setAttribute("height", "${picType[type].picHeight}")
+  canvas.setAttribute("style", "background-color: ${picType[type].bgColor};")
 
   var container = document.querySelector(".canvas-container")
   container.appendChild(canvas)
 }
-
-const getImageTitle = (date) => {
-  let year = date.getFullYear().toString().substring(2)
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-  let second = date.getSeconds();
-
-  month = month >= 10 ? month : '0' + month;
-  day = day >= 10 ? day : '0' + day;
-  hour = hour >= 10 ? hour : '0' + hour;
-  minute = minute >= 10 ? minute : '0' + minute;
-  second = second >= 10 ? second : '0' + second;
-
-  return "ourmoment" + year + month + day + hour + minute + second + ".jpg";
-} 
 
 function dataURItoBlob(dataURI) {
   var binary = atob(dataURI.split(',')[1]);
@@ -122,18 +137,14 @@ function dataURItoBlob(dataURI) {
   }
   var arr8 = new Uint8Array(array)
 
-  // return new Blob([new Uint8Array(array)], {type: 'image/jpg'});
   return arr8
 }
 
-
-alert("js running")
-
-
 const sendDataToReactNativeApp = () => {
-
+  var dataUrl = document.getElementById("my-canvas").toDataURL("image/jpg");
+  
   window.ReactNativeWebView.postMessage(
-    JSON.stringify(imgAToB)
+    dataUrl
   )
 }
 </script>
