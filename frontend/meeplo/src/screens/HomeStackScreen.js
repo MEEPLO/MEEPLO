@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DefaultTheme } from '@react-navigation/native';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
 import LoadingBar from '../components/common/LoadingBar';
