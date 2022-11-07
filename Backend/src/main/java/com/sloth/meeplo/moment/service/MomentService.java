@@ -25,4 +25,7 @@ public interface MomentService {
 
     void deleteMoment(String authorization, Long momentId);
 
+    List<MomentResponse.MomentDetailComment> getComments(String authorization, Long momentId);
+
+
 }

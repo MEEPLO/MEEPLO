@@ -58,4 +58,11 @@ public class MomentController {
         resultMap.put("comments", momentService.createComment(authorization, momentId,createMomentCommentInfo));
         return new ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>>(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/{momentId}/comment")
+    public ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>> getComments(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+        Map<String, List<MomentResponse.MomentDetailComment>> resultMap = new HashMap<>();
+        resultMap.put("comments", momentService.getComments(authorization, momentId));
+        return new ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>>(resultMap, HttpStatus.OK);
+    }
 }
