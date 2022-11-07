@@ -21,16 +21,23 @@ public class ScraperService {
         String clickableExplainRestaurant = "방이편백육분삼십 서울 강남구 테헤란로29길";
         String nonClickableExplainRestaurant = "바게트케이 서울특별시 강남구 테헤란로34길 21-10";
 
+        SeleniumScraper seleniumScraper = SeleniumScraper.builder().build();
+
         locationRepository.findByType(null, Pageable.ofSize(10))
                 .forEach(loc -> {
-                    SeleniumScraper seleniumScraper = SeleniumScraper.builder()
-                            .location(loc.getName() + " " + loc.getAddress())
-                            .build();
+                    String html = seleniumScraper.focusInitFrame(loc.getName() + " " + loc.getAddress());
 
-                    jsoupScraper.scrapDetailData(seleniumScraper.focusInitFrame(), loc);
+                    if(html == null)
+                        return;
 
-                    seleniumScraper.closeDriver();
+                    jsoupScraper.scrapDetailData(html, loc);
+
+                    jsoupScraper.scrapReviews(seleniumScraper.clickBar("리뷰"), loc);
+
+                    jsoupScraper.scrapMenus(seleniumScraper.clickBar("메뉴"), loc);
                 });
+
+        seleniumScraper.closeDriver();
 
         return "good";
     }
