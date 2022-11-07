@@ -7,14 +7,14 @@ import { faHouseChimney } from '@fortawesome/free-solid-svg-icons/faHouseChimney
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons/faCalendarDays';
 import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
-import HomeStackScreen from '../../screens/HomeStackScreen';
-import GroupStackScreen from '../../screens/GroupStackScreen';
-import ScheduleStackScreen from '../../screens/ScheduleStackScreen';
-import MomentsStackScreen from '../../screens/MomentsStackScreen';
-import HomeScreen from '../../screens/HomeScreen';
-import { theme } from '../../assets/constant/DesignTheme';
-import AddButonTabBar from './AddButonTabBar';
-import { getUserInfo } from '../../redux/userSlice';
+import HomeStackScreen from '../../../screens/HomeStackScreen';
+import GroupStackScreen from '../../../screens/GroupStackScreen';
+import ScheduleStackScreen from '../../../screens/ScheduleStackScreen';
+import MomentsStackScreen from '../../../screens/MomentsStackScreen';
+import HomeScreen from '../../../screens/HomeScreen';
+import { theme } from '../../../assets/constant/DesignTheme';
+import AddButon from './AddButon';
+import { getUserInfo } from '../../../redux/userSlice';
 
 const Tab = createBottomTabNavigator();
 
@@ -71,7 +71,7 @@ const NavigationBar = () => {
         name="Add"
         component={HomeScreen}
         options={{
-          tabBarButton: props => <AddButonTabBar {...props} />,
+          tabBarButton: props => <AddButon {...props} />,
         }}
       />
       <Tab.Screen
