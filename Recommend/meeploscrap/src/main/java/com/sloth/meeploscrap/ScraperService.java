@@ -33,8 +33,6 @@ public class ScraperService {
                     jsoupScraper.scrapDetailData(html, loc);
 
                     jsoupScraper.scrapReviews(seleniumScraper.clickBar("리뷰"), loc);
-
-                    jsoupScraper.scrapMenus(seleniumScraper.clickBar("메뉴"), loc);
                 });
 
         seleniumScraper.closeDriver();

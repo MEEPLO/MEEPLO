@@ -14,5 +14,5 @@ public enum LocationInfoSelector implements LocationSelector {
     LocationInfoSelector(String selector) {
         this.selector = selector;
     }
-    final String selector;
+    private final String selector;
 }
