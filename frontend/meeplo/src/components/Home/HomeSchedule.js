@@ -11,7 +11,7 @@ const Indicator = ({ scrollX, data }) => {
         const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
         const scale = scrollX.interpolate({
           inputRange,
-          outputRange: [0.7, 1.2, 0.7],
+          outputRange: [0.8, 1.15, 0.8],
           extrapolate: 'clamp',
         });
         const opacity = scrollX.interpolate({
@@ -23,9 +23,9 @@ const Indicator = ({ scrollX, data }) => {
           <Animated.View
             key={`indicator-${i}`}
             style={{
-              height: 10,
-              width: 10,
-              borderRadius: 5,
+              height: 8,
+              width: 8,
+              borderRadius: 4,
               backgroundColor: '#595959',
               margin: 5,
               transform: [{ scale }],
