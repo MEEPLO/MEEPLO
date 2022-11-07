@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -173,10 +175,18 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<String> getScheduleMonthList(String authorization, String yearMonth) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        LocalDateTime targetYearMonth = LocalDateTime.parse(yearMonth, DateTimeFormatter.ofPattern("yyyy-MM"));
-        // TODO: 2022-11-06  성능 질문 (영속성을 사용해 java단에서 크기비교가 좋을까? 여러번 DB접근은 하지만 DB에서 비교해 가져오는게 좋을까)
-//        member.getGroupMembers().stream().flatMap(gm-> scheduleRepository.findByGroupAndDateBetween(gm.getGroup(),targetYearMonth,targetYearMonth.plusMonths(1)))
-        return null;
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM")
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter();
+        LocalDate localDate = LocalDate.parse(yearMonth, formatter);
+        LocalDateTime targetYearMonth = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
+        return member.getGroupMembers().stream()
+                .flatMap(gm-> scheduleRepository
+                        .findByGroupAndDateBetween(gm.getGroup(),targetYearMonth,targetYearMonth.plusMonths(1)).stream())
+                .map(s->s.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override
