@@ -4,17 +4,17 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import { theme } from '../../assets/constant/DesignTheme';
+import Images from '../../assets/image/index';
 
 const ToolBarTitle = () => {
   return (
     <View style={{ backgroundColor: theme.color.background, height: 50, justifyContent: 'center' }}>
-      <Image style={{ height: 30 }} source={require('../../assets/image/meeploLogo.png')} resizeMode="contain" />
+      <Image style={{ height: 20 }} source={Images.meeploLogo} resizeMode="contain" />
     </View>
   );
 };
 
 const ToolBarLeft = props => {
-  // console.log(props);
   const navigation = useNavigation();
   return (
     <TouchableOpacity
