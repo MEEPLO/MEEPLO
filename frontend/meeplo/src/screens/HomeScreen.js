@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
@@ -6,8 +7,12 @@ import HomeGroup from '../components/Home/HomeGroup';
 import HomeMemory from '../components/Home/HomeMemory';
 import HomeSchedule from '../components/Home/HomeSchedule';
 import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation';
+import { getGroupList } from '../redux/groupSlice';
 
 const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const groupList = useSelector(state => state.groupList);
+
   // TODO: hrookim Change dummy data to redux state data
   const data = [
     {
@@ -36,33 +41,6 @@ const HomeScreen = ({ navigation }) => {
     },
   ];
 
-  const groupData = [
-    {
-      id: 1,
-      name: '나무늘보',
-      photo: 'https://image.msscdn.net/images/goods_img/20220324/2442488/2442488_6_500.jpg',
-      memberCount: 6,
-      leaderName: '김혜림',
-      lastSchedule: '2022.11.04',
-    },
-    {
-      id: 2,
-      name: '호사스',
-      photo: 'http://www.pharmnews.com/news/photo/202206/205376_75336_1939.png',
-      memberCount: 7,
-      leaderName: '곡호유',
-      lastSchedule: '2022.11.04',
-    },
-    {
-      id: 3,
-      name: 'SSDC',
-      photo: 'https://image.msscdn.net/images/goods_img/20220324/2442488/2442488_6_500.jpg',
-      memberCount: 6,
-      leaderName: '조준식',
-      lastSchedule: '2022.11.16',
-    },
-  ];
-
   const onPressMoreSchedule = () => {
     // TODO: navigation으로 페이지 옮기기
     console.log('무브무브');
@@ -75,6 +53,10 @@ const HomeScreen = ({ navigation }) => {
     // TODO: navigation으로 페이지 옮기기
     console.log('무브이동');
   };
+
+  useEffect(() => {
+    dispatch(getGroupList());
+  }, []);
 
   return (
     <ScrollView>
@@ -111,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
-      <HomeGroup data={groupData} />
+      <HomeGroup data={groupList.slice(0, 3)} navigation={navigation} />
       <View
         style={{
           margin: 20,

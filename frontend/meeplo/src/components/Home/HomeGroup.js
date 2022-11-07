@@ -2,16 +2,18 @@ import React from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import HomeGroupItem from './HomeGroupItem';
 
-const HomeGroup = ({ data }) => {
+const HomeGroup = ({ data, navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       activeOpacity={0.6}
       onPress={() => {
         // TODO: hrookim navigate to Group-DETAIL page
+        navigation.navigate('HomeStack', { screen: 'Login' });
+        // navigation.navigate()
       }}>
       <HomeGroupItem
         name={item.name}
-        lastSchedule={item.lastSchedule}
+        lastSchedule={item?.lastSchedule}
         photo={item.photo}
         memberCount={item.memberCount}
         leaderName={item.leaderName}
