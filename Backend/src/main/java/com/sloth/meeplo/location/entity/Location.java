@@ -41,11 +41,12 @@ public class Location extends GeoDataEntity {
     @OneToMany(mappedBy = "location")
     private List<LocationContent> locationContents;
 
+    @OneToMany(mappedBy = "location")
+    private List<Schedule> schedules;
+
     @OneToOne(mappedBy = "location")
     private LocationInfo locationInfo;
 
-    @OneToOne(mappedBy = "location")
-    private Schedule schedule;
 
     @Builder
     Location(String name){

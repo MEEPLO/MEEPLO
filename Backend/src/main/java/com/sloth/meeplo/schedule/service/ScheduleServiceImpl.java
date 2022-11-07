@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -181,10 +182,12 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<ScheduleResponse.ScheduleListInfo> getScheduleDailyList(String authorization, String date) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        LocalDateTime targetDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
+        log.info(targetDate.toString());
         return member.getGroupMembers().stream()
                 .flatMap(gm-> scheduleRepository
-                        .findByGroupAndDate(gm.getGroup(),targetDate).stream())
+                        .findByGroupAndDateBetween(gm.getGroup(),targetDate, targetDate.plusDays(1)).stream())
                 .map(s -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(s)
                         .build())

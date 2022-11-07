@@ -63,7 +63,7 @@ public class ScheduleController {
     @GetMapping("/daily/{date}")
     public ResponseEntity<Map<String, List<ScheduleResponse.ScheduleListInfo>>> getScheduleDailyList(@RequestHeader("Authorization") String authorization, @PathVariable String date){
         Map<String, List<ScheduleResponse.ScheduleListInfo>> resultMap = new HashMap<>();
-        resultMap.put("scheduledDates", scheduleService.getScheduleDailyList(authorization, date));
+        resultMap.put("schedules", scheduleService.getScheduleDailyList(authorization, date));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
