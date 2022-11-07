@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, ScrollView, Switch, Pressable, StyleSheet, TextInput } from 'react-native';
 import styled from 'styled-components';
 import { theme } from '../assets/constant/DesignTheme';
-import { Dropdown } from 'react-native-material-dropdown';
 
 import MomentsList from '../components/moments/MomentsList';
 
@@ -33,7 +32,6 @@ const MomentsListScreen = ({ navigation }) => {
           </View>
           <View>
             <Text style={{ textAlign: 'right' }}>그룹 선택 selet options</Text>
-            {/* <Dropdown label="Favorite Fruit" data={data} /> */}
           </View>
         </View>
         <Pressable onPress={() => linkTo('MomentsCreate')}>
