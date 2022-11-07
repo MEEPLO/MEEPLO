@@ -162,6 +162,11 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
     }
 
+    public ScheduleLocation getScheduleLocationById(Long scheduleLocationId){
+        return scheduleLocationRepository.findById(scheduleLocationId)
+                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+    }
+
     @Override
     public List<ScheduleResponse.ScheduleListInfo> getScheduleList(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);

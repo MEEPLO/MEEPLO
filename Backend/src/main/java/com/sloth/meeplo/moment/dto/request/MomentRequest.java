@@ -33,8 +33,8 @@ public class MomentRequest {
     @ToString
     @NoArgsConstructor
     public static class MomentCommentLocation{
-        private Double xPoint;
-        private Double yPoint;
+        private Double xpoint;
+        private Double ypoint;
         private Double angle;
 
     }
