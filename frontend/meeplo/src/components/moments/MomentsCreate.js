@@ -4,6 +4,7 @@ import StepIndicator from '../stepper/StepIndicator';
 import StepRenderer from '../stepper/StepRenderer';
 import MomentsSetGroup from './createSteps/MomentsSetGroup';
 import MomentsSetSchedule from './createSteps/MomentsSetSchedule';
+import MomentsSetPicture from './createSteps/MomentsSetPicture';
 import MomentsSetFrame from './createSteps/MomentsSetFrame';
 
 const MomentsCreate = () => {
