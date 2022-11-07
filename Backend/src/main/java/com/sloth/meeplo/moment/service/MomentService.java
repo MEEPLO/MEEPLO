@@ -23,4 +23,6 @@ public interface MomentService {
 
     Moment getMomentByMomentId(Long momentId);
 
+    void deleteMoment(String authorization, Long momentId);
+
 }

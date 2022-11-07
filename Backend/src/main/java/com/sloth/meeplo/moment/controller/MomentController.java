@@ -2,6 +2,7 @@ package com.sloth.meeplo.moment.controller;
 
 import com.sloth.meeplo.moment.dto.request.MomentRequest;
 import com.sloth.meeplo.moment.dto.response.MomentResponse;
+import com.sloth.meeplo.moment.repository.MomentRepository;
 import com.sloth.meeplo.moment.service.MomentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,12 @@ public class MomentController {
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{momentId}")
+    public ResponseEntity<Void> deleteMoment(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+        momentService.deleteMoment(authorization,momentId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/{momentId}/reaction")
     public ResponseEntity<Map<String,Long>> createReaction(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
         Map<String, Long> resultMap = new HashMap<>();
@@ -38,7 +45,7 @@ public class MomentController {
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{momentId}/reaction/{reactionId}")
+    @DeleteMapping("/{momentId}/reaction")
     public ResponseEntity<Map<String,Long>> deleteReaction(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("reactionCount", momentService.deleteReaction(authorization, momentId));

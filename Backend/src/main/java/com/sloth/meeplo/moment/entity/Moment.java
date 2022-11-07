@@ -46,15 +46,11 @@ public class Moment extends BaseTimeEntity {
     @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL)
     private List<MomentComment> momentComments;
 
-//    @Builder
-//    public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member){
-//        this.momentPhoto = createMomentInfo.getPhotoUrl();
-//        this.member = member;
-//        this.type = createMomentInfo.getType();
-//        if(createMomentInfo.getSchedulePlaceId()!=null && createMomentInfo.getSchedulePlaceId()>0){
-//            this.scheduleLocation =
-//        }else{
-//
-//        }
-//    }
+    @Builder
+    public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member, ScheduleLocation scheduleLocation){
+        this.momentPhoto = createMomentInfo.getPhotoUrl();
+        this.member = member;
+        this.type = createMomentInfo.getType();
+        this.scheduleLocation = scheduleLocation;
+    }
 }

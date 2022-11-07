@@ -5,6 +5,7 @@ import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
 import com.sloth.meeplo.schedule.dto.response.KeywordResponse;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
+import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,8 @@ public interface ScheduleService {
 
 
     Schedule getScheduleByScheduleId(Long scheduleId);
+
+    ScheduleLocation getScheduleLocationById(Long scheduleLocationId);
 
     List<ScheduleResponse.ScheduleListInfo> getScheduleList(String authorization);
 

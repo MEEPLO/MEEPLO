@@ -8,8 +8,11 @@ import com.sloth.meeplo.moment.dto.request.MomentRequest;
 import com.sloth.meeplo.moment.dto.response.MomentResponse;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.moment.entity.MomentComment;
+import com.sloth.meeplo.moment.exception.code.MomentErrorCode;
 import com.sloth.meeplo.moment.repository.MomentCommentRepository;
 import com.sloth.meeplo.moment.repository.MomentRepository;
+import com.sloth.meeplo.schedule.entity.ScheduleLocation;
+import com.sloth.meeplo.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class MomentServiceImpl implements MomentService{
 
     private final MemberService memberService;
+    private final ScheduleService scheduleService;
 
     private final MomentRepository momentRepository;
     private final MomentCommentRepository momentCommentRepository;
@@ -36,12 +40,17 @@ public class MomentServiceImpl implements MomentService{
         return MomentResponse.MomentDetail.builder().moment(moment).member(member).build();
     }
 
-    // TODO: 2022-11-06 group과 연결된 schedule 생성 요소들 재확인필요 
     @Override
     @Transactional
     public Long createMoment(String authorization, MomentRequest.CreateMomentInfo createMomentInfo) {
-//        Moment moment = momentRepository.save(Moment.)
-        return null;
+        Member member = memberService.getMemberByAuthorization(authorization);
+        ScheduleLocation scheduleLocation = scheduleService.getScheduleLocationById(createMomentInfo.getSchedulePlaceId());
+        Moment moment = momentRepository.save(Moment.builder()
+                .createMomentInfo(createMomentInfo)
+                .member(member)
+                .scheduleLocation(scheduleLocation)
+                .build());
+        return moment.getId();
     }
 
     @Override
@@ -49,7 +58,7 @@ public class MomentServiceImpl implements MomentService{
     public Long createReaction(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-
+        if(moment.getMembers().contains(member)) throw new MeeploException(MomentErrorCode.ALREADY_REACTED);
         moment.getMembers().add(member);
         momentRepository.save(moment);
         return (long) moment.getMembers().size();
@@ -60,12 +69,11 @@ public class MomentServiceImpl implements MomentService{
     public Long deleteReaction(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-// TODO: 2022-11-07 리스트 삭제, 입력으로 삭제되는가 확인
-//        moment.getMembers().stream().filter(m->!(m.getId().equals(member.getId()))).collect(Collectors.toList());
         int idx = moment.getMembers().indexOf(member);
-        if(idx>0){
-            moment.getMembers().remove(idx);
+        if(idx<0){
+            throw new MeeploException(MomentErrorCode.NOT_YET_REACTED);
         }
+        moment.getMembers().remove(member);
         momentRepository.save(moment);
         return (long) moment.getMembers().size();
     }
@@ -75,12 +83,13 @@ public class MomentServiceImpl implements MomentService{
     public List<MomentResponse.MomentDetailComment> createComment(String authorization, Long momentId, MomentRequest.CreateMomentCommentInfo createMomentCommentInfo) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
+        if (momentCommentRepository.existsByMemberAndMoment(member,moment))
+            throw new MeeploException(MomentErrorCode.ALREADY_COMMENTED);
         momentCommentRepository.save(MomentComment.builder()
                 .createMomentCommentInfo(createMomentCommentInfo)
                 .moment(moment)
+                .member(member)
                 .build());
-        // TODO: 2022-11-07 다시해야하는가 확인필요
-//        moment = getMomentByMomentId(momentId);
         return moment.getMomentComments().stream()
                 .map(mc -> MomentResponse.MomentDetailComment.builder()
                         .momentComment(mc)
@@ -92,5 +101,16 @@ public class MomentServiceImpl implements MomentService{
     public Moment getMomentByMomentId(Long momentId){
         return momentRepository.findById(momentId)
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+    }
+
+    @Override
+    @Transactional
+    public void deleteMoment(String authorization, Long momentId) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Moment moment = getMomentByMomentId(momentId);
+
+        if(!moment.getMember().getId().equals(member.getId())) throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
+
+        momentRepository.delete(moment);
     }
 }
