@@ -20,6 +20,7 @@ import com.sloth.meeplo.schedule.repository.ScheduleKeywordRepository;
 import com.sloth.meeplo.schedule.repository.ScheduleLocationRepository;
 import com.sloth.meeplo.schedule.repository.ScheduleMemberRepository;
 import com.sloth.meeplo.schedule.repository.ScheduleRepository;
+import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,48 +103,45 @@ public class ScheduleServiceImpl implements ScheduleService{
         Group group = groupService.getGroupEntityByGroupId(scheduleUpdateInput.getGroupId());
         Schedule schedule = getScheduleByScheduleId(scheduleUpdateInput.getId());
 
-
+        if(schedule.getScheduleMembers().stream().noneMatch(sm->sm.getRole().equals(Role.LEADER) && sm.getMember().getId().equals(member.getId())))
+            throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
         //내부값 수정
-//        schedule
-//                .name(scheduleCreateInput.getName())
-//                .date(scheduleCreateInput.getDate())
-//        // TODO: 2022-11-04 리더인경우만 수정가능하도록
-////        if(scheduleMemberRepository.)
-//
-//        // TODO: 2022-11-04 clear로 삭제 가능한가 확인
-//        schedule.getScheduleKeywords().clear();
-//        scheduleUpdateInput.getKeywords().stream().map(ScheduleRequest.ScheduleInputKeyword::getId)
-//                .map(id -> scheduleKeywordRepository.findById(id)
-//                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-//                .forEach(k-> schedule.getScheduleKeywords().add(k));
-//
-//        // TODO: 2022-11-04 member삭제의 경우 unactivated로
-//        scheduleUpdateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
-//                .map(id -> memberRepository.findById(id)
-//                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-//                .forEach(m -> scheduleMemberRepository
-//                        .save(ScheduleMember
-//                                .builder()
-//                                .schedule(newSchedule)
-//                                .member(m)
-//                                .role(Role.MEMBER)
-//                                .build()
-//                        )
-//                );
-//// TODO: 2022-11-04
-//        scheduleUpdateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
-//                .map(id -> locationRepository.findById(id)
-//                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-//                .forEach(location -> scheduleLocationRepository
-//                        .save(ScheduleLocation
-//                                .createScheduleLocation()
-//                                .schedule(newSchedule)
-//                                .location(location)
-//                                .build()
-//                        )
-//                );
-//
+        schedule.updateName(scheduleUpdateInput.getName());
+        schedule.updateLocation(locationRepository.findById(scheduleUpdateInput.getMeetLocationId())
+                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)));
+        schedule.updateDate(scheduleUpdateInput.getDate());
         scheduleRepository.save(schedule);
+
+        // TODO: 2022-11-04 clear로 삭제 가능한가 확인
+        schedule.getScheduleKeywords().clear();
+        scheduleUpdateInput.getKeywords().stream().map(ScheduleRequest.ScheduleInputKeyword::getId)
+                .map(id -> scheduleKeywordRepository.findById(id)
+                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .forEach(k-> schedule.getScheduleKeywords().add(k));
+
+        // TODO: 2022-11-04 member삭제의 경우 unactivated로
+        Map<Long, ScheduleMember> beforeMembers = schedule.getScheduleMembers().stream()
+                .collect(Collectors.toMap(i1-> i1.getMember().getId(), i2->i2));
+        scheduleUpdateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
+                .map(id -> memberRepository.findById(id)
+                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .forEach(m -> schedule.getScheduleMembers().stream().
+                );
+// TODO: 2022-11-04
+        schedule.getScheduleLocations().clear();
+        scheduleUpdateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
+                .map(id -> locationRepository.findById(id)
+                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .forEach(location -> scheduleLocationRepository
+                        .save(ScheduleLocation
+                                .createScheduleLocation()
+                                .schedule(schedule)
+                                .location(location)
+                                .build()
+                        )
+                );
+
+
     }
 
     @Override

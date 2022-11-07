@@ -56,6 +56,17 @@ public class Schedule extends BaseTimeEntity {
         this.name =name;
         this.group = group;
         this.location = location;
+    }
 
+    public void updateDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void updateLocation(Location location) {
+        this.location = location;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
     }
 }
