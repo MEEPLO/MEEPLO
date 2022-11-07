@@ -1,27 +1,19 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Text, Button, View } from 'react-native-svg';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SplashScreen from './SplashScreen';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
 import LoadingBar from '../components/common/LoadingBar';
 import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/ToolBar';
-import { getUserInfo } from '../redux/userSlice';
 import HomeGroup from '../components/Home/HomeGroup';
 
 const HomeStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
-  const dispatch = useDispatch();
   const user = useSelector(state => state.user);
 
-  useEffect(() => {
-    dispatch(getUserInfo());
-  }, []);
   return (
-    <HomeStack.Navigator initialRouteName="Splash">
-      <HomeStack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+    <HomeStack.Navigator initialRouteName="Login">
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}

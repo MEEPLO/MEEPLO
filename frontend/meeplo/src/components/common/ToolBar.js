@@ -14,7 +14,7 @@ const ToolBarTitle = () => {
 };
 
 const ToolBarLeft = props => {
-  console.log(props);
+  // console.log(props);
   const navigation = useNavigation();
   return (
     <TouchableOpacity
