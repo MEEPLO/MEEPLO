@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Dimensions } from 'react-native';
 import styled from 'styled-components';
 import AutoHeightImage from 'react-native-auto-height-image';
+import { theme } from '../../assets/constant/DesignTheme';
 
 const MomentsCol = styled.View`
   height: ${({ height }) => height}px;
@@ -22,7 +23,11 @@ const MomentPic = ({ uri, type, direction }) => {
   return (
     <MomentsCol paddLeft={direction === 'left' ? 20 : 10} height={viewHeight[type]}>
       <View style={{ width: '80%', height: 600 }}>
-        <AutoHeightImage source={{ uri }} width={imgWidth} style={{ borderRadius: 5 }} />
+        <AutoHeightImage
+          source={{ uri }}
+          width={imgWidth}
+          style={{ borderRadius: 5, borderWidth: type === 3 ? 0 : 2, borderColor: theme.color.disabled }}
+        />
       </View>
     </MomentsCol>
   );

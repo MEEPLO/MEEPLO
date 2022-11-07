@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, Pressable, Button, Image } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable, Image } from 'react-native';
 import { WebView } from 'react-native-webview';
 import styled from 'styled-components';
 import mergeAndUpload from './mergeAndUpload';
@@ -25,6 +25,13 @@ const getImageTitle = date => {
 };
 
 const MomentsFrame = () => {
+  const webviewRef = React.useRef();
+
+  const openGallary = () => {
+    webviewRef.current?.postMessage('open');
+  };
+
+  // upload image
   const html = mergeAndUpload(3);
   const uploadToS3 = dataString => {
     let now = new Date();
@@ -59,13 +66,16 @@ const MomentsFrame = () => {
     });
   };
 
-  function onMessage(event) {
+  const onMessage = event => {
     uploadToS3(event.nativeEvent.data);
-  }
+  };
 
   return (
     <View style={{ height: 550 }}>
-      <WebView source={{ html: html }} onMessage={onMessage} />
+      <Pressable onPress={openGallary}>
+        <Text>open gallary</Text>
+      </Pressable>
+      <WebView ref={webviewRef} source={{ html: html }} onMessage={onMessage} />
     </View>
   );
 };

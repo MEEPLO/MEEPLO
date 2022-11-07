@@ -147,6 +147,21 @@ const sendDataToReactNativeApp = () => {
     dataUrl
   )
 }
+
+const listener = (event) => {
+  if (event.data === "open") {
+    alert(document.getElementById("review-upload-input"))
+    document.getElementById("review-upload-input").click();
+    alert("fin")
+  }
+};
+
+// document.addEventListener("message", function(event) {
+//   document.getElementById('review-upload-input').click();
+//   alert("This is a Entry Point Working in Android");
+// });
+document.addEventListener("message", listener);
+
 </script>
 `;
 
