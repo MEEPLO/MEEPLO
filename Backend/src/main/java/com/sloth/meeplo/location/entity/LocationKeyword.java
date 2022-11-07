@@ -15,7 +15,7 @@ public class LocationKeyword {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 6)
+    @Column(length = 20)
     private String keyword;
 
     @ManyToOne
