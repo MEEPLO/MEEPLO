@@ -45,7 +45,7 @@ public class SeleniumScraper implements Scraper{
 
         driver = new ChromeDriver(options);
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(7));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
     }
 
     public String focusInitFrame(String location){
@@ -64,12 +64,21 @@ public class SeleniumScraper implements Scraper{
                     .filter(elements -> !elements.isEmpty())
                     .forEach(e -> e.get(0).click());
 
+            log.info(driver.findElement(By.className("xHaT3")).getText());
+
             return driver.getPageSource();
 
         } catch(Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public String getDetailExplain() {
+        return driver.findElements(By.className("xHaT3")).stream()
+                .findFirst()
+                .map(e -> e.getText().replaceAll("내용 더보기", ""))
+                .orElse("");
     }
 
     public String clickBar(String elementText) {

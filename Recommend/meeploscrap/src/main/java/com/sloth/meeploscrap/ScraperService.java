@@ -30,7 +30,7 @@ public class ScraperService {
                     if(html == null)
                         return;
 
-                    jsoupScraper.scrapDetailData(html, loc);
+                    jsoupScraper.scrapDetailData(html, loc, seleniumScraper.getDetailExplain());
 
                     jsoupScraper.scrapReviews(seleniumScraper.clickBar("리뷰"), loc);
 
