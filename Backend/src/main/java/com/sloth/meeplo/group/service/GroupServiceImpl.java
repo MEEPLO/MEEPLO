@@ -199,6 +199,30 @@ public class GroupServiceImpl implements GroupService{
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
     }
 
+    @Override
+    public List<GroupResponse.FedMoment> getFedMoments(String authorization, Long groupId) {
+        Group group = getGroupEntityByGroupId(groupId);
+        Member member = memberService.getMemberByAuthorization(authorization);
+        isMemberInGroup(member, group);
+
+        return group.getSchedules().stream()
+                .flatMap(s->s.getScheduleLocations().stream())
+                .flatMap(sl->sl.getMoments().stream())
+                .map(m-> GroupResponse.FedMoment.builder().moment(m).build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupResponse.MapMoment> getMapMoments(String authorization, Long groupId) {
+        Group group = getGroupEntityByGroupId(groupId);
+        Member member = memberService.getMemberByAuthorization(authorization);
+        isMemberInGroup(member, group);
+
+        return group.getSchedules().stream()
+                .flatMap(s->s.getScheduleLocations().stream())
+                .flatMap(sl->sl.getMoments().stream())
+                .map(m-> GroupResponse.MapMoment.builder().moment(m).build()).collect(Collectors.toList());
+    }
+
     private boolean isGroupLeader(Group group, Member member){
         GroupMember groupMember = groupMemberRepository.findByGroupAndMemberAndStatus(group, member, GroupMemberStatus.ACTIVATED).
                 orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
@@ -208,6 +232,10 @@ public class GroupServiceImpl implements GroupService{
         }else{
             throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
         }
+    }
+
+    private void isMemberInGroup(Member member, Group group){
+        if(!groupMemberRepository.existsByMemberAndGroup(member,group))throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
     }
     private void joinGroup(Group group, Member member, Role role){
         GroupMember groupMember= groupMemberRepository.findByGroupAndMember(group, member)
