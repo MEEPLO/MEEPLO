@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -20,16 +20,19 @@ const Tab = createBottomTabNavigator();
 
 const NavigationBar = () => {
   const dispatch = useDispatch();
+  const tabBarDisplay = useSelector(state => state.tabBar.display);
 
   useEffect(() => {
     dispatch(getUserInfo());
   }, []);
+
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
+          display: tabBarDisplay,
           position: 'absolute',
           paddingBottom: 10,
           elevation: 0,
@@ -39,6 +42,7 @@ const NavigationBar = () => {
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: theme.color.disabled,
         tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
       }}>
       <Tab.Screen
         name="HomeStack"
