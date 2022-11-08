@@ -61,7 +61,11 @@ public class SeleniumScraper implements Scraper{
 
             } catch(NoSuchFrameException e) {
 
-                driver.switchTo().frame("searchIframe");
+                try {
+                    driver.switchTo().frame("searchIframe");
+                } catch (Exception e2) {
+                    return LocationType.OTHER_ERR.name();
+                }
 
                 if((long) driver.findElements(By.className("FYvSc")).size() > 0)
                     return LocationType.NO_FRAME.name();
