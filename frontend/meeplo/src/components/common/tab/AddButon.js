@@ -1,47 +1,105 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Animated, TouchableOpacity, Easing } from 'react-native';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { View, Text } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHouseChimney } from '@fortawesome/free-solid-svg-icons/faHouseChimney';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
-import Images from '../../../assets/image/index';
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons/faCalendarDays';
+import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
+import HomeStackScreen from '../../../screens/HomeStackScreen';
+import GroupStackScreen from '../../../screens/GroupStackScreen';
+import ScheduleStackScreen from '../../../screens/schedule/ScheduleStackScreen';
+import MomentsStackScreen from '../../../screens/MomentsStackScreen';
+import HomeScreen from '../../../screens/HomeScreen';
+import { theme } from '../../../assets/constant/DesignTheme';
+import AddButon from './AddButon';
+import { getUserInfo } from '../../../redux/userSlice';
 
-const AddButon = props => {
-  // TODO: hrookim 생성메뉴 나오기
-  const mode = new Animated.Value(0);
+const Tab = createBottomTabNavigator();
 
-  const rotation = mode.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '45deg'],
-  });
+const NavigationBar = () => {
+  const dispatch = useDispatch();
 
-  const handlePress = async () => {
-    Animated.timing(mode, {
-      toValue: mode._value === 0 ? 1 : 0,
-      duration: 200,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start(() => {
-      if (mode._value === 0) {
-        mode.setValue(1);
-      } else {
-        mode.setValue(0);
-      }
-    });
-  };
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
   return (
-    <View style={[{ alignItems: 'center', justifyContent: 'center' }]}>
-      <Animated.View>
-        <TouchableOpacity onPress={handlePress} activeOpacity={1}>
-          <View>
-            <Animated.Image
-              style={{ width: 75, height: 75, bottom: 25, transform: [{ rotate: rotation }] }}
-              source={Images.addIcon}
-              resizeMode="contain"
-            />
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
-    </View>
+    <Tab.Navigator
+      initialRouteName="HomeStack"
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          position: 'absolute',
+          paddingBottom: 10,
+          elevation: 0,
+          backgroundColor: '#ffffff',
+          height: 70,
+        },
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: theme.color.disabled,
+        tabBarShowLabel: false,
+      }}>
+      <Tab.Screen
+        name="HomeStack"
+        component={HomeStackScreen}
+        options={{
+          // tabBarShowLabel: false,
+          tabBarLabel: '홈',
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faHouseChimney} color={color} size={size} />
+              <Text style={{ color }}>홈</Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="GroupStack"
+        component={GroupStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faUsers} color={color} size={size} />
+              <Text style={{ color }}>그룹</Text>
+            </View>
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Add"
+        component={HomeScreen}
+        options={{
+          tabBarButton: props => <AddButon {...props} />,
+        }}
+      />
+      <Tab.Screen
+        name="ScheduleStack"
+        component={ScheduleStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faCalendarDays} color={color} size={size} />
+              <Text style={{ color }}>약속</Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="MomentsStack"
+        component={MomentsStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <FontAwesomeIcon icon={faCameraRetro} color={color} size={size} />
+              <Text style={{ color }}>추억</Text>
+            </View>
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 };
 
-export default AddButon;
+export default NavigationBar;
