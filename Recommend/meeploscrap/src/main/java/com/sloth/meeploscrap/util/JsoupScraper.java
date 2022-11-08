@@ -31,14 +31,14 @@ public class JsoupScraper implements Scraper{
     private final LocationContentRepository locationContentRepository;
 
     @Transactional
-    public void scrapDetailData(String html, Location location) {
+    public void scrapDetailData(String html, Location location, String detailExplain) {
         Document parsedHTML = Jsoup.parse(html);
 
         locationInfoRepository.save(LocationInfo.builder()
                 .location(location)
                 .phoneNumber(extractFirstText(parsedHTML, LocationInfoSelector.PHONE_NUMBER))
                 .link(extractFirstText(parsedHTML, LocationInfoSelector.LINK))
-                .description(extractExplain(parsedHTML))
+                .description(extractExplain(parsedHTML, detailExplain))
                 .build()
         );
 
@@ -110,10 +110,10 @@ public class JsoupScraper implements Scraper{
                 .collect(Collectors.toList());
     }
 
-    private String extractExplain(Document doc) {
-        String detail = extractFirstText(doc, LocationInfoSelector.DETAIL_DESCRIPTION);
+    private String extractExplain(Document doc, String detail) {
+        String summary = extractFirstText(doc, LocationInfoSelector.SIMPLE_DESCRIPTION);
 
-        return !detail.isEmpty() ? detail : extractFirstText(doc, LocationInfoSelector.SIMPLE_DESCRIPTION);
+        return summary.isEmpty() ? detail : summary;
     }
 
     private List<LocationTime> extractOperationData(Document doc, Location location) {
