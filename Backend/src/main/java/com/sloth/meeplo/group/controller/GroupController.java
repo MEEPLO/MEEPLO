@@ -1,6 +1,7 @@
 package com.sloth.meeplo.group.controller;
 
 import com.sloth.meeplo.group.dto.request.GroupRequest;
+import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -78,5 +79,20 @@ public class GroupController {
     public ResponseEntity<Void> kickGroupMember(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId, @PathVariable Long memberId){
         groupService.kickGroupMember(authorization,groupId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("{groupId}/moment/fed")
+    public ResponseEntity<Map<String, List>> getFedMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("moments", groupService.getFedMoments(authorization,groupId));
+        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+    }
+
+
+    @GetMapping("{groupId}/moment/map")
+    public ResponseEntity<Map<String, List>> getMapMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("moments", groupService.getMapMoments(authorization,groupId));
+        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
     }
 }

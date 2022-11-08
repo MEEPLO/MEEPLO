@@ -30,4 +30,6 @@ public interface GroupService {
     void kickGroupMember(String authorization, Long groupId, Long memberId);
 
     Group getGroupEntityByGroupId(Long groupId);
+    List<GroupResponse.FedMoment> getFedMoments(String authorization, Long groupId);
+    List<GroupResponse.MapMoment> getMapMoments(String authorization, Long groupId);
 }
