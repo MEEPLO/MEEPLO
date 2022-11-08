@@ -2,6 +2,7 @@ package com.sloth.meeplo.moment.service;
 
 import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
+import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.moment.dto.request.MomentRequest;
@@ -34,6 +35,7 @@ public class MomentServiceImpl implements MomentService{
 
     private final MemberService memberService;
     private final ScheduleService scheduleService;
+    private final GroupService groupService;
 
     private final MomentRepository momentRepository;
     private final MomentCommentRepository momentCommentRepository;
@@ -42,7 +44,7 @@ public class MomentServiceImpl implements MomentService{
     public MomentResponse.MomentDetail getMomentDetail(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-
+        scheduleService.checkMemberInSchedule(moment.getScheduleLocation().getSchedule(),member);
         return MomentResponse.MomentDetail.builder().moment(moment).member(member).build();
     }
 
@@ -89,6 +91,9 @@ public class MomentServiceImpl implements MomentService{
     public List<MomentResponse.MomentDetailComment> createComment(String authorization, Long momentId, MomentRequest.CreateMomentCommentInfo createMomentCommentInfo) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
+
+        groupService.checkMemberInGroup(member, moment.getScheduleLocation().getSchedule().getGroup());
+
         if (momentCommentRepository.existsByMemberAndMoment(member,moment))
             throw new MeeploException(MomentErrorCode.ALREADY_COMMENTED);
         momentCommentRepository.save(MomentComment.builder()
@@ -123,7 +128,10 @@ public class MomentServiceImpl implements MomentService{
     @Override
     public List<MomentResponse.MomentDetailComment> getComments(String authorization, Long momentId) {
         Moment moment = getMomentByMomentId(momentId);
-//        Member member = memberService.getMemberByAuthorization(authorization);
+        Member member = memberService.getMemberByAuthorization(authorization);
+
+        groupService.checkMemberInGroup(member, moment.getScheduleLocation().getSchedule().getGroup());
+
         return moment.getMomentComments().stream().map(mc -> MomentResponse.MomentDetailComment.builder().momentComment(mc).build()).collect(Collectors.toList());
     }
 
@@ -136,6 +144,7 @@ public class MomentServiceImpl implements MomentService{
                 .toFormatter();
         LocalDate localDate = LocalDate.parse(month, formatter);
         LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
+        // TODO: 2022-11-08 native query 적용 고려 
         return member.getScheduleMembers().stream()
                 .filter(sm->sm.getSchedule().getDate().isBefore(targetDate.plusMonths(1)) && sm.getSchedule().getDate().isAfter(targetDate))
                 .flatMap(sm -> sm.getSchedule().getScheduleLocations().stream())

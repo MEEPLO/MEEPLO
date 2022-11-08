@@ -3,9 +3,7 @@ package com.sloth.meeplo.group.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.entity.GroupMember;
-import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.location.entity.Location;
-import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
@@ -17,7 +15,6 @@ import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GroupResponse {
 
@@ -113,12 +110,12 @@ public class GroupResponse {
 
     @Getter
     @ToString
-    public static class FedMoment{
+    public static class FeedMoment {
         private Long id;
         private String photo;
 
         @Builder
-        FedMoment(Moment moment){
+        FeedMoment(Moment moment){
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
         }

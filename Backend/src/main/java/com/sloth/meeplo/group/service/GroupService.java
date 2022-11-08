@@ -3,11 +3,9 @@ package com.sloth.meeplo.group.service;
 import com.sloth.meeplo.group.dto.request.GroupRequest;
 import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.group.entity.Group;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
+import com.sloth.meeplo.member.entity.Member;
 
 import java.util.List;
-import java.util.Map;
 
 public interface GroupService {
 
@@ -30,6 +28,8 @@ public interface GroupService {
     void kickGroupMember(String authorization, Long groupId, Long memberId);
 
     Group getGroupEntityByGroupId(Long groupId);
-    List<GroupResponse.FedMoment> getFedMoments(String authorization, Long groupId);
+
+    void checkMemberInGroup(Member member, Group group);
+    List<GroupResponse.FeedMoment> getFeedMoments(String authorization, Long groupId);
     List<GroupResponse.MapMoment> getMapMoments(String authorization, Long groupId);
 }
