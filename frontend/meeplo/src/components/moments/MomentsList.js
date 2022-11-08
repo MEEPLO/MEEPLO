@@ -88,13 +88,13 @@ const moments = {
   ],
 };
 
-const MomentsList = props => {
+const MomentsList = ({ navigation }) => {
   const leftPics = moments.momentsLeft.map(pic => (
-    <MomentPic key={pic.id} uri={pic.photo} type={pic.type} direction="left" />
+    <MomentPic navigation={navigation} key={pic.id} uri={pic.photo} type={pic.type} direction="left" />
   ));
 
   const rightPics = moments.momentsRight.map(pic => (
-    <MomentPic key={pic.id} uri={pic.photo} type={pic.type} direction="right" />
+    <MomentPic navigation={navigation} key={pic.id} uri={pic.photo} type={pic.type} direction="right" />
   ));
 
   return (

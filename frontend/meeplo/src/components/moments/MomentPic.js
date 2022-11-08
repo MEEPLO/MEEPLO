@@ -13,7 +13,6 @@ import {
 import styled from 'styled-components';
 import AutoHeightImage from 'react-native-auto-height-image';
 import Images from '../../assets/image/index';
-// import Slider from 'react-native-slider';
 import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
@@ -25,13 +24,18 @@ const MomentsCol = styled.View`
   margin-bottom: 25px;
 `;
 
-const MomentPic = ({ uri, type, direction }) => {
+const MomentPic = ({ uri, type, direction, navigation }) => {
   const [momentModal, setMomentModal] = React.useState(false);
   const [touchStart, setTouchStart] = React.useState(0);
   const [touchEnd, setTouchEnd] = React.useState(0);
   const [imageFront, setImageFront] = React.useState(true);
   const [imageUri, setImageUri] = React.useState();
   const swipeAnim = React.useRef(new Animated.Value(0)).current;
+  const watermark = Images.frame.watermark;
+
+  const linkTo = React.useCallback(nextPage => {
+    navigation.push(nextPage);
+  }, []);
 
   const momentData = {
     moment: {
@@ -46,35 +50,35 @@ const MomentPic = ({ uri, type, direction }) => {
     },
     comments: [
       {
-        comment: 'String comment',
+        comment: '다음엔 2차 3차도 갑시다 👍',
         location: {
-          xPoint: 100,
-          yPoint: 100,
-          angle: 40,
+          xPoint: 0,
+          yPoint: 60,
+          angle: -40,
         },
       },
       {
-        comment: '한글로 써 볼게요 한글로 써 볼게요 한글로 써 볼게요 한글로 써 볼게요',
+        comment: '오늘 진짜 재미있었다 오랜만에 만나서 더 꿀잼이었던 듯 😍',
         location: {
-          xPoint: 50,
-          yPoint: 200,
+          xPoint: 0,
+          yPoint: 170,
           angle: 20,
         },
       },
       {
-        comment: '아무 말이나 넣어봅니다 아무 말이나 넣어봅니다 ',
+        comment: '너희만 놀기 있냐? 나도 데려가라',
         location: {
-          xPoint: 20,
+          xPoint: 0,
           yPoint: 300,
           angle: 280,
         },
       },
       {
-        comment: '직관을 발휘해 보세요 직관을 발휘해 보세요 직관을 발휘해 보세요 직관을 발휘해 보세요 직관',
+        comment: '내가 봤을 때 그때 먹은 양꼬치가 진짜 미쳤음 칭따오 8병 실화냐? 사장님 서비스도 낭낭했음',
         location: {
-          xPoint: 0,
-          yPoint: 400,
-          angle: 190,
+          xPoint: 10,
+          yPoint: 450,
+          angle: -20,
         },
       },
     ],
@@ -85,7 +89,6 @@ const MomentPic = ({ uri, type, direction }) => {
   }, []);
 
   const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
   var imgWidth = windowWidth * 0.5 - 30;
 
   const viewHeight = {
@@ -94,12 +97,6 @@ const MomentPic = ({ uri, type, direction }) => {
     3: imgWidth * 3.61,
   };
 
-  const detailWidth = {
-    1: windowWidth * 0.8,
-    2: windowWidth * 0.8,
-    3: windowWidth * 0.5,
-  };
-  const uri1 = 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png';
   const uri2 = 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png';
 
   const rotateData = swipeAnim.interpolate({
@@ -143,8 +140,6 @@ const MomentPic = ({ uri, type, direction }) => {
     }
   };
 
-  const watermark = Images.frame.watermark;
-
   return (
     <MomentsCol paddLeft={direction === 'left' ? 20 : 10} height={viewHeight[type]}>
       <View style={{ width: '80%', height: 600 }}>
@@ -167,10 +162,8 @@ const MomentPic = ({ uri, type, direction }) => {
             position: 'relative',
           }}>
           <Pressable
-            onPress={() => setMomentModal(false)}
+            onPressOut={() => setMomentModal(false)}
             style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}></Pressable>
-          {/* <AutoHeightImage source={{ uri }} width={detailWidth[type]} /> */}
-
           <TouchableOpacity
             onPressIn={setStartLocation}
             onPressOut={setEndLocation}
@@ -201,7 +194,7 @@ const MomentPic = ({ uri, type, direction }) => {
                         left: comment.location.xPoint,
                       }}
                       key={idx}>
-                      <Text>{comment.comment}</Text>
+                      <Text style={{ fontSize: 12 }}>{comment.comment}</Text>
                     </View>
                   ))}
                 </ImageBackground>
@@ -236,7 +229,8 @@ const MomentPic = ({ uri, type, direction }) => {
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-            }}>
+            }}
+            onPress={() => linkTo('MomentsCommentCreate')}>
             <FontAwesomeIcon icon={faComment} color={theme.color.bright.green} size={30} />
           </Pressable>
         </View>
