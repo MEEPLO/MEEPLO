@@ -1,64 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { createMessage, MESSAGE_TYPE } from "../helper/message";
 
-const center = { lat: 37.50119278, lng: 127.03975728 };
-
-let test = 1;
 const KakaoMap = () => {
-  const [position, setPosition] = useState({});
-  const [message, setMessage] = useState("");
+  const [state, setState] = useState({
+    center: { lat: 37.50119278, lng: 127.03975728 },
+    isPanto: false,
+  });
 
   useEffect(() => {
-    window?.addEventListener("message", onMessageHandler);
-    return () => window?.removeEventListener("message", onMessageHandler);
+    const isAndroid = () => {
+      return navigator?.userAgent?.toLowerCase()?.indexOf("android") > -1;
+    };
+
+    const target = isAndroid() ? document : window;
+
+    target.addEventListener("message", onMessage);
+    return () => {
+      target.removeEventListener("message", onMessage);
+    };
   }, []);
 
-  const onMessageHandler = (e) => {
-    setMessage(test++);
-    // setMessage(e.data.data);
+  const onMessage = (e) => {
+    console.log("recevied from app", e.data);
   };
 
-  const postMessageHandler = () => {
-    window?.ReactNativeWebView?.postMessage("Data from WebView / Website");
+  const postMessage = (msg) => {
+    ReactNativeWebView?.postMessage(msg);
   };
 
-  // useEffect(() => {
-  //   const isUIWebView = () => {
-  //     return navigator.userAgent
-  //       .toLowerCase()
-  //       .match(/\(ip.*applewebkit(?!.*(version|crios))/);
-  //   };
+  const onClickHandler = (_t, mouseEvent) => {
+    const clickedPosition = {
+      lat: mouseEvent.latLng.getLat(),
+      lng: mouseEvent.latLng.getLng(),
+    };
 
-  //   const receiver = isUIWebView() ? window : document;
+    postMessage(
+      createMessage(MESSAGE_TYPE.UPDATE_CENTER, {
+        position: clickedPosition,
+      })
+    );
 
-  //   receiver.addEventListener("message", onMessageHandler);
-  //   return () => {
-  //     receiver.removeEventListener("message", onMessageHandler);
-  //   };
-  // });
+    setState({
+      center: clickedPosition,
+      isPanto: true,
+    });
+  };
+
+  const onZoomChangedHandler = (target) => {
+    postMessage(
+      createMessage(MESSAGE_TYPE.UPDATE_ZOOM_LEVEL, {
+        level: target.getLevel(),
+      })
+    );
+  };
 
   return (
     <>
       <Map
-        center={center}
+        center={state.center}
+        isPanto={state.isPanto}
         style={{ width: "100%", height: "400px" }}
-        onClick={(_t, mouseEvent) => {
-          postMessageHandler();
-          setPosition({
-            lat: mouseEvent.latLng.getLat(),
-            lng: mouseEvent.latLng.getLng(),
-          });
-        }}
+        onClick={onClickHandler}
+        onZoomChanged={onZoomChangedHandler}
       >
-        <MapMarker position={center}>
-          <div style={{ color: "#000" }}>Hello World!</div>
-        </MapMarker>
-        <MapMarker position={position} draggable={true}>
-          <div>Good to see you</div>
+        <MapMarker position={state.center}>
+          <div style={{ color: "#000" }}>중심</div>
         </MapMarker>
       </Map>
-      {position?.lat} and {position?.lng}
-      {message}
     </>
   );
 };
