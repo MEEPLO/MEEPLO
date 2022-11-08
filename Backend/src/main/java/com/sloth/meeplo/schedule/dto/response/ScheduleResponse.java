@@ -39,11 +39,27 @@ public class ScheduleResponse {
         ScheduleDetailInfo(Schedule schedule){
             this.date = schedule.getDate();
             this.name = schedule.getName();
-            this.keywords = schedule.getScheduleKeywords().stream().map(kw -> ScheduleDetailKeywordInfo.builder().keyword(kw).build()).collect(Collectors.toList());
-            this.group = ScheduleDetailGroupInfo.builder().group(schedule.getGroup()).build();
-            this.members = schedule.getScheduleMembers().stream().map(sm -> ScheduleDetailMemberInfo.builder().scheduleMember(sm).build()).collect(Collectors.toList());
-            this.meetLocation = ScheduleDetailMeetLocationInfo.builder().location(schedule.getLocation()).build();
-            this.amuseLocations = schedule.getScheduleLocations().stream().map(sl -> ScheduleDetailAmuseLocationInfo.builder().scheduleLocation(sl).build()).collect(Collectors.toList());
+            this.keywords = schedule.getScheduleKeywords().stream()
+                    .map(kw -> ScheduleDetailKeywordInfo.builder()
+                            .keyword(kw)
+                            .build())
+                    .collect(Collectors.toList());
+            this.group = ScheduleDetailGroupInfo.builder()
+                    .group(schedule.getGroup())
+                    .build();
+            this.members = schedule.getScheduleMembers().stream()
+                    .map(sm -> ScheduleDetailMemberInfo.builder()
+                            .scheduleMember(sm)
+                            .build())
+                    .collect(Collectors.toList());
+            this.meetLocation = ScheduleDetailMeetLocationInfo.builder()
+                    .location(schedule.getLocation())
+                    .build();
+            this.amuseLocations = schedule.getScheduleLocations().stream()
+                    .map(sl -> ScheduleDetailAmuseLocationInfo.builder()
+                            .scheduleLocation(sl)
+                            .build())
+                    .collect(Collectors.toList());
 
         }
     }
@@ -88,7 +104,10 @@ public class ScheduleResponse {
         @Builder
         ScheduleDetailMemberInfo(ScheduleMember scheduleMember){
             this.id = scheduleMember.getId();
-            this.nickname = scheduleMember.getMember().getGroupMembers().stream().filter(gm -> gm.getMember().getId().equals(scheduleMember.getMember().getId())).findFirst().orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)).getNickname();
+            this.nickname = scheduleMember.getMember().getGroupMembers().stream()
+                    .filter(gm -> gm.getMember().getId().equals(scheduleMember.getMember().getId()))
+                    .findFirst().orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE))
+                    .getNickname();
             this.photo = scheduleMember.getMember().getProfilePhoto();
             this.status = scheduleMember.getStatus();
         }
@@ -153,8 +172,12 @@ public class ScheduleResponse {
             this.name = schedule.getName();
             this.date = schedule.getDate();
             this.groupName = schedule.getGroup().getName();
-            this.memberCount = schedule.getScheduleMembers().stream().filter(sm -> sm.getStatus().equals(ScheduleMemberStatus.JOINED)).count();
-            this.momentRecorded = schedule.getScheduleLocations().stream().map(sl -> (long) sl.getMoments().size()).anyMatch(c -> c > 0);
+            this.memberCount = schedule.getScheduleMembers().stream()
+                    .filter(sm -> sm.getStatus().equals(ScheduleMemberStatus.JOINED))
+                    .count();
+            this.momentRecorded = schedule.getScheduleLocations().stream()
+                    .map(sl -> (long) sl.getMoments().size())
+                    .anyMatch(c -> c > 0);
             this.location = ScheduleListLocationInfo.builder().schedule(schedule).build();
         }
 
@@ -169,7 +192,14 @@ public class ScheduleResponse {
         @Builder
         ScheduleListLocationInfo(Schedule schedule){
             this.meetName = schedule.getLocation().getName();
-            this.amuseName = schedule.getScheduleLocations().stream().findFirst().orElse(ScheduleLocation.EmptyScheduleLocation().location(Location.builder().name("미정").build()).build()).getLocation().getName();
+            this.amuseName = schedule.getScheduleLocations().stream()
+                    .findFirst().orElse(ScheduleLocation.EmptyScheduleLocation()
+                            .location(Location.builder()
+                                    .name("미정")
+                                    .build())
+                            .build())
+                    .getLocation()
+                    .getName();
         }
     }
     @Getter

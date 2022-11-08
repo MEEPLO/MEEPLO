@@ -25,7 +25,7 @@ public class MomentResponse {
         MomentSimpleList(Moment moment){
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
-            this.reactionCount = (long) moment.getMembers().size();
+            this.reactionCount = (long) moment.getMomentReactions().size();
         }
     }
     @Getter
@@ -77,8 +77,8 @@ public class MomentResponse {
         private Boolean liked;
         @Builder
         MomentDetailReaction(Moment moment, Member member){
-            this.count = (long) moment.getMembers().size();
-            this.liked = moment.getMembers().stream().anyMatch(m -> m.getId().equals(member.getId()));
+            this.count = (long) moment.getMomentReactions().size();
+            this.liked = moment.getMomentReactions().stream().anyMatch(m -> m.getId().equals(member.getId()));
         }
 
     }

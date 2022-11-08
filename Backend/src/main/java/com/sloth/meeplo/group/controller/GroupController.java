@@ -1,7 +1,6 @@
 package com.sloth.meeplo.group.controller;
 
 import com.sloth.meeplo.group.dto.request.GroupRequest;
-import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -81,10 +80,10 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("{groupId}/moment/fed")
-    public ResponseEntity<Map<String, List>> getFedMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+    @GetMapping("{groupId}/moment/feed")
+    public ResponseEntity<Map<String, List>> getFeedMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, List> resultMap = new HashMap<>();
-        resultMap.put("moments", groupService.getFedMoments(authorization,groupId));
+        resultMap.put("moments", groupService.getFeedMoments(authorization,groupId));
         return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
     }
 
