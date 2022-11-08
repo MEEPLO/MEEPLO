@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import MomentsFrame from '../MomentsFrame';
+import MomentsUpload from '../MomentsUpload';
 
 const MomentsSetPicture = () => {
   return (
     <View>
-      <Text>step3</Text>
-      <MomentsFrame />
+      <MomentsUpload />
     </View>
   );
 };

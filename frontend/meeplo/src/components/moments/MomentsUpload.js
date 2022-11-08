@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
+import { View, Text, Pressable, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import styled from 'styled-components';
 import mergeAndUpload from './mergeAndUpload';
 import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { decode } from 'base64-arraybuffer';
+import { theme } from '../../assets/constant/DesignTheme';
 
 const getImageTitle = date => {
   let year = date.getFullYear().toString().substring(2);
@@ -24,12 +25,18 @@ const getImageTitle = date => {
   return 'ourmoment' + year + month + day + hour + minute + second + '.png';
 };
 
-const MomentsFrame = () => {
+const MpomentsUpload = () => {
   const webviewRef = React.useRef();
+  const viewWidth = Dimensions.get('window').width - 120;
 
   const openGallary = () => {
-    webviewRef.current?.postMessage('open');
+    // btnWidthString = buttonWidth.toString();
+    // webviewRef.current?.postMessage(btnWidthString);
   };
+
+  // React.useEffect(() => {
+  //   openGallary();
+  // }, []);
 
   // upload image
   const html = mergeAndUpload(3);
@@ -71,13 +78,40 @@ const MomentsFrame = () => {
   };
 
   return (
-    <View style={{ height: 550 }}>
-      <Pressable onPress={openGallary}>
-        <Text>open gallary</Text>
+    <View style={{ marginHorizontal: 20, width: viewWidth, height: 530, position: 'relative' }}>
+      <Pressable
+        style={{
+          width: viewWidth,
+          height: 55,
+          borderRadius: 15,
+          overflow: 'hidden',
+          borderColor: theme.color.border,
+          borderWidth: 2,
+          backgroundColor: theme.color.pale.red,
+          position: 'absolute',
+          bottom: 65,
+        }}>
+        <Text style={{ lineHeight: 53, textAlign: 'center', fontSize: 20, fontWeight: '800' }}>갤러리</Text>
       </Pressable>
-      <WebView ref={webviewRef} source={{ html: html }} onMessage={onMessage} />
+      <Pressable
+        style={{
+          width: viewWidth,
+          height: 35,
+          borderRadius: 15,
+          overflow: 'hidden',
+          position: 'absolute',
+          bottom: 20,
+        }}>
+        <Text style={{ lineHeight: 33, textAlign: 'center', fontSize: 15, fontWeight: '800' }}>사진 선택 초기화</Text>
+      </Pressable>
+      <WebView
+        ref={webviewRef}
+        source={{ html: html }}
+        onMessage={onMessage}
+        style={{ backgroundColor: 'transparent' }}
+      />
     </View>
   );
 };
 
-export default MomentsFrame;
+export default MpomentsUpload;
