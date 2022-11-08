@@ -5,6 +5,7 @@ import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
@@ -171,4 +172,21 @@ public class ScheduleResponse {
             this.amuseName = schedule.getScheduleLocations().stream().findFirst().orElse(ScheduleLocation.EmptyScheduleLocation().location(Location.builder().name("미정").build()).build()).getLocation().getName();
         }
     }
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class JoinedScheduleMoment{
+        private Long id;
+        private String photo;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        LocalDateTime date;
+
+        @Builder
+        JoinedScheduleMoment(Moment moment){
+            this.id = moment.getId();
+            this.photo = moment.getMomentPhoto();
+            this.date = moment.getScheduleLocation().getSchedule().getDate();
+        }
+    }
+
 }

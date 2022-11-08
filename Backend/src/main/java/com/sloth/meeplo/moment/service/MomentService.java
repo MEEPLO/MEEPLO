@@ -3,6 +3,7 @@ package com.sloth.meeplo.moment.service;
 import com.sloth.meeplo.moment.dto.request.MomentRequest;
 import com.sloth.meeplo.moment.dto.response.MomentResponse;
 import com.sloth.meeplo.moment.entity.Moment;
+import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,8 @@ public interface MomentService {
     void deleteMoment(String authorization, Long momentId);
 
     List<MomentResponse.MomentDetailComment> getComments(String authorization, Long momentId);
+
+    List<ScheduleResponse.JoinedScheduleMoment> getCalenderMoments(String authorization, String month);
 
 
 }
