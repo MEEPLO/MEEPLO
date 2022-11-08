@@ -66,10 +66,10 @@ public class MomentServiceImpl implements MomentService{
     public Long createReaction(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-        if(moment.getMembers().contains(member)) throw new MeeploException(MomentErrorCode.ALREADY_REACTED);
-        moment.getMembers().add(member);
+        if(moment.getMomentReactions().contains(member)) throw new MeeploException(MomentErrorCode.ALREADY_REACTED);
+        moment.getMomentReactions().add(member);
         momentRepository.save(moment);
-        return (long) moment.getMembers().size();
+        return (long) moment.getMomentReactions().size();
     }
 
     @Override
@@ -77,13 +77,13 @@ public class MomentServiceImpl implements MomentService{
     public Long deleteReaction(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-        int idx = moment.getMembers().indexOf(member);
+        int idx = moment.getMomentReactions().indexOf(member);
         if(idx<0){
             throw new MeeploException(MomentErrorCode.NOT_YET_REACTED);
         }
-        moment.getMembers().remove(member);
+        moment.getMomentReactions().remove(member);
         momentRepository.save(moment);
-        return (long) moment.getMembers().size();
+        return (long) moment.getMomentReactions().size();
     }
 
     @Override
