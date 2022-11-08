@@ -16,7 +16,7 @@ async function userLogin(kakaoAccessToken) {
     await AsyncStorage.setItem('@accessToken', tokens.data.accessToken);
     await AsyncStorage.setItem('@refreshToken', tokens.data.refreshToken);
   } catch (err) {
-    console.error("CAN'T SAVE TOKEN");
+    console.error('ERROR in userLogin: ', err.response.data);
   }
 }
 
