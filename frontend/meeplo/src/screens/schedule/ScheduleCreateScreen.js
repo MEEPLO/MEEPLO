@@ -11,12 +11,57 @@ import ScheduleCreateMemberScreen from './create/ScheduleCreateMemberScreen';
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'UPDATE_DATE':
+      return {
+        ...state,
+        date: action.payload,
+      };
+
+    case 'UPDATE_NAME':
+      return {
+        ...state,
+        name: action.payload,
+      };
+    case 'UPDATE_GROUPID':
+      return {
+        ...state,
+        groupId: action.payload,
+      };
+    case 'UPDATE_MEETLOCATIONID':
+      return {
+        ...state,
+        meetLocationId: action.payload,
+      };
+    case 'UPDATE_KEYWORD':
+      return {
+        ...state,
+        keywords: action.payload,
+      };
+    case 'UPDATE_MEMBERS':
+      return {
+        ...state,
+        members: action.payload,
+      };
+    case 'UPDATE_AMUSES':
+      return {
+        ...state,
+        amuses: action.payload,
+      };
     default:
       return action.type;
   }
 };
 
-const initialSchedule = {};
+const initialSchedule = {
+  date: null,
+  name: null,
+  groupId: null,
+  meetLocationId: null,
+  keywords: [],
+  members: [],
+  amuses: [],
+};
+
 const STEP_COUNT = 3;
 
 const ScheduleCreateScreen = ({ navigation }) => {
