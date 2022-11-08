@@ -33,7 +33,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,8 +103,8 @@ public class ScheduleServiceImpl implements ScheduleService{
         Group group = groupService.getGroupEntityByGroupId(scheduleUpdateInput.getGroupId());
         Schedule schedule = getScheduleByScheduleId(scheduleUpdateInput.getId());
 
-        isMemberScheduleLeader(member, schedule);
-        isAfterScheduleDate(schedule);
+        checkMemberScheduleLeader(member, schedule);
+        checkAfterScheduleDate(schedule);
         schedule.updateName(scheduleUpdateInput.getName());
         schedule.updateLocation(locationRepository.findById(scheduleUpdateInput.getMeetLocationId())
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)));
@@ -159,22 +158,28 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void deleteSchedule(String authorization, Long scheduleId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Schedule schedule = getScheduleByScheduleId(scheduleId);
-        isMemberScheduleLeader(member, schedule);
-        isAfterScheduleDate(schedule);
+        checkMemberScheduleLeader(member, schedule);
+        checkAfterScheduleDate(schedule);
         scheduleRepository.delete(schedule);
     }
 
     @Override
     public ScheduleResponse.ScheduleDetailInfo getScheduleDetail(String authorization, Long scheduleId) {
+        Member member = memberService.getMemberByAuthorization(authorization);
         Schedule schedule = getScheduleByScheduleId(scheduleId);
+
+        groupService.checkMemberInGroup(member, schedule.getGroup());
+
         return ScheduleResponse.ScheduleDetailInfo.builder().schedule(schedule).build();
     }
 
+    @Override
     public Schedule getScheduleByScheduleId(Long scheduleId){
         return scheduleRepository.findById(scheduleId)
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
     }
 
+    @Override
     public ScheduleLocation getScheduleLocationById(Long scheduleLocationId){
         return scheduleLocationRepository.findById(scheduleLocationId)
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
@@ -212,7 +217,6 @@ public class ScheduleServiceImpl implements ScheduleService{
         Member member = memberService.getMemberByAuthorization(authorization);
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        log.info(targetDate.toString());
         return member.getGroupMembers().stream()
                 .flatMap(gm-> scheduleRepository
                         .findByGroupAndDateBetween(gm.getGroup(),targetDate, targetDate.plusDays(1)).stream())
@@ -233,7 +237,12 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public List<MomentResponse.MomentSimpleList> getMomentListBySchedule(String authorization, Long scheduleId) {
-        return getScheduleByScheduleId(scheduleId)
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Schedule schedule = getScheduleByScheduleId(scheduleId);
+
+        groupService.checkMemberInGroup(member, schedule.getGroup());
+
+        return schedule
                 .getScheduleLocations().stream()
                 .flatMap(sl->sl.getMoments().stream())
                 .map(m-> MomentResponse.MomentSimpleList.builder()
@@ -242,13 +251,20 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .collect(Collectors.toList());
     }
 
-    public void isMemberScheduleLeader(Member member, Schedule schedule){
+    @Override
+    public void checkMemberScheduleLeader(Member member, Schedule schedule){
         if(schedule.getScheduleMembers().stream().noneMatch(
                 sm->sm.getRole().equals(Role.LEADER) && sm.getMember().getId().equals(member.getId())))
             throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
     }
 
-    public void isAfterScheduleDate(Schedule schedule){
+    @Override
+    public void checkAfterScheduleDate(Schedule schedule){
         if(schedule.getDate().isBefore(LocalDateTime.now())) throw new MeeploException(ScheduleErrorCode.DUE_DATE_PASSED);
+    }
+
+    @Override
+    public void checkMemberInSchedule(Schedule schedule, Member member) {
+        if(!scheduleMemberRepository.existsByMemberAndSchedule(member, schedule)) throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
     }
 }

@@ -18,7 +18,6 @@ import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +43,7 @@ public class GroupServiceImpl implements GroupService{
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
 
+    private final Integer GROUP_MEMBER_LIMIT = 10;
 
     private final LocalDate date = LocalDate.of(1111, 11,  11);
     private final LocalTime time = LocalTime.of(11,11,11);
@@ -164,7 +164,7 @@ public class GroupServiceImpl implements GroupService{
     public void joinToGroup(String authorization, Long groupId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Group group = getGroupEntityByGroupId(groupId);
-        if(groupMemberRepository.countByGroupAndStatus(group, GroupMemberStatus.ACTIVATED)>10)
+        if(groupMemberRepository.countByGroupAndStatus(group, GroupMemberStatus.ACTIVATED)>GROUP_MEMBER_LIMIT)
             throw new MeeploException(GroupErrorCode.NO_MORE_MEMBER);
         joinGroup(group, member, Role.MEMBER);
     }
@@ -200,22 +200,22 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public List<GroupResponse.FedMoment> getFedMoments(String authorization, Long groupId) {
+    public List<GroupResponse.FeedMoment> getFeedMoments(String authorization, Long groupId) {
         Group group = getGroupEntityByGroupId(groupId);
         Member member = memberService.getMemberByAuthorization(authorization);
-        isMemberInGroup(member, group);
+        checkMemberInGroup(member, group);
 
         return group.getSchedules().stream()
                 .flatMap(s->s.getScheduleLocations().stream())
                 .flatMap(sl->sl.getMoments().stream())
-                .map(m-> GroupResponse.FedMoment.builder().moment(m).build()).collect(Collectors.toList());
+                .map(m-> GroupResponse.FeedMoment.builder().moment(m).build()).collect(Collectors.toList());
     }
 
     @Override
     public List<GroupResponse.MapMoment> getMapMoments(String authorization, Long groupId) {
         Group group = getGroupEntityByGroupId(groupId);
         Member member = memberService.getMemberByAuthorization(authorization);
-        isMemberInGroup(member, group);
+        checkMemberInGroup(member, group);
 
         return group.getSchedules().stream()
                 .flatMap(s->s.getScheduleLocations().stream())
@@ -234,7 +234,8 @@ public class GroupServiceImpl implements GroupService{
         }
     }
 
-    private void isMemberInGroup(Member member, Group group){
+    @Override
+    public void checkMemberInGroup(Member member, Group group){
         if(!groupMemberRepository.existsByMemberAndGroup(member,group))throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
     }
     private void joinGroup(Group group, Member member, Role role){
