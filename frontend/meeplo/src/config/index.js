@@ -1,4 +1,4 @@
-import calendar from './config.calender';
+import calendar from './config.calendar.js';
 
 const config = {
   calendar,
