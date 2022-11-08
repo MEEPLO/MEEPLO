@@ -26,6 +26,7 @@ const StepTextInput = props => {
         {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
       </Text>
       <TextInput
+        multiline
         ref={textInputRef}
         maxLength={props.maxLength}
         onBlur={inputOnBlur}
