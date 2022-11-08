@@ -18,7 +18,8 @@ public class LocationContent {
     @Column(length = 200)
     private String content;
 
-    private Integer price;
+    @Column(length = 50)
+    private String price;
 
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")

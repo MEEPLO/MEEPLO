@@ -34,6 +34,9 @@ public class ScheduleMember extends GeoDataEntity {
     public void unactivateStatus(){
         this.status = ScheduleMemberStatus.UNACTIVATED;
     }
+    public void pendingStatus(){
+        this.status = ScheduleMemberStatus.PENDING;
+    }
 
     @Builder
     ScheduleMember(Schedule schedule, Member member, Role role){
