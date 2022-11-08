@@ -1,12 +1,11 @@
 package com.sloth.meeploscrap.util;
 
+import com.sloth.meeploscrap.location.entity.type.LocationType;
+import com.sloth.meeploscrap.util.type.LocationInfoSelector;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -54,28 +53,32 @@ public class SeleniumScraper implements Scraper{
                 .map(s -> DETAIL_DATA_CSS_SELECTOR + s + CLICKABLE_SUFFIX_TAG)
                 .collect(Collectors.toList());
 
-        try {
 
             driver.get(BASE_URL + location + "/place");
 
-            driver.switchTo().frame("entryIframe");
+            try {
+                driver.switchTo().frame("entryIframe");
+
+            } catch(NoSuchFrameException e) {
+
+                driver.switchTo().frame("searchIframe");
+
+                if(driver.findElements(By.className("FYvSc")).stream().count() > 0)
+                    return LocationType.NO_FRAME.name();
+
+                return LocationType.SEARCH_FRAME.name();
+            }
 
             clickableList.stream().map(c -> driver.findElements(By.cssSelector(c)))
                     .filter(elements -> !elements.isEmpty())
                     .forEach(e -> e.get(0).click());
 
-            log.info(driver.findElement(By.className("xHaT3")).getText());
-
             return driver.getPageSource();
 
-        } catch(Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public String getDetailExplain() {
-        return driver.findElements(By.className("xHaT3")).stream()
+        return driver.findElements(By.cssSelector(LocationInfoSelector.DETAIL_DESCRIPTION.getSelector())).stream()
                 .findFirst()
                 .map(e -> e.getText().replaceAll("내용 더보기", ""))
                 .orElse("");
@@ -95,8 +98,8 @@ public class SeleniumScraper implements Scraper{
             return driver.getPageSource();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            log.error("error : {}", e.getMessage());
+            return LocationType.NOT_CLICKABLE.name();
         }
     }
 

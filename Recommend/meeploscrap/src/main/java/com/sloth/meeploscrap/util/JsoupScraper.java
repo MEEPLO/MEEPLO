@@ -34,13 +34,19 @@ public class JsoupScraper implements Scraper{
     public void scrapDetailData(String html, Location location, String detailExplain) {
         Document parsedHTML = Jsoup.parse(html);
 
-        locationInfoRepository.save(LocationInfo.builder()
-                .location(location)
-                .phoneNumber(extractFirstText(parsedHTML, LocationInfoSelector.PHONE_NUMBER))
-                .link(extractFirstText(parsedHTML, LocationInfoSelector.LINK))
-                .description(extractExplain(parsedHTML, detailExplain))
-                .build()
-        );
+        String phoneNumber = extractFirstText(parsedHTML, LocationInfoSelector.PHONE_NUMBER);
+        String link = extractFirstText(parsedHTML, LocationInfoSelector.LINK);
+        String explain = extractExplain(parsedHTML, detailExplain);
+
+        if(!phoneNumber.isEmpty() || !link.isEmpty() || !explain.isEmpty()) {
+            locationInfoRepository.save(LocationInfo.builder()
+                    .location(location)
+                    .phoneNumber(phoneNumber)
+                    .link(link)
+                    .description(explain)
+                    .build()
+            );
+        }
 
         Pattern pattern = Pattern.compile("background-image:url\\(\"(.+)\"\\);");
 
@@ -50,9 +56,9 @@ public class JsoupScraper implements Scraper{
                             return matcher.find() ? matcher.group(1) : null;
                         })
                         .filter(Objects::nonNull)
-                        .map(link -> LocationPhoto.builder()
+                        .map(url -> LocationPhoto.builder()
                                 .location(location)
-                                .photo(link)
+                                .photo(url)
                                 .build())
                         .collect(Collectors.toList()));
 
