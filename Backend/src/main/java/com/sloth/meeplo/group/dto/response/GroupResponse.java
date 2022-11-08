@@ -6,6 +6,7 @@ import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
@@ -107,6 +108,48 @@ public class GroupResponse {
                             .location(Location.builder().name("미정").build())
                             .build())
                     .getLocation().getName();
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class FedMoment{
+        private Long id;
+        private String photo;
+
+        @Builder
+        FedMoment(Moment moment){
+            this.id = moment.getId();
+            this.photo = moment.getMomentPhoto();
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class MapMoment{
+        private Long id;
+        private String photo;
+
+        private MapMomentLocation location;
+
+        @Builder
+        MapMoment(Moment moment){
+            this.id = moment.getId();
+            this.photo = moment.getMomentPhoto();
+            this.location = MapMomentLocation.builder().location(moment.getScheduleLocation().getLocation()).build();
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class MapMomentLocation{
+        private Double lat;
+        private Double lng;
+
+        @Builder
+        MapMomentLocation(Location location){
+            this.lat = location.getLat();
+            this.lng = location.getLng();
         }
     }
 
