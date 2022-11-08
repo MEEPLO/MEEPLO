@@ -9,17 +9,9 @@ const MomentsSetFrame = () => {
   const frameContainerHeight = Dimensions.get('window').height * 0.18;
   const frameHeight = frameContainerHeight - 20;
 
-  const [frame1Border, setFrame1Border] = React.useState(false);
-  const [frame2Border, setFrame2Border] = React.useState(false);
-  const [frame3Border, setFrame3Border] = React.useState(false);
-  const frameStates = [setFrame1Border, setFrame2Border, setFrame3Border];
-
-  const [selectedFrame, setSelectedFrame] = React.useState(1);
+  const [selectedFrame, setSelectedFrame] = React.useState(0);
 
   const selectedFrameHandler = value => {
-    frameStates.forEach((setState, index) => {
-      index === value - 1 ? setState(true) : setState(false);
-    });
     setSelectedFrame(value);
   };
 
@@ -33,7 +25,7 @@ const MomentsSetFrame = () => {
             width: frameContainerWidth,
             height: frameContainerHeight,
             borderRadius: 20,
-            borderColor: frame1Border ? theme.color.bright.red : theme.color.disabled,
+            borderColor: selectedFrame === 1 ? theme.color.bright.red : theme.color.disabled,
             borderWidth: 2,
           }}
           onPress={() => selectedFrameHandler(1)}>
@@ -47,7 +39,7 @@ const MomentsSetFrame = () => {
             width: frameContainerWidth,
             height: frameContainerHeight,
             borderRadius: 20,
-            borderColor: frame2Border ? theme.color.bright.red : theme.color.disabled,
+            borderColor: selectedFrame === 2 ? theme.color.bright.red : theme.color.disabled,
             borderWidth: 2,
           }}
           onPress={() => selectedFrameHandler(2)}>
@@ -61,7 +53,7 @@ const MomentsSetFrame = () => {
             width: frameContainerWidth,
             height: frameContainerHeight,
             borderRadius: 20,
-            borderColor: frame3Border ? theme.color.bright.red : theme.color.disabled,
+            borderColor: selectedFrame === 3 ? theme.color.bright.red : theme.color.disabled,
             borderWidth: 2,
           }}
           onPress={() => selectedFrameHandler(3)}>

@@ -10,7 +10,7 @@ import MomentsSetFrame from './createSteps/MomentsSetFrame';
 const MomentsCreate = () => {
   const [step, setStep] = useState(0);
   // const [state, dispatch] = useReducer(reducer, initialState);
-  const stepItems = [MomentsSetGroup, MomentsSetSchedule, MomentsSetFrame];
+  const stepItems = [MomentsSetGroup, MomentsSetSchedule, MomentsSetFrame, MomentsSetPicture];
   const STEP_COUNT = stepItems.length;
 
   const toNext = (type, payload) => {
