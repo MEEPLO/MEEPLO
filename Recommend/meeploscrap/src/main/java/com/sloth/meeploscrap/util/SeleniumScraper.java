@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 public class SeleniumScraper implements Scraper{
     private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-    private static final String WEB_DRIVER_PATH = "C:\\Users\\SSAFY\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\static\\chromedriver.exe";
+    private static final String WEB_DRIVER_PATH = "C:\\Users\\minah\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\static\\chromedriver.exe";
 
     private static final String BASE_URL = "https://map.naver.com/v5/search/";
 
@@ -63,15 +63,19 @@ public class SeleniumScraper implements Scraper{
 
                 driver.switchTo().frame("searchIframe");
 
-                if(driver.findElements(By.className("FYvSc")).stream().count() > 0)
+                if((long) driver.findElements(By.className("FYvSc")).size() > 0)
                     return LocationType.NO_FRAME.name();
 
                 return LocationType.SEARCH_FRAME.name();
             }
 
-            clickableList.stream().map(c -> driver.findElements(By.cssSelector(c)))
-                    .filter(elements -> !elements.isEmpty())
-                    .forEach(e -> e.get(0).click());
+            try {
+                clickableList.stream().map(c -> driver.findElements(By.cssSelector(c)))
+                        .filter(elements -> !elements.isEmpty())
+                        .forEach(e -> e.get(0).click());
+            } catch (Exception e) {
+                return LocationType.NOT_CLICKABLE.name();
+            }
 
             return driver.getPageSource();
 

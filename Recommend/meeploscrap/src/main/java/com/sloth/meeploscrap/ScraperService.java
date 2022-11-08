@@ -7,11 +7,14 @@ import com.sloth.meeploscrap.util.SeleniumScraper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
 
+@EnableScheduling
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -20,8 +23,9 @@ public class ScraperService {
     private final JsoupScraper jsoupScraper;
     private final LocationRepository locationRepository;
 
-    private final int REQUEST_COUNT = 100;
+    private final int REQUEST_COUNT = 50;
 
+    @Scheduled(fixedDelay = 1000)
     @Transactional
     public void scrapDataFromWeb() {
         SeleniumScraper seleniumScraper = SeleniumScraper.builder().build();
@@ -46,6 +50,8 @@ public class ScraperService {
                 });
 
         seleniumScraper.closeDriver();
+
+        log.info("=====================");
     }
 
 }
