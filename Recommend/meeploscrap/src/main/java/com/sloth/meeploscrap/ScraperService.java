@@ -1,5 +1,6 @@
 package com.sloth.meeploscrap;
 
+import com.sloth.meeploscrap.location.entity.type.LocationType;
 import com.sloth.meeploscrap.location.repository.LocationRepository;
 import com.sloth.meeploscrap.util.JsoupScraper;
 import com.sloth.meeploscrap.util.SeleniumScraper;
@@ -7,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,11 +19,8 @@ public class ScraperService {
     private final JsoupScraper jsoupScraper;
     private final LocationRepository locationRepository;
 
+    @Transactional
     public String scrapDataFromWeb() {
-
-        String clickableExplainRestaurant = "방이편백육분삼십 서울 강남구 테헤란로29길";
-        String nonClickableExplainRestaurant = "바게트케이 서울특별시 강남구 테헤란로34길 21-10";
-
         SeleniumScraper seleniumScraper = SeleniumScraper.builder().build();
 
         locationRepository.findByType(null, Pageable.ofSize(10))
@@ -33,6 +33,10 @@ public class ScraperService {
                     jsoupScraper.scrapDetailData(html, loc);
 
                     jsoupScraper.scrapReviews(seleniumScraper.clickBar("리뷰"), loc);
+
+                    loc.overwriteType(LocationType.AMUSE);
+
+                    locationRepository.save(loc);
                 });
 
         seleniumScraper.closeDriver();

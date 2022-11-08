@@ -26,5 +26,9 @@ public class Location extends GeoDataEntity {
     @Column(length = 200)
     private String category;
 
+    public void overwriteType(LocationType type) {
+        this.type = type;
+    }
+
 }
 
