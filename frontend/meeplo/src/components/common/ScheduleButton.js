@@ -63,7 +63,7 @@ const ScheduleButton = props => {
             </View>
             <View>
               <Text>
-                아직20대초딩들 <Text> | </Text> {props.people}명
+                {props.group} <Text> | </Text> {props.people}명
               </Text>
             </View>
           </View>
