@@ -1,7 +1,19 @@
 import React from 'react';
-import { View, Dimensions, Pressable, Modal, Animated, TouchableOpacity, Easing } from 'react-native';
+import {
+  View,
+  Dimensions,
+  Pressable,
+  Text,
+  Modal,
+  Animated,
+  TouchableOpacity,
+  Easing,
+  ImageBackground,
+} from 'react-native';
 import styled from 'styled-components';
 import AutoHeightImage from 'react-native-auto-height-image';
+import Images from '../../assets/image/index';
+// import Slider from 'react-native-slider';
 import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
@@ -20,6 +32,53 @@ const MomentPic = ({ uri, type, direction }) => {
   const [imageFront, setImageFront] = React.useState(true);
   const [imageUri, setImageUri] = React.useState();
   const swipeAnim = React.useRef(new Animated.Value(0)).current;
+
+  const momentData = {
+    moment: {
+      id: 'long',
+      photoUrl: uri,
+      writer: 'int',
+      type: type,
+    },
+    reaction: {
+      count: 'int',
+      liked: 'boolean',
+    },
+    comments: [
+      {
+        comment: 'String comment',
+        location: {
+          xPoint: 100,
+          yPoint: 100,
+          angle: 40,
+        },
+      },
+      {
+        comment: '한글로 써 볼게요 한글로 써 볼게요 한글로 써 볼게요 한글로 써 볼게요',
+        location: {
+          xPoint: 50,
+          yPoint: 200,
+          angle: 20,
+        },
+      },
+      {
+        comment: '아무 말이나 넣어봅니다 아무 말이나 넣어봅니다 ',
+        location: {
+          xPoint: 20,
+          yPoint: 300,
+          angle: 280,
+        },
+      },
+      {
+        comment: '직관을 발휘해 보세요 직관을 발휘해 보세요 직관을 발휘해 보세요 직관을 발휘해 보세요 직관',
+        location: {
+          xPoint: 0,
+          yPoint: 400,
+          angle: 190,
+        },
+      },
+    ],
+  };
 
   React.useEffect(() => {
     setImageUri(uri);
@@ -56,12 +115,10 @@ const MomentPic = ({ uri, type, direction }) => {
   const setEndLocation = event => {
     const { locationY, pageY } = event.nativeEvent;
     setTouchEnd(pageY);
-    console.log('out');
     isSwiped();
   };
 
   const isSwiped = () => {
-    console.log('in&out', touchStart - touchEnd);
     if (touchEnd - touchStart < 100) {
       if (imageFront) {
         setImageFront(false);
@@ -86,13 +143,14 @@ const MomentPic = ({ uri, type, direction }) => {
     }
   };
 
+  const watermark = Images.frame.watermark;
+
   return (
     <MomentsCol paddLeft={direction === 'left' ? 20 : 10} height={viewHeight[type]}>
       <View style={{ width: '80%', height: 600 }}>
         <Pressable onPress={() => setMomentModal(true)}>
-          {/* <MomentpicBack uri={uri} type={type} /> */}
           <AutoHeightImage
-            source={{ uri }}
+            source={{ uri: momentData.moment.photoUrl }}
             width={imgWidth}
             style={{ borderRadius: 5, borderWidth: type === 3 ? 0 : 2, borderColor: theme.color.disabled }}
           />
@@ -117,11 +175,38 @@ const MomentPic = ({ uri, type, direction }) => {
             onPressIn={setStartLocation}
             onPressOut={setEndLocation}
             style={{ width: imgWidth + 40, height: viewHeight[type], backgroundColor: 'transparent' }}>
-            <Animated.Image
-              style={{ width: imgWidth, height: viewHeight[type], transform: [{ rotateY: rotateData }] }}
-              resizeMode="contain"
-              source={{ uri: imageUri }}
-            />
+            {imageFront ? (
+              <Animated.Image
+                style={{ width: imgWidth, height: viewHeight[type], transform: [{ rotateY: rotateData }] }}
+                resizeMode="contain"
+                source={{ uri: imageUri }}
+              />
+            ) : (
+              <Animated.View
+                style={{
+                  width: imgWidth,
+                  height: viewHeight[type] - 10,
+                  transform: [{ rotateY: rotateData }],
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+                resizeMode="contain">
+                <ImageBackground source={watermark} style={{ width: '100%', height: '100%' }}>
+                  {momentData.comments.map((comment, idx) => (
+                    <View
+                      style={{
+                        transform: [{ rotate: `${comment.location.angle}deg` }],
+                        position: 'absolute',
+                        top: comment.location.yPoint,
+                        left: comment.location.xPoint,
+                      }}
+                      key={idx}>
+                      <Text>{comment.comment}</Text>
+                    </View>
+                  ))}
+                </ImageBackground>
+              </Animated.View>
+            )}
           </TouchableOpacity>
 
           <Pressable

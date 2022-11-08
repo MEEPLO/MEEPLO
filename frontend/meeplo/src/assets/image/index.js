@@ -7,6 +7,7 @@ const images = {
     polaroid: require('./polaroidExample.png'),
     dayFilm: require('./dayFilmExample.png'),
     fourCut: require('./fourCutExample.png'),
+    watermark: require('./watermark.png'),
   },
 };
 
