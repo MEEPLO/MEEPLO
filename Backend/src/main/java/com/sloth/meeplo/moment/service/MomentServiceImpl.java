@@ -11,6 +11,7 @@ import com.sloth.meeplo.moment.entity.MomentComment;
 import com.sloth.meeplo.moment.exception.code.MomentErrorCode;
 import com.sloth.meeplo.moment.repository.MomentCommentRepository;
 import com.sloth.meeplo.moment.repository.MomentRepository;
+import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import com.sloth.meeplo.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -119,5 +125,23 @@ public class MomentServiceImpl implements MomentService{
         Moment moment = getMomentByMomentId(momentId);
 //        Member member = memberService.getMemberByAuthorization(authorization);
         return moment.getMomentComments().stream().map(mc -> MomentResponse.MomentDetailComment.builder().momentComment(mc).build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ScheduleResponse.JoinedScheduleMoment> getCalenderMoments(String authorization, String month) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM")
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter();
+        LocalDate localDate = LocalDate.parse(month, formatter);
+        LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
+        return member.getScheduleMembers().stream()
+                .filter(sm->sm.getSchedule().getDate().isBefore(targetDate.plusMonths(1)) && sm.getSchedule().getDate().isAfter(targetDate))
+                .flatMap(sm -> sm.getSchedule().getScheduleLocations().stream())
+                .flatMap(sl->sl.getMoments().stream())
+                .map(m-> ScheduleResponse.JoinedScheduleMoment.builder().moment(m).build())
+                .collect(Collectors.toList());
+
     }
 }

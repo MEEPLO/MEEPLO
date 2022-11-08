@@ -65,4 +65,11 @@ public class MomentController {
         resultMap.put("comments", momentService.getComments(authorization, momentId));
         return new ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>>(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/calendar")
+    public ResponseEntity<Map<String, List>> getCalenderMoments(@RequestHeader("Authorization") String authorization, @RequestParam String month){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("moments", momentService.getCalenderMoments(authorization, month));
+        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+    }
 }
