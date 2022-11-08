@@ -7,10 +7,6 @@ import AWS from 'aws-sdk';
 // import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { decode } from 'base64-arraybuffer';
 
-const MEEPLO_APP_ALBUM_BUCKET_NAME = 'meeplo-bucket';
-const MEEPLO_APP_BUCKET_REGION = 'ap-northeast-2';
-const MEEPLO_APP_IDENTITY_POOL_ID = 'ap-northeast-2:0a2bdbc0-2ec9-4898-85e2-3404fad80059';
-
 const getImageTitle = date => {
   let year = date.getFullYear().toString().substring(2);
   let month = date.getMonth() + 1;
