@@ -2,21 +2,22 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 import StepButton from '../../../components/stepper/StepButton';
+import StepTextInput from '../../../components/common/StepTextInput';
 
 const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
   return (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
         <Text>일시</Text>
-        <TextInput />
+        <StepTextInput />
       </View>
       <View style={styles.inputViewStyle}>
         <Text>약속 이름</Text>
-        <TextInput />
+        <StepTextInput />
       </View>
       <View style={styles.inputViewStyle}>
         <Text>키워드</Text>
-        <TextInput />
+        <StepTextInput />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="" />
