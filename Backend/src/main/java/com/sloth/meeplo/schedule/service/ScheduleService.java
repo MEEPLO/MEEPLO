@@ -1,5 +1,6 @@
 package com.sloth.meeplo.schedule.service;
 
+import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.dto.response.MomentResponse;
 import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
 import com.sloth.meeplo.schedule.dto.response.KeywordResponse;
@@ -39,5 +40,11 @@ public interface ScheduleService {
 
     List<MomentResponse.MomentSimpleList> getMomentListBySchedule(String authorization, Long scheduleId);
 
+    void checkMemberScheduleLeader(Member member, Schedule schedule);
 
-    }
+    void checkAfterScheduleDate(Schedule schedule);
+
+    void checkMemberInSchedule(Schedule schedule, Member member);
+
+
+}
