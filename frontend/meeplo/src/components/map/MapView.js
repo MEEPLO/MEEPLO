@@ -9,7 +9,7 @@ const MapView = ({ setWebViewRef, onMessageHandler }) => {
   return (
     <WebView
       style={styles.webViewStyle}
-      source={{ uri: 'http://70.12.246.204:8080' }}
+      source={{ uri: 'http://meeplo.co.kr:8080' }}
       onMessage={onMessageHandler}
       ref={setWebViewRef}
     />
