@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,17 +20,22 @@ public class ScraperService {
     private final JsoupScraper jsoupScraper;
     private final LocationRepository locationRepository;
 
+    private final int REQUEST_COUNT = 100;
+
     @Transactional
-    public String scrapDataFromWeb() {
+    public void scrapDataFromWeb() {
         SeleniumScraper seleniumScraper = SeleniumScraper.builder().build();
 
-        locationRepository.findByType(null, Pageable.ofSize(10))
+        locationRepository.findByType(null, Pageable.ofSize(REQUEST_COUNT))
                 .forEach(loc -> {
                     String html = seleniumScraper.focusInitFrame(loc.getName() + " " + loc.getAddress());
 
-                    if(html == null)
+                    if(Arrays.stream(LocationType.values()).anyMatch(v -> v.name().equals(html))) {
+                        log.error("{} occurs error : {}", loc.getName(), html);
+                        loc.overwriteType(LocationType.valueOf(html));
+                        locationRepository.save(loc);
                         return;
-
+                    }
                     jsoupScraper.scrapDetailData(html, loc, seleniumScraper.getDetailExplain());
 
                     jsoupScraper.scrapReviews(seleniumScraper.clickBar("리뷰"), loc);
@@ -40,8 +46,6 @@ public class ScraperService {
                 });
 
         seleniumScraper.closeDriver();
-
-        return "good";
     }
 
 }

@@ -11,7 +11,10 @@ public class ScraperController {
     private final ScraperService scraperService;
 
     @GetMapping
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok().body(scraperService.scrapDataFromWeb());
+    public ResponseEntity<Void> test() {
+
+        scraperService.scrapDataFromWeb();
+
+        return ResponseEntity.ok().build();
     }
 }
