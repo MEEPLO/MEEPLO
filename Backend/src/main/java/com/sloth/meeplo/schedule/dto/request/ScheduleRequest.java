@@ -1,5 +1,7 @@
 package com.sloth.meeplo.schedule.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,33 +17,50 @@ public class ScheduleRequest {
     @ToString
     @NoArgsConstructor
     public static class ScheduleCreateInput{
-        @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
         private String name;
         private Long groupId;
         private Long meetLocationId;
-        private List<ScheduleCreateInputKeyword> keywords;
-        private List<ScheduleCreateInputMember> members;
-        private List<ScheduleCreateInputAmuse> amuses;
+        private List<ScheduleInputKeyword> keywords;
+        private List<ScheduleInputMember> members;
+        private List<ScheduleInputAmuse> amuses;
 
     }
 
     @Getter
     @ToString
     @NoArgsConstructor
-    public static class ScheduleCreateInputKeyword{
+    public static class ScheduleInputKeyword{
         private Long id;
     }
     @Getter
     @ToString
     @NoArgsConstructor
-    public static class ScheduleCreateInputMember{
+    public static class ScheduleInputMember{
         private Long id;
     }
     @Getter
     @ToString
     @NoArgsConstructor
-    public static class ScheduleCreateInputAmuse{
+    public static class ScheduleInputAmuse{
         private Long id;
     }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class ScheduleUpdateInput{
+        private Long id;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        private LocalDateTime date;
+        private String name;
+        private Long groupId;
+        private Long meetLocationId;
+        private List<ScheduleInputKeyword> keywords;
+        private List<ScheduleInputMember> members;
+        private List<ScheduleInputAmuse> amuses;
+    }
+
+
 }

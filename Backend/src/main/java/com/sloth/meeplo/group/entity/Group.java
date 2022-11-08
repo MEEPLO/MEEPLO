@@ -2,6 +2,7 @@ package com.sloth.meeplo.group.entity;
 
 import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.group.dto.request.GroupRequest;
+import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleMember;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,6 +30,9 @@ public class Group extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupMember> groupMembers;
+
+    @OneToMany(mappedBy = "group")
+    private List<Schedule> schedules;
 
     public void updateGroupId(Long id) {
         this.id = id;
