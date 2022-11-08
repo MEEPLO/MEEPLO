@@ -28,17 +28,17 @@ public class Schedule extends BaseTimeEntity {
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     private Group group;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<ScheduleMember> scheduleMembers;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<ScheduleLocation> scheduleLocations;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinTable(name = "ScheduleKeywordRelaction",
             joinColumns = @JoinColumn(name="schedule_id"),
             inverseJoinColumns = @JoinColumn(name="schedule_keyword_id")
@@ -56,6 +56,17 @@ public class Schedule extends BaseTimeEntity {
         this.name =name;
         this.group = group;
         this.location = location;
+    }
 
+    public void updateDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void updateLocation(Location location) {
+        this.location = location;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
     }
 }
