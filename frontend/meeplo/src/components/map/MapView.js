@@ -1,25 +1,20 @@
-import React, { forwardRef } from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import React from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const screen = Dimensions.get('screen');
 console.log(screen);
 
-const MapView = forwardRef((props, ref) => {
-  const onMessageHandler = e => {
-    // const event = JSON.parse(e.nativeEvent.data);
-    console.log('onMessage', e.nativeEvent.data);
-  };
-
+const MapView = ({ setWebViewRef, onMessageHandler }) => {
   return (
     <WebView
       style={styles.webViewStyle}
       source={{ uri: 'http://70.12.246.204:8080' }}
-      ref={ref}
       onMessage={onMessageHandler}
+      ref={setWebViewRef}
     />
   );
-});
+};
 
 const styles = StyleSheet.create({
   viewStyle: {},
@@ -27,7 +22,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: screen.width,
     height: screen.height,
-    borderWidth: 10,
   },
 });
 
