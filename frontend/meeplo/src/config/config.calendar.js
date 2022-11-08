@@ -1,4 +1,5 @@
 import React from 'react';
+import CalendarHeader from '../components/calendar/CalendarHeader';
 import { LocaleConfig } from 'react-native-calendars';
 
 const today = new Date();
@@ -16,9 +17,9 @@ LocaleConfig.locales['ko'] = {
 const calendar = {};
 
 calendar.meeploCalendarParam = {
-  // renderHeader: date => {
-  //   return <CalendarHeader date={date} />;
-  // },
+  renderHeader: date => {
+    return <CalendarHeader date={date} />;
+  },
 
   enableSwipeMonths: true,
   // minDate: '2020-10-01',
