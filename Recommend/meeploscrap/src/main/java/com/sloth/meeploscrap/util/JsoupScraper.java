@@ -56,6 +56,7 @@ public class JsoupScraper implements Scraper{
                             return matcher.find() ? matcher.group(1) : null;
                         })
                         .filter(Objects::nonNull)
+                        .filter(p -> p.length() < 800)
                         .map(url -> LocationPhoto.builder()
                                 .location(location)
                                 .photo(url)
