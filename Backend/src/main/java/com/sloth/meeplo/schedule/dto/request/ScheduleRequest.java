@@ -1,5 +1,6 @@
 package com.sloth.meeplo.schedule.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class ScheduleRequest {
     @ToString
     @NoArgsConstructor
     public static class ScheduleCreateInput{
-        @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
         private String name;
         private Long groupId;
@@ -51,7 +52,7 @@ public class ScheduleRequest {
     @NoArgsConstructor
     public static class ScheduleUpdateInput{
         private Long id;
-        @DateTimeFormat(pattern = "YYYY-MM-DD hh:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
         private String name;
         private Long groupId;
