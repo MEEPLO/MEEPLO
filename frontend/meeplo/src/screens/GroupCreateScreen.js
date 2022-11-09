@@ -19,7 +19,7 @@ const GroupCreateScreen = () => {
   const [groupPhoto, setGroupPhoto] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
-  const { width } = Dimensions.get('window');
+  const { width, height } = Dimensions.get('window');
 
   const addImage = async () => {
     const result = await launchImageLibrary();
@@ -100,7 +100,7 @@ const GroupCreateScreen = () => {
   });
 
   return (
-    <View>
+    <View style={{ height }}>
       <View style={{ margin: 20 }}>
         <StepTextInput type="그룹명" maxLength={20} required={true} inputValueHandler={setGroupName} />
       </View>
@@ -156,13 +156,13 @@ const GroupCreateScreen = () => {
       </View>
       <TouchableOpacity
         style={{
-          alignSelf: 'flex-end',
+          position: 'absolute',
           alignItems: 'center',
           width,
           backgroundColor: 'white',
           justifyContent: 'center',
           height: 90,
-          top: 30,
+          top: height - 140,
         }}
         activeOpacity={0.6}
         onPress={onPressCreate}>
