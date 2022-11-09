@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-
+import config from '../../config';
 import { theme } from '../../assets/constant/DesignTheme';
 
 const KeywordBadge = ({ keyword, selected, onPress }) => {

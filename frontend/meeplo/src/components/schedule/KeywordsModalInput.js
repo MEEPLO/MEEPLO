@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
+import Toast from 'react-native-toast-message';
 
 import ModalRound from '../common/ModalRound';
 import KeywordSelector from './KeywordSelector';
@@ -95,7 +96,15 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
     if (selected.find(id => id === selectedId)) {
       setSelected(selected.filter(id => id !== selectedId));
     } else {
-      setSelected([...selected, selectedId]);
+      if (selected.length >= config.schedule.MAX_SELECT_KEYWORD_COUNT) {
+        Toast.show({
+          type: 'error',
+          text1: '더 이상 선택할 수 없어요!',
+        });
+        return;
+      } else {
+        setSelected([...selected, selectedId]);
+      }
     }
   };
 
@@ -127,6 +136,12 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
       </TouchableOpacity>
 
       <ModalRound title="키워드" visible={showModal} onRequestClose={closeModal}>
+        <View style={{ alignSelf: 'flex-end' }}>
+          <Text>
+            {selected.length} / {config.schedule.MAX_SELECT_KEYWORD_COUNT}
+          </Text>
+        </View>
+
         {renderCategories(categories)}
 
         <View style={styles.confirmButtonView}>
@@ -134,6 +149,8 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
             <Text style={styles.confirmButtonTextStyle}> 확인 </Text>
           </TouchableOpacity>
         </View>
+
+        <Toast />
       </ModalRound>
     </View>
   );
