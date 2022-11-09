@@ -14,7 +14,7 @@ const GroupStackScreen = () => {
 
   useEffect(() => {}, []);
   return (
-    <GroupStack.Navigator initialRouteName="GroupCreate">
+    <GroupStack.Navigator initialRouteName="GroupDetail">
       <GroupStack.Screen
         name="GroupHome"
         component={GroupHomeScreen}
@@ -25,11 +25,25 @@ const GroupStackScreen = () => {
           headerLeft: props => {
             props.canGoBack && <ToolBarLeft {...props} />;
           },
-          headerRight: () => <ToolBarRight userPhoto={user.memberDetail.profilePhoto} />,
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
           headerTitle: () => <ToolBarTitle />,
         }}
       />
-      <GroupStack.Screen name="GroupDetail" component={GroupDetailScreen} options={{ headerShown: true }} />
+      <GroupStack.Screen
+        name="GroupDetail"
+        component={GroupDetailScreen}
+        initialParams={{ groupId: 1 }}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerLeft: props => {
+            props.canGoBack && <ToolBarLeft {...props} />;
+          },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
       <GroupStack.Screen
         name="GroupCreate"
         component={GroupCreateScreen}
@@ -40,7 +54,7 @@ const GroupStackScreen = () => {
           headerLeft: props => {
             props.canGoBack && <ToolBarLeft {...props} />;
           },
-          headerRight: () => <ToolBarRight userPhoto={user.memberDetail.profilePhoto} />,
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
           headerTitle: () => <ToolBarTitle />,
         }}
       />

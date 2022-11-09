@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, TextInput, ScrollView, Dimensions } from 'react-native';
-import React, { useState, useReducer } from 'react';
+import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
@@ -10,8 +10,8 @@ import StepTextInput from '../components/common/StepTextInput';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { createGroup } from '../redux/groupSlice';
-
 import { useFocusEffect } from '@react-navigation/native';
+
 const GroupCreateScreen = () => {
   const dispatch = useDispatch();
   const [groupPhotoFile, setGroupPhotoFile] = useState(null);

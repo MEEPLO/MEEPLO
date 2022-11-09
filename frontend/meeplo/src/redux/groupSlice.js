@@ -18,6 +18,7 @@ export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
 });
 
 export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({ groupId }) => {
+  console.log('그룹슬라이스!!!', groupId);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {

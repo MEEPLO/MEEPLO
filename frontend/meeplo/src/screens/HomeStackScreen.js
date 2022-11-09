@@ -24,7 +24,7 @@ const HomeStackScreen = () => {
           headerLeft: props => {
             props.canGoBack && <ToolBarLeft {...props} />;
           },
-          headerRight: () => <ToolBarRight userPhoto={user.memberDetail.profilePhoto} />,
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
           headerTitle: () => <ToolBarTitle />,
         }}
       />
@@ -40,7 +40,7 @@ const HomeStackScreen = () => {
           headerLeft: props => {
             return props.canGoBack && <ToolBarLeft {...props} />;
           },
-          headerRight: () => <ToolBarRight userPhoto={user.memberDetail.profilePhoto} />,
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
           headerTitle: () => <ToolBarTitle />,
         }}
       />
