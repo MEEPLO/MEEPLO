@@ -1,15 +1,34 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { theme } from '../../../assets/constant/DesignTheme';
 
 import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
+import DateInput from '../../../components/schedule/DateInput';
 
 const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
+  const onPressNext = () => {
+    const actions = [
+      {
+        type: '',
+        payload: '',
+      },
+      {
+        type: '',
+        payload: '',
+      },
+      {
+        type: '',
+        payload: '',
+      },
+    ];
+
+    toNext(actions);
+  };
   return (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <Text>일시</Text>
-        <StepTextInput />
+        <DateInput type="일시" required />
       </View>
       <View style={styles.inputViewStyle}>
         <Text>약속 이름</Text>
@@ -21,7 +40,7 @@ const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="" />
-        <StepButton text="다음 >" active={true} onPress={toNext} />
+        <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
     </View>
   );

@@ -92,7 +92,11 @@ const ScheduleCreateScreen = ({ navigation }) => {
   const setStepClamp = newStep => {
     setStep(helper.number.clamp(newStep, 0, STEP_COUNT - 1));
   };
-  const toNext = () => {
+  const toNext = actions => {
+    if (Array.isArray(actions)) {
+      actions.forEach(action => dispatch(action));
+    }
+
     setStepClamp(step + 1);
   };
 
@@ -119,8 +123,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#FFFFFF',
-
-    borderWidth: 3,
   },
   stepIndicatorStyle: {
     alignItems: 'center',
