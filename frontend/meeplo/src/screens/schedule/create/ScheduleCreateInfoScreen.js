@@ -4,7 +4,7 @@ import { theme } from '../../../assets/constant/DesignTheme';
 
 import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
-import DateInput from '../../../components/schedule/DateInput';
+import DateModalInput from '../../../components/schedule/DateModalInput';
 
 const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
   const onPressNext = () => {
@@ -28,7 +28,7 @@ const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
   return (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <DateInput type="일시" required />
+        <DateModalInput type="일시" required />
       </View>
       <View style={styles.inputViewStyle}>
         <Text>약속 이름</Text>
