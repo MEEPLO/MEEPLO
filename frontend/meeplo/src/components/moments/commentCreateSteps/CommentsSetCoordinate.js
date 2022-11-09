@@ -91,6 +91,7 @@ const CommentsSetCoordinate = () => {
           {momentData.comments.map((comment, idx) => (
             <View
               style={{
+                width: '80%',
                 transform: [{ rotate: `${comment.location.angle}deg` }],
                 position: 'absolute',
                 top: comment.location.yPoint * 0.85,
@@ -102,6 +103,7 @@ const CommentsSetCoordinate = () => {
           ))}
           <Text
             style={{
+              width: '80%',
               fontSize: 10,
               color: theme.font.color,
               transform: [{ rotate: `${tilt}deg` }],
