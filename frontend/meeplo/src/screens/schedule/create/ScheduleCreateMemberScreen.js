@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 import StepButton from '../../../components/stepper/StepButton';
 
-const ScheduleCreateMemberScreen = ({ toNext, toPrev, onFinish }) => {
+const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish }) => {
   return (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>

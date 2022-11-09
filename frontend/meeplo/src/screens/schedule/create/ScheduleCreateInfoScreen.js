@@ -1,35 +1,56 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
 
 import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
 import DateModalInput from '../../../components/schedule/DateModalInput';
+import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput';
 
-const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
-  const [date, setDate] = useState('');
+const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish }) => {
+  const [date, setDate] = useState();
+  const [name, setName] = useState();
+  const [keywords, setKeywords] = useState([]);
 
+  useEffect(() => {
+    setDate(state.date);
+    setName(state.name);
+    setKeywords(state.keywords);
+  }, [state]);
+
+  const validateInput = () => {
+    if (date && name) {
+      return true;
+    }
+    return false;
+  };
   const onPressNext = () => {
-    const actions = [
-      {
-        type: '',
-        payload: '',
-      },
-      {
-        type: '',
-        payload: '',
-      },
-      {
-        type: '',
-        payload: '',
-      },
-    ];
+    if (validateInput()) {
+      const actions = [
+        {
+          type: 'UPDATE_DATE',
+          payload: date,
+        },
+        {
+          type: 'UPDATE_NAME',
+          payload: name,
+        },
+        {
+          type: 'UPDATE_KEYWORDS',
+          payload: keywords,
+        },
+      ];
 
-    toNext(actions);
+      toNext(actions);
+    }
   };
 
   const onConfirmDate = confirmedDate => {
     setDate(confirmedDate);
+  };
+
+  const onConfirmKeywords = confirmedKeywords => {
+    setKeywords(confirmedKeywords);
   };
 
   return (
@@ -38,10 +59,10 @@ const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
         <DateModalInput type="일시" value={date} required onConfirm={onConfirmDate} />
       </View>
       <View style={styles.inputViewStyle}>
-        <StepTextInput type="약속 이름" required />
+        <StepTextInput type="약속 이름" multiline={false} value={name} onValueChange={setName} required />
       </View>
       <View style={styles.inputViewStyle}>
-        <StepTextInput type="키워드" />
+        <KeywordsModalInput type="키워드" value={keywords} onConfirm={onConfirmKeywords} />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="" />

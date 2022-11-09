@@ -29,8 +29,8 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
       </Text>
 
       <TouchableOpacity onPress={openModal}>
-        <Text>{value}</Text>
-        <View style={styles.dateInputView}></View>
+        <Text style={{ color: theme.font.color }}>{value}</Text>
+        <View style={styles.dateInputView} />
       </TouchableOpacity>
 
       <ModalRound title="날짜 선택" visible={showModal} onRequestClose={closeModal}>
