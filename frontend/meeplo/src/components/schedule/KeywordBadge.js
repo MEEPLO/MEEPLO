@@ -3,9 +3,9 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import config from '../../config';
 import { theme } from '../../assets/constant/DesignTheme';
 
-const KeywordBadge = ({ keyword, selected, onPress }) => {
+const KeywordBadge = ({ keyword, selected, onPress, disabled = false }) => {
   return (
-    <TouchableOpacity style={styles.keywordBadge(selected)} onPress={() => onPress(keyword.id)}>
+    <TouchableOpacity disabled={disabled} style={styles.keywordBadge(selected)} onPress={() => onPress(keyword.id)}>
       <Text style={styles.keywordBadgeText}>{keyword.keyword}</Text>
     </TouchableOpacity>
   );

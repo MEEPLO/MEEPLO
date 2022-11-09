@@ -5,6 +5,7 @@ import Toast from 'react-native-toast-message';
 
 import ModalRound from '../common/ModalRound';
 import KeywordSelector from './KeywordSelector';
+import KeywordBadge from './KeywordBadge';
 import config from '../../config';
 
 const screen = Dimensions.get('screen');
@@ -28,7 +29,7 @@ const KeywordsModalInput = ({ type, value, onConfirm, keywordsData }) => {
     }
 
     setCategories(categorized);
-  }, []);
+  }, [keywordsData]);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -72,12 +73,17 @@ const KeywordsModalInput = ({ type, value, onConfirm, keywordsData }) => {
     );
   };
 
+  const renderKeywordBadges = keywordsData => {
+    const selectedKeywordsData = keywordsData.filter(keyword => selected.find(id => id === keyword.id));
+    return selectedKeywordsData.map(keyword => <KeywordBadge keyword={keyword} selected={true} disabled />);
+  };
+
   return (
     <View>
       <Text style={styles.titleStyle}>{type}</Text>
 
-      <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>{value}</Text>
+      <TouchableOpacity style={{ borderWidth: 1, minHeight: 50 }} onPress={openModal}>
+        <View style={styles.keywordBadgeView}>{renderKeywordBadges(keywordsData)}</View>
         <View style={styles.keywordsInputView} />
       </TouchableOpacity>
 
@@ -107,6 +113,10 @@ const styles = StyleSheet.create({
     color: theme.font.color,
     fontWeight: '800',
     marginBottom: 40,
+  },
+  keywordBadgeView: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   keywordsInputView: {
     width: screen.width * 0.9,

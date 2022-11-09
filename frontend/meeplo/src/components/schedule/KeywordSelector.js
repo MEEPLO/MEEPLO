@@ -6,7 +6,7 @@ import { theme } from '../../assets/constant/DesignTheme';
 import KeywordBadge from './KeywordBadge';
 
 const KeywordSelector = ({ classification, keywords, selected, onPress }) => {
-  const renderKeywords = keywords => {
+  const renderKeywordBadges = keywords => {
     if (Array.isArray(keywords)) {
       return keywords.map(keyword => (
         <KeywordBadge
@@ -24,7 +24,7 @@ const KeywordSelector = ({ classification, keywords, selected, onPress }) => {
       <View style={styles.keywordClassificationView}>
         <Text style={styles.keywordClassificationText}>{classification}</Text>
       </View>
-      <View style={styles.keywordsView}>{renderKeywords(keywords)}</View>
+      <View style={styles.keywordBadgeView}>{renderKeywordBadges(keywords)}</View>
     </View>
   );
 };
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     color: theme.font.color,
     fontWeight: '800',
   },
-  keywordsView: {
+  keywordBadgeView: {
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
