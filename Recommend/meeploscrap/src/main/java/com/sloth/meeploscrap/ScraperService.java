@@ -23,14 +23,14 @@ public class ScraperService {
     private final JsoupScraper jsoupScraper;
     private final LocationRepository locationRepository;
 
-    private final int REQUEST_COUNT = 50;
+    private final int REQUEST_COUNT = 20;
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 500)
     @Transactional
     public void scrapDataFromWeb() {
         SeleniumScraper seleniumScraper = SeleniumScraper.builder().build();
 
-        locationRepository.findByType(null, Pageable.ofSize(REQUEST_COUNT))
+        locationRepository.findByTypeOrderByIdDesc(null, Pageable.ofSize(REQUEST_COUNT))
                 .forEach(loc -> {
                     String html = seleniumScraper.focusInitFrame(loc.getName() + " " + loc.getAddress());
 

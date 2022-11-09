@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 public class SeleniumScraper implements Scraper{
     private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-    private static final String WEB_DRIVER_PATH = "C:\\Users\\minah\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\static\\chromedriver.exe";
+    private static final String WEB_DRIVER_PATH = "C:\\Users\\SSAFY\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\static\\chromedriver.exe";
 
     private static final String BASE_URL = "https://map.naver.com/v5/search/";
 
@@ -67,8 +67,12 @@ public class SeleniumScraper implements Scraper{
                     return LocationType.OTHER_ERR.name();
                 }
 
-                if((long) driver.findElements(By.className("FYvSc")).size() > 0)
-                    return LocationType.NO_FRAME.name();
+                try {
+                    if ((long) driver.findElements(By.className("FYvSc")).size() > 0)
+                        return LocationType.NO_FRAME.name();
+                } catch (Exception e3) {
+                    return LocationType.OTHER_ERR.name();
+                }
 
                 return LocationType.SEARCH_FRAME.name();
             }
