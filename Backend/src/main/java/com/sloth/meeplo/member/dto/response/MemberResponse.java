@@ -30,12 +30,14 @@ public class MemberResponse {
     @ToString
     @Getter
     public static class MemberDetail{
+        private Long id;
         private String nickname;
         private String profilePhoto;
         private List<MemberDetailStartLocation> startLocations;
 
         @Builder
         MemberDetail(Member member){
+            this.id = member.getId();
             this.nickname = member.getUsername();
             this.profilePhoto = member.getProfilePhoto();
             this.startLocations = member.getMemberLocations()

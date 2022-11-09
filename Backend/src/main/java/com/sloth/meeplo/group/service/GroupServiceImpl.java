@@ -119,7 +119,7 @@ public class GroupServiceImpl implements GroupService{
 
         return GroupResponse.JoinedGroupDetail.builder()
                 .group(group)
-                .leader(leader.getNickname())
+                .leader(leader)
                 .members(groupMembers.stream()
                         .map(m-> GroupResponse.GroupDetailMember.builder()
                                 .groupMember(m)
