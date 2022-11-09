@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface LocationRepository extends JpaRepository<Location, Long> {
 
-    List<Location> findByType(LocationType type, Pageable pageable);
+    List<Location> findByTypeOrderByIdDesc(LocationType type, Pageable pageable);
 
 }
