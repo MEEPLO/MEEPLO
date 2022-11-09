@@ -1,15 +1,19 @@
 import React from 'react';
-import { View, Text, Modal, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 
 const screen = Dimensions.get('screen');
+const modalWidth = screen.width * 0.85;
 
 const ModalRound = ({ title, visible, onRequestClose, children }) => {
   return (
-    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onRequestClose}>
+    <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onRequestClose}>
       <View style={styles.centeredView}>
         <View style={styles.roundedView}>
           <View style={styles.headerView}>
+            <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
+              <Text style={styles.closeButtonTextStyle}> X </Text>
+            </TouchableOpacity>
             <Text style={styles.title}>{title}</Text>
           </View>
           <View style={styles.childrenView}>{children}</View>
@@ -31,10 +35,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   roundedView: {
-    width: screen.width * 0.7,
+    width: modalWidth,
     backgroundColor: 'white',
 
-    borderRadius: 10,
+    borderRadius: theme.radius.base,
     borderWidth: 2,
     borderColor: theme.color.border,
 
@@ -55,7 +59,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   childrenView: {
+    width: modalWidth,
     padding: 20,
+    justifyContent: 'center',
+  },
+  closeButtonStyle: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 50,
+  },
+  closeButtonTextStyle: {
+    fontWeight: '800',
+    fontSize: 18,
   },
   title: {
     fontWeight: '800',
