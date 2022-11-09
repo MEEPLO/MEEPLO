@@ -12,8 +12,13 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     String HAVERSINE_FORMULA = "(6371 * acos(cos(radians(:latitude)) * cos(radians(l.lat)) *" +
             " cos(radians(l.lng) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(l.lat))))";
 
-    @Query("SELECT l FROM Location l WHERE " + HAVERSINE_FORMULA + " < :distance ORDER BY "+ HAVERSINE_FORMULA + " DESC")
-    List<Location> findLocationsWithInDistance(@Param("latitude") double latitude, @Param("longitude") double longitude, @Param("distance") double distanceWithInKM);
+
+    @Query(value = "SELECT l FROM Location l WHERE " + HAVERSINE_FORMULA + " < :distance and type = 1 ORDER BY " + HAVERSINE_FORMULA + " DESC")
+    List<Location> findLocationsWithCoordination(
+            @Param("latitude") double latitude,
+            @Param("longitude") double longitude,
+            @Param("distance") double distanceWithInKM
+    );
 
 
 }
