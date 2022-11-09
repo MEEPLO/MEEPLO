@@ -1,4 +1,4 @@
-package com.sloth.meeplo.member;
+package com.sloth.meeplo.location.service;
 
 import com.sloth.meeplo.location.dto.response.LocationResponse;
 import com.sloth.meeplo.location.repository.LocationRepository;

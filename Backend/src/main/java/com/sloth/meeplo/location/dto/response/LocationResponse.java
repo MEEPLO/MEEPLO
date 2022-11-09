@@ -35,7 +35,7 @@ public class LocationResponse {
             this.photo = location.getLocationPhotos().stream()
                     .findFirst().orElse(LocationPhoto
                             .EmptyLocationPhotoBuilder()
-                            .photo("noPhoto")
+                            .photo("https://popcat.click/twitter-card.jpg")
                             .build())
                     .getPhoto();
         }
