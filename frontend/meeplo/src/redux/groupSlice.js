@@ -32,18 +32,14 @@ export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({
   }
 });
 
-export const createGroup = createAsyncThunk('group/createGroup', async ({ form }) => {
+export const createGroup = createAsyncThunk('group/createGroup', async form => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(
-      'http://meeplo.co.kr/meeplo/api/v1/group',
-      { ...form },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+    const response = await axios.post('http://meeplo.co.kr/meeplo/api/v1/group', form, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+    });
     console.log('group CREATED!');
     return response.data;
   } catch (err) {
