@@ -1147,6 +1147,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-community/checkbox@^0.5.13":
+  version "0.5.13"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.13.tgz#f15cdc1f80ccc33fc949b7673b226225d94fe865"
+  integrity sha512-FMDYudaUbodbDOBgD6wT7s5z2QSzzghq46og8fF1yNXAp56AIrmRHZAtQhvlfyCdzWDu1+lBqgOxgupRmkCAUA==
+
 "@react-native-community/cli-clean@^9.2.1":
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-clean/-/cli-clean-9.2.1.tgz#198c5dd39c432efb5374582073065ff75d67d018"
