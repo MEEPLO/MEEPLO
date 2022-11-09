@@ -20,7 +20,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<LocationResponse.pointNearLocation> getNearLocation(Double lat, Double lng, Double radius) {
 
-        return locationRepository.findLocationsWithInDistance(lat,lng,radius).stream()
+        return locationRepository.findLocationsWithCoordination(lat,lng,radius).stream()
                 .map(l->LocationResponse.pointNearLocation.builder()
                         .location(l)
                         .build())
