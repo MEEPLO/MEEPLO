@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
 
@@ -7,6 +7,8 @@ import StepTextInput from '../../../components/common/StepTextInput';
 import DateModalInput from '../../../components/schedule/DateModalInput';
 
 const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
+  const [date, setDate] = useState('');
+
   const onPressNext = () => {
     const actions = [
       {
@@ -25,18 +27,21 @@ const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
 
     toNext(actions);
   };
+
+  const onConfirmDate = confirmedDate => {
+    setDate(confirmedDate);
+  };
+
   return (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <DateModalInput type="일시" required />
+        <DateModalInput type="일시" value={date} required onConfirm={onConfirmDate} />
       </View>
       <View style={styles.inputViewStyle}>
-        <Text>약속 이름</Text>
-        <StepTextInput />
+        <StepTextInput type="약속 이름" required />
       </View>
       <View style={styles.inputViewStyle}>
-        <Text>키워드</Text>
-        <StepTextInput />
+        <StepTextInput type="키워드" />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="" />
