@@ -6,6 +6,7 @@ import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/To
 import GroupCreateScreen from './GroupCreateScreen';
 import GroupDetailScreen from './GroupDetailScreen';
 import GroupHomeScreen from './GroupHomeScreen';
+import GroupDetailInfoScreen from './GroupDetailInfoScreen';
 
 const GroupStack = createNativeStackNavigator();
 
@@ -47,6 +48,21 @@ const GroupStackScreen = () => {
       <GroupStack.Screen
         name="GroupCreate"
         component={GroupCreateScreen}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerLeft: props => {
+            props.canGoBack && <ToolBarLeft {...props} />;
+          },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <GroupStack.Screen
+        name="GroupDetailInfo"
+        component={GroupDetailInfoScreen}
+        initialParams={{ groupId: 1 }}
         options={{
           headerShadowVisible: false,
           headerShown: true,

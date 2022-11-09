@@ -18,7 +18,6 @@ export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
 });
 
 export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({ groupId }) => {
-  console.log('그룹슬라이스!!!', groupId);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
@@ -29,6 +28,22 @@ export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({
     return response.data.group;
   } catch (err) {
     console.error('ERROR in getGroupDetail!', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const getGroupMomentsFeed = createAsyncThunk('group/getGroupMomentsFeed', async ({ groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/moment/feed`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(response.data);
+    return response.data.moments;
+  } catch (err) {
+    console.error('ERROR in getGroupMomentsFeed', err);
     return isRejectedWithValue(err.response.data);
   }
 });
@@ -127,7 +142,7 @@ const groupListSlice = createSlice({
       {
         id: -1,
         name: 'string',
-        photo: 'photo url',
+        photo: 'https://d1fdloi71mui9q.cloudfront.net/jl9DQQM1QxiPQklpiKii_GjzZ0fFXW61vAGZx',
         memberCount: -1,
         leaderName: 'string',
         lastSchedule: 'YYYY-MM-DD hh:mm',
@@ -143,34 +158,57 @@ const groupListSlice = createSlice({
 const groupDetailSlice = createSlice({
   name: 'group',
   initialState: {
-    id: -1,
-    name: 'string',
-    description: 'string',
-    photo: 'photo url',
-    leader: 'string',
-    members: [
-      {
-        id: -1,
-        nickname: 'string',
-        photo: 'string',
-      },
-    ],
-    schedules: [
-      {
-        id: -1,
-        name: 'string',
-        date: 'string',
-        memberCount: -1,
-        location: {
-          meetName: 'string',
-          amuseName: 'string',
+    details: {
+      id: -1,
+      name: 'string',
+      description: 'string',
+      photo: 'https://d1fdloi71mui9q.cloudfront.net/jl9DQQM1QxiPQklpiKii_GjzZ0fFXW61vAGZx',
+      leader: 'string',
+      members: [
+        {
+          id: -1,
+          nickname: 'string',
+          photo: 'string',
         },
-      },
-    ],
+      ],
+      schedules: [
+        {
+          id: -1,
+          name: 'string',
+          date: 'string',
+          memberCount: -1,
+          location: {
+            meetName: 'string',
+            amuseName: 'string',
+          },
+        },
+      ],
+    },
+    moments: [],
+    isLoading: false,
   },
   reducers: {},
   extraReducers: {
-    [getGroupDetail.fulfilled]: (state, { payload }) => payload,
+    [getGroupDetail.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getGroupDetail.fulfilled]: (state, { payload }) => {
+      state.details = payload;
+      state.isLoading = false;
+    },
+    [getGroupDetail.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+    },
+    [getGroupMomentsFeed.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getGroupMomentsFeed.fulfilled]: (state, { payload }) => {
+      state.moments = payload;
+      state.isLoading = false;
+    },
+    [getGroupMomentsFeed.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+    },
   },
 });
 

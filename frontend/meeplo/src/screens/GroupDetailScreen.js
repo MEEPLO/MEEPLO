@@ -1,14 +1,16 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Tabs, MaterialTabBar } from 'react-native-collapsible-tab-view';
-import GroupDetailHeader from '../components/Group/GroupDetailHeader';
-import { theme } from '../assets/constant/DesignTheme';
+import { Tabs } from 'react-native-collapsible-tab-view';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons/faMapLocationDot';
 import { renderTabBar, renderScheduleLabel, renderMomentsLabel } from '../components/Group/GroupDetailTabBar';
+import GroupDetailHeader from '../components/Group/GroupDetailHeader';
 import GroupDetailScheduleItem from '../components/Group/GroupDetailScheduleItem';
-import { getGroupDetail } from '../redux/groupSlice';
+import GroupDetailMomentsItem from '../components/Group/GroupDetailMomentsItem';
+import { getGroupDetail, getGroupMomentsFeed } from '../redux/groupSlice';
+import { theme } from '../assets/constant/DesignTheme';
 
-const identity = v => v.id + 'id';
 const DATA = {
   id: 1,
   name: 'SSAFY 갓자율',
@@ -80,27 +82,47 @@ const DATA = {
         amuseName: '양국',
       },
     },
-    {
-      id: 6,
-      name: '두번째 약속',
-      date: '2022-11-18 11:11:11',
-      memberCount: 5,
-      location: {
-        meetName: '강남역',
-        amuseName: '양국',
-      },
-    },
   ],
 };
+const MOMENTS = [
+  {
+    id: 1,
+    photo:
+      'https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80',
+  },
+  {
+    id: 2,
+    photo:
+      'https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80',
+  },
+  {
+    id: 3,
+    photo: 'https://e1.pngegg.com/pngimages/917/1009/png-clipart-polaroid-frames-thumbnail.png',
+  },
+  { id: 4, photo: 'https://iso.500px.com/wp-content/uploads/2016/11/stock-photo-159533631-1500x1000.jpg' },
+  { id: 5, photo: 'https://img.gqkorea.co.kr/gq/2022/04/style_624a422c209d0-340x1024.jpg' },
+  { id: 6, photo: 'https://iso.500px.com/wp-content/uploads/2016/11/stock-photo-159533631-1500x1000.jpg' },
+  { id: 7, photo: 'https://img.gqkorea.co.kr/gq/2022/04/style_624a422c209d0-340x1024.jpg' },
+  { id: 8, photo: 'https://iso.500px.com/wp-content/uploads/2016/11/stock-photo-159533631-1500x1000.jpg' },
+  { id: 9, photo: 'https://img.gqkorea.co.kr/gq/2022/04/style_624a422c209d0-340x1024.jpg' },
+  { id: 10, photo: 'https://iso.500px.com/wp-content/uploads/2016/11/stock-photo-159533631-1500x1000.jpg' },
+  {
+    id: 11,
+    photo: 'https://e1.pngegg.com/pngimages/917/1009/png-clipart-polaroid-frames-thumbnail.png',
+  },
+];
 
 const GroupDetailScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const { groupId } = route.params;
-  const groupDetail = useSelector(state => state.group);
+  const groupDetail = useSelector(state => state.group.details);
+  const groupMomentsFeed = useSelector(state => state.group.moments);
+  const { width } = Dimensions.get('window');
+
   const colorList = ['purple', 'red', 'navy', 'yellow', 'green', 'orange', 'blue'];
 
   const renderHeader = () => {
-    return <GroupDetailHeader data={DATA} navigation={navigation} />;
+    return <GroupDetailHeader data={DATA} navigation={navigation} groupId={groupId} isInfo={false} />;
   };
 
   const renderItem = useCallback(({ index, item }) => {
@@ -120,20 +142,58 @@ const GroupDetailScreen = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
-    console.log('디태일 useEffect');
-    dispatch(getGroupDetail({ groupId }));
+    // TODO: hrookim remove annotation
+    // dispatch(getGroupDetail({ groupId }));
+    // dispatch(getGroupMomentsFeed({ groupId }));
   }, []);
 
   return (
     <Tabs.Container renderHeader={renderHeader} renderTabBar={renderTabBar}>
       <Tabs.Tab name="scheduleLabel" label={renderScheduleLabel}>
         {/* TODO: hrookim change DATA to groupDetail */}
-        <Tabs.FlatList data={DATA.schedules} renderItem={renderItem} keyExtractor={identity} />
+        <Tabs.FlatList data={DATA.schedules} renderItem={renderItem} keyExtractor={item => item.id + 'id'} />
       </Tabs.Tab>
       <Tabs.Tab name="momentsLabel" label={renderMomentsLabel}>
         <Tabs.ScrollView>
-          <View style={[styles.box, styles.boxA]} />
-          <View style={[styles.box, styles.boxB]} />
+          <TouchableOpacity activeOpacity={0.6}>
+            <View
+              style={{
+                justifyContent: 'center',
+                flexDirection: 'row',
+                alignSelf: 'center',
+                height: 35,
+                width: width - 120,
+                marginVertical: 15,
+                borderColor: theme.color.border,
+                borderWidth: 2,
+                borderRadius: 10,
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: theme.color.bright.blue,
+                  borderTopLeftRadius: 7,
+                  borderBottomLeftRadius: 7,
+                  borderColor: theme.color.border,
+                  borderRightWidth: 2,
+                }}></View>
+              <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+                <FontAwesomeIcon icon={faMapLocationDot} size={20} color="gray" />
+                <Text style={{ fontSize: 20, fontWeight: '900', alignItems: 'center' }}>{`  지도로 추억 보기`}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <View style={{ marginBottom: 105, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+            {MOMENTS.map((item, i) => (
+              <GroupDetailMomentsItem
+                key={item.id}
+                id={item.id}
+                photo={item.photo}
+                width={width / 3 - 2}
+                color={colorList[(item.id % 4) + 3]}
+              />
+            ))}
+          </View>
         </Tabs.ScrollView>
       </Tabs.Tab>
     </Tabs.Container>
