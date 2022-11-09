@@ -6,7 +6,6 @@ import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
 import DateModalInput from '../../../components/schedule/DateModalInput';
 import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput';
-import KeywordBadge from '../../../components/schedule/KeywordBadge';
 
 const keywordsData = [
   {
