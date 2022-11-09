@@ -18,7 +18,7 @@ public class Location extends GeoDataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 10)
+    @Column(length = 50)
     private String name;
 
     private LocationType type;

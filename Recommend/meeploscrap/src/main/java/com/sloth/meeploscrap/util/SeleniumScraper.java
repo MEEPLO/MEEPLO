@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @Getter
 public class SeleniumScraper implements Scraper{
-    private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
-    private static final String WEB_DRIVER_PATH = "C:\\Users\\SSAFY\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\static\\chromedriver.exe";
+    private final String WEB_DRIVER_ID = "webdriver.chrome.driver";
+    private final String WEB_DRIVER_PATH = "C:\\Users\\SSAFY\\IdeaProjects\\S07P31A508\\Recommend\\meeploscrap\\src\\main\\resources\\static\\chromedriver.exe";
 
-    private static final String BASE_URL = "https://map.naver.com/v5/search/";
+    private final String BASE_URL = "https://map.naver.com/v5/search/";
 
-    private static final String CLICKABLE_SUFFIX_TAG = " > div > a";
+    private final String CLICKABLE_SUFFIX_TAG = " > div > a";
 
-    private static final String TABS_CLASS = ".tpj9w";
+    private final String TABS_CLASS = ".tpj9w";
 
     private final WebDriver driver;
 
