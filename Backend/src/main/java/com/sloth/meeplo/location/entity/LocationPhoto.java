@@ -1,6 +1,7 @@
 package com.sloth.meeplo.location.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,9 @@ public class LocationPhoto {
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private  Location location;
+
+    @Builder(builderMethodName = "EmptyLocationPhotoBuilder")
+    public LocationPhoto(String photo){
+        this.photo = photo;
+    }
 }
