@@ -10,3 +10,5 @@ Minikube Test
 RXJava, Observer, Mono, Flux
 
 kubeadm, kubectl, etcd
+
+Ingress : 외부에서 고정 IP로 클러스터에 접글할 때 필요. LB와 같은 역할
