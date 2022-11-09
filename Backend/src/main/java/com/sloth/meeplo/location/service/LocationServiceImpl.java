@@ -37,9 +37,9 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<LocationResponse.AutoStationSearch> getStationList(String keyword) {
+    public List<LocationResponse.StationAutoSearch> getStationList(String keyword) {
         return locationRepository.findByTypeAndNameStartingWith(LocationType.STATION, keyword).stream()
-                .map(l-> LocationResponse.AutoStationSearch.builder()
+                .map(l-> LocationResponse.StationAutoSearch.builder()
                         .location(l)
                         .build())
                 .collect(Collectors.toList());

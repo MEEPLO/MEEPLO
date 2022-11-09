@@ -151,14 +151,14 @@ public class LocationResponse {
     @Getter
     @ToString
     @NoArgsConstructor
-    public static class AutoStationSearch {
+    public static class StationAutoSearch {
         private Long id;
         private String name;
         private Double lat;
         private Double lng;
 
         @Builder
-        AutoStationSearch(Location location){
+        StationAutoSearch(Location location){
             this.id = location.getId();
             this.name = location.getName();
             this.lat= location.getLat();
