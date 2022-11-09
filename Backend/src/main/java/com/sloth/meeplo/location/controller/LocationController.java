@@ -1,5 +1,6 @@
 package com.sloth.meeplo.location.controller;
 
+import com.sloth.meeplo.location.dto.response.LocationResponse;
 import com.sloth.meeplo.location.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,17 @@ public class LocationController {
 
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("locations", locationService.getNearLocation(lat,lng,radius));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+    @GetMapping("/{locationId}")
+    public ResponseEntity<LocationResponse.LocationDetail> getDetailLocation(@PathVariable Long locationId){
+        return new ResponseEntity<>(locationService.getDetailLocation(locationId), HttpStatus.OK);
+    }
+
+    @GetMapping("/station")
+    public ResponseEntity<Map<String, List>> getStationList(@RequestParam String keyword){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("stations", locationService.getStationList(keyword));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }
