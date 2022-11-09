@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -53,10 +52,9 @@ public class JsoupScraper implements Scraper{
         locationPhotoRepository.saveAll(parsedHTML.select(LocationListSelector.PHOTO.getSelector()).stream()
                         .map(s -> {
                             Matcher matcher = pattern.matcher(s.attr("style"));
-                            return matcher.find() ? matcher.group(1) : null;
+                            return matcher.find() ? matcher.group(1) : "";
                         })
-                        .filter(Objects::nonNull)
-                        .filter(p -> p.length() < 800)
+                        .filter(p -> !p.isEmpty() && p.length() < 1000)
                         .map(url -> LocationPhoto.builder()
                                 .location(location)
                                 .photo(url)
@@ -118,9 +116,7 @@ public class JsoupScraper implements Scraper{
     }
 
     private String extractExplain(Document doc, String detail) {
-        String summary = extractFirstText(doc, LocationInfoSelector.SIMPLE_DESCRIPTION);
-
-        return summary.isEmpty() ? detail : summary;
+        return !detail.isEmpty() ? detail : extractFirstText(doc, LocationInfoSelector.SIMPLE_DESCRIPTION);
     }
 
     private List<LocationTime> extractOperationData(Document doc, Location location) {
