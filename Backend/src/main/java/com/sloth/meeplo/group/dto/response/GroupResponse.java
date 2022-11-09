@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
@@ -41,16 +42,19 @@ public class GroupResponse {
         private String photo;
         private String leader;
 
+        private Long leaderMemberId;
+
         private List<GroupDetailMember> members;
         private List<GroupDetailSchedule> schedules;
 
         @Builder
-        JoinedGroupDetail(Group group, String leader, List<GroupDetailMember> members, List<GroupDetailSchedule> schedules){
+        JoinedGroupDetail(Group group, GroupMember leader, List<GroupDetailMember> members, List<GroupDetailSchedule> schedules){
             this.id = group.getId();
             this.name = group.getName();
             this.description = group.getDescription();
             this.photo = group.getGroupPhoto();
-            this.leader = leader;
+            this.leader = leader.getNickname();
+            this.leaderMemberId = leader.getMember().getId();
             this.members=members;
             this.schedules=schedules;
         }
