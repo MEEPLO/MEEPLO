@@ -36,6 +36,14 @@ public class MemberController {
         return new ResponseEntity<>(memberToken, HttpStatus.OK);
     }
 
+    @GetMapping("/auth/refresh")
+    public ResponseEntity<MemberResponse.MemberToken> refreshTokens(@ApiIgnore @RequestHeader("Authorization") String authorization, @ApiIgnore @RequestHeader("Refresh") String refresh) {
+        log.debug("Controller");
+        MemberResponse.MemberToken memberToken = memberService.refreshMemberToken(authorization, refresh);
+
+        return new ResponseEntity<>(memberToken, HttpStatus.OK);
+    }
+
     @GetMapping("/member")
     public ResponseEntity<MemberResponse.MemberDetail> getMemberDetail(@ApiIgnore @RequestHeader("Authorization") String authorization){
         return new ResponseEntity<MemberResponse.MemberDetail>(memberService.getMemberDetail(authorization), HttpStatus.OK);

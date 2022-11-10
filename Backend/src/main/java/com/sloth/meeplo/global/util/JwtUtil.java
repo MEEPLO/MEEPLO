@@ -4,10 +4,7 @@ import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.TokenType;
 import com.sloth.meeplo.member.entity.Member;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -39,6 +36,8 @@ public class JwtUtil {
     public long getUserIdFromToken(String token) {
         try {
             return Long.parseLong(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject());
+        } catch(ExpiredJwtException e) {
+            return Long.parseLong(e.getClaims().getSubject());
         } catch(Exception e) {
             throw new MeeploException(CommonErrorCode.WRONG_TOKEN);
         }

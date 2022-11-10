@@ -74,6 +74,26 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberResponse.MemberToken refreshMemberToken(String authorization, String refresh) {
+        authorization = authorization.replaceFirst("Bearer ", "");
+        refresh = refresh.replaceFirst("Bearer ", "");
+        long id = jwtUtil.getUserIdFromToken(authorization);
+        log.info(refresh);
+        log.info(redisUtil.getData(String.valueOf(id)));
+        if(!refresh.equals(redisUtil.getData(String.valueOf(id)))) throw new MeeploException(CommonErrorCode.INVALID_TOKEN);
+        Member member = getMemberById(id);
+
+        String accessToken = jwtUtil.generateJwtToken(member, TokenType.ACCESS_TOKEN);
+        String refreshToken = jwtUtil.generateJwtToken(member, TokenType.REFRESH_TOKEN);
+        redisUtil.setDataWithExpiration(member.getId().toString(), refreshToken, TokenType.REFRESH_TOKEN.getExpiration());
+
+        return MemberResponse.MemberToken.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Override
     public MemberResponse.MemberDetail getMemberDetail(String authorization) {
         Member member = getMemberByAuthorization(authorization);
         return MemberResponse.MemberDetail.builder().member(member).build();
