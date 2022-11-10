@@ -10,10 +10,10 @@ export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    return response.data.group;
+    return response?.data.group;
   } catch (err) {
     console.error('ERROR in getGroupList!', err);
-    return isRejectedWithValue(err.response.data);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
@@ -25,10 +25,10 @@ export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    return response.data.group;
+    return response?.data.group;
   } catch (err) {
     console.error('ERROR in getGroupDetail!', err);
-    return isRejectedWithValue(err.response.data);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
@@ -40,48 +40,69 @@ export const getGroupMomentsFeed = createAsyncThunk('group/getGroupMomentsFeed',
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(response.data);
-    return response.data.moments;
+    return response?.data.moments;
   } catch (err) {
     console.error('ERROR in getGroupMomentsFeed', err);
-    return isRejectedWithValue(err.response.data);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
-export const createGroup = createAsyncThunk('group/createGroup', async form => {
+export const createGroup = createAsyncThunk('group/createGroup', async ({ form, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post('http://meeplo.co.kr/meeplo/api/v1/group', form, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log('group CREATED!');
-    return response.data;
-  } catch (err) {
-    console.error('ERROR in createGroup!', err);
-    return isRejectedWithValue(err.response.data);
-  }
-});
-
-export const editGroup = createAsyncThunk('group/editGroup', async ({ form, groupId }) => {
-  console.log('수정 함수 실행');
-  try {
-    const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.put(
-      `http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`,
-      { ...form },
-      {
+    const response = await axios
+      .post('http://meeplo.co.kr/meeplo/api/v1/group', form, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      },
-    );
+      })
+      .then(() => {
+        Alert.alert(`그룹을 생성했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.replace('GroupDetail', { groupId: response.data.groupId });
+            },
+          },
+        ]);
+      });
+    console.log('group CREATED!');
+    return response?.data;
+  } catch (err) {
+    console.error('ERROR in createGroup!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const editGroup = createAsyncThunk('group/editGroup', async ({ form, groupId, Alert, navigation }) => {
+  console.log('수정 함수 실행');
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios
+      .put(
+        `http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`,
+        { ...form },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
+      .then(() => {
+        Alert.alert(`그룹을 수정했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.replace('GroupDetailInfo', { groupId });
+            },
+          },
+        ]);
+      });
     console.log('group EDITED!');
-    return response.data;
+    return response?.data;
   } catch (err) {
     console.error('ERROR in editGroup!', err);
-    return isRejectedWithValue(err.response.data);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
@@ -89,53 +110,58 @@ export const editGroup = createAsyncThunk('group/editGroup', async ({ form, grou
 export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupName, groupId, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    Alert.alert(`${groupName} 그룹을 삭제했습니다.`, '', [
-      {
-        text: '확인',
-        onPress: () => {
-          navigation.replace('GroupHome');
+    const response = await axios
+      .delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-      },
-    ]);
-    return response.data;
+      })
+      .then(() => {
+        Alert.alert(`${groupName} 그룹을 삭제했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.replace('GroupHome');
+            },
+          },
+        ]);
+      });
+    return response?.data;
   } catch (err) {
     console.error('ERROR in getGroupList!', err);
-    return isRejectedWithValue(err.response.data);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
 export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName, groupId, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/member`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    Alert.alert(`${groupName} 그룹에서 나갔습니다.`, '', [
-      {
-        text: '확인',
-        onPress: () => {
-          navigation.replace('GroupHome');
+    const response = await axios
+      .delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/member`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-      },
-    ]);
+      })
+      .then(() => {
+        Alert.alert(`${groupName} 그룹에서 나갔습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.replace('GroupHome');
+            },
+          },
+        ]);
+      });
     console.log('group EXITED!');
-    return response.data;
+    return response?.data;
   } catch (err) {
     console.error('ERROR in exitGroup!', err);
-    console.error('ERROR in exitGroup!', err.response);
-
-    return isRejectedWithValue(err.response.data);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
 // Only available to LEADER
+// TODO: hrookim 강퇴 후 navigate 로직!!!
 export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async ({ groupId, memberId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
@@ -145,10 +171,10 @@ export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async (
       },
     });
     console.log('group member EXITED');
-    return response.data;
+    return response?.data;
   } catch (err) {
     console.error('ERROR in exitGroupMember', err);
-    return isRejectedWithValue(err.response.data);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
@@ -182,6 +208,18 @@ const groupDetailSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
+    [createGroup.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [createGroup.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+    },
+    [editGroup.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [editGroup.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+    },
     [getGroupDetail.pending]: (state, { payload }) => {
       state.isLoading = true;
     },
