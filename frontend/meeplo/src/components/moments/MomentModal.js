@@ -15,6 +15,7 @@ import Images from '../../assets/image/index';
 import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
+import { faHeart as frHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
 import { getMomentDetail } from '../../redux/momentsSlice';
 
@@ -23,6 +24,7 @@ const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
   const [touchEnd, setTouchEnd] = React.useState(0);
   const [imageFront, setImageFront] = React.useState(true);
   const [imageUri, setImageUri] = React.useState();
+  cosnt[(isLiked, setIsLiked)] = React.useState(false);
 
   const dispatch = useDispatch();
   const momentDetail = useSelector(state => state.momentDetail);
@@ -30,6 +32,7 @@ const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
   React.useEffect(() => {
     dispatch(getMomentDetail({ momentId }));
     setImageUri({ uri: momentDetail.moment.photoUrl });
+    setIsLiked(momentDetail.reaction.liked);
   }, [momentId]);
 
   const linkTo = React.useCallback((nextPage, params) => {
