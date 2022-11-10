@@ -172,7 +172,7 @@ public class MomentServiceImpl implements MomentService{
                 })
                 .flatMap(sm->sm.getSchedule().getScheduleLocations().stream())
                 .flatMap(sl->momentRepository.findByScheduleLocation(sl).stream())
-                .sorted(Comparator.comparing(BaseTimeEntity::getCreatedDate))
+                .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
                 .collect(Collectors.toList());
 
 
