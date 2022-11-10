@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity, Dimensions, Image, Alert } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
@@ -7,16 +8,18 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons/faCrown';
 import GroupDetailHeader from '../components/Group/GroupDetailHeader';
 import { theme } from '../assets/constant/DesignTheme';
 import Images from '../assets/image/index';
-import { getGroupDetail, deleteGroup } from '../redux/groupSlice';
+import { getGroupDetail, deleteGroup, exitGroup } from '../redux/groupSlice';
 
 const GroupDetailInfoScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const { groupId } = route.params;
   const groupDetail = useSelector(state => state.group.details);
+  const user = useSelector(state => state.user.info);
+  const isLeader = user.id === groupDetail.leaderMemberId;
+
+  const { groupId } = route.params;
+
   const { width } = Dimensions.get('window');
   const memberCount = groupDetail.members.length;
-  // TODO: hrookim, after Validation check,
-  const isLeader = true;
 
   const onPressKick = nickname => {
     Alert.alert(
@@ -51,17 +54,9 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
         {
           text: '삭제',
           onPress: () => {
-            // TODO: hrookim 삭제 dispatch
-            dispatch(deleteGroup({ groupId: groupDetail.id })).then(() => {
-              Alert.alert(`${groupDetail.name} 그룹을 삭제했습니다.`, '', [
-                {
-                  text: '확인',
-                  onPress: () => {
-                    navigation.reset('GroupHome');
-                  },
-                },
-              ]);
-            });
+            dispatch(deleteGroup({ groupName: groupDetail.name, groupId: groupDetail.id, Alert, navigation })).then(
+              () => {},
+            );
           },
         },
       ],
@@ -82,8 +77,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
         {
           text: '나가기',
           onPress: () => {
-            // TODO: hrookim 강퇴 dispatch
-            Alert.alert(`${groupDetail.name} 그룹에서 나갔습니다.`);
+            dispatch(exitGroup({ groupName: groupDetail.name, groupId: groupDetail.id, Alert, navigation }));
           },
         },
       ],

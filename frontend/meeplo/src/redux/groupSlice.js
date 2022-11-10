@@ -86,7 +86,7 @@ export const editGroup = createAsyncThunk('group/editGroup', async ({ form, grou
 });
 
 // Only available to LEADER
-export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupId }) => {
+export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupName, groupId, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
@@ -94,6 +94,14 @@ export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupI
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    Alert.alert(`${groupName} 그룹을 삭제했습니다.`, '', [
+      {
+        text: '확인',
+        onPress: () => {
+          navigation.replace('GroupHome');
+        },
+      },
+    ]);
     return response.data;
   } catch (err) {
     console.error('ERROR in getGroupList!', err);
@@ -101,18 +109,28 @@ export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupI
   }
 });
 
-export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupId }) => {
+export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName, groupId, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
+    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/member`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    Alert.alert(`${groupName} 그룹에서 나갔습니다.`, '', [
+      {
+        text: '확인',
+        onPress: () => {
+          navigation.replace('GroupHome');
+        },
+      },
+    ]);
     console.log('group EXITED!');
     return response.data;
   } catch (err) {
     console.error('ERROR in exitGroup!', err);
+    console.error('ERROR in exitGroup!', err.response);
+
     return isRejectedWithValue(err.response.data);
   }
 });
