@@ -7,6 +7,7 @@ import GroupCreateScreen from './GroupCreateScreen';
 import GroupDetailScreen from './GroupDetailScreen';
 import GroupHomeScreen from './GroupHomeScreen';
 import GroupDetailInfoScreen from './GroupDetailInfoScreen';
+import GroupEditScreen from './GroupEditScreen';
 
 const GroupStack = createNativeStackNavigator();
 
@@ -15,7 +16,7 @@ const GroupStackScreen = () => {
 
   useEffect(() => {}, []);
   return (
-    <GroupStack.Navigator initialRouteName="GroupDetail">
+    <GroupStack.Navigator initialRouteName="GroupHome">
       <GroupStack.Screen
         name="GroupHome"
         component={GroupHomeScreen}
@@ -48,6 +49,20 @@ const GroupStackScreen = () => {
       <GroupStack.Screen
         name="GroupCreate"
         component={GroupCreateScreen}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerLeft: props => {
+            props.canGoBack && <ToolBarLeft {...props} />;
+          },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <GroupStack.Screen
+        name="GroupEdit"
+        component={GroupEditScreen}
         options={{
           headerShadowVisible: false,
           headerShown: true,

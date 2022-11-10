@@ -102,7 +102,7 @@ const GroupCreateScreen = () => {
   return (
     <View style={{ height }}>
       <View style={{ margin: 20 }}>
-        <StepTextInput type="그룹명" maxLength={20} required={true} inputValueHandler={setGroupName} />
+        <StepTextInput type="그룹명" maxLength={20} required={true} onValueChange={setGroupName} />
       </View>
       <View style={{ margin: 20 }}>
         <Text style={{ color: theme.font.color, fontWeight: '800' }}>

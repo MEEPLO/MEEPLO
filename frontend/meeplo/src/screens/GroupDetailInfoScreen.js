@@ -95,14 +95,58 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
       `${nickname}님을 강퇴하시겠습니까?`,
       [
         {
+          text: '취소',
+        },
+        {
           text: '강퇴하기',
           onPress: () => {
             // TODO: hrookim 강퇴 dispatch
             Alert.alert(`${nickname}님을 강퇴했습니다.`);
           },
         },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  };
+
+  const onPressDelete = () => {
+    Alert.alert(
+      '그룹 삭제',
+      `${DATA.name} 그룹을 삭제하시겠습니까?`,
+      [
         {
           text: '취소',
+        },
+        {
+          text: '삭제',
+          onPress: () => {
+            // TODO: hrookim 삭제 dispatch
+            Alert.alert(`${DATA.name} 그룹을 삭제했습니다.`);
+          },
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  };
+
+  const onPressExit = () => {
+    Alert.alert(
+      '그룹 나가기',
+      `${DATA.name} 그룹에서 나가시겠습니까?`,
+      [
+        {
+          text: '취소',
+        },
+        {
+          text: '나가기',
+          onPress: () => {
+            // TODO: hrookim 강퇴 dispatch
+            Alert.alert(`${DATA.name} 그룹에서 나갔습니다.`);
+          },
         },
       ],
       {
@@ -115,12 +159,12 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
     <ScrollView>
       <GroupDetailHeader data={DATA} navigation={navigation} groupId={groupId} isInfo={true} />
       <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 105 }}>
-        {/* FIXME: 설명파트 */}
+        {/* Descriptions */}
         <View style={{ margin: 20 }}>
           <Text>{DATA.description}</Text>
         </View>
 
-        {/* FIXME: 버튼 */}
+        {/* Inviting button */}
         <TouchableOpacity activeOpacity={0.6}>
           <View
             style={{
@@ -138,12 +182,12 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
           </View>
         </TouchableOpacity>
 
-        {/* FIXME: 멤버 파트 */}
+        {/* member list*/}
         <View
           style={[
             {
               marginHorizontal: 20,
-              marginTop: 20,
+              marginVertical: 15,
               width: width - 40,
               height: 40 * (memberCount + 1),
               borderRadius: 20,
@@ -208,6 +252,65 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
             <View style={{ flex: 1, justifyContent: 'space-evenly', height: width * 0.2 }}></View>
           </View>
         </View>
+
+        {/* exit and edit button */}
+        {isLeader ? (
+          <View>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => {
+                navigation.navigate('GroupEdit', { groupId });
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 35,
+                  width: width - 150,
+                  marginVertical: 15,
+                  borderColor: theme.color.border,
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  backgroundColor: theme.color.pale.red,
+                }}>
+                <Text style={{ fontSize: 20, fontWeight: '900', color: 'black' }}>그룹 프로필 편집</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} onPress={onPressDelete}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 35,
+                  width: width - 150,
+                  marginVertical: 15,
+                  borderColor: theme.color.border,
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  backgroundColor: theme.color.alert,
+                }}>
+                <Text style={{ fontSize: 20, fontWeight: '900', color: 'white' }}>그룹 삭제하기</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity activeOpacity={0.6} onPress={onPressExit}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 35,
+                width: width - 150,
+                marginVertical: 15,
+                borderColor: theme.color.border,
+                borderWidth: 2,
+                borderRadius: 10,
+                backgroundColor: theme.color.alert,
+              }}>
+              <Text style={{ fontSize: 20, fontWeight: '900', color: 'white' }}>그룹에서 나가기</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
