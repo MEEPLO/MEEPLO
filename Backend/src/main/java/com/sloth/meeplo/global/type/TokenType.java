@@ -2,7 +2,7 @@ package com.sloth.meeplo.global.type;
 
 public enum TokenType {
 
-    ACCESS_TOKEN(60 * 60 * 1000L),
+    ACCESS_TOKEN(2 * 60 * 60 * 1000L),
     REFRESH_TOKEN(7 * 24 * 60 * 60 * 1000L);
 
     private long expiration;
