@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,53 +22,53 @@ public class MomentController {
     private final MomentService momentService;
 
     @GetMapping("/{momentId}")
-    public ResponseEntity<MomentResponse.MomentDetail> getMomentDetail(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+    public ResponseEntity<MomentResponse.MomentDetail> getMomentDetail(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
         return new ResponseEntity<>(momentService.getMomentDetail(authorization,momentId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Long>> createMoment(@RequestHeader("Authorization") String authorization, @RequestBody MomentRequest.CreateMomentInfo createMomentInfo){
+    public ResponseEntity<Map<String, Long>> createMoment(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody MomentRequest.CreateMomentInfo createMomentInfo){
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("momentId", momentService.createMoment(authorization, createMomentInfo));
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
 
     @DeleteMapping("/{momentId}")
-    public ResponseEntity<Void> deleteMoment(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+    public ResponseEntity<Void> deleteMoment(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
         momentService.deleteMoment(authorization,momentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/{momentId}/reaction")
-    public ResponseEntity<Map<String,Long>> createReaction(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+    public ResponseEntity<Map<String,Long>> createReaction(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("reactionCount", momentService.createReaction(authorization, momentId));
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
 
     @DeleteMapping("/{momentId}/reaction")
-    public ResponseEntity<Map<String,Long>> deleteReaction(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+    public ResponseEntity<Map<String,Long>> deleteReaction(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("reactionCount", momentService.deleteReaction(authorization, momentId));
         return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/{momentId}/comment")
-    public ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>> createComment(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId, @RequestBody MomentRequest.CreateMomentCommentInfo createMomentCommentInfo){
+    public ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>> createComment(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long momentId, @RequestBody MomentRequest.CreateMomentCommentInfo createMomentCommentInfo){
         Map<String, List<MomentResponse.MomentDetailComment>> resultMap = new HashMap<>();
         resultMap.put("comments", momentService.createComment(authorization, momentId,createMomentCommentInfo));
         return new ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/{momentId}/comment")
-    public ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>> getComments(@RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
+    public ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>> getComments(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long momentId){
         Map<String, List<MomentResponse.MomentDetailComment>> resultMap = new HashMap<>();
         resultMap.put("comments", momentService.getComments(authorization, momentId));
         return new ResponseEntity<Map<String, List<MomentResponse.MomentDetailComment>>>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/calendar")
-    public ResponseEntity<Map<String, List>> getCalenderMoments(@RequestHeader("Authorization") String authorization, @RequestParam String month){
+    public ResponseEntity<Map<String, List>> getCalenderMoments(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestParam String month){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("moments", momentService.getCalenderMoments(authorization, month));
         return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
