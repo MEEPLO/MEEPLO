@@ -8,7 +8,11 @@ import SelectDropdown from '../../common/SelectDropdown';
 
 const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
   const dispatch = useDispatch();
-  const groupList = useSelector(state => state.groupList);
+  const groupNameList = useSelector(state =>
+    state.groupList.map(({ id, name }) => {
+      return { key: id, value: name };
+    }),
+  );
 
   const [selectedGroup, setSelectedGroup] = React.useState('');
   const [groupsData, setGroupsData] = React.useState([]);
@@ -17,10 +21,14 @@ const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
 
   React.useEffect(() => {
     dispatch(getGroupList());
-    groupList.group.forEach(group => {
-      setGroupsData(prevData => [...prevData, { key: group.id, value: group.name }]);
-    });
   }, []);
+
+  // React.useEffect(() => {
+  //   console.log(groupList.group);
+  //   groupList.forEach(group => {
+  //     setGroupsData(prevData => [...prevData, { key: group.id, value: group.name }]);
+  //   });
+  // }, [groupList.group]);
 
   const onPressNext = () => {
     const actions = [
@@ -34,7 +42,7 @@ const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
 
   return visible ? (
     <View style={{ height: windowHeight - 150, marginHorizontal: 20 }}>
-      <SelectDropdown setSelected={setSelectedGroup} type="모임" data={groupsData} required={true} />
+      <SelectDropdown setSelected={setSelectedGroup} type="모임" data={groupNameList} required={true} />
       <View
         style={{
           width: '100%',
