@@ -15,7 +15,7 @@ import HomeScreen from '../../../screens/HomeScreen';
 import { theme } from '../../../assets/constant/DesignTheme';
 import AddButton from './AddButton';
 import { getUserInfo } from '../../../redux/userSlice';
-import { toggleOpened } from '../../../redux/navigationSlice';
+import { setOpened } from '../../../redux/navigationSlice';
 import LoadingBar from '../LoadingBar';
 import LoginScreen from '../../../screens/LoginScreen';
 
@@ -55,7 +55,6 @@ const NavigationBar = () => {
         name="HomeStack"
         component={HomeStackScreen}
         options={{
-          // tabBarShowLabel: false,
           tabBarLabel: '홈',
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -63,6 +62,9 @@ const NavigationBar = () => {
               <Text style={{ color }}>홈</Text>
             </View>
           ),
+        }}
+        listeners={{
+          tabPress: e => opened && dispatch(setOpened(!opened)),
         }}
       />
       <Tab.Screen
@@ -76,6 +78,9 @@ const NavigationBar = () => {
             </View>
           ),
         }}
+        listeners={{
+          tabPress: e => opened && dispatch(setOpened(!opened)),
+        }}
       />
 
       <Tab.Screen
@@ -83,7 +88,7 @@ const NavigationBar = () => {
         component={HomeScreen}
         options={{
           tabBarItemStyle: { height: 0 },
-          tabBarButton: props => <AddButton opened={opened} toggleOpened={toggleOpened} {...props} />,
+          tabBarButton: props => <AddButton opened={opened} setOpened={setOpened} {...props} />,
         }}
       />
       <Tab.Screen
@@ -97,6 +102,9 @@ const NavigationBar = () => {
             </View>
           ),
         }}
+        listeners={{
+          tabPress: e => opened && dispatch(setOpened(!opened)),
+        }}
       />
       <Tab.Screen
         name="MomentsStack"
@@ -108,6 +116,9 @@ const NavigationBar = () => {
               <Text style={{ color }}>추억</Text>
             </View>
           ),
+        }}
+        listeners={{
+          tabPress: e => opened && dispatch(setOpened(!opened)),
         }}
       />
     </Tab.Navigator>
