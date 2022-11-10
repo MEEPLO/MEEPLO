@@ -12,7 +12,7 @@ import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDEN
 import { createGroup } from '../redux/groupSlice';
 import { useFocusEffect } from '@react-navigation/native';
 
-const GroupCreateScreen = () => {
+const GroupCreateScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [groupPhotoFile, setGroupPhotoFile] = useState(null);
   const [groupName, setGroupName] = useState('');
@@ -69,8 +69,10 @@ const GroupCreateScreen = () => {
         photo: data.Location,
         description: groupDescription,
       };
-      dispatch(createGroup(form));
-      // TODO: hrookim navigate to group details
+      dispatch(createGroup(form)).then(({ payload }) => {
+        // TODO: hrookim 생성되었습니다 alert창!
+        navigation.replace('GroupDetail', { groupId: payload.groupId });
+      });
       // 이동 여기서 바로
       // 상세 컴포넌트에서 리덕스의 값을 가져오는데
       // 아직 업데이트 전이면 -> 스피너, 로딩

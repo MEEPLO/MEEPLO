@@ -4,8 +4,7 @@ import { theme } from '../../assets/constant/DesignTheme';
 
 const GroupDetailMomentsItem = ({ id, photo, width, color }) => {
   return (
-    <TouchableOpacity
-      activeOpacity={0.6}
+    <View
       style={{
         backgroundColor: theme.color.pale[color],
         width,
@@ -14,7 +13,7 @@ const GroupDetailMomentsItem = ({ id, photo, width, color }) => {
         margin: 1,
       }}>
       <Image source={{ uri: photo }} style={{ width: '100%', height: '100%' }} resizeMode="center" />
-    </TouchableOpacity>
+    </View>
   );
 };
 

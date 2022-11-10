@@ -1,92 +1,21 @@
 import { View, Text, ScrollView, TouchableOpacity, Dimensions, Image, Alert } from 'react-native';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faCrown } from '@fortawesome/free-solid-svg-icons/faCrown';
 import GroupDetailHeader from '../components/Group/GroupDetailHeader';
 import { theme } from '../assets/constant/DesignTheme';
 import Images from '../assets/image/index';
-
-const DATA = {
-  id: 1,
-  name: 'SSAFY 갓자율',
-  description:
-    '그룹 상세 설명이라굽쇼 이게 200자나 된다는 말이죠 이게 쉽지 않습니다 저희는 삼성 청년 소프트웨어 아카데미 7기를 다니고 있는 6명의 정예 인원이 모여서 자율 프로젝트에 임하게 되었습니다 5반에 배정되어 지금 8팀이고 덕분에 바로 문 옆에 자리가 있더라고요 근데 생각보다 많이 거슬리지 않아서 저는 이 자리가 좋습니다 그리고 칠판과 플립을 쓸 수 있어요!',
-  photo: 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/avengersendgame_lob_crd_05.jpg',
-  leader: '김혜림킹갓제너럴',
-  members: [
-    {
-      id: 1,
-      nickname: '김혜림킹갓제너럴',
-      photo:
-        'https://static.wikia.nocookie.net/pororo/images/e/e0/LoopyCurrentOutfit.jpg/revision/latest?cb=20220224155019',
-    },
-    {
-      id: 2,
-      nickname: '한나두나세나',
-      photo: 'https://item.kakaocdn.net/do/c5c470298d527ef65eb52883f0f186c49f17e489affba0627eb1eb39695f93dd',
-    },
-  ],
-  schedules: [
-    {
-      id: 1,
-      name: '첫번째 약속',
-      date: '2022-11-11 11:11:11',
-      memberCount: 6,
-      location: {
-        meetName: '역삼역',
-        amuseName: '매화램 양꼬치',
-      },
-    },
-    {
-      id: 2,
-      name: '두번째 약속',
-      date: '2022-11-18 11:11:11',
-      memberCount: 5,
-      location: {
-        meetName: '강남역',
-        amuseName: '양국',
-      },
-    },
-    {
-      id: 3,
-      name: '두번째 약속',
-      date: '2022-11-18 11:11:11',
-      memberCount: 5,
-      location: {
-        meetName: '강남역',
-        amuseName: '양국',
-      },
-    },
-    {
-      id: 4,
-      name: '두번째 약속',
-      date: '2022-11-18 11:11:11',
-      memberCount: 5,
-      location: {
-        meetName: '강남역',
-        amuseName: '양국',
-      },
-    },
-    {
-      id: 5,
-      name: '두번째 약속',
-      date: '2022-11-18 11:11:11',
-      memberCount: 5,
-      location: {
-        meetName: '강남역',
-        amuseName: '양국',
-      },
-    },
-  ],
-};
+import { getGroupDetail, deleteGroup } from '../redux/groupSlice';
 
 const GroupDetailInfoScreen = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   const { groupId } = route.params;
   const groupDetail = useSelector(state => state.group.details);
   const { width } = Dimensions.get('window');
-  const memberCount = DATA.members.length;
+  const memberCount = groupDetail.members.length;
+  // TODO: hrookim, after Validation check,
   const isLeader = true;
 
   const onPressKick = nickname => {
@@ -114,7 +43,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
   const onPressDelete = () => {
     Alert.alert(
       '그룹 삭제',
-      `${DATA.name} 그룹을 삭제하시겠습니까?`,
+      `${groupDetail.name} 그룹을 삭제하시겠습니까?`,
       [
         {
           text: '취소',
@@ -123,7 +52,16 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
           text: '삭제',
           onPress: () => {
             // TODO: hrookim 삭제 dispatch
-            Alert.alert(`${DATA.name} 그룹을 삭제했습니다.`);
+            dispatch(deleteGroup({ groupId: groupDetail.id })).then(() => {
+              Alert.alert(`${groupDetail.name} 그룹을 삭제했습니다.`, '', [
+                {
+                  text: '확인',
+                  onPress: () => {
+                    navigation.reset('GroupHome');
+                  },
+                },
+              ]);
+            });
           },
         },
       ],
@@ -136,7 +74,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
   const onPressExit = () => {
     Alert.alert(
       '그룹 나가기',
-      `${DATA.name} 그룹에서 나가시겠습니까?`,
+      `${groupDetail.name} 그룹에서 나가시겠습니까?`,
       [
         {
           text: '취소',
@@ -145,7 +83,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
           text: '나가기',
           onPress: () => {
             // TODO: hrookim 강퇴 dispatch
-            Alert.alert(`${DATA.name} 그룹에서 나갔습니다.`);
+            Alert.alert(`${groupDetail.name} 그룹에서 나갔습니다.`);
           },
         },
       ],
@@ -155,13 +93,17 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
     );
   };
 
+  useEffect(() => {
+    dispatch(getGroupDetail({ groupId: groupDetail.id }));
+  }, []);
+
   return (
     <ScrollView>
-      <GroupDetailHeader data={DATA} navigation={navigation} groupId={groupId} isInfo={true} />
+      <GroupDetailHeader data={groupDetail} navigation={navigation} groupId={groupId} isInfo={true} />
       <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 105 }}>
         {/* Descriptions */}
         <View style={{ margin: 20 }}>
-          <Text>{DATA.description}</Text>
+          <Text>{groupDetail.description}</Text>
         </View>
 
         {/* Inviting button */}
@@ -223,7 +165,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
               alignItems: 'center',
             }}>
             <View style={{ flex: 3, justifyContent: 'space-evenly', height: width * 0.2 }}>
-              {DATA.members.map((item, i) => (
+              {groupDetail.members.map((item, i) => (
                 <View key={'groupMember' + i} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Image
                     source={{ uri: item.photo }}
@@ -236,8 +178,8 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                     }}
                   />
                   <Text style={{ margin: 10 }}>{item.nickname}</Text>
-                  {item.nickname === DATA.leader && <FontAwesomeIcon icon={faCrown} size={14} />}
-                  {isLeader && item.nickname !== DATA.leader && (
+                  {item.nickname === groupDetail.leader && <FontAwesomeIcon icon={faCrown} size={14} />}
+                  {isLeader && item.nickname !== groupDetail.leader && (
                     <TouchableOpacity
                       activeOpacity={0.6}
                       onPress={() => {

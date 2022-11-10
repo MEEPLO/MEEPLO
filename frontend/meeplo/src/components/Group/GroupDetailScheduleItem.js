@@ -8,14 +8,13 @@ const GroupDetailScheduleItem = ({ name, date, memberCount, location, color, isL
   const rawDate = new Date(date);
   const scheduleDate = {
     year: rawDate.getFullYear(),
-    month: rawDate.getMonth(),
-    day: rawDate.getDay(),
+    month: rawDate.getMonth() + 1,
+    day: rawDate.getDate(),
     hour: rawDate.getHours(),
-    minute: rawDate.getMinutes(),
+    minute: ('0' + rawDate.getMinutes()).slice(-2),
   };
   const width = Dimensions.get('window').width - 40;
-  const height = width * 0.33;
-
+  const height = width * 0.4;
   return (
     <View
       style={[
@@ -48,12 +47,18 @@ const GroupDetailScheduleItem = ({ name, date, memberCount, location, color, isL
       </View>
       <View
         style={{
-          flex: 2,
+          flex: 3,
           flexDirection: 'row',
           marginHorizontal: 20,
           alignItems: 'center',
         }}>
-        <View style={{ flex: 3, justifyContent: 'space-evenly', height: width * 0.2 }}>
+        <View style={{ flex: 7, justifyContent: 'space-evenly', height: '100%' }}>
+          <View>
+            <Text style={{ fontSize: 14 }}>
+              {`약속 이름  `}
+              <Text style={{ fontWeight: '900', color: 'black' }}>{name}</Text>
+            </Text>
+          </View>
           <View>
             <Text style={{ fontSize: 14 }}>
               {`만남 장소  `}
