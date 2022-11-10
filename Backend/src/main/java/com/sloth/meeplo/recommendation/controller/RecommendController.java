@@ -1,14 +1,14 @@
 package com.sloth.meeplo.recommendation.controller;
 
-import com.sloth.meeplo.recommendation.dto.request.RecommendRequest;
+import com.sloth.meeplo.recommendation.dto.common.Coordinate;
+import com.sloth.meeplo.recommendation.dto.request.AmuseRecommendRequest;
+import com.sloth.meeplo.recommendation.dto.request.MiddlePointRequest;
 import com.sloth.meeplo.recommendation.dto.response.AmuseRecommendResponse;
 import com.sloth.meeplo.recommendation.service.AmuseRecommendService;
+import com.sloth.meeplo.recommendation.service.MiddlePointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecommendController {
 
     private final AmuseRecommendService amuseRecommendService;
+    private final MiddlePointService middlePointService;
 
     @PostMapping("/middle")
-    public ResponseEntity<?> getMiddlePoint(@RequestBody RecommendRequest.CoordinationList startLocations) {
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<?> getMiddlePoint(@RequestHeader("Authorization") String authorization, @RequestBody MiddlePointRequest.CoordinationList startLocations) {
+        return ResponseEntity.ok().body(middlePointService.calcMiddleStations(authorization, startLocations));
     }
 
     @PostMapping("/amuse")
-    public ResponseEntity<AmuseRecommendResponse.AmuseList> getAmuseRecommendation(@RequestBody RecommendRequest.CreateRecommendAmuse recommendAmuse) {
-        return ResponseEntity.ok().body(amuseRecommendService.gatherAmuseRecommendation());
+    public ResponseEntity<AmuseRecommendResponse.AmuseList> getAmuseRecommendation(@RequestBody AmuseRecommendRequest.CreateRecommendAmuse recommendAmuse) {
+        return ResponseEntity.ok().body(amuseRecommendService.gatherAmuseRecommendation(recommendAmuse));
     }
 
 }

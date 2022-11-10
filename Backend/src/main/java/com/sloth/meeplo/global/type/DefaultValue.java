@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum DefaultValue {
 
-    AMUSE_REPRESENTATIVE_PHOTO("https://popcat.click/twitter-card.jpg")
+    AMUSE_REPRESENTATIVE_PHOTO("https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png"),
+    STATION_AVERAGE_TIME("-1"),
     ;
 
     private String value;
