@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
 @RestController
@@ -29,31 +30,31 @@ public class MemberController {
      * @return : accessToken, refreshToken, 신규 회원 여부
      */
     @GetMapping("/auth/kakao")
-    public ResponseEntity<MemberResponse.MemberToken> getAppTokenForKakaoLogin(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<MemberResponse.MemberToken> getAppTokenForKakaoLogin(@ApiIgnore @RequestHeader("Authorization") String authorization) {
         MemberResponse.MemberToken memberToken = memberService.getKakaoMemberToken(authorization);
 
         return new ResponseEntity<>(memberToken, HttpStatus.OK);
     }
 
     @GetMapping("/member")
-    public ResponseEntity<MemberResponse.MemberDetail> getMemberDetail(@RequestHeader("Authorization") String authorization){
+    public ResponseEntity<MemberResponse.MemberDetail> getMemberDetail(@ApiIgnore @RequestHeader("Authorization") String authorization){
         return new ResponseEntity<MemberResponse.MemberDetail>(memberService.getMemberDetail(authorization), HttpStatus.OK);
     }
 
     @PutMapping("/member")
-    public ResponseEntity<Void> updateMemberInfo(@RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberUpdateInfo memberUpdateInfo){
+    public ResponseEntity<Void> updateMemberInfo(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberUpdateInfo memberUpdateInfo){
         memberService.updateMemberInfo(authorization,memberUpdateInfo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/member")
-    public ResponseEntity<Void> quitMember(@RequestHeader("Authorization") String authorization){
+    public ResponseEntity<Void> quitMember(@ApiIgnore @RequestHeader("Authorization") String authorization){
         memberService.quitMember(authorization);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/member/location")
-    public ResponseEntity<Map<String, List>> getMemberStartLocations(@RequestHeader("Authorization") String authorization){
+    public ResponseEntity<Map<String, List>> getMemberStartLocations(@ApiIgnore @RequestHeader("Authorization") String authorization){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("startLocations", memberService.getMemberStartLocations(authorization));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
