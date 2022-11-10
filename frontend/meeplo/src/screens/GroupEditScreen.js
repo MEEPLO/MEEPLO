@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, TextInput, Dimensions, Alert } from 'react-native';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
@@ -99,9 +99,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         photo: groupPhoto,
         description: groupDescription,
       };
-      dispatch(editGroup({ form, groupId: groupDetail.id })).then(() => {
-        navigation.replace('GroupDetailInfo', { groupId: groupDetail.id });
-      });
+      dispatch(editGroup({ form, groupId: groupDetail.id, Alert, navigation }));
     } else {
       uploadToS3(groupPhotoFile);
       // 로딩 모달 열기
@@ -184,7 +182,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         }}
         activeOpacity={0.6}
         onPress={onPressEdit}>
-        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>만들기</Text>
+        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>수정하기</Text>
       </TouchableOpacity>
     </View>
   );
