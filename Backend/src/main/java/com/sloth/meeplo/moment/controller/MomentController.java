@@ -72,4 +72,10 @@ public class MomentController {
         resultMap.put("moments", momentService.getCalenderMoments(authorization, month));
         return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/feed")
+    public ResponseEntity<MomentResponse.MomentFeedTwoList> getFeedMoment(@RequestHeader("Authorization") String authorization, @RequestParam Integer page, @RequestParam Integer size, @RequestParam(required = false) Long group, @RequestParam(defaultValue = "0") Integer leftSize, @RequestParam(defaultValue = "0") Integer rightSize){
+
+        return new ResponseEntity<>(momentService.getFeedMoment(authorization,page,size,group, leftSize, rightSize),HttpStatus.OK);
+    }
 }

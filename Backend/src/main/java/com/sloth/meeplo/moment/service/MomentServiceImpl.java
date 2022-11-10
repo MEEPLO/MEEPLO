@@ -1,5 +1,6 @@
 package com.sloth.meeplo.moment.service;
 
+import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.group.service.GroupService;
@@ -15,16 +16,21 @@ import com.sloth.meeplo.moment.repository.MomentRepository;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import com.sloth.meeplo.schedule.service.ScheduleService;
+import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -152,5 +158,48 @@ public class MomentServiceImpl implements MomentService{
                 .map(m-> ScheduleResponse.JoinedScheduleMoment.builder().moment(m).build())
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public MomentResponse.MomentFeedTwoList getFeedMoment(String authorization, Integer page, Integer size, Long group, Integer leftSize, Integer rightSize) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+
+        List<Moment> momentList=member.getScheduleMembers().stream()
+                .filter(sm -> {
+                    if(group == null)
+                        return true;
+                    return sm.getSchedule().getGroup().getId().equals(group) && sm.getStatus().equals(ScheduleMemberStatus.JOINED);
+                })
+                .flatMap(sm->sm.getSchedule().getScheduleLocations().stream())
+                .flatMap(sl->momentRepository.findByScheduleLocation(sl).stream())
+                .sorted(Comparator.comparing(BaseTimeEntity::getCreatedDate))
+                .collect(Collectors.toList());
+
+
+        if(momentList.size()<page*size) throw new MeeploException(MomentErrorCode.NO_MORE_DATA);
+        List<Moment> subList = momentList.subList(page*size, Math.min(momentList.size(), (page+1) *size));
+
+
+        List<Moment> momentsLeft = new ArrayList<>();
+        List<Moment> momentsRight = new ArrayList<>();
+        int leftLength = leftSize;
+        int rightLength = rightSize;
+        for (Moment m: subList) {
+            if(leftLength>rightLength){
+                rightLength += m.getType().getSize();
+                momentsRight.add(m);
+            }else{
+                leftLength += m.getType().getSize();
+                momentsLeft.add(m);
+            }
+        }
+
+        return MomentResponse.MomentFeedTwoList.builder()
+                .momentsLeft(momentsLeft)
+                .momentsRight(momentsRight)
+                .leftSize(leftLength)
+                .rightSize(rightLength)
+                .moreData(momentList.size()> (page+1) *size)
+                .build();
     }
 }

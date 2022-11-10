@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public interface MomentService {
     List<MomentResponse.MomentDetailComment> getComments(String authorization, Long momentId);
 
     List<ScheduleResponse.JoinedScheduleMoment> getCalenderMoments(String authorization, String month);
+
+    MomentResponse.MomentFeedTwoList getFeedMoment(String authorization, Integer page, Integer size, Long group, Integer leftSize, Integer rightSize);
 
 
 }
