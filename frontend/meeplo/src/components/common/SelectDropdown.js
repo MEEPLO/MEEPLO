@@ -19,7 +19,7 @@ const SelectDropdown = props => {
           placeholder={placeholder}
           setSelected={props.setSelected}
           data={props.data}
-          onSelect={() => alert(selected)}
+          onSelect={() => {}}
           maxHeight={windowHeight * 0.4}
           boxStyles={{ borderRadius: 0, borderWidth: 0, height: 50 }}
           dropdownStyles={{ borderTopRightRadius: 0, borderTopLeftRadius: 0, backgroundColor: theme.color.pale.red }}
