@@ -18,7 +18,7 @@ const MomentsList = ({ navigation }) => {
   const momentsList = useSelector(state => state.momentsList);
 
   const [momentModal, setMomentModal] = React.useState(false);
-  const [momentId, setMomentId] = React.useState(1);
+  const [momentId, setMomentId] = React.useState(3);
 
   const leftPics = momentsList.momentsLeft.map(moment => (
     <MomentPic
