@@ -1,21 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
-
-import { useNavigation } from '@react-navigation/native';
-
 import { TouchableWithoutFeedback, View, StyleSheet, Image, Animated } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons/faUserPlus';
+import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons/faMapLocationDot';
+import { faImages } from '@fortawesome/free-regular-svg-icons/faImages';
 
+import { setOpened } from '../../../redux/navigationSlice';
 import Images from '../../../assets/image/index';
 import { theme } from '../../../assets/constant/DesignTheme';
 
-const AddButton = ({ toggleOpened }) => {
+const AddButton = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [opened, setOpened] = useState(false);
-  const animation = React.useRef(new Animated.Value(0)).current;
+  const opened = useSelector(state => state.tabBar.opened);
+
+  const animation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(animation, {
       toValue: opened ? 1 : 0,
-      duration: 300,
+      duration: 250,
       friction: 2,
       useNativeDriver: false,
     }).start();
@@ -30,11 +36,24 @@ const AddButton = ({ toggleOpened }) => {
 
   const onPressCreateGroup = () => {
     navigation.navigate('GroupStack', { screen: 'GroupCreate' });
+    dispatch(setOpened(!opened));
+  };
+  const onPressCreateSchedule = () => {
+    // TODO: hrookim navigate to create screen
+    // navigation.navigate('ScheduleStack', { screen: 'Create' });
+  };
+  const onPressCreateMoment = () => {
+    // TODO: hrookim navigate to create screen
+    // navigation.navigate('MomentsStack', { screen: 'MomentsCreate' });
+  };
+  const onPressAddButton = () => {
+    dispatch(setOpened(!opened));
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.box}>
+        {/* Create-Group Button */}
         <TouchableWithoutFeedback onPress={onPressCreateGroup}>
           <Animated.View
             style={[
@@ -51,20 +70,20 @@ const AddButton = ({ toggleOpened }) => {
                   {
                     translateY: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0, -50],
+                      outputRange: [0, -45],
                     }),
                   },
                 ],
               },
+              {
+                backgroundColor: theme.color.pale.red,
+              },
             ]}>
-            <Image
-              source={{ uri: 'https://icons.veryicon.com/png/o/miscellaneous/forestry-in-yiliang/group-people.png' }}
-              resizeMode="contain"
-              style={styles.itemIcon}
-            />
+            <FontAwesomeIcon icon={faUserPlus} size={30} />
           </Animated.View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
+        {/* Create-Schedule Button */}
+        <TouchableWithoutFeedback onPress={onPressCreateSchedule}>
           <Animated.View
             style={[
               styles.item,
@@ -74,20 +93,20 @@ const AddButton = ({ toggleOpened }) => {
                   {
                     translateY: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0, -90],
+                      outputRange: [0, -80],
                     }),
                   },
                 ],
               },
+              {
+                backgroundColor: theme.color.pale.yellow,
+              },
             ]}>
-            <Image
-              source={{ uri: 'https://icons.veryicon.com/png/o/miscellaneous/forestry-in-yiliang/group-people.png' }}
-              resizeMode="contain"
-              style={styles.itemIcon}
-            />
+            <FontAwesomeIcon icon={faMapLocationDot} size={30} />
           </Animated.View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
+        {/* Create-Moments Button */}
+        <TouchableWithoutFeedback onPress={onPressCreateMoment}>
           <Animated.View
             style={[
               styles.item,
@@ -103,21 +122,20 @@ const AddButton = ({ toggleOpened }) => {
                   {
                     translateY: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0, -50],
+                      outputRange: [0, -45],
                     }),
                   },
                 ],
               },
+              {
+                backgroundColor: theme.color.pale.blue,
+              },
             ]}>
-            <Image
-              source={{ uri: 'https://icons.veryicon.com/png/o/miscellaneous/forestry-in-yiliang/group-people.png' }}
-              resizeMode="contain"
-              style={styles.itemIcon}
-            />
+            <FontAwesomeIcon icon={faImages} size={30} />
           </Animated.View>
         </TouchableWithoutFeedback>
-        {/* 중앙버튼 */}
-        <TouchableWithoutFeedback onPress={() => setOpened(!opened)} style={styles.addButton}>
+        {/* Add Button */}
+        <TouchableWithoutFeedback onPress={onPressAddButton} style={styles.addButton}>
           <Animated.View
             style={[
               styles.addButtonInner,
@@ -174,7 +192,6 @@ const styles = StyleSheet.create({
   },
   item: {
     position: 'absolute',
-    backgroundColor: theme.color.bright.blue,
     top: 5,
     left: 5,
     alignItems: 'center',
@@ -182,12 +199,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: theme.color.border,
-  },
-  itemIcon: {
-    width: 32,
-    height: 32,
   },
 });
 
