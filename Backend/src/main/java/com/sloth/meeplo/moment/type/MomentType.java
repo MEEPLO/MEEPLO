@@ -1,7 +1,7 @@
 package com.sloth.meeplo.moment.type;
 
 public enum MomentType {
-    POLAROID(1), DAYFILM(2),FOURCUT(4);
+    POLAROID(71), DAYFILM(63),FOURCUT(130);
 
     final private int size;
 
