@@ -1,13 +1,20 @@
 import React from 'react';
 import { View, Text, ScrollView, Switch, Pressable, StyleSheet, TextInput } from 'react-native';
-import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { theme } from '../assets/constant/DesignTheme';
-
+import { getMomentsList } from '../redux/momentsSlice';
 import MomentsList from '../components/moments/MomentsList';
 
-const MomentsListScreen = ({ navigation }) => {
+const MomentsListScreen = props => {
+  // console.log(props);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getMomentsList());
+  }, []);
+
   const linkTo = React.useCallback(nextPage => {
-    navigation.push(nextPage);
+    props.navigation.push(nextPage);
   }, []);
 
   const [isMine, setIsMine] = React.useState(false);
@@ -37,7 +44,7 @@ const MomentsListScreen = ({ navigation }) => {
         <Pressable onPress={() => linkTo('MomentsCreate')}>
           <Text>생성</Text>
         </Pressable>
-        <MomentsList />
+        <MomentsList navigation={props.navigation} />
       </View>
     </ScrollView>
   );
