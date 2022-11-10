@@ -31,6 +31,7 @@ const theme = {
   },
   radius: {
     base: 20,
+    input: 15,
   },
 };
 
