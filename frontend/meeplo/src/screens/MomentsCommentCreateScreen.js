@@ -1,47 +1,112 @@
-import { View } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMomentDetail } from '../redux/momentsSlice';
+import { hideTabBar, showTabBar } from '../redux/navigationSlice';
+import { useFocusEffect } from '@react-navigation/native';
+import { createComment } from '../redux/momentsSlice';
 
+import helper from '../helper';
 import StepIndicator from '../components/stepper/StepIndicator';
 import StepRenderer from '../components/stepper/StepRenderer';
 import CommentsSetContent from '../components/moments/commentCreateSteps/CommentsSetContent';
 import CommentsSetCoordinate from '../components/moments/commentCreateSteps/CommentsSetCoordinate';
+import CommentsSetCheck from '../components/moments/commentCreateSteps/CommentsSetCheck';
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'UPDATE_COMMENT':
+      return {
+        ...state,
+        comment: action.payload,
+      };
+    case 'UPDATE_LOCATION':
+      return {
+        ...state,
+        location: action.payload,
+      };
+    default:
+      return action.type;
+  }
+};
+
+const initialComment = {
+  comment: '',
+  location: {
+    xpoint: 0,
+    ypoint: 0,
+    angle: 0,
+  },
+};
+
+const STEP_COUNT = 3;
 
 const MomentsCommentCreateScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const momentDetail = useSelector(state => state.momentDetail);
+  const [step, setStep] = React.useState(0);
+  const [comment, stepDispatch] = React.useReducer(reducer, initialComment);
+  const stepItems = [CommentsSetContent, CommentsSetCoordinate, CommentsSetCheck];
+
   const { momentId } = route.params;
 
-  console.log(momentId);
-
   React.useEffect(() => {
-    dispatch(getMomentDetail({ momentId }));
-  }, []);
+    return navigation.addListener('beforeRemove', event => {
+      const action = event.data.action;
+      event.preventDefault();
 
-  const [step, setStep] = React.useState(0);
-  // const [state, dispatch] = useReducer(reducer, initialState);
-  const stepItems = [CommentsSetCoordinate, CommentsSetContent];
-  const STEP_COUNT = stepItems.length;
+      if (step > 0) {
+        setStepClamp(step - 1);
+      } else if (step === 0) {
+        Alert.alert('댓글 생성을 취소하시겠습니까?', '입력 중인 값들이 모두 초기화됩니다.', [
+          { text: '남아있기', style: 'cancel' },
+          {
+            text: '나가기',
+            style: 'destructive',
+            onPress: () => navigation.dispatch(action),
+          },
+        ]);
+      }
+    });
+  }, [navigation, step]);
 
-  const toNext = (type, payload) => {
-    // dispatch({ type: type, payload: payload });
-    // setStep(helper.number.clamp(step + 1, 0, STEP_COUNT - 1));
+  useFocusEffect(() => {
+    dispatch(hideTabBar());
+
+    return () => {
+      dispatch(showTabBar());
+    };
+  });
+
+  const setStepClamp = newStep => {
+    setStep(helper.number.clamp(newStep, 0, STEP_COUNT - 1));
   };
+  const toNext = actions => {
+    if (Array.isArray(actions)) {
+      actions.forEach(action => stepDispatch(action));
+    }
+    setStepClamp(step + 1);
+  };
+
   const toPrev = () => {
-    // setStep(helper.number.clamp(step - 1, 0, STEP_COUNT - 1));
+    setStepClamp(step - 1);
   };
-  const onFinish = () => {
-    // submit state
+
+  const onFinish = actions => {
+    const commentInfo = {
+      momentId: momentId,
+      comment: comment,
+    };
+    console.log('onfin', commentInfo);
+    dispatch(createComment(commentInfo));
   };
 
   return (
-    <View style={{ marginTop: 50 }}>
-      <View style={{ marginBottom: 50 }}>
-        <StepIndicator stepCount={2} currentStep={step} />
+    <View style={styles.screenStyle}>
+      <View style={styles.stepIndicatorStyle}>
+        <StepIndicator stepCount={STEP_COUNT} currentStep={step} />
       </View>
       <StepRenderer
-        comments={momentDetail.comments}
+        data={momentId}
+        state={comment}
         items={stepItems}
         currentStep={step}
         toNext={toNext}
@@ -51,5 +116,18 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  screenStyle: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+  },
+  stepIndicatorStyle: {
+    alignItems: 'center',
+    padding: 20,
+    marginBottom: 50,
+  },
+});
 
 export default MomentsCommentCreateScreen;
