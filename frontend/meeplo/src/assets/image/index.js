@@ -14,6 +14,7 @@ const images = {
     watermark: { uri: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/watermark.png' },
     defaultImage: { uri: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png' },
   },
+  faDoor: require('./faDoor.png'),
 };
 
 export default images;
