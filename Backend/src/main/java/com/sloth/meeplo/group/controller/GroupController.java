@@ -19,7 +19,7 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Long>> createGroup(@RequestHeader("Authorization") String authorization, @RequestBody GroupRequest.GroupInput groupInput){
+    public ResponseEntity<Map<String, Long>> createGroup(@RequestHeader(value = "Authorization", required = false) String authorization, @RequestBody GroupRequest.GroupInput groupInput){
         Map<String, Long> resultMap = new HashMap<>();
         Long groupId = groupService.makeGroup(authorization, groupInput);
         resultMap.put("groupId", groupId);
@@ -41,7 +41,7 @@ public class GroupController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, List>> getGroupList(@RequestHeader("Authorization") String authorization){
+    public ResponseEntity<Map<String, List>> getGroupList(@RequestHeader(value = "Authorization", required = false) String authorization){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("group", groupService.joinedGroupList(authorization));
         return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
