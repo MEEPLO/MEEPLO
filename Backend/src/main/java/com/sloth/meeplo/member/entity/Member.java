@@ -3,6 +3,7 @@ package com.sloth.meeplo.member.entity;
 import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.moment.entity.Moment;
+import com.sloth.meeplo.moment.entity.MomentComment;
 import com.sloth.meeplo.schedule.entity.ScheduleMember;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -70,6 +71,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Moment> moments;
+
+    @OneToMany(mappedBy = "member")
+    private List<MomentComment> momentComments;
 
     public void updateProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;
