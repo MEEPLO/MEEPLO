@@ -5,6 +5,7 @@ import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.service.GroupService;
+import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.location.repository.LocationRepository;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.repository.MemberRepository;
@@ -118,7 +119,6 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .forEach(k-> schedule.getScheduleKeywords().add(k));
 
-        // TODO: 2022-11-04 member삭제의 경우 unactivated로
         schedule.getScheduleMembers().stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
                         .anyMatch(o-> o.getId().equals(sm.getMember().getId()) && sm.getStatus().equals(ScheduleMemberStatus.UNACTIVATED)))
@@ -189,6 +189,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public List<ScheduleResponse.ScheduleListInfo> getScheduleList(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
         return member.getScheduleMembers().stream()
+                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED))
                 .map(sm -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(sm.getSchedule())
                         .build())
@@ -205,6 +206,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         LocalDate localDate = LocalDate.parse(yearMonth, formatter);
         LocalDateTime targetYearMonth = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
         return member.getGroupMembers().stream()
+                .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
                 .flatMap(gm-> scheduleRepository
                         .findByGroupAndDateBetween(gm.getGroup(),targetYearMonth,targetYearMonth.plusMonths(1)).stream())
                 .map(s->s.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
@@ -218,6 +220,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
         return member.getGroupMembers().stream()
+                .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
                 .flatMap(gm-> scheduleRepository
                         .findByGroupAndDateBetween(gm.getGroup(),targetDate, targetDate.plusDays(1)).stream())
                 .map(s -> ScheduleResponse.ScheduleListInfo.builder()
@@ -265,6 +268,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public void checkMemberInSchedule(Schedule schedule, Member member) {
-        if(!scheduleMemberRepository.existsByMemberAndSchedule(member, schedule)) throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
+        if(!scheduleMemberRepository.existsByMemberAndScheduleAndStatus(member, schedule, ScheduleMemberStatus.JOINED))
+            throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
     }
 }
