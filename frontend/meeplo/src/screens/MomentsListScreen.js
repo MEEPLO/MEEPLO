@@ -44,7 +44,7 @@ const MomentsListScreen = props => {
         <Pressable onPress={() => linkTo('MomentsCreate')}>
           <Text>생성</Text>
         </Pressable>
-        <MomentsList navigation={props.navigation} />
+        <MomentsList isMine={isMine} navigation={props.navigation} />
       </View>
     </ScrollView>
   );
