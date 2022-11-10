@@ -3,6 +3,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { createMessage, MESSAGE_TYPE } from "../helper/message";
 
 const KakaoMap = () => {
+  const [test, setTest] = useState("여기가 중심");
   const [state, setState] = useState({
     center: { lat: 37.50119278, lng: 127.03975728 },
     isPanto: false,
@@ -23,10 +24,11 @@ const KakaoMap = () => {
 
   const onMessage = (e) => {
     console.log("recevied from app", e.data);
+    setTest(e.data);
   };
 
   const postMessage = (msg) => {
-    ReactNativeWebView?.postMessage(msg);
+    document?.ReactNativeWebView?.postMessage(msg);
   };
 
   const onClickHandler = (_t, mouseEvent) => {
@@ -60,12 +62,12 @@ const KakaoMap = () => {
       <Map
         center={state.center}
         isPanto={state.isPanto}
-        style={{ width: "100%", height: "400px" }}
+        style={{ width: "100%", height: "1024px" }}
         onClick={onClickHandler}
         onZoomChanged={onZoomChangedHandler}
       >
         <MapMarker position={state.center}>
-          <div style={{ color: "#000" }}>중심</div>
+          <div style={{ color: "#000" }}>{test}</div>
         </MapMarker>
       </Map>
     </>
