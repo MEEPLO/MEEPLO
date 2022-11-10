@@ -110,4 +110,47 @@ public class MomentResponse {
             this.angle = momentComment.getAngle();
         }
     }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class MomentFeedTwoList{
+
+        private Boolean moreData;
+        private Integer leftSize;
+        private Integer rightSize;
+        private List<MomentFeedData> momentsLeft;
+        private List<MomentFeedData> momentsRight;
+
+        @Builder
+        MomentFeedTwoList(List<Moment> momentsLeft, List<Moment> momentsRight, Boolean moreData, Integer leftSize, Integer rightSize){
+            this.momentsLeft = momentsLeft.stream()
+                    .map(m->MomentFeedData.builder().moment(m).build())
+                    .collect(Collectors.toList());
+            this.momentsRight = momentsRight.stream()
+                    .map(m->MomentFeedData.builder().moment(m).build())
+                    .collect(Collectors.toList());
+            this.moreData = moreData;
+            this.leftSize = leftSize;
+            this.rightSize = rightSize;
+        }
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class MomentFeedData{
+
+        private Long id;
+        private String photo;
+        private int reactionCount;
+        private MomentType type;
+        @Builder
+        MomentFeedData(Moment moment){
+            this.id = moment.getId();
+            this.photo = moment.getMomentPhoto();
+            this.reactionCount = moment.getMomentReactions().size();
+            this.type = moment.getType();
+        }
+    }
 }
