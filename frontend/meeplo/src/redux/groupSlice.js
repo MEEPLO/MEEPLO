@@ -32,6 +32,22 @@ export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({
   }
 });
 
+export const getGroupMomentsFeed = createAsyncThunk('group/getGroupMomentsFeed', async ({ groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/moment/feed`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(response.data);
+    return response.data.moments;
+  } catch (err) {
+    console.error('ERROR in getGroupMomentsFeed', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
 export const createGroup = createAsyncThunk('group/createGroup', async form => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
@@ -49,6 +65,7 @@ export const createGroup = createAsyncThunk('group/createGroup', async form => {
 });
 
 export const editGroup = createAsyncThunk('group/editGroup', async ({ form, groupId }) => {
+  console.log('수정 함수 실행');
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.put(
@@ -121,18 +138,17 @@ export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async (
 
 const groupListSlice = createSlice({
   name: 'groupList',
-  initialState: {
-    group: [
-      {
-        id: -1,
-        name: 'string',
-        photo: 'photo url',
-        memberCount: -1,
-        leaderName: 'string',
-        lastSchedule: 'YYYY-MM-DD hh:mm',
-      },
-    ],
-  },
+  initialState: [
+    {
+      id: -1,
+      name: 'string',
+      photo:
+        'https://images.squarespace-cdn.com/content/v1/5c5f909ee5f7d115a785fd8e/1583427044737-14H3GRLCB4OG2SMSRMBS/light-gray-box%402x.png?format=2500w',
+      memberCount: -1,
+      leaderName: 'string',
+      lastSchedule: '1111-11-11 11:11',
+    },
+  ],
   reducers: {},
   extraReducers: {
     [getGroupList.fulfilled]: (state, { payload }) => payload,
@@ -142,34 +158,32 @@ const groupListSlice = createSlice({
 const groupDetailSlice = createSlice({
   name: 'group',
   initialState: {
-    id: -1,
-    name: 'string',
-    description: 'string',
-    photo: 'photo url',
-    leader: 'string',
-    members: [
-      {
-        id: -1,
-        nickname: 'string',
-        photo: 'string',
-      },
-    ],
-    schedules: [
-      {
-        id: -1,
-        name: 'string',
-        date: 'string',
-        memberCount: -1,
-        location: {
-          meetName: 'string',
-          amuseName: 'string',
-        },
-      },
-    ],
+    details: {},
+    moments: [],
+    isLoading: false,
   },
   reducers: {},
   extraReducers: {
-    [getGroupDetail.fulfilled]: (state, { payload }) => payload,
+    [getGroupDetail.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getGroupDetail.fulfilled]: (state, { payload }) => {
+      state.details = payload;
+      state.isLoading = false;
+    },
+    [getGroupDetail.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+    },
+    [getGroupMomentsFeed.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getGroupMomentsFeed.fulfilled]: (state, { payload }) => {
+      state.moments = payload;
+      state.isLoading = false;
+    },
+    [getGroupMomentsFeed.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+    },
   },
 });
 

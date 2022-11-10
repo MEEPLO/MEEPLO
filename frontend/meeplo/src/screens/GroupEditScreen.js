@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
 import { decode } from 'base64-arraybuffer';
@@ -9,15 +9,19 @@ import { theme } from '../assets/constant/DesignTheme';
 import StepTextInput from '../components/common/StepTextInput';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
-import { createGroup } from '../redux/groupSlice';
+import { editGroup, getGroupDetail } from '../redux/groupSlice';
 import { useFocusEffect } from '@react-navigation/native';
 
-const GroupCreateScreen = ({ navigation }) => {
+const GroupEditScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
+  const groupDetail = useSelector(state => state.group.details);
+
+  // TODO: hrookim change DATA to groupDetail
   const [groupPhotoFile, setGroupPhotoFile] = useState(null);
-  const [groupName, setGroupName] = useState('');
-  const [groupPhoto, setGroupPhoto] = useState('');
-  const [groupDescription, setGroupDescription] = useState('');
+  const [groupName, setGroupName] = useState(groupDetail.name);
+  const [groupPhoto, setGroupPhoto] = useState(groupDetail.photo);
+  const [groupInitialPhoto, setGroupInitialPhoto] = useState(groupDetail.photo);
+  const [groupDescription, setGroupDescription] = useState(groupDetail.description);
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
   const { width, height } = Dimensions.get('window');
 
@@ -69,9 +73,9 @@ const GroupCreateScreen = ({ navigation }) => {
         photo: data.Location,
         description: groupDescription,
       };
-      dispatch(createGroup(form)).then(({ payload }) => {
-        // TODO: hrookim 생성되었습니다 alert창!
-        navigation.replace('GroupDetail', { groupId: payload.groupId });
+      dispatch(editGroup({ form, groupId: groupDetail.id })).then(() => {
+        // TODO: hrookim 수정되었습니다 alert창!
+        navigation.replace('GroupDetailInfo', { groupId: groupDetail.id });
       });
       // 이동 여기서 바로
       // 상세 컴포넌트에서 리덕스의 값을 가져오는데
@@ -88,9 +92,20 @@ const GroupCreateScreen = ({ navigation }) => {
     setInputBorderColor(theme.color.bright.red);
   };
 
-  const onPressCreate = () => {
-    uploadToS3(groupPhotoFile);
-    // 로딩 모달 열기
+  const onPressEdit = () => {
+    if (groupPhoto === groupInitialPhoto) {
+      const form = {
+        name: groupName,
+        photo: groupPhoto,
+        description: groupDescription,
+      };
+      dispatch(editGroup({ form, groupId: groupDetail.id })).then(() => {
+        navigation.replace('GroupDetailInfo', { groupId: groupDetail.id });
+      });
+    } else {
+      uploadToS3(groupPhotoFile);
+      // 로딩 모달 열기
+    }
   };
 
   useFocusEffect(() => {
@@ -104,7 +119,7 @@ const GroupCreateScreen = ({ navigation }) => {
   return (
     <View style={{ height }}>
       <View style={{ margin: 20 }}>
-        <StepTextInput type="그룹명" maxLength={20} required={true} onValueChange={setGroupName} />
+        <StepTextInput type="그룹명" maxLength={20} required={true} onValueChange={setGroupName} value={groupName} />
       </View>
       <View style={{ margin: 20 }}>
         <Text style={{ color: theme.font.color, fontWeight: '800' }}>
@@ -152,6 +167,7 @@ const GroupCreateScreen = ({ navigation }) => {
           numberOfLines={6}
           onBlur={inputOnBlur}
           onFocus={inputOnFocus}
+          value={groupDescription}
           onChangeText={setGroupDescription}
           style={{ borderColor: inputBorderColor, borderWidth: 1 }}
         />
@@ -167,11 +183,11 @@ const GroupCreateScreen = ({ navigation }) => {
           top: height - 140,
         }}
         activeOpacity={0.6}
-        onPress={onPressCreate}>
+        onPress={onPressEdit}>
         <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>만들기</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default GroupCreateScreen;
+export default GroupEditScreen;
