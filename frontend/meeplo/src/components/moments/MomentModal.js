@@ -17,27 +17,45 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faHeart as frHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
-import { getMomentDetail } from '../../redux/momentsSlice';
+import { getMomentDetail, updateMomentReaction, deleteMomentReaction } from '../../redux/momentsSlice';
 
-const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
+const windowWidth = Dimensions.get('window').width;
+
+const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }) => {
   const [touchStart, setTouchStart] = React.useState(0);
   const [touchEnd, setTouchEnd] = React.useState(0);
   const [imageFront, setImageFront] = React.useState(true);
   const [imageUri, setImageUri] = React.useState();
-  cosnt[(isLiked, setIsLiked)] = React.useState(false);
+  const [isLiked, setIsLiked] = React.useState(false);
 
   const dispatch = useDispatch();
   const momentDetail = useSelector(state => state.momentDetail);
 
   React.useEffect(() => {
-    dispatch(getMomentDetail({ momentId }));
-    setImageUri({ uri: momentDetail.moment.photoUrl });
+    dispatch(getMomentDetail({ momentDetailId }));
     setIsLiked(momentDetail.reaction.liked);
-  }, [momentId]);
+  }, []);
+
+  React.useEffect(() => {
+    console.log('detail id: ', momentDetailId);
+    setImageUri({ uri: momentDetail.moment.photoUrl });
+  }, [momentDetail.moment]);
 
   const linkTo = React.useCallback((nextPage, params) => {
     navigation.push(nextPage, params);
   }, []);
+
+  const momentLikeHandler = () => {
+    if (isLiked) {
+      console.log('isliked off');
+      setIsLiked(prev => !prev);
+      dispatch(deleteMomentReaction({ momentDetailId }));
+    } else {
+      console.log('isliked on');
+      setIsLiked(prev => !prev);
+      dispatch(updateMomentReaction({ momentDetailId }));
+    }
+  };
 
   const swipeAnim = React.useRef(new Animated.Value(0)).current;
 
@@ -82,18 +100,16 @@ const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
     }
   };
 
-  const windowWidth = Dimensions.get('window').width;
-
   const imgWidth = {
-    POLAROID: windowWidth * 0.7,
-    DAYFILM: windowWidth * 0.8,
-    FOURCUT: windowWidth * 0.5 - 30,
+    1: windowWidth * 0.7,
+    2: windowWidth * 0.8,
+    3: windowWidth * 0.5 - 30,
   };
 
   const viewHeight = {
-    POLAROID: windowWidth * 0.7 * 1.17,
-    DAYFILM: windowWidth * 0.8 * 0.8,
-    FOURCUT: (windowWidth * 0.5 - 30) * 3.61,
+    1: windowWidth * 0.7 * 1.17,
+    2: windowWidth * 0.8 * 0.8,
+    3: (windowWidth * 0.5 - 30) * 3.61,
   };
 
   return (
@@ -113,16 +129,16 @@ const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
           onPressIn={setStartLocation}
           onPressOut={setEndLocation}
           style={{
-            width: imgWidth[momentDetail.moment.type] + 40,
-            height: viewHeight[momentDetail.moment.type],
+            width: imgWidth[1] + 40,
+            height: viewHeight[1],
             backgroundColor: 'transparent',
           }}>
           {imageFront ? (
             <Animated.Image
               style={{
                 marginLeft: 20,
-                width: imgWidth[momentDetail.moment.type],
-                height: viewHeight[momentDetail.moment.type],
+                width: imgWidth[1],
+                height: viewHeight[1],
                 transform: [{ rotateY: rotateData }],
               }}
               resizeMode="contain"
@@ -132,15 +148,15 @@ const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
             <Animated.View
               style={{
                 marginLeft: 20,
-                width: imgWidth[momentDetail.moment.type],
-                height: viewHeight[momentDetail.moment.type] - 10,
+                width: imgWidth[1],
+                height: viewHeight[1] - 10,
                 transform: [{ rotateY: rotateData }],
                 position: 'relative',
                 overflow: 'hidden',
               }}
               resizeMode="contain">
               <ImageBackground source={Images.frame.watermark} style={{ width: '100%', height: '100%' }}>
-                {momentDetail.comments.map((comment, idx) => (
+                {momentDetail.comments?.map((comment, idx) => (
                   <View
                     style={{
                       width: '80%',
@@ -170,8 +186,13 @@ const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
-          <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={30} />
+          }}
+          onPress={momentLikeHandler}>
+          {isLiked ? (
+            <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={30} />
+          ) : (
+            <FontAwesomeIcon icon={frHeart} color={theme.color.alert} size={30} />
+          )}
         </Pressable>
         <Pressable
           style={{
@@ -186,7 +207,7 @@ const MomentModal = ({ momentId, setMomentModal, momentModal, navigation }) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}
-          onPress={() => linkTo('MomentsCommentCreate', { momentId: momentId })}>
+          onPress={() => linkTo('MomentsCommentCreate', { momentId: momentDetailId })}>
           <FontAwesomeIcon icon={faComment} color={theme.color.bright.green} size={30} />
         </Pressable>
       </View>
