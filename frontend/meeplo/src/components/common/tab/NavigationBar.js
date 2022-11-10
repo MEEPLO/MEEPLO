@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHouseChimney } from '@fortawesome/free-solid-svg-icons/faHouseChimney';
@@ -13,14 +13,20 @@ import ScheduleStackScreen from '../../../screens//schedule/ScheduleStackScreen'
 import MomentsStackScreen from '../../../screens/MomentsStackScreen';
 import HomeScreen from '../../../screens/HomeScreen';
 import { theme } from '../../../assets/constant/DesignTheme';
-import AddButon from './AddButon';
+import AddButton from './AddButton';
 import { getUserInfo } from '../../../redux/userSlice';
+import { toggleOpened } from '../../../redux/navigationSlice';
+import LoadingBar from '../LoadingBar';
+import LoginScreen from '../../../screens/LoginScreen';
 
 const Tab = createBottomTabNavigator();
 
 const NavigationBar = () => {
   const dispatch = useDispatch();
-  ``;
+  const opened = useSelector(state => state.tabBar.opened);
+  const isLoginLoading = useSelector(state => state.user.isLoginLoading);
+  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+
   const tabBarDisplay = useSelector(state => state.tabBar.display);
 
   useEffect(() => {
@@ -76,7 +82,8 @@ const NavigationBar = () => {
         name="Add"
         component={HomeScreen}
         options={{
-          tabBarButton: props => <AddButon {...props} />,
+          tabBarItemStyle: { height: 0 },
+          tabBarButton: props => <AddButton opened={opened} toggleOpened={toggleOpened} {...props} />,
         }}
       />
       <Tab.Screen
