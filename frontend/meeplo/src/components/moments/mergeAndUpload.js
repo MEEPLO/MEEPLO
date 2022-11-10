@@ -45,24 +45,26 @@ const picType = {
 
 const mergeAndUpload = type => `
 <div class="upload-control">
-<div class="gallary">
-  사진 추가하기
-  <input
-  type="file"
-  accept="image/jpeg, image/jpg, image/png"
-  multiple
-  id="review-upload-input"
-  >
+</div>
+<div>
+<div id="canvas-container" style="margin: 0 auto;width: ${picType[type].picWidth}px; height: ${picType[3].picHeight}px;border: 6px solid #ccc;">
+<canvas id="my-canvas" width="${picType[type].picWidth}" height="${picType[type].picHeight}" style="background-color: ${picType[type].bgColor};"></canvas>
+</div>
+<div id="gallary" onclick="openGallary()" style="margin: 130px 0 50px 0;width: calc(100vw - 12px);height: 180px;background-color: rgba(0, 0, 0, 0);border-radius: 45px;">
+<input
+type="file"
+accept="image/jpeg, image/jpg, image/png"
+multiple
+id="review-upload-input"
+style="display: none;"
+>
+</div>
+<div onclick="resetGallery()" style="width: calc(100vw - 12px);height: 130px;background-color: rgba(0, 0, 0, 0);">
 </div>
 <button class="reset" onclick="sendDataToReactNativeApp()">
   만들기
 </button>
-<button onclick="resetGallery()">
-다시하기
-</button>
-</div>
-<div class="canvas-container">
-<canvas id="my-canvas" width="${picType[type].picWidth}" height="${picType[type].picHeight}" style="background-color: ${picType[type].bgColor};"></canvas>
+
 </div>
 
 <script>
@@ -117,6 +119,10 @@ picInput.addEventListener('change', (event) => {
   }
 });
 
+const openGallary = () => {
+  document.getElementById("review-upload-input").click();
+}
+
 const resetGallery = () => {
   document.getElementById("my-canvas").remove()
   var canvas = document.createElement("canvas")
@@ -125,7 +131,7 @@ const resetGallery = () => {
   canvas.setAttribute("height", "${picType[type].picHeight}")
   canvas.setAttribute("style", "background-color: ${picType[type].bgColor};")
 
-  var container = document.querySelector(".canvas-container")
+  var container = document.getElementById("canvas-container")
   container.appendChild(canvas)
 }
 
@@ -147,6 +153,24 @@ const sendDataToReactNativeApp = () => {
     dataUrl
   )
 }
+
+const listener = (event) => {
+  // alert("start")
+  // // if (event.data === "open") {
+    // // }
+    buttonWidth = Math.ceil(event.data * 1)
+    // document.getElementById("input-label").style.width = buttonWidth
+    alert(buttonWidth)
+    // alert("fin")
+};
+
+var buttonWidth = 0
+
+// document.addEventListener("message", function(event) {
+//   alert(event.data)
+// });
+document.addEventListener("message", listener); 
+
 </script>
 `;
 
