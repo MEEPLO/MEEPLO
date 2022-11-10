@@ -66,6 +66,22 @@ export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReacti
   }
 });
 
+export const createMoment = createAsyncThunk('moment/createMoment', async moment => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.post('http://meeplo.co.kr/meeplo/api/v1/moment', moment, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    console.error('createMoment: ', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
 const momentsListSlice = createSlice({
   name: 'momentsList',
   initialState: {

@@ -1,41 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
-import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { hideTabBar, showTabBar } from '../redux/navigationSlice';
-import { useFocusEffect } from '@react-navigation/native';
-import { createMoment } from '../redux/momentsSlice';
 
-import helper from '../helper';
-import StepIndicator from '../components/stepper/StepIndicator';
-import StepRenderer from '../components/stepper/StepRenderer';
-import MomentsSetGroup from '../components/moments/createSteps/MomentsSetGroup';
-import MomentsSetSchedule from '../components/moments/createSteps/MomentsSetSchedule';
-import MomentsSetFrame from '../components/moments/createSteps/MomentsSetFrame';
-import MomentsSetPicture from '../components/moments/createSteps/MomentsSetPicture';
+import helper from '../../helper';
+
+import StepIndicator from '../stepper/StepIndicator';
+import StepRenderer from '../stepper/StepRenderer';
+import MomentsSetGroup from './createSteps/MomentsSetGroup';
+import MomentsSetSchedule from './createSteps/MomentsSetSchedule';
+import MomentsSetPicture from './createSteps/MomentsSetPicture';
+import MomentsSetFrame from './createSteps/MomentsSetFrame';
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'UPDATE_GROUPID':
       return {
         ...state,
-        groupId: action.payload,
+        date: action.payload,
       };
 
     case 'UPDATE_SCHEDULEID':
       return {
         ...state,
-        schedulePlaceId: action.payload,
+        name: action.payload,
       };
     case 'UPDATE_FRAME':
       return {
         ...state,
-        type: action.payload,
+        groupId: action.payload,
       };
     case 'UPDATE_PICTURE':
       return {
         ...state,
-        photoUrl: action.payload,
+        members: action.payload,
       };
     default:
       return action.type;
@@ -46,19 +42,18 @@ const initialMoment = {
   groupId: null,
   schedulePlaceId: null,
   photoUrl: null,
-  content: 'null',
+  content: null,
   type: null,
 };
 
 const STEP_COUNT = 4;
 
-const MomentsCreateScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
+const MomentCreateStep = ({ navigation }) => {
   const [step, setStep] = useState(0);
-  const [moment, stepDispatch] = React.useReducer(reducer, initialMoment);
+  const [moment, dispatch] = useReducer(reducer, initialMoment);
   const stepItems = [MomentsSetGroup, MomentsSetSchedule, MomentsSetFrame, MomentsSetPicture];
 
-  React.useEffect(() => {
+  useEffect(() => {
     return navigation.addListener('beforeRemove', event => {
       const action = event.data.action;
       event.preventDefault();
@@ -78,20 +73,13 @@ const MomentsCreateScreen = ({ navigation }) => {
     });
   }, [navigation, step]);
 
-  useFocusEffect(() => {
-    dispatch(hideTabBar());
-
-    return () => {
-      dispatch(showTabBar());
-    };
-  });
-
   const setStepClamp = newStep => {
     setStep(helper.number.clamp(newStep, 0, STEP_COUNT - 1));
   };
+
   const toNext = actions => {
     if (Array.isArray(actions)) {
-      actions.forEach(action => stepDispatch(action));
+      actions.forEach(action => dispatch(action));
     }
     setStepClamp(step + 1);
   };
@@ -100,12 +88,8 @@ const MomentsCreateScreen = ({ navigation }) => {
     setStepClamp(step - 1);
   };
 
-  const onFinish = actions => {
-    if (Array.isArray(actions)) {
-      actions.forEach(action => stepDispatch(action));
-    }
+  const onFinish = () => {
     console.log(moment);
-    dispatch(createMoment(moment));
   };
 
   return (
@@ -113,14 +97,7 @@ const MomentsCreateScreen = ({ navigation }) => {
       <View style={styles.stepIndicatorStyle}>
         <StepIndicator stepCount={STEP_COUNT} currentStep={step} />
       </View>
-      <StepRenderer
-        state={moment}
-        items={stepItems}
-        currentStep={step}
-        toNext={toNext}
-        toPrev={toPrev}
-        onFinish={onFinish}
-      />
+      <StepRenderer items={stepItems} currentStep={step} toNext={toNext} toPrev={toPrev} onFinish={onFinish} />
     </View>
   );
 };
@@ -138,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MomentsCreateScreen;
+export default MomentCreateStep;
