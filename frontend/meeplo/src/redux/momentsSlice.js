@@ -17,6 +17,21 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async (
   }
 });
 
+export const getMomentsCalendar = createAsyncThunk('moments/getMomentsCalendar', async () => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get('http://meeplo.co.kr/meeplo/api/v1/moment/calendar', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error('getMomentsCalendar: ', err.response.data);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
 export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
@@ -82,6 +97,57 @@ export const createMoment = createAsyncThunk('moment/createMoment', async moment
   }
 });
 
+export const deleteMoment = createAsyncThunk('moments/deleteMoment', async ({ momentDetailId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error('deleteMoment: ', err.response.data);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const getComments = createAsyncThunk('moment/getComments', async ({ momentDetailId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}/comment`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error('getComments: ', err.response.data);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const createComment = createAsyncThunk('moment/createComment', async commentInfo => {
+  console.log(commentInfo.comment, commentInfo.momentId);
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.post(
+      `http://meeplo.co.kr/meeplo/api/v1/moment/${commentInfo.momentId}/comment`,
+      commentInfo.comment,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    console.error('createComment: ', err);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
 const momentsListSlice = createSlice({
   name: 'momentsList',
   initialState: {
@@ -115,7 +181,7 @@ const momentsListSlice = createSlice({
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
         type: 'FOURCUT',
-        id: 9,
+        id: 6,
         reactionCount: 3,
       },
       {
@@ -127,7 +193,7 @@ const momentsListSlice = createSlice({
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
         type: 'POLAROID',
-        id: 6,
+        id: 9,
         reactionCount: 0,
       },
     ],
@@ -141,7 +207,7 @@ const momentDetailSlice = createSlice({
     moment: {
       id: -1,
       photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',
-      type: 'FOURCUT',
+      type: 1,
       writer: -1,
     },
     reaction: {

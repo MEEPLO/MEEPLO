@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import styled from 'styled-components';
+import { View, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { useFocusEffect } from '@react-navigation/native';
