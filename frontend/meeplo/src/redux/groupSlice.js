@@ -65,6 +65,7 @@ export const createGroup = createAsyncThunk('group/createGroup', async form => {
 });
 
 export const editGroup = createAsyncThunk('group/editGroup', async ({ form, groupId }) => {
+  console.log('수정 함수 실행');
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.put(
@@ -137,18 +138,17 @@ export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async (
 
 const groupListSlice = createSlice({
   name: 'groupList',
-  initialState: {
-    group: [
-      {
-        id: -1,
-        name: 'string',
-        photo: 'https://d1fdloi71mui9q.cloudfront.net/jl9DQQM1QxiPQklpiKii_GjzZ0fFXW61vAGZx',
-        memberCount: -1,
-        leaderName: 'string',
-        lastSchedule: 'YYYY-MM-DD hh:mm',
-      },
-    ],
-  },
+  initialState: [
+    {
+      id: -1,
+      name: 'string',
+      photo:
+        'https://images.squarespace-cdn.com/content/v1/5c5f909ee5f7d115a785fd8e/1583427044737-14H3GRLCB4OG2SMSRMBS/light-gray-box%402x.png?format=2500w',
+      memberCount: -1,
+      leaderName: 'string',
+      lastSchedule: '1111-11-11 11:11',
+    },
+  ],
   reducers: {},
   extraReducers: {
     [getGroupList.fulfilled]: (state, { payload }) => payload,
@@ -158,32 +158,7 @@ const groupListSlice = createSlice({
 const groupDetailSlice = createSlice({
   name: 'group',
   initialState: {
-    details: {
-      id: -1,
-      name: 'string',
-      description: 'string',
-      photo: 'https://d1fdloi71mui9q.cloudfront.net/jl9DQQM1QxiPQklpiKii_GjzZ0fFXW61vAGZx',
-      leader: 'string',
-      members: [
-        {
-          id: -1,
-          nickname: 'string',
-          photo: 'string',
-        },
-      ],
-      schedules: [
-        {
-          id: -1,
-          name: 'string',
-          date: 'string',
-          memberCount: -1,
-          location: {
-            meetName: 'string',
-            amuseName: 'string',
-          },
-        },
-      ],
-    },
+    details: {},
     moments: [],
     isLoading: false,
   },
