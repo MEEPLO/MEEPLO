@@ -58,14 +58,14 @@ public class MomentResponse {
         private Long id;
         private String photoUrl;
         private Long writer;
-        private MomentType type;
+        private Integer type;
 
         @Builder
         MomentDetailInfo(Moment moment){
             this.id = moment.getId();
             this.photoUrl = moment.getMomentPhoto();
             this.writer = moment.getMember().getId();
-            this.type = moment.getType();
+            this.type = moment.getType().ordinal();
         }
 
     }
@@ -144,13 +144,13 @@ public class MomentResponse {
         private Long id;
         private String photo;
         private int reactionCount;
-        private MomentType type;
+        private Integer type;
         @Builder
         MomentFeedData(Moment moment){
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
             this.reactionCount = moment.getMomentReactions().size();
-            this.type = moment.getType();
+            this.type = moment.getType().ordinal();
         }
     }
 }
