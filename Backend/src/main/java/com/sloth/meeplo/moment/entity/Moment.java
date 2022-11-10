@@ -1,11 +1,12 @@
 package com.sloth.meeplo.moment.entity;
 
 import com.sloth.meeplo.common.BaseTimeEntity;
-import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.moment.dto.request.MomentRequest;
 import com.sloth.meeplo.moment.type.MomentType;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,8 +40,16 @@ public class Moment extends BaseTimeEntity {
             joinColumns = @JoinColumn(name="moment_id"),
             inverseJoinColumns = @JoinColumn(name="member_id")
     )
-    private List<Member> members = new ArrayList<>();
+    private List<Member> momentReactions = new ArrayList<>();
 
     @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL)
     private List<MomentComment> momentComments;
+
+    @Builder
+    public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member, ScheduleLocation scheduleLocation){
+        this.momentPhoto = createMomentInfo.getPhotoUrl();
+        this.member = member;
+        this.type = createMomentInfo.getType();
+        this.scheduleLocation = scheduleLocation;
+    }
 }

@@ -73,4 +73,25 @@ public class GroupController {
         groupService.joinToGroup(authorization, groupId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("{groupId}/member/{memberId}")
+    public ResponseEntity<Void> kickGroupMember(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId, @PathVariable Long memberId){
+        groupService.kickGroupMember(authorization,groupId, memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("{groupId}/moment/feed")
+    public ResponseEntity<Map<String, List>> getFeedMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("moments", groupService.getFeedMoments(authorization,groupId));
+        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+    }
+
+
+    @GetMapping("{groupId}/moment/map")
+    public ResponseEntity<Map<String, List>> getMapMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("moments", groupService.getMapMoments(authorization,groupId));
+        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+    }
 }

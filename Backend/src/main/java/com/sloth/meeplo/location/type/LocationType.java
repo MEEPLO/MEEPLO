@@ -1,5 +1,6 @@
 package com.sloth.meeplo.location.type;
 
 public enum LocationType {
-    ETC, STATION, CAFE, RESTAURANT
+    STATION, AMUSE,
+    NO_FRAME, NOT_CLICKABLE, SEARCH_FRAME, OTHER_ERR
 }

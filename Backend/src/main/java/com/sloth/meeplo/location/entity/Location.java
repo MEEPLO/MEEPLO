@@ -20,16 +20,14 @@ public class Location extends GeoDataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 10)
+    @Column(length = 50)
     private String name;
 
     private LocationType type;
 
-    @Column(length = 13)
-    private String phoneNumber;
+    @Column(length = 200)
+    private String category;
 
-    @Column(length = 10000)
-    private String description;
 
     @OneToMany(mappedBy = "location")
     private List<LocationPhoto> locationPhotos;
@@ -43,11 +41,12 @@ public class Location extends GeoDataEntity {
     @OneToMany(mappedBy = "location")
     private List<LocationContent> locationContents;
 
-    @OneToOne(mappedBy = "location")
-    private LocationCategory locationCategory;
+    @OneToMany(mappedBy = "location")
+    private List<Schedule> schedules;
 
     @OneToOne(mappedBy = "location")
-    private Schedule schedule;
+    private LocationInfo locationInfo;
+
 
     @Builder
     Location(String name){

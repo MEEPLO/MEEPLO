@@ -9,13 +9,20 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LocationCategory {
+public class LocationInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
+    @Column(length = 20)
+    private String phoneNumber;
+
+    @Column(length = 10000)
+    private String description;
+
+    @Column(length = 300)
+    private String link;
 
     @OneToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")

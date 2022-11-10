@@ -20,8 +20,11 @@ import java.util.*;
 public class SwaggerConfig {
 
     private ApiInfo swaggerInfo() {
-        return new ApiInfoBuilder().title("Meeple API")
-                .description("Meeple API Docs").build();
+        return new ApiInfoBuilder()
+                .title("Meeplo API")
+                .description("Meeplo API Docs")
+                .version("1.0")
+                .build();
     }
 
     @Bean
