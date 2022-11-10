@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/ToolBar';
 import GroupCreateScreen from './GroupCreateScreen';
+import GroupDetailScreen from './GroupDetailScreen';
 import GroupHomeScreen from './GroupHomeScreen';
 import GroupDetailInfoScreen from './GroupDetailInfoScreen';
 import GroupEditScreen from './GroupEditScreen';
