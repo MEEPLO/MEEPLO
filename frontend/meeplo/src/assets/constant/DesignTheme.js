@@ -8,6 +8,7 @@ const theme = {
       blue: '#C5D1FF',
       navy: '#D1DBFF',
       purple: '#D3CCFF',
+      gray: '#BABABA',
     },
     pale: {
       red: '#FFD3D3',
@@ -17,6 +18,7 @@ const theme = {
       blue: '#DAEAFF',
       navy: '#E2E5FF',
       purple: '#F1E5FF',
+      gray: '#CFCFCF',
     },
     background: '#FFFFFF',
     border: '#585858',

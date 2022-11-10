@@ -4,7 +4,7 @@ import { theme } from '../../assets/constant/DesignTheme';
 import SelectList from 'react-native-dropdown-select-list';
 
 const SelectDropdown = props => {
-  const [selected, setSelected] = React.useState('');
+  // const [selected, setSelected] = React.useState('');
   const placeholder = props.type + ' 선택';
 
   const windowHeight = Dimensions.get('window').height;
@@ -17,9 +17,9 @@ const SelectDropdown = props => {
       <View style={{ position: 'relative' }}>
         <SelectList
           placeholder={placeholder}
-          setSelected={setSelected}
+          setSelected={props.setSelected}
           data={props.data}
-          onSelect={() => alert(selected)}
+          onSelect={() => {}}
           maxHeight={windowHeight * 0.4}
           boxStyles={{ borderRadius: 0, borderWidth: 0, height: 50 }}
           dropdownStyles={{ borderTopRightRadius: 0, borderTopLeftRadius: 0, backgroundColor: theme.color.pale.red }}

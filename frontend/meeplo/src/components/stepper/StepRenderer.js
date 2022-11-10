@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 
-const StepRenderer = ({ items, currentStep, toNext, toPrev, onFinish }) => {
+const StepRenderer = ({ items, state, currentStep, toNext, toPrev, onFinish }) => {
   return (
-    <View>{typeof items[currentStep] === 'function' ? items[currentStep]({ toNext, toPrev, onFinish }) : null}</View>
+    <View>{items.map((item, i) => item({ key: i, state, toNext, toPrev, onFinish, visible: i === currentStep }))}</View>
   );
 };
 
