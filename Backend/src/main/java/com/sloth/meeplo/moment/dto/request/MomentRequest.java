@@ -18,7 +18,7 @@ public class MomentRequest {
         private Long schedulePlaceId;
         private String photoUrl;
         private String content;
-        private MomentType type;
+        private Integer type;
     }
 
     @Getter

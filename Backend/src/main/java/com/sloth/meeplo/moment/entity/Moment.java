@@ -49,7 +49,7 @@ public class Moment extends BaseTimeEntity {
     public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member, ScheduleLocation scheduleLocation){
         this.momentPhoto = createMomentInfo.getPhotoUrl();
         this.member = member;
-        this.type = createMomentInfo.getType();
+        this.type = MomentType.values()[createMomentInfo.getType()];
         this.scheduleLocation = scheduleLocation;
     }
 }
