@@ -1,9 +1,15 @@
-import API from '../api';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 
 export const getMomentsList = createAsyncThunk('moments/getMomentsList', async () => {
   try {
-    const response = await API.get('http://meeplo.co.kr/meeplo/api/v1/moment/feed');
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get('http://meeplo.co.kr/meeplo/api/v1/moment/feed', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response.data;
   } catch (err) {
     console.error('getMomentsList: ', err.response.data);
@@ -11,12 +17,51 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async (
   }
 });
 
-export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async ({ momentId }) => {
+export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async ({ momentDetailId }) => {
   try {
-    const response = await API.get(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentId}`);
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log(response.data);
     return response.data;
   } catch (err) {
     console.error('getMomentDetail: ', err.response.data);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const updateMomentReaction = createAsyncThunk('moments/updateMomentReaction', async ({ momentDetailId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.post(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}/reaction`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log('updateMomentReaction: ', response.data);
+    return response.data;
+  } catch (err) {
+    console.error('updateMomentReaction: ', err.response.data);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReaction', async ({ momentDetailId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}/reaction`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log('deleteMomentReaction: ', response.data);
+
+    return response.data;
+  } catch (err) {
+    console.error('deleteMomentReaction: ', err.response.data);
     return isRejectedWithValue(err.response.data);
   }
 });
@@ -71,62 +116,25 @@ const momentsListSlice = createSlice({
       },
     ],
   },
-  extraReducers: builder => {
-    builder.addCase(getMomentsList.fulfilled, (state, action) => {
-      state.payload = action.payload;
-    });
-  },
+  extraReducers: { [getMomentsList.fulfilled]: (state, { payload }) => payload },
 });
 
 const momentDetailSlice = createSlice({
   name: 'momentDetail',
   initialState: {
     moment: {
-      id: 1,
-      photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-      writer: 1,
-      type: 'POLAROID',
+      id: -1,
+      photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',
+      type: 'FOURCUT',
+      writer: -1,
     },
-    // moment: {
-    //   id: 9,
-    //   photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
-    //   writer: 2,
-    //   type: "FOURCUT",
-    // },
-    // moment: {
-    //   id: 3,
-    //   photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
-    //   writer: 1,
-    //   type: 'DAYFILM',
-    // },
     reaction: {
-      count: 2,
+      count: -1,
       liked: true,
     },
-    comments: [
-      {
-        comment: '다음엔 2차 3차도 갑시다 👍',
-        location: {
-          xPoint: 0,
-          yPoint: 60,
-          angle: -40,
-        },
-      },
-      {
-        comment: '오늘 진짜 재미있었다 오랜만에 만나서 더 꿀잼이었던 듯 😍',
-        location: {
-          xPoint: 0,
-          yPoint: 170,
-          angle: 20,
-        },
-      },
-    ],
+    comments: [],
   },
-  extraReducers: builder => {
-    builder.addCase(getMomentDetail.fulfilled, (state, action) => {
-      state.payload = action.payload;
-    });
-  },
+  extraReducers: { [getMomentDetail.fulfilled]: (state, { payload }) => payload },
 });
 
 export { momentsListSlice, momentDetailSlice };
