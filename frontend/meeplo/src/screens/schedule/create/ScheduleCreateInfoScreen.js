@@ -167,7 +167,7 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish }) => {
     setKeywords(confirmedKeywords);
   };
 
-  return (
+  return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
         <DateModalInput type="일시" value={date} required onConfirm={onConfirmDate} />
@@ -183,7 +183,7 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish }) => {
         <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
     </View>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({
