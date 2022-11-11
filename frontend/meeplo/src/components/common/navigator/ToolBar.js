@@ -1,15 +1,16 @@
-import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
-import { theme } from '../../assets/constant/DesignTheme';
-import Images from '../../assets/image/index';
+import { theme } from '../../../assets/constant/DesignTheme';
+import Images from '../../../assets/image/index';
 
 const ToolBarTitle = () => {
   return (
     <View style={{ backgroundColor: theme.color.background, height: 50, justifyContent: 'center' }}>
-      <Image style={{ height: 20 }} source={Images.meeploLogo} resizeMode="contain" />
+      <Image style={{ width: 60, height: '100%' }} source={Images.meeploLogo} resizeMode="contain" />
     </View>
   );
 };
@@ -28,9 +29,16 @@ const ToolBarLeft = props => {
 };
 
 const ToolBarRight = ({ userPhoto }) => {
+  const user = useSelector(state => state.user.info);
+  // console.log('props로 받기', user.profilePhoto);
+  // console.log('selector로 받기', userPhoto);
   return (
     <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
-      <Image style={{ width: 40, height: 40, borderRadius: 20 }} source={{ uri: userPhoto }} resizeMode="contain" />
+      <Image
+        style={{ width: 40, height: 40, borderRadius: 20 }}
+        source={{ uri: userPhoto || user.profilePhoto }}
+        resizeMode="contain"
+      />
     </View>
   );
 };

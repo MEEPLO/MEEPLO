@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, Button, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import HomeGroup from '../components/Home/HomeGroup';
@@ -8,6 +8,7 @@ import HomeMemory from '../components/Home/HomeMemory';
 import HomeSchedule from '../components/Home/HomeSchedule';
 import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation';
 import { getGroupList } from '../redux/groupSlice';
+import { logInWithKakao, logOutWithKakao } from '../auth/Authentication';
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -43,15 +44,28 @@ const HomeScreen = ({ navigation }) => {
 
   const onPressMoreSchedule = () => {
     // TODO: navigation으로 페이지 옮기기
-    console.log('무브무브');
+    navigation.navigate('ScheduleStack', { screen: 'Home' });
   };
   const onPressMoreGroup = () => {
     // TODO: navigation으로 페이지 옮기기
-    console.log('이동이동');
+    navigation.navigate('GroupStack', { screen: 'GroupHome' });
   };
   const onPressMoreMoment = () => {
     // TODO: navigation으로 페이지 옮기기
-    console.log('무브이동');
+    navigation.navigate('MomentsStack', { screen: 'MomentsList' });
+  };
+
+  const onPressLogout = () => {
+    logOutWithKakao().then(() => {
+      Alert.alert('로그아웃', '로그아웃 되었습니다.', [
+        {
+          text: '확인',
+          onPress: () => {
+            navigation.replace('Login');
+          },
+        },
+      ]);
+    });
   };
 
   useEffect(() => {
@@ -60,6 +74,11 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <ScrollView>
+      <Button title="로그아웃" onPress={onPressLogout} />
+      <TouchableOpacity style={{ top: 15, alignItems: 'center' }} onPress={logInWithKakao}>
+        <Text> 로그인 </Text>
+      </TouchableOpacity>
+
       <View
         style={{
           margin: 20,
@@ -93,7 +112,7 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
-      <HomeGroup data={groupList.slice(0, 3)} navigation={navigation} />
+      <HomeGroup data={groupList?.slice(0, 3)} navigation={navigation} />
       <View
         style={{
           margin: 20,
