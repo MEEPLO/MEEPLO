@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,10 +18,14 @@ public class ScheduleRequest {
     @ToString
     @NoArgsConstructor
     public static class ScheduleCreateInput{
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
+        @NotBlank
         private String name;
+        @NotBlank
         private Long groupId;
+        @NotBlank
         private Long meetLocationId;
         private List<ScheduleInputKeyword> keywords;
         private List<ScheduleInputMember> members;
@@ -51,11 +56,16 @@ public class ScheduleRequest {
     @ToString
     @NoArgsConstructor
     public static class ScheduleUpdateInput{
+        @NotBlank
         private Long id;
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
+        @NotBlank
         private String name;
+        @NotBlank
         private Long groupId;
+        @NotBlank
         private Long meetLocationId;
         private List<ScheduleInputKeyword> keywords;
         private List<ScheduleInputMember> members;

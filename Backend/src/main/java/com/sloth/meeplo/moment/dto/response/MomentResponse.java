@@ -35,9 +35,10 @@ public class MomentResponse {
         private MomentDetailInfo moment;
         private MomentDetailReaction reaction;
         private List<MomentDetailComment> comments;
+        private Boolean commentCreated;
 
         @Builder
-        MomentDetail(Moment moment, Member member){
+        MomentDetail(Moment moment, Member member, Boolean commentCreated){
             this.moment = MomentDetailInfo.builder().moment(moment).build();
             this.reaction =MomentDetailReaction.builder()
                     .member(member)
@@ -48,6 +49,7 @@ public class MomentResponse {
                             .momentComment(mc)
                             .build())
                     .collect(Collectors.toList());
+            this.commentCreated = commentCreated;
         }
 
     }

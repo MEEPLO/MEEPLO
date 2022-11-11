@@ -6,14 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 public class GroupRequest {
 
     @Getter
     @ToString
     @NoArgsConstructor
     public static class GroupInput {
+
+        @NotBlank
         private String name;
+        @NotBlank
         private String description;
+        @NotBlank
         private String photo;
 
         @Builder
