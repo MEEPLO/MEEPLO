@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -49,7 +51,8 @@ public class MemberController {
     }
 
     @PutMapping("/member")
-    public ResponseEntity<Void> updateMemberInfo(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberUpdateInfo memberUpdateInfo){
+    public ResponseEntity<Void> updateMemberInfo(@ApiIgnore @RequestHeader("Authorization") String authorization,
+                                                 @RequestBody @Valid MemberRequest.MemberUpdateInfo memberUpdateInfo){
         memberService.updateMemberInfo(authorization,memberUpdateInfo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -68,7 +71,8 @@ public class MemberController {
     }
 
     @PostMapping("/member/location")
-    public ResponseEntity<Void> addMemberStartLocation(@RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberLocationAddInfo memberLocationAddInfo){
+    public ResponseEntity<Void> addMemberStartLocation(@RequestHeader("Authorization") String authorization,
+                                                       @RequestBody @Valid MemberRequest.MemberLocationAddInfo memberLocationAddInfo){
         memberService.addMemberStartLocation(authorization,memberLocationAddInfo);
         return new ResponseEntity<>(HttpStatus.OK);
     }

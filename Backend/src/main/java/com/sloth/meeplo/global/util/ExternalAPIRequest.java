@@ -66,4 +66,32 @@ public class ExternalAPIRequest {
                 .providerId(id)
                 .build();
     }
+
+//    public MemberRequest.MemberInfo getKakaoCoordinateInfo(String token, String location) {
+//        URL url;
+//
+//        try {
+//            url = new URL("https://dapi.kakao.com/v2/local/search/address.json?query="+location);
+//        } catch(IOException e) {
+//            throw new MeeploException(CommonErrorCode.WRONG_URL);
+//        }
+//
+//        String response = getHttpResponse(url, "KakaoAK "+token);
+//
+//        JsonObject fullResponse = JsonParser.parseString(response).getAsJsonObject();
+//        JsonObject kakaoAccount = fullResponse.get("kakao_account").getAsJsonObject();
+//        JsonObject profile = kakaoAccount.get("profile").getAsJsonObject();
+//
+//        String id = fullResponse.get("id").toString();
+//        String nickname = profile.get("nickname").toString().replaceAll("\"","");
+//        String profileImageUrl = profile.get(("profile_image_url")).toString().replaceAll("\"", "");
+//        final String provider = "kakao";
+//
+//        return MemberRequest.MemberInfo.builder()
+//                .username(nickname)
+//                .profilePhoto(profileImageUrl)
+//                .provider(provider)
+//                .providerId(id)
+//                .build();
+//    }
 }
