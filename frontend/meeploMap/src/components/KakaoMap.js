@@ -3,7 +3,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { createMessage, MESSAGE_TYPE } from "../helper/message";
 
 const KakaoMap = () => {
-  const [test, setTest] = useState("여기가 중심");
+  const [test, setTest] = useState("검색바 업데이트");
   const [state, setState] = useState({
     center: { lat: 37.50119278, lng: 127.03975728 },
     isPanto: false,
