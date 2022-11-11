@@ -8,6 +8,7 @@ import com.sloth.meeplo.recommendation.service.MiddlePointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,7 +19,7 @@ public class RecommendController {
     private final MiddlePointService middlePointService;
 
     @PostMapping("/middle")
-    public ResponseEntity<?> getMiddlePoint(@RequestHeader("Authorization") String authorization, @RequestBody MiddlePointRequest.CoordinationList startLocations) {
+    public ResponseEntity<?> getMiddlePoint(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody MiddlePointRequest.CoordinationList startLocations) {
         return ResponseEntity.ok().body(middlePointService.calcMiddleStations(authorization, startLocations));
     }
 
