@@ -229,6 +229,13 @@ public class GroupServiceImpl implements GroupService{
                 .map(m-> GroupResponse.MapMoment.builder().moment(m).build()).collect(Collectors.toList());
     }
 
+    @Override
+    public GroupMember getGroupMemberByGroupAndMemberId(Group group, Long memberId) {
+        return groupMemberRepository.findByGroupAndMember(group, memberService.getMemberById(memberId))
+                .filter(gm -> GroupMemberStatus.ACTIVATED.equals(gm.getStatus()))
+                .orElseThrow(() -> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP_MEMBER));
+    }
+
     private boolean isGroupLeader(Group group, Member member){
         GroupMember groupMember = groupMemberRepository
                 .findByGroupAndMemberAndStatus(group, member, GroupMemberStatus.ACTIVATED).
