@@ -22,7 +22,10 @@ const MapLocationInput = ({ type, required, value }) => {
   const [mapCenter, setMapCenter] = useState();
   const [mapZoomLevel, setMapZoomLevel] = useState();
 
-  const [searchResult, setSearchResult] = useState();
+  const [nearLocations, setNearLocations] = useState();
+  const [selectedNearLocation, setSelectedNearLocation] = useState();
+  const [showSelectedNearLocationInfo, setShowSelectedNearLocationInfo] = useState();
+
   const webViewRef = useRef();
 
   useEffect(() => {
@@ -41,23 +44,30 @@ const MapLocationInput = ({ type, required, value }) => {
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+  const openSelectedNearLocationInfo = () => setShowSelectedNearLocationInfo(true);
+  const closeSelectedNearLocationInfo = () => setShowSelectedNearLocationInfo(false);
 
   const onMessageHandler = data => {
     processMapMessage(parseMessage(data.nativeEvent.data));
   };
 
   const processMapMessage = message => {
-    console.log(message);
-    switch (message.messageType) {
+    const messageType = message.messageType;
+    const body = message.messageBody;
+    switch (messageType) {
       case MESSAGE_TYPE.INIT_MAP:
-        setMapCenter(message.messageBody.center);
-        setMapZoomLevel(message.messageBody.level);
+        setMapCenter(body.center);
+        setMapZoomLevel(body.level);
         break;
       case MESSAGE_TYPE.UPDATE_CENTER:
-        setMapCenter(message.messageBody.center);
+        setMapCenter(body.center);
         break;
       case MESSAGE_TYPE.UPDATE_ZOOM_LEVEL:
-        setMapZoomLevel(message.messageBody.level);
+        setMapZoomLevel(body.level);
+        break;
+      case MESSAGE_TYPE.SELECT_NEAR_LOCATION:
+        setSelectedNearLocation(body);
+        openSelectedNearLocationInfo();
         break;
     }
   };
@@ -89,9 +99,9 @@ const MapLocationInput = ({ type, required, value }) => {
     )
       .unwrap()
       .then(payload => {
-        const result = payload.locations;
-        setSearchResult(result);
-        webViewRef.current.postMessage(createMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, result));
+        const locations = payload.locations;
+        setNearLocations(locations);
+        webViewRef.current.postMessage(createMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, locations));
         setShowSearchResultList(true);
       })
       .catch(err => {
