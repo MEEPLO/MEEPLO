@@ -69,7 +69,7 @@ const KakaoMap = () => {
   const onDragEnd = map => {
     postMessage(
       createMessage(MESSAGE_TYPE.UPDATE_CENTER, {
-        position: {
+        center: {
           lat: map.getCenter().getLat(),
           lng: map.getCenter().getLng(),
         },

@@ -1,21 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { getNearLocations } from '../../redux/locationSlice';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, parseMessage } from '../../helper/message';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
+import MapSearchResultList from './MapSearchResultList';
 
 const screen = Dimensions.get('screen');
 const serachInputWidth = screen.width * 0.7;
 
 const MapLocationInput = ({ type, required, value }) => {
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
+  const [showSearchResultList, setShowSearchResultList] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [mapCenter, setMapCenter] = useState();
   const [mapZoomLevel, setMapZoomLevel] = useState();
+
+  const [searchResult, setSearchResult] = useState();
   const webViewRef = useRef();
 
   useEffect(() => {
@@ -55,6 +62,25 @@ const MapLocationInput = ({ type, required, value }) => {
     }
   };
 
+  const onSearchNear = () => {
+    dispatch(
+      getNearLocations({
+        lat: mapCenter.lat,
+        lng: mapCenter.lng,
+        radius: 1,
+      }),
+    )
+      .unwrap()
+      .then(payload => {
+        console.log('isarray ', Array.isArray(payload.locations));
+        setSearchResult(payload.locations);
+        setShowSearchResultList(true);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <View>
       <Text style={styles.titleStyle}>
@@ -77,10 +103,12 @@ const MapLocationInput = ({ type, required, value }) => {
           </View>
 
           {showSearchCurrentMapButton ? (
-            <TouchableOpacity style={styles.mapSearchCurrentMapButton}>
-              <Text style={styles.mapSearchCurrentMapText}>현 지도에서 검색</Text>
+            <TouchableOpacity style={styles.mapSearchNearButton} onPress={onSearchNear}>
+              <Text style={styles.mapSearchNearText}>현 지도에서 검색</Text>
             </TouchableOpacity>
           ) : null}
+
+          {showSearchResultList ? <MapSearchResultList items={searchResult} /> : null}
         </View>
       </ModalCover>
     </View>
@@ -120,7 +148,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'white',
   },
-  mapSearchCurrentMapButton: {
+  mapSearchNearButton: {
     backgroundColor: theme.color.bright.red,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -129,7 +157,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.color.border,
   },
-  mapSearchCurrentMapText: {
+  mapSearchNearText: {
     color: 'white',
   },
 });
