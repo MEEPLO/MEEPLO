@@ -30,16 +30,21 @@ const ToolBarLeft = props => {
 
 const ToolBarRight = ({ userPhoto }) => {
   const user = useSelector(state => state.user.info);
+  const navigation = useNavigation();
+
+  const onPressMyPage = () => {
+    navigation.navigate('HomeStack', { screen: 'MyPage' });
+  };
   // console.log('props로 받기', user.profilePhoto);
   // console.log('selector로 받기', userPhoto);
   return (
-    <View style={{ height: 50, alignItems: 'center', justifyContent: 'center' }}>
+    <TouchableOpacity style={{ height: 50, alignItems: 'center', justifyContent: 'center' }} onPress={onPressMyPage}>
       <Image
         style={{ width: 40, height: 40, borderRadius: 20 }}
         source={{ uri: userPhoto || user.profilePhoto }}
         resizeMode="contain"
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
