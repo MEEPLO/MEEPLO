@@ -19,7 +19,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
   const { groupId } = route.params;
 
   const { width } = Dimensions.get('window');
-  const memberCount = groupDetail.members.length;
+  const memberCount = groupDetail?.members.length;
 
   const onPressKick = nickname => {
     Alert.alert(

@@ -56,18 +56,20 @@ export const createGroup = createAsyncThunk('group/createGroup', async ({ form, 
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then(() => {
+      .then(res => {
         Alert.alert(`그룹을 생성했습니다.`, '', [
           {
             text: '확인',
             onPress: () => {
-              navigation.replace('GroupDetail', { groupId: response.data.groupId });
+              navigation.reset({
+                index: 1,
+                routes: [{ name: 'GroupHome' }, { name: 'GroupDetail', params: { groupId: res.data.groupId } }],
+              });
             },
           },
         ]);
       });
     console.log('group CREATED!');
-    return response?.data;
   } catch (err) {
     console.error('ERROR in createGroup!', err);
     return isRejectedWithValue(err.response?.data);
@@ -93,7 +95,14 @@ export const editGroup = createAsyncThunk('group/editGroup', async ({ form, grou
           {
             text: '확인',
             onPress: () => {
-              navigation.replace('GroupDetailInfo', { groupId });
+              navigation.reset({
+                index: 2,
+                routes: [
+                  { name: 'GroupHome' },
+                  { name: 'GroupDetail', params: { groupId } },
+                  { name: 'GroupDetailInfo', params: { groupId } },
+                ],
+              });
             },
           },
         ]);
@@ -121,7 +130,10 @@ export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupN
           {
             text: '확인',
             onPress: () => {
-              navigation.replace('GroupHome');
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'GroupHome' }],
+              });
             },
           },
         ]);
@@ -147,7 +159,10 @@ export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName,
           {
             text: '확인',
             onPress: () => {
-              navigation.replace('GroupHome');
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'GroupHome' }],
+              });
             },
           },
         ]);
