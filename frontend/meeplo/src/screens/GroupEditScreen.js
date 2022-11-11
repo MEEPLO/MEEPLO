@@ -73,10 +73,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         photo: data.Location,
         description: groupDescription,
       };
-      dispatch(editGroup({ form, groupId: groupDetail.id })).then(() => {
-        // TODO: hrookim 수정되었습니다 alert창!
-        navigation.replace('GroupDetailInfo', { groupId: groupDetail.id });
-      });
+      dispatch(editGroup({ form, groupId: groupDetail.id }));
       // 이동 여기서 바로
       // 상세 컴포넌트에서 리덕스의 값을 가져오는데
       // 아직 업데이트 전이면 -> 스피너, 로딩
@@ -121,7 +118,7 @@ const GroupEditScreen = ({ route, navigation }) => {
       </View>
       <View style={{ margin: 20 }}>
         <Text style={{ color: theme.font.color, fontWeight: '800' }}>
-          대표 사진<Text style={{ color: theme.color.alert }}>*</Text>
+          대표 사진 <Text style={{ color: theme.color.alert }}>*</Text>
         </Text>
         <View style={{ alignItems: 'center', marginTop: 10 }}>
           <View

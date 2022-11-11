@@ -9,7 +9,7 @@ import { faCalendarDays } from '@fortawesome/free-solid-svg-icons/faCalendarDays
 import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import HomeStackScreen from '../../../screens/HomeStackScreen';
 import GroupStackScreen from '../../../screens/GroupStackScreen';
-import ScheduleStackScreen from '../../../screens//schedule/ScheduleStackScreen';
+import ScheduleStackScreen from '../../../screens/schedule/ScheduleStackScreen';
 import MomentsStackScreen from '../../../screens/MomentsStackScreen';
 import HomeScreen from '../../../screens/HomeScreen';
 import { theme } from '../../../assets/constant/DesignTheme';
