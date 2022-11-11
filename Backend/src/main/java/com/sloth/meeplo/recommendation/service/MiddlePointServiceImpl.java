@@ -24,9 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class MiddlePointServiceImpl implements MiddlePointService{
-
-    private final GroupMemberRepository groupMemberRepository;
-    private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
 
     private final GroupService groupService;
@@ -50,9 +47,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
                                             RouteMetaData route = calcDurationAndRoute(start, station);
 
                                             return MiddlePointResponse.StationRoute.builder()
-                                                    .member(groupMemberRepository.findByGroupAndMember(group, memberRepository.findById(start.getMemberId())
-                                                                    .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                                                            .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                                                    .groupMember(groupService.getGroupMemberByGroupAndMemberId(group, start.getMemberId()))
                                                     .time((int) route.getTime())
                                                     .startLocation(MiddlePointResponse.StartLocation.builder()
                                                             .lat(start.getLat())
@@ -81,7 +76,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
     }
 
     private List<Location> getMiddleStations(List<MiddlePointRequest.MemberStartLocation> coordinates) {
-        // TODO : fastapi로 무게중심 좌표 찾아오기
+        // TODO : fastapi로 무게중심 좌표 찾아오기 -> graham scan 알고리즘을 이용하여 concave일 경우 외곽
         double lat = 37.564820366666666;
         double lng = 127.04954223333333;
         return locationRepository.findLocationsWithCoordination(lat, lng, 0.3, LocationType.AMUSE);
