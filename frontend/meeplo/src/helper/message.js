@@ -1,14 +1,25 @@
 const MESSAGE_TYPE = {
-  UPDATE_CENTER: 101,
-  UPDATE_ZOOM_LEVEL: 102,
+  INIT_MAP: 101,
+
+  UPDATE_CENTER: 111,
+  UPDATE_ZOOM_LEVEL: 112,
 
   SEND_NEAR_LOCATIONS: 201,
 };
 
-const createMessage = (messageType, message) => {
+// 메시지 객체 예시
+// {
+//   messageType : 111,
+//   messageBody: {
+//     lat: 37.50119278,
+//     lng: 127.03975728
+//   }
+// }
+
+const createMessage = (messageType, messageBody) => {
   return JSON.stringify({
     messageType: messageType,
-    message: message,
+    messageBody: messageBody,
   });
 };
 
