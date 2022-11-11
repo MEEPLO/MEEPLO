@@ -5,7 +5,8 @@ import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
 import LoadingBar from '../components/common/LoadingBar';
 import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/navigator/ToolBar';
-import HomeGroup from '../components/Home/HomeGroup';
+import MyPageScreen from './mypage/MyPageScreen';
+import MyPageEditScreen from './mypage/MyPageEditScreen';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -32,16 +33,30 @@ const HomeStackScreen = () => {
       <HomeStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <HomeStack.Screen name="Loading" component={LoadingBar} options={{ headerShown: false }} />
       <HomeStack.Screen
-        name="HomeGroup"
-        component={HomeGroup}
+        name="MyPage"
+        component={MyPageScreen}
         options={{
+          headerShadowVisible: false,
           headerShown: true,
           headerTitleAlign: 'center',
           headerBackVisible: false,
           headerLeft: props => {
             return props.canGoBack && <ToolBarLeft {...props} />;
           },
-          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <HomeStack.Screen
+        name="MyPageEdit"
+        component={MyPageEditScreen}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerBackVisible: false,
+          headerLeft: props => {
+            return props.canGoBack && <ToolBarLeft {...props} />;
+          },
           headerTitle: () => <ToolBarTitle />,
         }}
       />
