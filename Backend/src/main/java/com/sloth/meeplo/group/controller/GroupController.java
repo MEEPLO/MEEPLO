@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,8 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Long>> createGroup(@ApiIgnore @RequestHeader(value = "Authorization") String authorization, @RequestBody GroupRequest.GroupInput groupInput){
+    public ResponseEntity<Map<String, Long>> createGroup(@ApiIgnore @RequestHeader(value = "Authorization") String authorization,
+                                                         @RequestBody @Valid GroupRequest.GroupInput groupInput){
         Map<String, Long> resultMap = new HashMap<>();
         Long groupId = groupService.makeGroup(authorization, groupInput);
         resultMap.put("groupId", groupId);
@@ -28,7 +30,9 @@ public class GroupController {
     }
 
     @PutMapping("/{groupId}")
-    public ResponseEntity<Void> updateGroup(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long groupId, @RequestBody GroupRequest.GroupInput groupInput){
+    public ResponseEntity<Void> updateGroup(@ApiIgnore @RequestHeader("Authorization") String authorization,
+                                            @PathVariable Long groupId,
+                                            @RequestBody @Valid GroupRequest.GroupInput groupInput){
 
         groupService.updateGroup(authorization,groupId,groupInput);
 
