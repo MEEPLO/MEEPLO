@@ -64,64 +64,7 @@ const keywordsData = [
   },
 ];
 
-const keywordsData = [
-  {
-    classification: 1,
-    category: '음식 종류',
-    keyword: '양꼬치',
-    id: 1,
-  },
-  {
-    classification: 1,
-    category: '음식 종류',
-    keyword: '닭꼬치',
-    id: 2,
-  },
-  {
-    classification: 1,
-    category: '음식 종류',
-    keyword: '떡꼬치',
-    id: 3,
-  },
-  {
-    classification: 2,
-    category: '분위기',
-    keyword: '조용한',
-    id: 4,
-  },
-  {
-    classification: 2,
-    category: '분위기',
-    keyword: '신나는',
-    id: 5,
-  },
-  {
-    classification: 2,
-    category: '분위기',
-    keyword: '행복한',
-    id: 6,
-  },
-  {
-    classification: 3,
-    category: '장소',
-    keyword: '카페',
-    id: 7,
-  },
-  {
-    classification: 3,
-    category: '장소',
-    keyword: '술집',
-    id: 8,
-  },
-  {
-    classification: 3,
-    category: '장소',
-    keyword: '산책',
-    id: 9,
-  },
-];
-
-const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish }) => {
+const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const [date, setDate] = useState();
   const [name, setName] = useState();
   const [keywords, setKeywords] = useState([]);
@@ -156,7 +99,7 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish }) => {
       ];
 
       toNext(actions);
-    }
+    } else toNext();
   };
 
   const onConfirmDate = confirmedDate => {
