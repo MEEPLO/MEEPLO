@@ -112,7 +112,11 @@ const KakaoMap = () => {
             position={{ lat: location.lat, lng: location.lng }}
             clickable={true}
             onClick={() => {
-              setTest(location.name);
+              postMessage(createMessage(MESSAGE_TYPE.SELECT_NEAR_LOCATION, location));
+              setState({
+                center: { lat: location.lat, lng: location.lng },
+                isPanto: true,
+              });
             }}
           />
         </>
