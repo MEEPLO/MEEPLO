@@ -1,6 +1,7 @@
 package com.sloth.meeplo.recommendation.service;
 
 import com.sloth.meeplo.location.repository.LocationRepository;
+import com.sloth.meeplo.location.type.LocationType;
 import com.sloth.meeplo.recommendation.dto.request.AmuseRecommendRequest;
 import com.sloth.meeplo.recommendation.dto.response.AmuseRecommendResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,7 @@ public class AmuseRecommendServiceImpl implements AmuseRecommendService{
     @Override
     public AmuseRecommendResponse.AmuseList gatherAmuseRecommendation(AmuseRecommendRequest.CreateRecommendAmuse recommendAmuse) {
         return AmuseRecommendResponse.AmuseList.builder()
-                .amuses(locationRepository.findLocationsWithCoordination(recommendAmuse.getStartLocation().getLat(),
-                                recommendAmuse.getStartLocation().getLng(), RADIUS).stream()
+                .amuses(locationRepository.findLocationsWithCoordination(recommendAmuse.getStartLocation().getLat(), recommendAmuse.getStartLocation().getLng(), RADIUS, LocationType.AMUSE).stream()
                         .map(l -> AmuseRecommendResponse.AmuseSummary.builder()
                                 .location(l)
                                 .build())

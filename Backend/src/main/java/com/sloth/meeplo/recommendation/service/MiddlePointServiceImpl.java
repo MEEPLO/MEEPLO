@@ -1,10 +1,13 @@
 package com.sloth.meeplo.recommendation.service;
 
+import com.sloth.meeplo.global.exception.MeeploException;
+import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.repository.GroupMemberRepository;
 import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.location.repository.LocationRepository;
+import com.sloth.meeplo.location.type.LocationType;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
@@ -41,18 +44,15 @@ public class MiddlePointServiceImpl implements MiddlePointService{
         return MiddlePointResponse.StationList.builder()
                 .stations(getMiddleStations(startData.getStartLocations()).stream()
                         .map(station -> MiddlePointResponse.RecommendedStation.builder()
-                                .name(station.getName())
-                                .lat(station.getLat())
-                                .lng(station.getLng())
+                                .location(station)
                                 .requiredTimes(startData.getStartLocations().stream()
                                         .map(start -> {
                                             RouteMetaData route = calcDurationAndRoute(start, station);
 
                                             return MiddlePointResponse.StationRoute.builder()
-                                                    .member(groupMemberRepository.findByGroupAndMember(group,
-                                                                    memberRepository.findById(start.getMemberId())
-                                                                            .orElseThrow())
-                                                            .orElseThrow())
+                                                    .member(groupMemberRepository.findByGroupAndMember(group, memberRepository.findById(start.getMemberId())
+                                                                    .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                                                            .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                                                     .time((int) route.getTime())
                                                     .startLocation(MiddlePointResponse.StartLocation.builder()
                                                             .lat(start.getLat())
@@ -84,6 +84,6 @@ public class MiddlePointServiceImpl implements MiddlePointService{
         // TODO : fastapi로 무게중심 좌표 찾아오기
         double lat = 37.564820366666666;
         double lng = 127.04954223333333;
-        return locationRepository.findLocationsWithCoordination(lat, lng, 0.3);
+        return locationRepository.findLocationsWithCoordination(lat, lng, 0.3, LocationType.AMUSE);
     }
 }

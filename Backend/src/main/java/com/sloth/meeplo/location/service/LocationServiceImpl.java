@@ -23,7 +23,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<LocationResponse.PointNearLocation> getNearLocation(Double lat, Double lng, Double radius) {
 
-        return locationRepository.findLocationsWithCoordination(lat,lng,radius).stream()
+        return locationRepository.findLocationsWithCoordination(lat, lng, radius, LocationType.AMUSE).stream()
                 .map(l-> LocationResponse.PointNearLocation.builder()
                         .location(l)
                         .build())
