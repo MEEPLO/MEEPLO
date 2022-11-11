@@ -2,6 +2,7 @@ package com.sloth.meeplo.recommendation.dto.response;
 
 import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.location.entity.LocationPhoto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -39,7 +40,7 @@ public class AmuseRecommendResponse {
             this.category = location.getCategory();
             this.photo = location.getLocationPhotos().stream()
                     .findFirst()
-                    .map(p -> p.getPhoto())
+                    .map(LocationPhoto::getPhoto)
                     .orElse(DefaultValue.AMUSE_REPRESENTATIVE_PHOTO.getValue());
         }
     }
