@@ -75,8 +75,8 @@ public class MomentController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<MomentResponse.MomentFeedTwoList> getFeedMoment(@RequestHeader("Authorization") String authorization, @RequestParam Integer page, @RequestParam Integer size, @RequestParam(required = false) Long group, @RequestParam(defaultValue = "0") Integer leftSize, @RequestParam(defaultValue = "0") Integer rightSize){
+    public ResponseEntity<MomentResponse.MomentFeedTwoList> getFeedMoment(@RequestHeader("Authorization") String authorization, @RequestParam Integer page, @RequestParam Integer size, @RequestParam(required = false) Long group, @RequestParam(defaultValue = "0") Integer leftSize, @RequestParam(defaultValue = "0") Integer rightSize, @RequestParam(defaultValue = "false") Boolean writer){
 
-        return new ResponseEntity<>(momentService.getFeedMoment(authorization,page,size,group, leftSize, rightSize),HttpStatus.OK);
+        return new ResponseEntity<>(momentService.getFeedMoment(authorization,page,size,group, leftSize, rightSize, writer),HttpStatus.OK);
     }
 }

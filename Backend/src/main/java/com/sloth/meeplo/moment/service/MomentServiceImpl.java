@@ -161,17 +161,15 @@ public class MomentServiceImpl implements MomentService{
     }
 
     @Override
-    public MomentResponse.MomentFeedTwoList getFeedMoment(String authorization, Integer page, Integer size, Long group, Integer leftSize, Integer rightSize) {
+    public MomentResponse.MomentFeedTwoList getFeedMoment(String authorization, Integer page, Integer size, Long group, Integer leftSize, Integer rightSize, Boolean writer) {
         Member member = memberService.getMemberByAuthorization(authorization);
 
         List<Moment> momentList=member.getScheduleMembers().stream()
-                .filter(sm -> {
-                    if(group == null)
-                        return true;
-                    return sm.getSchedule().getGroup().getId().equals(group) && sm.getStatus().equals(ScheduleMemberStatus.JOINED);
-                })
+                .filter(sm -> (group == null) || sm.getSchedule().getGroup().getId().equals(group))
+                .filter(sm->sm.getStatus().equals(ScheduleMemberStatus.JOINED))
                 .flatMap(sm->sm.getSchedule().getScheduleLocations().stream())
                 .flatMap(sl->momentRepository.findByScheduleLocation(sl).stream())
+                .filter(m-> !writer || m.getMember().getId().equals(member.getId()))
                 .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
                 .collect(Collectors.toList());
 
