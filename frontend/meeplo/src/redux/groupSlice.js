@@ -78,7 +78,6 @@ export const createGroup = createAsyncThunk('group/createGroup', async ({ form, 
 });
 
 export const editGroup = createAsyncThunk('group/editGroup', async ({ form, groupId, Alert, navigation }) => {
-  console.log('수정 함수 실행');
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios
