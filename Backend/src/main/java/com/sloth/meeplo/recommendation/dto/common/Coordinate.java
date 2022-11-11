@@ -1,7 +1,6 @@
 package com.sloth.meeplo.recommendation.dto.common;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @ToString
 @Getter
