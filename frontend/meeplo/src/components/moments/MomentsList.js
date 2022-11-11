@@ -18,25 +18,25 @@ const momentsList = {
   momentsLeft: [
     {
       photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-      type: 'POLAROID',
+      type: 0,
       id: 1,
       reactionCount: 2,
     },
     {
       photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
-      type: 'DAYFILM',
+      type: 1,
       id: 3,
       reactionCount: 3,
     },
     {
       photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-      type: 'POLAROID',
+      type: 0,
       id: 10,
       reactionCount: 0,
     },
     {
       photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
-      type: 'FOURCUT',
+      type: 2,
       id: 7,
       reactionCount: 3,
     },
@@ -44,19 +44,19 @@ const momentsList = {
   momentsRight: [
     {
       photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
-      type: 'FOURCUT',
+      type: 2,
       id: 9,
       reactionCount: 3,
     },
     {
       photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
-      type: 'DAYFILM',
+      type: 1,
       id: 4,
       reactionCount: 3,
     },
     {
       photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-      type: 'POLAROID',
+      type: 0,
       id: 6,
       reactionCount: 0,
     },

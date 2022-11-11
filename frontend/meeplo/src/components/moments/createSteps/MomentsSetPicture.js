@@ -35,9 +35,10 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   const [pictureUrl, setPictureUrl] = React.useState('');
 
   // load webview
-  const html = mergeAndUpload(1);
-
+  const html = mergeAndUpload(state.type);
   console.log('inpicture: ', state);
+
+  var dataString = '';
 
   // upload image
   const uploadToS3 = dataString => {
@@ -78,21 +79,28 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
     uploadToS3(event.nativeEvent.data);
   };
 
-  const onPressFin = () => {
+  const onPressNext = () => {
     const actions = [
       {
         type: 'UPDATE_PICTURE',
         payload: pictureUrl,
       },
     ];
-    onFinish(actions);
+
+    toNext(actions);
   };
 
   return visible ? (
     <>
       <View style={{ height: windowHeight - 150, marginHorizontal: 20 }}>
         {/* <MomentsUpload setPictureUrl={setPictureUrl} frameType={state.type} /> */}
-        <View style={{ marginHorizontal: 20, width: viewWidth, height: 530, position: 'relative' }}>
+        <View
+          style={{
+            marginHorizontal: 20,
+            width: viewWidth,
+            height: windowHeight - 250,
+            position: 'relative',
+          }}>
           <Pressable
             style={{
               width: viewWidth,
@@ -103,22 +111,23 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
               borderWidth: 2,
               backgroundColor: theme.color.pale.red,
               position: 'absolute',
-              bottom: 65,
+              bottom: 85,
             }}>
-            <Text style={{ lineHeight: 53, textAlign: 'center', fontSize: 20, fontWeight: '800' }}>갤러리</Text>
+            <Text style={{ lineHeight: 49, textAlign: 'center', fontSize: 20, fontWeight: '800' }}>갤러리</Text>
           </Pressable>
           <Pressable
             style={{
               width: viewWidth,
-              height: 35,
+              height: 55,
               borderRadius: 15,
               overflow: 'hidden',
+              borderColor: theme.color.border,
+              borderWidth: 2,
+              backgroundColor: theme.color.bright.red,
               position: 'absolute',
               bottom: 20,
             }}>
-            <Text style={{ lineHeight: 33, textAlign: 'center', fontSize: 15, fontWeight: '800' }}>
-              사진 선택 초기화
-            </Text>
+            <Text style={{ lineHeight: 51, textAlign: 'center', fontSize: 15, fontWeight: '800' }}>사진 확정하기</Text>
           </Pressable>
           <WebView
             ref={webviewRef}
@@ -137,7 +146,7 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
           justifyContent: 'space-between',
         }}>
         <StepButton text="< 이전" active={true} onPress={toPrev} />
-        <StepButton text="만들기" active={true} onPress={onPressFin} />
+        <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
     </>
   ) : null;

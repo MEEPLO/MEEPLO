@@ -8,7 +8,7 @@ import { theme } from '../../assets/constant/DesignTheme';
  * text input에 작성된 값을 상위 component에서 state로 관리
  */
 const StepTextInput = props => {
-  // const { value, onValueChange } = props;
+  const { value, onValueChange } = props;
   const [inputBorderColor, setInputBorderColor] = React.useState(theme.color.disabled);
   const textInputRef = React.useRef(null);
 
@@ -31,8 +31,8 @@ const StepTextInput = props => {
         maxLength={props.maxLength}
         onBlur={inputOnBlur}
         onFocus={inputOnFocus}
-        onChangeText={props.setValue}
-        value={props.value}
+        onChangeText={onValueChange}
+        value={value}
         style={{ borderBottomColor: inputBorderColor, borderBottomWidth: 1 }}
       />
     </View>
