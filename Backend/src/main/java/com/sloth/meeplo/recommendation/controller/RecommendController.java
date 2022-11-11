@@ -1,6 +1,5 @@
 package com.sloth.meeplo.recommendation.controller;
 
-import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import com.sloth.meeplo.recommendation.dto.request.AmuseRecommendRequest;
 import com.sloth.meeplo.recommendation.dto.request.MiddlePointRequest;
 import com.sloth.meeplo.recommendation.dto.response.AmuseRecommendResponse;

@@ -2,6 +2,7 @@ package com.sloth.meeplo.recommendation.dto.response;
 
 import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.group.entity.GroupMember;
+import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,14 +26,16 @@ public class MiddlePointResponse {
     @ToString
     @Getter
     public static class RecommendedStation extends Coordinate{
+        private Long stationId;
         private String name;
         private int avgTime;
         private List<StationRoute> requiredTimes;
 
         @Builder
-        RecommendedStation(String name, double lat, double lng, List<StationRoute> requiredTimes) {
-            super(lat, lng);
-            this.name = name;
+        RecommendedStation(Location location, List<StationRoute> requiredTimes) {
+            super(location.getLat(), location.getLng());
+            this.stationId = location.getId();
+            this.name = location.getName();
             this.requiredTimes = requiredTimes;
             this.avgTime = (int) requiredTimes.stream()
                             .mapToInt(StationRoute::getTime)
@@ -44,16 +47,16 @@ public class MiddlePointResponse {
     @ToString
     @Getter
     public static class StationRoute {
-        private long memberId;
-        private String memberName;
+        private Long groupMemberId;
+        private String groupMemberName;
         private int time;
         private StartLocation startLocation;
         private List<RouteCoordinate> coordinates;
 
         @Builder
         StationRoute(GroupMember member, int time, StartLocation startLocation, List<RouteCoordinate> coordinates) {
-            this.memberId = member.getId();
-            this.memberName = member.getNickname();
+            this.groupMemberId = member.getId();
+            this.groupMemberName = member.getNickname();
             this.time = time;
             this.startLocation = startLocation;
             this.coordinates = coordinates;
