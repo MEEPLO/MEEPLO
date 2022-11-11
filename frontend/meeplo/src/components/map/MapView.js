@@ -11,8 +11,7 @@ const MapView = forwardRef(({ onMessageHandler }, ref) => {
   return (
     <WebView
       style={styles.webViewStyle}
-      // source={{ uri: 'http://meeplo.co.kr:8080' }}
-      source={{ uri: 'http://70.12.246.204:8080' }}
+      source={{ uri: 'http://meeplo.co.kr:8080' }}
       ref={ref}
       onMessage={onMessageHandler}
       onLoadStart={() => {
