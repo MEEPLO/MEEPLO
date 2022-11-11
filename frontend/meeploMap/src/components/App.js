@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import KakaoMap from "./KakaoMap";
+import KakaoMap from './KakaoMap';
 
 const App = () => {
   return <KakaoMap />;

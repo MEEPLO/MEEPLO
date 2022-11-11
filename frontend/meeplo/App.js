@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 import NavigationBar from './src/components/common/navigator/NavigationBar';
 import { theme } from './src/assets/constant/DesignTheme';
 import SplashScreen from 'react-native-splash-screen';
+import Toast from 'react-native-toast-message';
 
 const App = () => {
   const navTheme = {
@@ -24,13 +25,16 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer theme={navTheme}>
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <NavigationBar />
-        </ThemeProvider>
-      </Provider>
-    </NavigationContainer>
+    <>
+      <NavigationContainer theme={navTheme}>
+        <Provider store={store}>
+          <ThemeProvider theme={theme}>
+            <NavigationBar />
+          </ThemeProvider>
+        </Provider>
+      </NavigationContainer>
+      <Toast />
+    </>
   );
 };
 

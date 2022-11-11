@@ -29,6 +29,10 @@ const theme = {
     family: '',
     color: '#000000',
   },
+  radius: {
+    base: 20,
+    input: 15,
+  },
 };
 
 export { theme };

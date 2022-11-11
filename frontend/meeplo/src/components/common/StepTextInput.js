@@ -8,7 +8,7 @@ import { theme } from '../../assets/constant/DesignTheme';
  * text input에 작성된 값을 상위 component에서 state로 관리
  */
 const StepTextInput = props => {
-  const { value, onValueChange } = props;
+  const { value, onValueChange, multiline = true } = props;
   const [inputBorderColor, setInputBorderColor] = React.useState(theme.color.disabled);
   const textInputRef = React.useRef(null);
 
@@ -26,7 +26,7 @@ const StepTextInput = props => {
         {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
       </Text>
       <TextInput
-        multiline
+        multiline={multiline}
         ref={textInputRef}
         maxLength={props.maxLength}
         onBlur={inputOnBlur}
