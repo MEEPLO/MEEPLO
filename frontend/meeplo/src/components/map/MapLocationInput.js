@@ -116,9 +116,9 @@ const MapLocationInput = ({ type, required, value }) => {
         </View>
 
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
-          <View style={styles.mapSaerchInputView}>
+          {/* <View style={styles.mapSaerchInputView}>
             <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
-          </View>
+          </View> */}
 
           {showSearchCurrentMapButton ? (
             <TouchableOpacity style={styles.mapSearchNearButton} onPress={onSearchNear}>
