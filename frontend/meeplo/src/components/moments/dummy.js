@@ -121,3 +121,46 @@ const momentData = {
     },
   ],
 };
+
+const momentsSlicemomentDetail = {
+  moment: {
+    id: 1,
+    photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
+    writer: 1,
+    type: 'POLAROID',
+  },
+  moment: {
+    id: 9,
+    photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
+    writer: 2,
+    type: 'FOURCUT',
+  },
+  moment: {
+    id: 3,
+    photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
+    writer: 1,
+    type: 'DAYFILM',
+  },
+  reaction: {
+    count: 2,
+    liked: true,
+  },
+  comments: [
+    {
+      comment: '다음엔 2차 3차도 갑시다 👍',
+      location: {
+        xPoint: 0,
+        yPoint: 60,
+        angle: -40,
+      },
+    },
+    {
+      comment: '오늘 진짜 재미있었다 오랜만에 만나서 더 꿀잼이었던 듯 😍',
+      location: {
+        xPoint: 0,
+        yPoint: 170,
+        angle: 20,
+      },
+    },
+  ],
+};

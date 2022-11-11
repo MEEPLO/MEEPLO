@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
-import styled from 'styled-components';
 import mergeAndUpload from './mergeAndUpload';
 import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
@@ -25,21 +24,13 @@ const getImageTitle = date => {
   return 'ourmoment' + year + month + day + hour + minute + second + '.png';
 };
 
-const MpomentsUpload = () => {
+const MpomentsUpload = ({ setPictureUrl, frameType }) => {
   const webviewRef = React.useRef();
   const viewWidth = Dimensions.get('window').width - 120;
 
-  const openGallary = () => {
-    // btnWidthString = buttonWidth.toString();
-    // webviewRef.current?.postMessage(btnWidthString);
-  };
-
-  // React.useEffect(() => {
-  //   openGallary();
-  // }, []);
-
+  console.log(frameType);
+  const html = mergeAndUpload(1);
   // upload image
-  const html = mergeAndUpload(3);
   const uploadToS3 = dataString => {
     let now = new Date();
     const imageTitle = getImageTitle(now);
@@ -69,7 +60,8 @@ const MpomentsUpload = () => {
         return alert(err.stack);
       }
       alert('Successfully uploaded photo.');
-      console.log(data.Location);
+      // console.log(data.Location);
+      setPictureUrl(data.Location);
     });
   };
 
