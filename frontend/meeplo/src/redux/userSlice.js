@@ -1,11 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
+import { MEEPLO_SERVER_BASE_URL } from '@env';
 
 export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get('http://meeplo.co.kr/meeplo/api/v1/member', {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/member`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -14,6 +15,96 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
   } catch (err) {
     console.error('ERROR in getUserInfo!', err.response.data);
     return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form, Alert, navigation }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    await axios
+      .put(
+        MEEPLO_SERVER_BASE_URL + `/member`,
+        { ...form },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
+      .then(() => {
+        Alert.alert(`프로필을 수정했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({
+                index: 1,
+                routes: [{ name: 'Home' }, { name: 'MyPage' }],
+              });
+            },
+          },
+        ]);
+      });
+    console.log('userInfo EDITED!');
+  } catch (err) {
+    console.error('ERROR in editUserInfo!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const deleteUser = createAsyncThunk('user/deleteUser', async ({ Alert, navigation }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    await axios
+      .delete(MEEPLO_SERVER_BASE_URL + `/member`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(() => {
+        Alert.alert(`성공적으로 탈퇴하였습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+              });
+            },
+          },
+        ]);
+      });
+    console.log('user DELETED!');
+  } catch (err) {
+    console.error('ERROR in deleteUser!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const createStartLocation = createAsyncThunk('user/createStartLocation', async ({ form }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    await axios.post(MEEPLO_SERVER_BASE_URL + `/member/location`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  } catch (err) {
+    console.error('ERROR in createStartLocation', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const deleteStartLocation = createAsyncThunk('user/deleteStartLocation', async ({ locationId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    await axios.delete(MEEPLO_SERVER_BASE_URL + `/member/location/${locationId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  } catch (err) {
+    console.error('ERROR in deleteStartLocation', err);
+    return isRejectedWithValue(err.response?.data);
   }
 });
 
