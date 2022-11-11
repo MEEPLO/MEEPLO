@@ -1,11 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
+import { MEEPLO_SERVER_BASE_URL } from '@env';
 
 export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get('http://meeplo.co.kr/meeplo/api/v1/group', {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -20,7 +21,7 @@ export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
 export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({ groupId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group/${groupId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -35,7 +36,7 @@ export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({
 export const getGroupMomentsFeed = createAsyncThunk('group/getGroupMomentsFeed', async ({ groupId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/moment/feed`, {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/moment/feed`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -51,7 +52,7 @@ export const createGroup = createAsyncThunk('group/createGroup', async ({ form, 
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios
-      .post('http://meeplo.co.kr/meeplo/api/v1/group', form, {
+      .post(MEEPLO_SERVER_BASE_URL + `/group`, form, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -82,7 +83,7 @@ export const editGroup = createAsyncThunk('group/editGroup', async ({ form, grou
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios
       .put(
-        `http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`,
+        MEEPLO_SERVER_BASE_URL + `/group/${groupId}`,
         { ...form },
         {
           headers: {
@@ -120,7 +121,7 @@ export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupN
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios
-      .delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}`, {
+      .delete(MEEPLO_SERVER_BASE_URL + `/group/${groupId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -149,7 +150,7 @@ export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName,
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios
-      .delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/member`, {
+      .delete(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/member`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -180,7 +181,7 @@ export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName,
 export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async ({ groupId, memberId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/group/${groupId}/member/${memberId}`, {
+    const response = await axios.delete(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/member/${memberId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

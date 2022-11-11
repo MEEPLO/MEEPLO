@@ -45,14 +45,17 @@ const HomeScreen = ({ navigation }) => {
   const onPressMoreSchedule = () => {
     // TODO: navigation으로 페이지 옮기기
     console.log('무브무브');
+    navigation.navigate('ScheduleStack', { screen: 'Home' });
   };
   const onPressMoreGroup = () => {
     // TODO: navigation으로 페이지 옮기기
     console.log('이동이동');
+    navigation.navigate('GroupStack', { screen: 'GroupHome' });
   };
   const onPressMoreMoment = () => {
     // TODO: navigation으로 페이지 옮기기
     console.log('무브이동');
+    navigation.navigate('MomentsStack', { screen: 'MomentsList' });
   };
 
   const onPressLogout = () => {
