@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { getNearLocations } from '../../redux/locationSlice';
 
 import { theme } from '../../assets/constant/DesignTheme';
-import { MESSAGE_TYPE, parseMessage } from '../../helper/message';
+import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
@@ -62,18 +62,36 @@ const MapLocationInput = ({ type, required, value }) => {
     }
   };
 
+  const getRadiusKM = zoom => {
+    switch (zoom) {
+      case 1:
+        return 0.1;
+      case 2:
+        return 0.2;
+      case 3:
+        return 0.3;
+      case 4:
+        return 0.4;
+      case 5:
+        return 0.5;
+      default:
+        return 1;
+    }
+  };
+
   const onSearchNear = () => {
     dispatch(
       getNearLocations({
         lat: mapCenter.lat,
         lng: mapCenter.lng,
-        radius: 1,
+        radius: getRadiusKM(mapZoomLevel),
       }),
     )
       .unwrap()
       .then(payload => {
-        console.log('isarray ', Array.isArray(payload.locations));
-        setSearchResult(payload.locations);
+        const result = payload.locations;
+        setSearchResult(result);
+        webViewRef.current.postMessage(createMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, result));
         setShowSearchResultList(true);
       })
       .catch(err => {
@@ -108,7 +126,7 @@ const MapLocationInput = ({ type, required, value }) => {
             </TouchableOpacity>
           ) : null}
 
-          {showSearchResultList ? <MapSearchResultList items={searchResult} /> : null}
+          {/* {showSearchResultList ? <MapSearchResultList items={searchResult} /> : null} */}
         </View>
       </ModalCover>
     </View>
