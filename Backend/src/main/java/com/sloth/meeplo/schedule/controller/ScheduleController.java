@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +24,17 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Long>> createSchedule(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody ScheduleRequest.ScheduleCreateInput scheduleCreateInput){
+    public ResponseEntity<Map<String, Long>> createSchedule(@ApiIgnore @RequestHeader("Authorization") String authorization,
+                                                            @RequestBody @Valid ScheduleRequest.ScheduleCreateInput scheduleCreateInput){
         Map<String, Long> resultMap = new HashMap<>();
         Long scheduleId = scheduleService.createSchedule(authorization, scheduleCreateInput);
         resultMap.put("scheduleId", scheduleId);
-        return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateSchedule(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput){
+    public ResponseEntity<Void> updateSchedule(@ApiIgnore @RequestHeader("Authorization") String authorization,
+                                               @RequestBody @Valid ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput){
         scheduleService.updateSchedule(authorization, scheduleUpdateInput);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }

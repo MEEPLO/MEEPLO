@@ -8,16 +8,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 public class MomentRequest {
 
     @Getter
     @ToString
     @NoArgsConstructor
     public static class CreateMomentInfo {
+        @NotBlank
         private Long groupId;
+        @NotBlank
         private Long schedulePlaceId;
+        @NotBlank
         private String photoUrl;
+        @NotBlank
         private String content;
+        @NotBlank
         private Integer type;
     }
 
@@ -25,7 +32,9 @@ public class MomentRequest {
     @ToString
     @NoArgsConstructor
     public static class CreateMomentCommentInfo{
+        @NotBlank
         private String comment;
+        @NotBlank
         private MomentRequest.MomentCommentLocation location;
 
     }
