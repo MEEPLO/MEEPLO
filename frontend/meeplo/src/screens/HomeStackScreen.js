@@ -15,7 +15,7 @@ const HomeStackScreen = () => {
   console.log(user.profilePhoto);
 
   return (
-    <HomeStack.Navigator initialRouteName="Home">
+    <HomeStack.Navigator initialRouteName="Login">
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
