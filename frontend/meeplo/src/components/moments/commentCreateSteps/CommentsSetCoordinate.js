@@ -3,6 +3,8 @@ import React from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
 import { theme } from '../../../assets/constant/DesignTheme';
 import images from '../../../assets/image';
+import { useDispatch, useSelector } from 'react-redux';
+import StepButton from '../../stepper/StepButton';
 
 const momentData = {
   moment: {
@@ -51,11 +53,14 @@ const momentData = {
   ],
 };
 
-const CommentsSetCoordinate = () => {
+const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => {
+  const dispatch = useDispatch();
+
   const [tilt, setTilt] = React.useState(0);
   // 실제 좌표 데이터 보낼 때에는 조정 필요
   const [delX, setDelX] = React.useState(0);
   const [delY, setDelY] = React.useState(0);
+  const commentsList = useSelector(state => state.commentsList);
 
   const windowHeight = Dimensions.get('window').height;
   var imgHeight = windowHeight * 0.65;
@@ -64,6 +69,16 @@ const CommentsSetCoordinate = () => {
     1: imgHeight * 0.86,
     2: imgHeight * 1.25,
     3: imgHeight * 0.277,
+  };
+
+  const onPressNext = () => {
+    const actions = [
+      {
+        type: 'UPDATE_LOCATION',
+        payload: { xpoint: delX * 1.05, ypoint: delY * 1.05, angle: tilt[0] },
+      },
+    ];
+    toNext(actions);
   };
 
   const watermark = images.frame.watermark;
@@ -76,63 +91,71 @@ const CommentsSetCoordinate = () => {
     setDelY(locationY);
   };
 
-  return (
-    <View>
-      <TouchableOpacity
-        style={{
-          marginHorizontal: imgMargin,
-          width: imgWidth[momentData.moment.type],
-          height: imgHeight,
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-        onPress={setLocation}>
-        <ImageBackground source={watermark} style={{ width: '100%', height: '100%' }} resizeMode="cover">
-          {momentData.comments.map((comment, idx) => (
-            <View
+  return visible ? (
+    <>
+      <View style={{ position: 'relative', height: windowHeight - 150, marginHorizontal: 20 }}>
+        <TouchableOpacity
+          style={{
+            marginHorizontal: imgMargin,
+            width: imgWidth[momentData.moment.type],
+            height: imgHeight,
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+          onPress={setLocation}>
+          <ImageBackground source={watermark} style={{ width: '100%', height: '100%' }} resizeMode="cover">
+            {commentsList.comments.map((comment, idx) => (
+              <View
+                style={{
+                  width: '80%',
+                  transform: [{ rotate: `${comment.location.angle}deg` }],
+                  position: 'absolute',
+                  top: comment.location.ypoint * 0.85,
+                  left: comment.location.xpoint * 0.6,
+                }}
+                key={idx}>
+                <Text style={{ fontSize: 10 }}>{comment.comment}</Text>
+              </View>
+            ))}
+            <Text
               style={{
                 width: '80%',
-                transform: [{ rotate: `${comment.location.angle}deg` }],
+                fontSize: 10,
+                color: theme.font.color,
+                transform: [{ rotate: `${tilt}deg` }],
                 position: 'absolute',
-                top: comment.location.yPoint * 0.85,
-                left: comment.location.xPoint * 0.6,
-              }}
-              key={idx}>
-              <Text style={{ fontSize: 10 }}>{comment.comment}</Text>
-            </View>
-          ))}
-          <Text
-            style={{
-              width: '80%',
-              fontSize: 10,
-              color: theme.font.color,
-              transform: [{ rotate: `${tilt}deg` }],
-              position: 'absolute',
-              top: delY,
-              left: delX,
-              transform: [{ rotate: `${tilt}deg` }],
-              position: 'absolute',
-              top: delY,
-              left: delX,
-            }}>
-            새로운 댓글!!!!!!!!!!!!!!!을 길게 적는다면 ?50자가 넘어버린다면 ? ㅓ그렇다ㅕㄴ? 어쩔 셈이지? 어쩔거냐고? 어?
-          </Text>
-        </ImageBackground>
-      </TouchableOpacity>
-      <View style={{ marginHorizontal: 40 }}>
-        <Slider
-          value={tilt}
-          onValueChange={value => setTilt(value)}
-          maximumValue={360}
-          minimumTrackTintColor={theme.color.bright.red}
-          maximumTrackTintColor={theme.color.pale.gray}
-          thumbTintColor={theme.color.alert}
-          step={1}
-        />
-        <Text>Value: {tilt}</Text>
+                top: delY,
+                left: delX,
+              }}>
+              {state.comment}
+            </Text>
+          </ImageBackground>
+        </TouchableOpacity>
+        <View style={{ marginHorizontal: 40 }}>
+          <Slider
+            value={tilt}
+            onValueChange={value => setTilt(value)}
+            maximumValue={360}
+            minimumTrackTintColor={theme.color.bright.red}
+            maximumTrackTintColor={theme.color.pale.gray}
+            thumbTintColor={theme.color.alert}
+            step={1}
+          />
+        </View>
       </View>
-    </View>
-  );
+      <View
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: 0,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <StepButton text="< 이전" active={true} onPress={toPrev} />
+        <StepButton text="다음 >" active={true} onPress={onPressNext} />
+      </View>
+    </>
+  ) : null;
 };
 
 export default CommentsSetCoordinate;
