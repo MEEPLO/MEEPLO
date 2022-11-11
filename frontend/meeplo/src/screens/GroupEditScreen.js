@@ -73,7 +73,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         photo: data.Location,
         description: groupDescription,
       };
-      dispatch(editGroup({ form, groupId: groupDetail.id }));
+      dispatch(editGroup({ form, groupId: groupDetail.id, Alert, navigation }));
       // 이동 여기서 바로
       // 상세 컴포넌트에서 리덕스의 값을 가져오는데
       // 아직 업데이트 전이면 -> 스피너, 로딩
