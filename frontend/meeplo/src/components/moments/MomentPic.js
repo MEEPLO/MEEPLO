@@ -17,9 +17,9 @@ const MomentPic = ({ momentData, direction, setMomentModal, setMomentDetailId })
   var imgWidth = windowWidth * 0.5 - 30;
 
   const viewHeight = {
-    POLAROID: imgWidth * 1.17,
-    DAYFILM: imgWidth * 0.8,
-    FOURCUT: imgWidth * 3.61,
+    0: imgWidth * 1.17,
+    1: imgWidth * 0.8,
+    2: imgWidth * 3.61,
   };
 
   const setDetailModel = () => {
@@ -33,9 +33,9 @@ const MomentPic = ({ momentData, direction, setMomentModal, setMomentDetailId })
         <AutoHeightImage
           source={{ uri: momentData.photo }}
           width={imgWidth}
-          style={{ borderRadius: 5, borderWidth: momentData.type === 3 ? 0 : 2, borderColor: theme.color.disabled }}
+          style={{ borderRadius: 5, borderWidth: momentData.type === 2 ? 0 : 2, borderColor: theme.color.disabled }}
         />
-        <Text style={momentData.type === 'DAYFILM' ? styles.dayfilmType : styles.otherTypes}>
+        <Text style={momentData.type === 1 ? styles.dayfilmType : styles.otherTypes}>
           <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} style={{ marginRight: 10 }} />
           {momentData.reactionCount}
         </Text>

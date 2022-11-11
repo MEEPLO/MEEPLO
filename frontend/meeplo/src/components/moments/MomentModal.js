@@ -42,6 +42,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
   }, [momentDetail.moment]);
 
   const linkTo = React.useCallback((nextPage, params) => {
+    setMomentModal(false);
     navigation.push(nextPage, params);
   }, []);
 
@@ -107,9 +108,9 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
   };
 
   const viewHeight = {
-    1: windowWidth * 0.7 * 1.17,
-    2: windowWidth * 0.8 * 0.8,
-    3: (windowWidth * 0.5 - 30) * 3.61,
+    0: windowWidth * 0.7 * 1.17,
+    1: windowWidth * 0.8 * 0.8,
+    2: (windowWidth * 0.5 - 30) * 3.61,
   };
 
   return (
@@ -129,16 +130,19 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
           onPressIn={setStartLocation}
           onPressOut={setEndLocation}
           style={{
-            width: imgWidth[1] + 40,
-            height: viewHeight[1],
+            width: imgWidth[momentDetail.moment.type],
+            height: viewHeight[momentDetail.moment.type],
             backgroundColor: 'transparent',
           }}>
           {imageFront ? (
             <Animated.Image
               style={{
-                marginLeft: 20,
-                width: imgWidth[1],
-                height: viewHeight[1],
+                marginLeft: momentDetail.moment.type === 2 ? 20 : 0,
+                width:
+                  momentDetail.moment.type === 2
+                    ? imgWidth[momentDetail.moment.type] - 40
+                    : imgWidth[momentDetail.moment.type],
+                height: viewHeight[momentDetail.moment.type] - 10,
                 transform: [{ rotateY: rotateData }],
               }}
               resizeMode="contain"
@@ -148,28 +152,42 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
             <Animated.View
               style={{
                 marginLeft: 20,
-                width: imgWidth[1],
-                height: viewHeight[1] - 10,
+                width: imgWidth[momentDetail.moment.type] - 40,
+                height: viewHeight[momentDetail.moment.type] - 10,
                 transform: [{ rotateY: rotateData }],
                 position: 'relative',
-                overflow: 'hidden',
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
               resizeMode="contain">
-              <ImageBackground source={Images.frame.watermark} style={{ width: '100%', height: '100%' }}>
-                {momentDetail.comments?.map((comment, idx) => (
-                  <View
-                    style={{
-                      width: '80%',
-                      transform: [{ rotate: `${comment.location.angle}deg` }],
-                      position: 'absolute',
-                      top: comment.location.yPoint,
-                      left: comment.location.xPoint,
-                    }}
-                    key={idx}>
-                    <Text style={{ fontSize: 12 }}>{comment.comment}</Text>
-                  </View>
-                ))}
-              </ImageBackground>
+              <View
+                style={{
+                  width:
+                    momentDetail.moment.type === 2
+                      ? (viewHeight[momentDetail.moment.type] - 10) * 0.277
+                      : imgWidth[momentDetail.moment.type],
+                  height: viewHeight[momentDetail.moment.type] - 10,
+                  overflow: 'hidden',
+                }}>
+                <ImageBackground
+                  source={Images.frame.watermark}
+                  style={{ overflow: 'hidden', width: '100%', height: '100%' }}>
+                  {momentDetail.comments?.map((comment, idx) => (
+                    <View
+                      style={{
+                        width: '80%',
+                        transform: [{ rotate: `${comment.location.angle}deg` }],
+                        position: 'absolute',
+                        top: comment.location.ypoint,
+                        left: comment.location.xpoint,
+                      }}
+                      key={idx}>
+                      <Text style={{ fontSize: 12 }}>{comment.comment}</Text>
+                    </View>
+                  ))}
+                </ImageBackground>
+              </View>
             </Animated.View>
           )}
         </TouchableOpacity>

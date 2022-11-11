@@ -12,6 +12,7 @@ import MomentsSetGroup from '../components/moments/createSteps/MomentsSetGroup';
 import MomentsSetSchedule from '../components/moments/createSteps/MomentsSetSchedule';
 import MomentsSetFrame from '../components/moments/createSteps/MomentsSetFrame';
 import MomentsSetPicture from '../components/moments/createSteps/MomentsSetPicture';
+import MomentSetCheck from '../components/moments/createSteps/MomentSetCheck';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -49,13 +50,13 @@ const initialMoment = {
   type: null,
 };
 
-const STEP_COUNT = 4;
+const STEP_COUNT = 5;
 
 const MomentsCreateScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
   const [moment, stepDispatch] = React.useReducer(reducer, initialMoment);
-  const stepItems = [MomentsSetGroup, MomentsSetSchedule, MomentsSetFrame, MomentsSetPicture];
+  const stepItems = [MomentsSetGroup, MomentsSetSchedule, MomentsSetFrame, MomentsSetPicture, MomentSetCheck];
 
   React.useEffect(() => {
     return navigation.addListener('beforeRemove', event => {
@@ -100,11 +101,8 @@ const MomentsCreateScreen = ({ navigation }) => {
   };
 
   const onFinish = actions => {
-    if (Array.isArray(actions)) {
-      actions.forEach(action => stepDispatch(action));
-    }
     console.log(moment);
-    dispatch(createMoment(moment));
+    dispatch(createMoment({ moment, navigation, Alert }));
   };
 
   return (
