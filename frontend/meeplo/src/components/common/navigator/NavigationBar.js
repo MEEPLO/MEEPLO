@@ -55,6 +55,7 @@ const NavigationBar = () => {
         name="HomeStack"
         component={HomeStackScreen}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: '홈',
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -71,6 +72,7 @@ const NavigationBar = () => {
         name="GroupStack"
         component={GroupStackScreen}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <FontAwesomeIcon icon={faUsers} color={color} size={size} />
@@ -95,6 +97,7 @@ const NavigationBar = () => {
         name="ScheduleStack"
         component={ScheduleStackScreen}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <FontAwesomeIcon icon={faCalendarDays} color={color} size={size} />
@@ -110,6 +113,7 @@ const NavigationBar = () => {
         name="MomentsStack"
         component={MomentsStackScreen}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <FontAwesomeIcon icon={faCameraRetro} color={color} size={size} />
