@@ -78,6 +78,8 @@ public class MemberServiceImpl implements MemberService {
         authorization = authorization.replaceFirst("Bearer ", "");
         refresh = refresh.replaceFirst("Bearer ", "");
         long id = jwtUtil.getUserIdFromToken(authorization);
+        log.info(refresh);
+        log.info(redisUtil.getData(String.valueOf(id)));
         if(!refresh.equals(redisUtil.getData(String.valueOf(id)))) throw new MeeploException(CommonErrorCode.INVALID_TOKEN);
         Member member = getMemberById(id);
 
