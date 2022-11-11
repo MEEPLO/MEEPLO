@@ -1,49 +1,189 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
 
 import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
 import DateModalInput from '../../../components/schedule/DateModalInput';
+import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput';
 
-const ScheduleCreateInfoScreen = ({ toNext, toPrev, onFinish }) => {
-  const onPressNext = () => {
-    const actions = [
-      {
-        type: '',
-        payload: '',
-      },
-      {
-        type: '',
-        payload: '',
-      },
-      {
-        type: '',
-        payload: '',
-      },
-    ];
+const keywordsData = [
+  {
+    classification: 1,
+    category: '음식 종류',
+    keyword: '양꼬치',
+    id: 1,
+  },
+  {
+    classification: 1,
+    category: '음식 종류',
+    keyword: '닭꼬치',
+    id: 2,
+  },
+  {
+    classification: 1,
+    category: '음식 종류',
+    keyword: '떡꼬치',
+    id: 3,
+  },
+  {
+    classification: 2,
+    category: '분위기',
+    keyword: '조용한',
+    id: 4,
+  },
+  {
+    classification: 2,
+    category: '분위기',
+    keyword: '신나는',
+    id: 5,
+  },
+  {
+    classification: 2,
+    category: '분위기',
+    keyword: '행복한',
+    id: 6,
+  },
+  {
+    classification: 3,
+    category: '장소',
+    keyword: '카페',
+    id: 7,
+  },
+  {
+    classification: 3,
+    category: '장소',
+    keyword: '술집',
+    id: 8,
+  },
+  {
+    classification: 3,
+    category: '장소',
+    keyword: '산책',
+    id: 9,
+  },
+];
 
-    toNext(actions);
+const keywordsData = [
+  {
+    classification: 1,
+    category: '음식 종류',
+    keyword: '양꼬치',
+    id: 1,
+  },
+  {
+    classification: 1,
+    category: '음식 종류',
+    keyword: '닭꼬치',
+    id: 2,
+  },
+  {
+    classification: 1,
+    category: '음식 종류',
+    keyword: '떡꼬치',
+    id: 3,
+  },
+  {
+    classification: 2,
+    category: '분위기',
+    keyword: '조용한',
+    id: 4,
+  },
+  {
+    classification: 2,
+    category: '분위기',
+    keyword: '신나는',
+    id: 5,
+  },
+  {
+    classification: 2,
+    category: '분위기',
+    keyword: '행복한',
+    id: 6,
+  },
+  {
+    classification: 3,
+    category: '장소',
+    keyword: '카페',
+    id: 7,
+  },
+  {
+    classification: 3,
+    category: '장소',
+    keyword: '술집',
+    id: 8,
+  },
+  {
+    classification: 3,
+    category: '장소',
+    keyword: '산책',
+    id: 9,
+  },
+];
+
+const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish }) => {
+  const [date, setDate] = useState();
+  const [name, setName] = useState();
+  const [keywords, setKeywords] = useState([]);
+
+  useEffect(() => {
+    setDate(state.date);
+    setName(state.name);
+    setKeywords(state.keywords);
+  }, [state]);
+
+  const validateInput = () => {
+    if (date && name) {
+      return true;
+    }
+    return false;
   };
-  return (
+  const onPressNext = () => {
+    if (validateInput()) {
+      const actions = [
+        {
+          type: 'UPDATE_DATE',
+          payload: date,
+        },
+        {
+          type: 'UPDATE_NAME',
+          payload: name,
+        },
+        {
+          type: 'UPDATE_KEYWORDS',
+          payload: keywords,
+        },
+      ];
+
+      toNext(actions);
+    }
+  };
+
+  const onConfirmDate = confirmedDate => {
+    setDate(confirmedDate);
+  };
+
+  const onConfirmKeywords = confirmedKeywords => {
+    setKeywords(confirmedKeywords);
+  };
+
+  return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <DateModalInput type="일시" required />
+        <DateModalInput type="일시" value={date} required onConfirm={onConfirmDate} />
       </View>
       <View style={styles.inputViewStyle}>
-        <Text>약속 이름</Text>
-        <StepTextInput />
+        <StepTextInput type="약속 이름" multiline={false} value={name} onValueChange={setName} required />
       </View>
       <View style={styles.inputViewStyle}>
-        <Text>키워드</Text>
-        <StepTextInput />
+        <KeywordsModalInput type="키워드" value={keywords} onConfirm={onConfirmKeywords} keywordsData={keywordsData} />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="" />
         <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
     </View>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({
