@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, TextInput, Dimensions, Alert } from 'react-native';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
@@ -73,10 +73,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         photo: data.Location,
         description: groupDescription,
       };
-      dispatch(editGroup({ form, groupId: groupDetail.id })).then(() => {
-        // TODO: hrookim 수정되었습니다 alert창!
-        navigation.replace('GroupDetailInfo', { groupId: groupDetail.id });
-      });
+      dispatch(editGroup({ form, groupId: groupDetail.id, Alert, navigation }));
       // 이동 여기서 바로
       // 상세 컴포넌트에서 리덕스의 값을 가져오는데
       // 아직 업데이트 전이면 -> 스피너, 로딩
@@ -99,9 +96,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         photo: groupPhoto,
         description: groupDescription,
       };
-      dispatch(editGroup({ form, groupId: groupDetail.id })).then(() => {
-        navigation.replace('GroupDetailInfo', { groupId: groupDetail.id });
-      });
+      dispatch(editGroup({ form, groupId: groupDetail.id, Alert, navigation }));
     } else {
       uploadToS3(groupPhotoFile);
       // 로딩 모달 열기
@@ -123,7 +118,7 @@ const GroupEditScreen = ({ route, navigation }) => {
       </View>
       <View style={{ margin: 20 }}>
         <Text style={{ color: theme.font.color, fontWeight: '800' }}>
-          대표 사진<Text style={{ color: theme.color.alert }}>*</Text>
+          대표 사진 <Text style={{ color: theme.color.alert }}>*</Text>
         </Text>
         <View style={{ alignItems: 'center', marginTop: 10 }}>
           <View
@@ -184,7 +179,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         }}
         activeOpacity={0.6}
         onPress={onPressEdit}>
-        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>만들기</Text>
+        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>수정하기</Text>
       </TouchableOpacity>
     </View>
   );
