@@ -47,16 +47,16 @@ public class MiddlePointResponse {
     @ToString
     @Getter
     public static class StationRoute {
-        private Long groupMemberId;
+        private Long memberId;
         private String groupMemberName;
         private int time;
         private StartLocation startLocation;
         private List<RouteCoordinate> coordinates;
 
         @Builder
-        StationRoute(GroupMember member, int time, StartLocation startLocation, List<RouteCoordinate> coordinates) {
-            this.groupMemberId = member.getId();
-            this.groupMemberName = member.getNickname();
+        StationRoute(GroupMember groupMember, int time, StartLocation startLocation, List<RouteCoordinate> coordinates) {
+            this.memberId = groupMember.getMember().getId();
+            this.groupMemberName = groupMember.getNickname();
             this.time = time;
             this.startLocation = startLocation;
             this.coordinates = coordinates;
