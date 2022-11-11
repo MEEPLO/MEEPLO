@@ -3,8 +3,8 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 import StepButton from '../../../components/stepper/StepButton';
 
-const ScheduleCreateMemberScreen = ({ toNext, toPrev, onFinish }) => {
-  return (
+const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
+  return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
         <Text>모임</Text>
@@ -19,7 +19,7 @@ const ScheduleCreateMemberScreen = ({ toNext, toPrev, onFinish }) => {
         <StepButton text="다음 >" active={true} onPress={toNext} />
       </View>
     </View>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({

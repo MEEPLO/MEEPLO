@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 import StepButton from '../../../components/stepper/StepButton';
 
-const ScheduleCreateLocationScreen = ({ toNext, toPrev, onFinish }) => {
-  return (
+const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
+  const [meet, setMeet] = useState();
+  const [amuse, setAmuse] = useState();
+
+  useEffect(() => {
+    // TODO : set meet
+    setMeet();
+    setAmuse();
+  }, []);
+
+  return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
         <Text>만날 장소</Text>
@@ -19,7 +28,7 @@ const ScheduleCreateLocationScreen = ({ toNext, toPrev, onFinish }) => {
         <StepButton text="만들기" active={true} onPress={onFinish} />
       </View>
     </View>
-  );
+  ) : null;
 };
 
 const styles = StyleSheet.create({

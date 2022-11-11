@@ -32,7 +32,7 @@ const reducer = (state, action) => {
         ...state,
         meetLocationId: action.payload,
       };
-    case 'UPDATE_KEYWORD':
+    case 'UPDATE_KEYWORDS':
       return {
         ...state,
         keywords: action.payload,
@@ -113,7 +113,14 @@ const ScheduleCreateScreen = ({ navigation }) => {
       <View style={styles.stepIndicatorStyle}>
         <StepIndicator stepCount={STEP_COUNT} currentStep={step} />
       </View>
-      <StepRenderer items={stepItems} currentStep={step} toNext={toNext} toPrev={toPrev} onFinish={onFinish} />
+      <StepRenderer
+        items={stepItems}
+        state={schedule}
+        currentStep={step}
+        toNext={toNext}
+        toPrev={toPrev}
+        onFinish={onFinish}
+      />
     </View>
   );
 };
