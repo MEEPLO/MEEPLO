@@ -2,7 +2,6 @@ package com.sloth.meeplo.recommendation.dto.request;
 
 import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class MiddlePointRequest {
 
     @ToString
     @Getter
-    @NoArgsConstructor
     public static class MemberStartLocation extends Coordinate{
         private long memberId;
     }
