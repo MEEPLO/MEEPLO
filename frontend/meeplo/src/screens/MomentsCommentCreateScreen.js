@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { useFocusEffect } from '@react-navigation/native';
-import { createComment } from '../redux/momentsSlice';
+import { getComments, createComment } from '../redux/momentsSlice';
 
 import helper from '../helper';
 import StepIndicator from '../components/stepper/StepIndicator';
@@ -49,6 +49,10 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
   const { momentId } = route.params;
 
   React.useEffect(() => {
+    dispatch(getComments({ momentDetailId: momentId }));
+  }, []);
+
+  React.useEffect(() => {
     return navigation.addListener('beforeRemove', event => {
       const action = event.data.action;
       event.preventDefault();
@@ -91,11 +95,6 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
   };
 
   const onFinish = actions => {
-    const commentInfo = {
-      momentId: momentId,
-      comment: comment,
-    };
-    console.log('onfin', commentInfo);
     dispatch(createComment(commentInfo));
   };
 

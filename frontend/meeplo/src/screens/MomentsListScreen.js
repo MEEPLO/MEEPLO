@@ -41,8 +41,22 @@ const MomentsListScreen = props => {
             <Text style={{ textAlign: 'right' }}>그룹 선택 selet options</Text>
           </View>
         </View>
-        <Pressable onPress={() => linkTo('MomentsCreate')}>
-          <Text>생성</Text>
+        <Pressable
+          style={{
+            marginBottom: 20,
+            marginHorizontal: '10%',
+            width: '80%',
+            height: 60,
+            borderRadius: 15,
+            borderColor: theme.color.border,
+            borderWidth: 2,
+            backgroundColor: theme.color.bright.yellow,
+          }}
+          onPress={() => linkTo('MomentsCreate')}>
+          <Text
+            style={{ textAlign: 'center', fontWeight: '800', fontSize: 20, color: theme.font.color, lineHeight: 54 }}>
+            생성
+          </Text>
         </Pressable>
         <MomentsList isMine={isMine} navigation={props.navigation} />
       </View>

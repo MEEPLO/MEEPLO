@@ -6,13 +6,13 @@ import StepButton from '../../stepper/StepButton';
 const windowHeight = Dimensions.get('window').height;
 
 const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
-  const [comment, setComment] = React.useState('');
+  const [value, onValueChange] = React.useState('');
 
   const onPressNext = () => {
     const actions = [
       {
         type: 'UPDATE_COMMENT',
-        payload: comment,
+        payload: value,
       },
     ];
     toNext(actions);
@@ -21,7 +21,7 @@ const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <>
       <View style={{ position: 'relative', height: windowHeight - 150, marginHorizontal: 20 }}>
-        <StepTextInput value={comment} setValue={setComment} type="댓글" maxLength={50} required={true} />
+        <StepTextInput value={value} onValueChange={onValueChange} type="댓글" maxLength={50} required={true} />
       </View>
       <View
         style={{
