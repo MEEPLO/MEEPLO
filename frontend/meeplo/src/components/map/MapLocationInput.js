@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from 'react-native';
 
 import { theme } from '../../assets/constant/DesignTheme';
+import { MESSAGE_TYPE, parseMessage } from '../../helper/message';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
@@ -11,8 +12,19 @@ const serachInputWidth = screen.width * 0.7;
 
 const MapLocationInput = ({ type, required, value }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
   const [searchValue, setSearchValue] = useState('');
+  const [mapCenter, setMapCenter] = useState();
+  const [mapZoomLevel, setMapZoomLevel] = useState();
   const webViewRef = useRef();
+
+  useEffect(() => {
+    if (mapZoomLevel <= 5) {
+      setShowSearchCurrentMapButton(true);
+    } else {
+      setShowSearchCurrentMapButton(false);
+    }
+  }, [mapZoomLevel]);
 
   useEffect(() => {
     if (webViewRef && webViewRef.current && webViewRef.current.postMessage) {
@@ -22,6 +34,26 @@ const MapLocationInput = ({ type, required, value }) => {
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+
+  const onMessageHandler = data => {
+    processMapMessage(parseMessage(data.nativeEvent.data));
+  };
+
+  const processMapMessage = message => {
+    console.log(message);
+    switch (message.messageType) {
+      case MESSAGE_TYPE.INIT_MAP:
+        setMapCenter(message.messageBody.center);
+        setMapZoomLevel(message.messageBody.level);
+        break;
+      case MESSAGE_TYPE.UPDATE_CENTER:
+        setMapCenter(message.messageBody.center);
+        break;
+      case MESSAGE_TYPE.UPDATE_ZOOM_LEVEL:
+        setMapZoomLevel(message.messageBody.level);
+        break;
+    }
+  };
 
   return (
     <View>
@@ -36,13 +68,19 @@ const MapLocationInput = ({ type, required, value }) => {
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} />
+          <MapView ref={webViewRef} onMessageHandler={onMessageHandler} />
         </View>
 
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
-          <View style={styles.mapSearchView}>
+          <View style={styles.mapSaerchInputView}>
             <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
           </View>
+
+          {showSearchCurrentMapButton ? (
+            <TouchableOpacity style={styles.mapSearchCurrentMapButton}>
+              <Text style={styles.mapSearchCurrentMapText}>현 지도에서 검색</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </ModalCover>
     </View>
@@ -68,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  mapSearchView: {
+  mapSaerchInputView: {
     width: screen.width,
     alignItems: 'center',
   },
@@ -81,6 +119,18 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.input,
     padding: 10,
     backgroundColor: 'white',
+  },
+  mapSearchCurrentMapButton: {
+    backgroundColor: theme.color.bright.red,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+
+    borderRadius: theme.radius.base,
+    borderWidth: 2,
+    borderColor: theme.color.border,
+  },
+  mapSearchCurrentMapText: {
+    color: 'white',
   },
 });
 
