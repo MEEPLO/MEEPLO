@@ -12,6 +12,8 @@ public interface MemberService {
 
     MemberResponse.MemberToken getKakaoMemberToken(String token);
 
+    MemberResponse.MemberToken refreshMemberToken(String authorization, String refresh);
+
     MemberResponse.MemberDetail getMemberDetail(String authorization);
 
     void updateMemberInfo(String authorization, MemberRequest.MemberUpdateInfo memberUpdateInfo);
