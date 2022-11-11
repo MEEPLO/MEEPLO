@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, Dimensions, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -69,10 +69,7 @@ const GroupCreateScreen = ({ navigation }) => {
         photo: data.Location,
         description: groupDescription,
       };
-      dispatch(createGroup(form)).then(({ payload }) => {
-        // TODO: hrookim 생성되었습니다 alert창!
-        navigation.replace('GroupDetail', { groupId: payload.groupId });
-      });
+      dispatch(createGroup({ form, Alert, navigation }));
       // 이동 여기서 바로
       // 상세 컴포넌트에서 리덕스의 값을 가져오는데
       // 아직 업데이트 전이면 -> 스피너, 로딩
@@ -108,7 +105,7 @@ const GroupCreateScreen = ({ navigation }) => {
       </View>
       <View style={{ margin: 20 }}>
         <Text style={{ color: theme.font.color, fontWeight: '800' }}>
-          대표 사진<Text style={{ color: theme.color.alert }}>*</Text>
+          대표 사진 <Text style={{ color: theme.color.alert }}>*</Text>
         </Text>
         <View style={{ alignItems: 'center', marginTop: 10 }}>
           <View
