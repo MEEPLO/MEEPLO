@@ -1,5 +1,6 @@
 package com.sloth.meeplo.location.dto.response;
 
+import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.location.entity.*;
 import com.sloth.meeplo.location.type.LocationType;
 import lombok.Builder;
@@ -37,7 +38,7 @@ public class LocationResponse {
             this.photo = location.getLocationPhotos().stream()
                     .findFirst().orElse(LocationPhoto
                             .EmptyLocationPhotoBuilder()
-                            .photo("https://popcat.click/twitter-card.jpg")
+                            .photo(DefaultValue.AMUSE_REPRESENTATIVE_PHOTO.getValue())
                             .build())
                     .getPhoto();
         }
