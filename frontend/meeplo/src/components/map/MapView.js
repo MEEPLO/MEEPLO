@@ -29,7 +29,7 @@ const MapView = forwardRef(({ onMessageHandler }, ref) => {
       }}
     />
   );
-};
+});
 
 const styles = StyleSheet.create({
   webViewStyle: {
