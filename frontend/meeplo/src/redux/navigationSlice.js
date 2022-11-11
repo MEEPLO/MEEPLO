@@ -4,6 +4,7 @@ const tabBarSlice = createSlice({
   name: 'tabBar',
   initialState: {
     display: 'flex',
+    opened: false,
   },
   reducers: {
     hideTabBar: state => {
@@ -12,9 +13,12 @@ const tabBarSlice = createSlice({
     showTabBar: state => {
       return { ...state, display: 'flex' };
     },
+    setOpened: (state, action) => {
+      state.opened = action.payload;
+    },
   },
   extraReducers: {},
 });
 
-export const { hideTabBar, showTabBar } = tabBarSlice.actions;
+export const { hideTabBar, showTabBar, setOpened } = tabBarSlice.actions;
 export { tabBarSlice };

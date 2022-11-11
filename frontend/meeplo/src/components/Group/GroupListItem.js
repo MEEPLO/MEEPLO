@@ -11,14 +11,12 @@ const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, col
   const width = Dimensions.get('window').width - 40;
   const height = width * 0.33;
   const imgHeight = width * 0.18;
-  console.log(lastSchedule);
 
   useEffect(() => {
     if (lastSchedule === '1111-11-11 11:11') {
       setLastScheduleDate('');
     } else {
       const date = moment(new Date(lastSchedule)).format('YYYY.MM.DD');
-      console.log(date);
       setLastScheduleDate(date);
     }
   }, []);

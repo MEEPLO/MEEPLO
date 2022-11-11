@@ -20,20 +20,33 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    nickname: 'String',
-    profilePhoto: 'http://www.pharmnews.com/news/photo/202206/205376_75336_1939.png',
-    startLocations: [
-      {
-        id: -1,
-        name: 'String',
-        lat: 0.1,
-        lng: 0.1,
-        address: 'String',
-      },
-    ],
+    info: {
+      nickname: 'String',
+      id: 1,
+      profilePhoto: 'http://www.pharmnews.com/news/photo/202206/205376_75336_1939.png',
+      startLocations: [
+        {
+          id: -1,
+          name: 'String',
+          lat: 0.1,
+          lng: 0.1,
+          address: 'String',
+        },
+      ],
+    },
+    isLoginLoading: false,
+    isLoggedIn: false,
   },
   extraReducers: {
-    [getUserInfo.fulfilled]: (state, { payload }) => payload,
+    [getUserInfo.pending]: (state, { payload }) => {
+      state.isLoginLoading = true;
+      state.isLoggedIn = false;
+    },
+    [getUserInfo.fulfilled]: (state, { payload }) => {
+      state.isLoginLoading = false;
+      state.isLoggedIn = true;
+      state.info = payload;
+    },
   },
 });
 
