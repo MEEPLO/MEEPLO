@@ -14,28 +14,80 @@ const MomentsListHalf = styled.View`
   flex: 1;
 `;
 
-const MomentsList = ({ navigation }) => {
-  const momentsList = useSelector(state => state.momentsList);
+const momentsList = {
+  momentsLeft: [
+    {
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
+      type: 0,
+      id: 1,
+      reactionCount: 2,
+    },
+    {
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
+      type: 1,
+      id: 3,
+      reactionCount: 3,
+    },
+    {
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
+      type: 0,
+      id: 10,
+      reactionCount: 0,
+    },
+    {
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
+      type: 2,
+      id: 7,
+      reactionCount: 3,
+    },
+  ],
+  momentsRight: [
+    {
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
+      type: 2,
+      id: 9,
+      reactionCount: 3,
+    },
+    {
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
+      type: 1,
+      id: 4,
+      reactionCount: 3,
+    },
+    {
+      photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
+      type: 0,
+      id: 6,
+      reactionCount: 0,
+    },
+  ],
+};
+
+const MomentsList = ({ navigation, isMine }) => {
+  // const momentsList = useSelector(state => state.momentsList);
 
   const [momentModal, setMomentModal] = React.useState(false);
-  const [momentId, setMomentId] = React.useState(3);
+  const [momentDetailId, setMomentDetailId] = React.useState(6);
+  const [isMineFilter, setIsMineFilter] = React.useState(false);
 
-  const leftPics = momentsList.momentsLeft.map(moment => (
-    <MomentPic
-      setMomentModal={setMomentModal}
-      setMomentId={setMomentId}
-      key={moment.id}
-      moment={moment}
-      direction="left"
-    />
-  ));
+  const leftPics = momentsList.momentsLeft.map(moment =>
+    isMine ? (
+      <MomentPic
+        setMomentModal={setMomentModal}
+        setMomentDetailId={setMomentDetailId}
+        key={moment.id}
+        momentData={moment}
+        direction="left"
+      />
+    ) : null,
+  );
 
   const rightPics = momentsList.momentsRight.map(moment => (
     <MomentPic
       setMomentModal={setMomentModal}
-      setMomentId={setMomentId}
+      setMomentDetailId={setMomentDetailId}
       key={moment.id}
-      moment={moment}
+      momentData={moment}
       direction="right"
     />
   ));
@@ -43,13 +95,13 @@ const MomentsList = ({ navigation }) => {
   return (
     <>
       <MomentsListView>
-        <MomentsListHalf bgColor="pink">{leftPics}</MomentsListHalf>
-        <MomentsListHalf bgColor="skyblue">{rightPics}</MomentsListHalf>
+        <MomentsListHalf>{leftPics}</MomentsListHalf>
+        <MomentsListHalf>{rightPics}</MomentsListHalf>
       </MomentsListView>
 
       <MomentModal
         navigation={navigation}
-        momentId={momentId}
+        momentDetailId={momentDetailId}
         setMomentModal={setMomentModal}
         momentModal={momentModal}
       />
