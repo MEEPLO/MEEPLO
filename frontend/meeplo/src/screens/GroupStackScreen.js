@@ -2,7 +2,7 @@ import { View, Text } from 'react-native';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/ToolBar';
+import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/navigator/ToolBar';
 import GroupCreateScreen from './GroupCreateScreen';
 import GroupDetailScreen from './GroupDetailScreen';
 import GroupHomeScreen from './GroupHomeScreen';

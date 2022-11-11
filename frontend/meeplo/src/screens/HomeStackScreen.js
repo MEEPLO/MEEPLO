@@ -4,13 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
 import LoadingBar from '../components/common/LoadingBar';
-import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/ToolBar';
+import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/navigator/ToolBar';
 import HomeGroup from '../components/Home/HomeGroup';
 
 const HomeStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user.info);
+  console.log(user.profilePhoto);
 
   return (
     <HomeStack.Navigator initialRouteName="Login">
