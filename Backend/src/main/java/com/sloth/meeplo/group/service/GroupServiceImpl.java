@@ -61,12 +61,14 @@ public class GroupServiceImpl implements GroupService{
     public void updateGroup(String authorization, Long groupId, GroupRequest.GroupInput groupInput) {
         Group group = getGroupEntityByGroupId(groupId);
         Member member = memberService.getMemberByAuthorization(authorization);
-// TODO: 2022-11-01 ID만 바꿔서 가능한지 확인필요
-        if(isGroupLeader(group, member)){
-            group = groupInput.toEntity();
-            group.updateGroupId(groupId);
-            groupRepository.save(group);
-        }
+
+        if(!isGroupLeader(group, member))
+            throw new MeeploException(GroupErrorCode.UNAUTHORIZED);
+
+        group = groupInput.toEntity();
+        group.updateGroupId(groupId);
+        groupRepository.save(group);
+
     }
 
     @Override
