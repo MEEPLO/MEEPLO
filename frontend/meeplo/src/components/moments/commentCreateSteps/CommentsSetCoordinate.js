@@ -3,7 +3,7 @@ import React from 'react';
 import { Slider } from '@miblanchard/react-native-slider';
 import { theme } from '../../../assets/constant/DesignTheme';
 import images from '../../../assets/image';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import StepButton from '../../stepper/StepButton';
 
 const momentData = {
@@ -54,11 +54,13 @@ const momentData = {
 };
 
 const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => {
+  const dispatch = useDispatch();
+
   const [tilt, setTilt] = React.useState(0);
   // 실제 좌표 데이터 보낼 때에는 조정 필요
   const [delX, setDelX] = React.useState(0);
   const [delY, setDelY] = React.useState(0);
-  const momentDetail = useSelector(state => state.momentDetail);
+  const commentsList = useSelector(state => state.commentsList);
 
   const windowHeight = Dimensions.get('window').height;
   var imgHeight = windowHeight * 0.65;
@@ -102,14 +104,14 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
           }}
           onPress={setLocation}>
           <ImageBackground source={watermark} style={{ width: '100%', height: '100%' }} resizeMode="cover">
-            {momentData.comments.map((comment, idx) => (
+            {commentsList.comments.map((comment, idx) => (
               <View
                 style={{
                   width: '80%',
                   transform: [{ rotate: `${comment.location.angle}deg` }],
                   position: 'absolute',
-                  top: comment.location.yPoint * 0.85,
-                  left: comment.location.xPoint * 0.6,
+                  top: comment.location.ypoint * 0.85,
+                  left: comment.location.xpoint * 0.6,
                 }}
                 key={idx}>
                 <Text style={{ fontSize: 10 }}>{comment.comment}</Text>
@@ -120,10 +122,6 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
                 width: '80%',
                 fontSize: 10,
                 color: theme.font.color,
-                transform: [{ rotate: `${tilt}deg` }],
-                position: 'absolute',
-                top: delY,
-                left: delX,
                 transform: [{ rotate: `${tilt}deg` }],
                 position: 'absolute',
                 top: delY,

@@ -81,18 +81,27 @@ export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReacti
   }
 });
 
-export const createMoment = createAsyncThunk('moment/createMoment', async moment => {
+export const createMoment = createAsyncThunk('moment/createMoment', async ({ moment, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post('http://meeplo.co.kr/meeplo/api/v1/moment', moment, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log(response.data);
-    return response.data;
+    const response = await axios
+      .post('http://meeplo.co.kr/meeplo/api/v1/moment', moment, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(res => {
+        Alert.alert(`추억을 생성했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({ routes: [{ name: 'MomentsCreate' }] });
+            },
+          },
+        ]);
+      });
   } catch (err) {
-    console.error('createMoment: ', err);
+    console.error('createMoment: ', err.response.data);
     return isRejectedWithValue(err.response.data);
   }
 });
@@ -154,25 +163,25 @@ const momentsListSlice = createSlice({
     momentsLeft: [
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-        type: 'POLAROID',
+        type: 0,
         id: 1,
         reactionCount: 2,
       },
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
-        type: 'DAYFILM',
+        type: 1,
         id: 3,
         reactionCount: 3,
       },
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-        type: 'POLAROID',
+        type: 0,
         id: 10,
         reactionCount: 0,
       },
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
-        type: 'FOURCUT',
+        type: 2,
         id: 7,
         reactionCount: 3,
       },
@@ -180,19 +189,19 @@ const momentsListSlice = createSlice({
     momentsRight: [
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
-        type: 'FOURCUT',
+        type: 2,
         id: 6,
         reactionCount: 3,
       },
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
-        type: 'DAYFILM',
+        type: 1,
         id: 4,
         reactionCount: 3,
       },
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-        type: 'POLAROID',
+        type: 0,
         id: 9,
         reactionCount: 0,
       },
@@ -219,4 +228,21 @@ const momentDetailSlice = createSlice({
   extraReducers: { [getMomentDetail.fulfilled]: (state, { payload }) => payload },
 });
 
-export { momentsListSlice, momentDetailSlice };
+const commentsSlice = createSlice({
+  name: 'momentDetail',
+  initialState: {
+    comments: [
+      {
+        comment: 'String',
+        location: {
+          xpoint: 0,
+          ypoint: 0,
+          angle: 0,
+        },
+      },
+    ],
+  },
+  extraReducers: { [getComments.fulfilled]: (state, { payload }) => payload },
+});
+
+export { momentsListSlice, momentDetailSlice, commentsSlice };
