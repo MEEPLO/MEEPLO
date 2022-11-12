@@ -1,6 +1,7 @@
 package com.sloth.meeplo.member.dto.request;
 
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -66,6 +67,15 @@ public class MemberRequest {
         public MemberLocationAddInfo(String name, String address){
             this.name = name;
             this.address= address;
+        }
+    }
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class ConvertedCoordinate extends Coordinate {
+        @Builder
+        ConvertedCoordinate(Double lat, Double lng){
+            super(lat, lng);
         }
     }
 
