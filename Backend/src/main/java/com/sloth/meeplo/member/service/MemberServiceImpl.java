@@ -139,9 +139,14 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void addMemberStartLocation(String authorization, MemberRequest.MemberLocationAddInfo memberLocationAddInfo) {
         Member member = getMemberByAuthorization(authorization);
+        String address = memberLocationAddInfo.getAddress();
+
+        MemberRequest.ConvertedCoordinate convertedCoordinate = externalAPIRequest.getKakaoCoordinateInfo(address);
+
         memberLocationRepository.save(MemberLocation.builder()
                 .memberLocationAddInfo(memberLocationAddInfo)
                 .member(member)
+                .convertedCoordinate(convertedCoordinate)
                 .build()
         );
     }
