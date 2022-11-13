@@ -37,7 +37,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
   }, []);
 
   React.useEffect(() => {
-    console.log('detail id: ', momentDetailId);
+    console.log('modal detail id: ', momentDetailId);
     setImageUri({ uri: momentDetail.moment.photoUrl });
   }, [momentDetail.moment]);
 

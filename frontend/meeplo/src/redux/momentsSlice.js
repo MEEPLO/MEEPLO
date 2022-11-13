@@ -1,11 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
+import { MEEPLO_SERVER_BASE_URL } from '@env';
 
 export const getMomentsList = createAsyncThunk('moments/getMomentsList', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get('http://meeplo.co.kr/meeplo/api/v1/moment/feed', {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/feed`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -20,7 +21,7 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async (
 export const getMomentsCalendar = createAsyncThunk('moments/getMomentsCalendar', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get('http://meeplo.co.kr/meeplo/api/v1/moment/calendar', {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/calendar`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -35,7 +36,7 @@ export const getMomentsCalendar = createAsyncThunk('moments/getMomentsCalendar',
 export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}`, {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -51,7 +52,7 @@ export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async
 export const updateMomentReaction = createAsyncThunk('moments/updateMomentReaction', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}/reaction`, {
+    const response = await axios.post(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/reaction`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -67,7 +68,7 @@ export const updateMomentReaction = createAsyncThunk('moments/updateMomentReacti
 export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReaction', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}/reaction`, {
+    const response = await axios.delete(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/reaction`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -85,7 +86,7 @@ export const createMoment = createAsyncThunk('moment/createMoment', async ({ mom
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios
-      .post('http://meeplo.co.kr/meeplo/api/v1/moment', moment, {
+      .post(MEEPLO_SERVER_BASE_URL + `/moment`, moment, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -109,7 +110,7 @@ export const createMoment = createAsyncThunk('moment/createMoment', async ({ mom
 export const deleteMoment = createAsyncThunk('moments/deleteMoment', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}`, {
+    const response = await axios.delete(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -124,7 +125,7 @@ export const deleteMoment = createAsyncThunk('moments/deleteMoment', async ({ mo
 export const getComments = createAsyncThunk('moment/getComments', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`http://meeplo.co.kr/meeplo/api/v1/moment/${momentDetailId}/comment`, {
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/comment`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -141,7 +142,7 @@ export const createComment = createAsyncThunk('moment/createComment', async comm
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.post(
-      `http://meeplo.co.kr/meeplo/api/v1/moment/${commentInfo.momentId}/comment`,
+      MEEPLO_SERVER_BASE_URL + `/moment/${commentInfo.momentId}/comment`,
       commentInfo.comment,
       {
         headers: {
@@ -162,47 +163,17 @@ const momentsListSlice = createSlice({
   initialState: {
     momentsLeft: [
       {
-        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-        type: 0,
-        id: 1,
-        reactionCount: 2,
-      },
-      {
-        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
+        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',
         type: 1,
-        id: 3,
-        reactionCount: 3,
-      },
-      {
-        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-        type: 0,
-        id: 10,
+        id: 0,
         reactionCount: 0,
-      },
-      {
-        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
-        type: 2,
-        id: 7,
-        reactionCount: 3,
       },
     ],
     momentsRight: [
       {
-        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107005349.png',
-        type: 2,
-        id: 6,
-        reactionCount: 3,
-      },
-      {
-        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010049.png',
+        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',
         type: 1,
-        id: 4,
-        reactionCount: 3,
-      },
-      {
-        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/ourmoment221107010141.png',
-        type: 0,
-        id: 9,
+        id: 0,
         reactionCount: 0,
       },
     ],
@@ -220,12 +191,35 @@ const momentDetailSlice = createSlice({
       writer: -1,
     },
     reaction: {
-      count: -1,
+      count: 0,
       liked: true,
     },
     comments: [],
+    isLikeSwitched: false,
   },
-  extraReducers: { [getMomentDetail.fulfilled]: (state, { payload }) => payload },
+  extraReducers: {
+    [getMomentDetail.fulfilled]: (state, { payload }) => {
+      state = payload;
+    },
+    [updateMomentReaction.pending]: (state, { payload }) => {
+      state.isLikeSwitched = false;
+    },
+    [updateMomentReaction.fulfilled]: (state, { payload }) => {
+      state.isLikeSwitched = true;
+    },
+    [updateMomentReaction.rejected]: (state, { payload }) => {
+      state.isLikeSwitched = false;
+    },
+    [deleteMomentReaction.pending]: (state, { payload }) => {
+      state.isLikeSwitched = false;
+    },
+    [deleteMomentReaction.fulfilled]: (state, { payload }) => {
+      state.isLikeSwitched = true;
+    },
+    [deleteMomentReaction.rejected]: (state, { payload }) => {
+      state.isLikeSwitched = false;
+    },
+  },
 });
 
 const commentsSlice = createSlice({
