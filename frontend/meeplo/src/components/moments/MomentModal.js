@@ -18,6 +18,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { faHeart as frHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
 import { getMomentDetail, updateMomentReaction, deleteMomentReaction } from '../../redux/momentsSlice';
+import AnimationLikes from '../common/AnimationLikes';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -206,11 +207,12 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
             alignItems: 'center',
           }}
           onPress={momentLikeHandler}>
-          {isLiked ? (
+          {/* {isLiked ? (
             <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={30} />
           ) : (
             <FontAwesomeIcon icon={frHeart} color={theme.color.alert} size={30} />
-          )}
+          )} */}
+          <AnimationLikes isLiked={isLiked} />
         </Pressable>
         <Pressable
           style={{
