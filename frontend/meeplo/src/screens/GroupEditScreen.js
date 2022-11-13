@@ -1,4 +1,14 @@
-import { View, Text, Image, TouchableOpacity, TextInput, Dimensions, Alert } from 'react-native';
+import {
+  ScrollView,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Dimensions,
+  Alert,
+  SafeAreaView,
+} from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -23,7 +33,9 @@ const GroupEditScreen = ({ route, navigation }) => {
   const [groupInitialPhoto, setGroupInitialPhoto] = useState(groupDetail.photo);
   const [groupDescription, setGroupDescription] = useState(groupDetail.description);
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
-  const { width, height } = Dimensions.get('window');
+  const { width } = Dimensions.get('window');
+  const { height } = Dimensions.get('screen');
+  console.log(height);
 
   const addImage = async () => {
     const result = await launchImageLibrary();
@@ -112,83 +124,88 @@ const GroupEditScreen = ({ route, navigation }) => {
   });
 
   return (
-    <View style={{ height }}>
-      <View style={{ margin: 20 }}>
-        <StepTextInput
-          type="그룹명"
-          maxLength={20}
-          required={true}
-          onValueChange={setGroupName}
-          value={groupName}
-          multiline={false}
-        />
-      </View>
-      <View style={{ margin: 20 }}>
-        <Text style={{ color: theme.font.color, fontWeight: '800' }}>
-          대표 사진 <Text style={{ color: theme.color.alert }}>*</Text>
-        </Text>
-        <View style={{ alignItems: 'center', marginTop: 10 }}>
-          <View
-            style={{
-              width: 160,
-              height: 160,
-              borderRadius: 20,
-              borderWidth: 3,
-              borderStyle: 'dashed',
-              borderColor: theme.color.disabled,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            {!!groupPhoto && (
-              <Image
-                source={{ uri: groupPhoto }}
-                style={{ width: 160, height: 160, borderRadius: 20, borderWidth: 3, borderColor: theme.color.disabled }}
-                resizeMode="cover"
-              />
-            )}
-          </View>
-          <TouchableOpacity
-            style={{
-              marginTop: 20,
-              width: 120,
-              height: 30,
-              borderRadius: 15,
-              borderWidth: 2,
-              borderColor: theme.color.border,
-            }}
-            onPress={addImage}
-            activeOpacity={0.6}>
-            <Text style={{ color: 'black', alignSelf: 'center', lineHeight: 24 }}>이미지 선택</Text>
-          </TouchableOpacity>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView>
+        <View style={{ margin: 20 }}>
+          <StepTextInput
+            type="그룹명"
+            maxLength={20}
+            required={true}
+            onValueChange={setGroupName}
+            value={groupName}
+            multiline={false}
+          />
         </View>
-      </View>
-      <View style={{ marginHorizontal: 20 }}>
-        <Text style={{ color: theme.font.color, fontWeight: '800', marginVertical: 20 }}>그룹 설명</Text>
-        <TextInput
-          multiline={true}
-          numberOfLines={6}
-          onBlur={inputOnBlur}
-          onFocus={inputOnFocus}
-          value={groupDescription}
-          onChangeText={setGroupDescription}
-          style={{ borderColor: inputBorderColor, borderWidth: 1 }}
-        />
-      </View>
+        <View style={{ margin: 20 }}>
+          <Text style={{ color: theme.font.color, fontWeight: '800' }}>
+            대표 사진 <Text style={{ color: theme.color.alert }}>*</Text>
+          </Text>
+          <View style={{ alignItems: 'center', marginTop: 10 }}>
+            <View
+              style={{
+                width: 160,
+                height: 160,
+                borderRadius: 20,
+                borderWidth: 3,
+                borderStyle: 'dashed',
+                borderColor: theme.color.disabled,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {!!groupPhoto && (
+                <Image
+                  source={{ uri: groupPhoto }}
+                  style={{
+                    width: 160,
+                    height: 160,
+                    borderRadius: 20,
+                    borderWidth: 3,
+                    borderColor: theme.color.disabled,
+                  }}
+                  resizeMode="cover"
+                />
+              )}
+            </View>
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                width: 120,
+                height: 30,
+                borderRadius: 15,
+                borderWidth: 2,
+                borderColor: theme.color.border,
+              }}
+              onPress={addImage}
+              activeOpacity={0.6}>
+              <Text style={{ color: 'black', alignSelf: 'center', lineHeight: 24 }}>이미지 선택</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{ marginHorizontal: 20 }}>
+          <Text style={{ color: theme.font.color, fontWeight: '800', marginVertical: 20 }}>그룹 설명</Text>
+          <TextInput
+            multiline={true}
+            numberOfLines={6}
+            onBlur={inputOnBlur}
+            onFocus={inputOnFocus}
+            value={groupDescription}
+            onChangeText={setGroupDescription}
+            style={{ borderColor: inputBorderColor, borderWidth: 1 }}
+          />
+        </View>
+      </ScrollView>
       <TouchableOpacity
         style={{
-          position: 'absolute',
           alignItems: 'center',
           width,
-          backgroundColor: 'white',
           justifyContent: 'center',
-          height: 90,
-          top: height - 140,
+          height: 70,
         }}
         activeOpacity={0.6}
         onPress={onPressEdit}>
         <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>수정하기</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
