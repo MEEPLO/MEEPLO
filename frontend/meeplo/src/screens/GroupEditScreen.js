@@ -114,7 +114,14 @@ const GroupEditScreen = ({ route, navigation }) => {
   return (
     <View style={{ height }}>
       <View style={{ margin: 20 }}>
-        <StepTextInput type="그룹명" maxLength={20} required={true} onValueChange={setGroupName} value={groupName} />
+        <StepTextInput
+          type="그룹명"
+          maxLength={20}
+          required={true}
+          onValueChange={setGroupName}
+          value={groupName}
+          multiline={false}
+        />
       </View>
       <View style={{ margin: 20 }}>
         <Text style={{ color: theme.font.color, fontWeight: '800' }}>

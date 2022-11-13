@@ -20,6 +20,7 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
 
 export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form, Alert, navigation }) => {
   try {
+    console.log('리덕스 유저정보수정', form);
     const accessToken = await AsyncStorage.getItem('@accessToken');
     await axios
       .put(
@@ -35,12 +36,6 @@ export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form,
         Alert.alert(`프로필을 수정했습니다.`, '', [
           {
             text: '확인',
-            onPress: () => {
-              navigation.reset({
-                index: 1,
-                routes: [{ name: 'Home' }, { name: 'MyPage' }],
-              });
-            },
           },
         ]);
       });
