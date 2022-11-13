@@ -35,8 +35,7 @@ const ToolBarRight = ({ userPhoto }) => {
   const onPressMyPage = () => {
     navigation.navigate('HomeStack', { screen: 'MyPage' });
   };
-  // console.log('props로 받기', user.profilePhoto);
-  // console.log('selector로 받기', userPhoto);
+
   return (
     <TouchableOpacity style={{ height: 50, alignItems: 'center', justifyContent: 'center' }} onPress={onPressMyPage}>
       <Image

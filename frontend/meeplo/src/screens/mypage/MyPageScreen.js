@@ -12,40 +12,6 @@ import { theme } from '../../assets/constant/DesignTheme';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { editUserInfo } from '../../redux/userSlice';
 
-const DATA = {
-  id: 2,
-  nickname: '김혜림',
-  profilePhoto: 'http://k.kakaocdn.net/dn/8v2nW/btrN66KPJ0G/kUvxNi2zoea8K4y3mzfMc0/img_640x640.jpg',
-  startLocations: [
-    {
-      id: 1,
-      name: '집',
-      address: '서울특별시 양천구 신월동 350-2 신안파크아파트',
-    },
-    {
-      id: 2,
-      name: '집',
-      address: '서울특별시 양천구 신월동 350-2 신안파크아파트',
-    },
-    {
-      id: 3,
-      name: '집',
-      address:
-        '서울특별시 양천구 신월동 350-2 신안파크아파트 겁나 길어지면 어때요? 오오오오오오 알아서 되네 좋아요굳굳',
-    },
-    {
-      id: 4,
-      name: '집',
-      address: '서울특별시 양천구 신월동 350-2 신안파크아파트',
-    },
-    {
-      id: 5,
-      name: '집',
-      address: '서울특별시 양천구 신월동 350-2 신안파크아파트',
-    },
-  ],
-};
-
 const MyPageScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.info);
@@ -141,7 +107,9 @@ const MyPageScreen = ({ navigation }) => {
     setUserPhoto(userInitialPhoto);
   };
 
-  const onPressEditLocations = () => {};
+  const onPressEditLocations = () => {
+    navigation.navigate('MyPageLocation');
+  };
 
   return (
     <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
@@ -261,16 +229,34 @@ const MyPageScreen = ({ navigation }) => {
       <View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{ fontSize: 24, fontWeight: '900', color: 'black', marginVertical: 25 }}>등록된 출발지</Text>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            style={{ flexDirection: 'row', alignItems: 'center' }}
-            onPress={onPressEditLocations}>
-            <Text>수정</Text>
-            <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
-          </TouchableOpacity>
+          {user.startLocations.length !== 0 && (
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+              onPress={onPressEditLocations}>
+              <Text>수정</Text>
+              <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={{ marginHorizontal: 20 }}>
-          {DATA.startLocations.map((item, index) => {
+          {user.startLocations.length === 0 && (
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={onPressEditLocations}
+              style={{
+                borderWidth: 2,
+                borderColor: theme.color.disabled,
+                height: 100,
+                borderRadius: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{ fontSize: 16 }}>아직 등록된 출발지가 없네요!</Text>
+              <Text style={{ fontSize: 20, color: 'gray' }}>출발지를 등록해보세요</Text>
+            </TouchableOpacity>
+          )}
+          {user.startLocations.map((item, index) => {
             return (
               <View key={'startLocation' + index} style={{ marginVertical: 10 }}>
                 <Text style={{ fontSize: 20, fontWeight: '700', color: 'black' }}>{item.name}</Text>

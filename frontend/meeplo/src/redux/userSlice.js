@@ -2,6 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
+import Images from '../assets/image/index';
 
 export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
   try {
@@ -20,7 +21,6 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
 
 export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form, Alert, navigation }) => {
   try {
-    console.log('리덕스 유저정보수정', form);
     const accessToken = await AsyncStorage.getItem('@accessToken');
     await axios
       .put(
@@ -78,11 +78,15 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async ({ Alert, na
 export const createStartLocation = createAsyncThunk('user/createStartLocation', async ({ form }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    await axios.post(MEEPLO_SERVER_BASE_URL + `/member/location`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    await axios.post(
+      MEEPLO_SERVER_BASE_URL + `/member/location`,
+      { ...form },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
   } catch (err) {
     console.error('ERROR in createStartLocation', err);
     return isRejectedWithValue(err.response?.data);
@@ -109,7 +113,7 @@ const userSlice = createSlice({
     info: {
       nickname: 'String',
       id: 1,
-      profilePhoto: 'http://www.pharmnews.com/news/photo/202206/205376_75336_1939.png',
+      profilePhoto: Images.frame.defaultImage.uri,
       startLocations: [
         {
           id: -1,
