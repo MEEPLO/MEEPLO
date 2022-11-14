@@ -9,6 +9,7 @@ import HomeSchedule from '../components/Home/HomeSchedule';
 import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation';
 import { getGroupList } from '../redux/groupSlice';
 import { logInWithKakao, logOutWithKakao } from '../auth/Authentication';
+import { getUserInfo } from '../redux/userSlice';
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -56,19 +57,11 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const onPressLogout = () => {
-    logOutWithKakao().then(() => {
-      Alert.alert('로그아웃', '로그아웃 되었습니다.', [
-        {
-          text: '확인',
-          onPress: () => {
-            navigation.replace('Login');
-          },
-        },
-      ]);
-    });
+    logOutWithKakao({ Alert, navigation });
   };
 
   useEffect(() => {
+    dispatch(getUserInfo());
     dispatch(getGroupList());
   }, []);
 
