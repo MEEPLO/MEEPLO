@@ -13,10 +13,9 @@ const HomeStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
   const user = useSelector(state => state.user.info);
-  console.log(user.profilePhoto);
 
   return (
-    <HomeStack.Navigator initialRouteName="Login">
+    <HomeStack.Navigator initialRouteName="Home">
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}

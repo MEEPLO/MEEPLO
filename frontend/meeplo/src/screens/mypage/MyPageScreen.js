@@ -1,5 +1,5 @@
 import { ScrollView, View, Text, Image, TouchableOpacity, Dimensions, Alert, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
@@ -10,7 +10,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import { theme } from '../../assets/constant/DesignTheme';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
-import { editUserInfo } from '../../redux/userSlice';
+import { editUserInfo, getUserInfo } from '../../redux/userSlice';
 
 const MyPageScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -110,6 +110,10 @@ const MyPageScreen = ({ navigation }) => {
   const onPressEditLocations = () => {
     navigation.navigate('MyPageLocation');
   };
+
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
 
   return (
     <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
