@@ -1,11 +1,49 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+
+import { createSchedule } from '../../../redux/scheduleSlice';
 import StepButton from '../../../components/stepper/StepButton';
 
 import { theme } from '../../../assets/constant/DesignTheme';
 
 const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
-  console.log(state);
+  const dispatch = useDispatch();
+
+  const onPressCreate = () => {
+    dispatch(
+      createSchedule({
+        date: state.date,
+        name: state.name,
+        groupId: state.group.id,
+        meetLocationId: state.meet.id,
+        // keywords : [
+        //   {
+        //     id : long
+        //   }
+        // ],
+        // members: [
+        //   {
+        //     id: long,
+        //   },
+        // ],
+        amuses: [
+          {
+            id: state.amuse.id,
+          },
+        ],
+      }),
+    )
+      .unwrap()
+      .then(payload => {
+        console.log('createSchdule success', payload);
+
+        onFinish();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   return visible ? (
     <View style={styles.screenStyle}>
@@ -64,7 +102,7 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
 
       <View style={styles.navigateViewStyle}>
         <StepButton text="< 이전" active={false} onPress={toPrev} />
-        <StepButton text="만들기" active={true} onPress={onFinish} />
+        <StepButton text="만들기" active={true} onPress={onPressCreate} />
       </View>
     </View>
   ) : null;
