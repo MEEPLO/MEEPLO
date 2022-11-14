@@ -33,6 +33,10 @@ const theme = {
     base: 20,
     input: 15,
   },
+  border: {
+    thick: 2,
+    thin: 1,
+  },
 };
 
 export { theme };
