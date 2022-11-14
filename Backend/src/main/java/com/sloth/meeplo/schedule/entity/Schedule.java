@@ -38,11 +38,7 @@ public class Schedule extends BaseTimeEntity {
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<ScheduleLocation> scheduleLocations;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinTable(name = "ScheduleKeywordRelaction",
-            joinColumns = @JoinColumn(name="schedule_id"),
-            inverseJoinColumns = @JoinColumn(name="schedule_keyword_id")
-    )
+    @OneToMany(mappedBy = "schedule",cascade = CascadeType.ALL)
     private List<ScheduleKeyword> scheduleKeywords = new ArrayList<>();
 
     @Builder(builderClassName = "EmptyBuilder",builderMethodName = "EmptyBuilder")
