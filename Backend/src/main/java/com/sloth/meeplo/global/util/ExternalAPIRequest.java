@@ -26,7 +26,7 @@ public class ExternalAPIRequest {
 
     @Value("${kakao.restapikey}")
     private String kakaoRestApiKey;
-    @Value("OpenRouterService.api_key")
+    @Value("${OpenRouterService.api_key}")
     private String ORSApiKey;
 
     public String getHttpResponse(URL url, String token) {
@@ -60,7 +60,6 @@ public class ExternalAPIRequest {
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setDoOutput(true);
             String requestBody = new JSONObject(requestMap).toString();
-            log.info(requestBody);
 
             // log 관련 처리
 //        int responseCode = conn.getResponseCode();
@@ -69,9 +68,6 @@ public class ExternalAPIRequest {
             bw.write(requestBody);
             bw.flush();
             bw.close();
-
-            log.info(conn.getContentType());
-            log.info(conn.getResponseMessage());
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder sb = new StringBuilder();
@@ -139,7 +135,7 @@ public class ExternalAPIRequest {
     public String getKakaoAddressInfo(Double lng, Double lat) {
 
         String parameter =  String.format("x=%s&y=%s", URLEncoder.encode(lng.toString(), StandardCharsets.UTF_8), URLEncoder.encode(lat.toString(), StandardCharsets.UTF_8));
-        log.info(parameter);
+//        log.info(parameter);
         URL url;
         try {
             url = new URL("https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?"+parameter);
@@ -168,16 +164,16 @@ public class ExternalAPIRequest {
         requestMap.put("coordinates",new Double[][] {{start.getLng(),start.getLat()},{dest.getLng(), dest.getLat()}});
 
         String response = postHttpResponse(url, header, requestMap);
-//        log.info(response);
+        log.info(response);
         JsonObject fullResponse = JsonParser.parseString(response).getAsJsonObject();
 
         //시간
         JsonArray routes = fullResponse.get("routes").getAsJsonArray();
         JsonObject summary = routes.get(0).getAsJsonObject().get("summary").getAsJsonObject();
         Double duration = summary.getAsJsonObject().get("duration").getAsDouble();
-
+        log.info(duration.toString());
         String geometry = routes.get(0).getAsJsonObject().get("geometry").getAsString();
-
+        log.info(geometry);
         log.info(GeometryDecoder.decodeGeometry(geometry, true).toString());
         return null;
     }
