@@ -22,6 +22,26 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
     setAmuse(location);
   };
 
+  const validateInput = () => {
+    return true;
+  };
+  const onPressNext = () => {
+    if (validateInput()) {
+      const actions = [
+        {
+          type: 'UPDATE_MEET',
+          payload: meet,
+        },
+        {
+          type: 'UPDATE_AMUSE',
+          payload: amuse,
+        },
+      ];
+
+      toNext(actions);
+    } else toNext();
+  };
+
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
@@ -32,7 +52,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="< 이전" active={false} onPress={toPrev} />
-        <StepButton text="만들기" active={true} onPress={onFinish} />
+        <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
     </View>
   ) : null;
