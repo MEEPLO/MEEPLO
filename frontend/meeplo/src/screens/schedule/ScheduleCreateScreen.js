@@ -1,5 +1,7 @@
 import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { hideTabBar, showTabBar } from '../../redux/navigationSlice';
 
 import helper from '../../helper';
 
@@ -66,6 +68,7 @@ const initialSchedule = {
 const STEP_COUNT = 4;
 
 const ScheduleCreateScreen = ({ navigation }) => {
+  const reduxDispatch = useDispatch();
   const [step, setStep] = useState(0);
   const [schedule, dispatch] = useReducer(reducer, initialSchedule);
   const stepItems = [
@@ -74,6 +77,13 @@ const ScheduleCreateScreen = ({ navigation }) => {
     ScheduleCreateLocationScreen,
     ScheduleCreateCheckScreen,
   ];
+
+  useEffect(() => {
+    reduxDispatch(hideTabBar());
+    return () => {
+      reduxDispatch(showTabBar());
+    };
+  }, []);
 
   useEffect(() => {
     return navigation.addListener('beforeRemove', e => {

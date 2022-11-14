@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     width: '100%',
 
     position: 'absolute',
-    bottom: 150,
+    bottom: 100,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

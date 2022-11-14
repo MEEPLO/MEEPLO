@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { theme } from '../../assets/constant/DesignTheme';
 
 import GroupMemberSelectListItem from './GroupMemberSelectListItem';
 
+const screen = Dimensions.get('screen');
+
+const memberListMaxHeight = screen.height * 0.5;
+
 const GroupMemberSelectList = ({ type, members, selectedMembers, required, onSelect }) => {
   const userInfo = useSelector(state => state.user.info);
+  const [testMembers, setTestMembers] = useState([]);
+
+  useEffect(() => {
+    setTestMembers([...members, ...members, ...members, ...members, ...members]);
+  }, [members]);
+
+  useEffect(() => {
+    console.log('user', userInfo);
+  }, [userInfo]);
 
   return (
     <View style={styles.memberListViewStyle}>
       <Text style={{ color: '#000', fontWeight: '800', marginBottom: 20 }}>
         {type} {required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
       </Text>
-      <Text style={styles.memberListStyle}>
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <FlatList
-          data={members}
+          style={styles.memberListStyle}
+          data={testMembers}
           renderItem={item => (
             <GroupMemberSelectListItem
               member={item.item}
@@ -26,12 +40,18 @@ const GroupMemberSelectList = ({ type, members, selectedMembers, required, onSel
             />
           )}
           keyExtractor={member => member.id}
+          showsVerticalScrollIndicator={false}
         />
-      </Text>
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({ memberListViewStyle: {}, memberListStyle: {} });
+const styles = StyleSheet.create({
+  memberListViewStyle: {},
+  memberListStyle: {
+    maxHeight: memberListMaxHeight,
+  },
+});
 
 export default GroupMemberSelectList;
