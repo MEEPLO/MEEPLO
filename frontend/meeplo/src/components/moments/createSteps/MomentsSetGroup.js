@@ -23,13 +23,6 @@ const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
     dispatch(getGroupList());
   }, []);
 
-  // React.useEffect(() => {
-  //   console.log(groupList.group);
-  //   groupList.forEach(group => {
-  //     setGroupsData(prevData => [...prevData, { key: group.id, value: group.name }]);
-  //   });
-  // }, [groupList.group]);
-
   const onPressNext = () => {
     const actions = [
       {
