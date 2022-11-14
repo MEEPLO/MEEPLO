@@ -10,63 +10,6 @@ import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput'
 
 const screen = Dimensions.get('screen');
 
-const keywordsData = [
-  {
-    classification: 1,
-    category: '음식 종류',
-    keyword: '양꼬치',
-    id: 1,
-  },
-  {
-    classification: 1,
-    category: '음식 종류',
-    keyword: '닭꼬치',
-    id: 2,
-  },
-  {
-    classification: 1,
-    category: '음식 종류',
-    keyword: '떡꼬치',
-    id: 3,
-  },
-  {
-    classification: 2,
-    category: '분위기',
-    keyword: '조용한',
-    id: 4,
-  },
-  {
-    classification: 2,
-    category: '분위기',
-    keyword: '신나는',
-    id: 5,
-  },
-  {
-    classification: 2,
-    category: '분위기',
-    keyword: '행복한',
-    id: 6,
-  },
-  {
-    classification: 3,
-    category: '장소',
-    keyword: '카페',
-    id: 7,
-  },
-  {
-    classification: 3,
-    category: '장소',
-    keyword: '술집',
-    id: 8,
-  },
-  {
-    classification: 3,
-    category: '장소',
-    keyword: '산책',
-    id: 9,
-  },
-];
-
 const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const [date, setDate] = useState();
   const [name, setName] = useState();
@@ -128,7 +71,7 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
         <StepTextInput type="약속 이름" multiline={false} value={name} onValueChange={setName} required />
       </View>
       <View style={styles.inputViewStyle}>
-        <KeywordsModalInput type="키워드" value={keywords} onConfirm={onConfirmKeywords} keywordsData={keywordsData} />
+        <KeywordsModalInput type="키워드" value={keywords} onConfirm={onConfirmKeywords} />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="" />
