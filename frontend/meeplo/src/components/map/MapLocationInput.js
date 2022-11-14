@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from 'react-native';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, TextInput, Image } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { getNearLocations } from '../../redux/locationSlice';
 
@@ -11,9 +11,13 @@ import MapView from './MapView';
 import MapSearchResultList from './MapSearchResultList';
 
 const screen = Dimensions.get('screen');
-const serachInputWidth = screen.width * 0.7;
+const searchInputWidth = screen.width * 0.7;
+const selectedNearLocationViewWidth = screen.width * 0.95;
+const selectedNearLocationViewHeight = screen.height * 0.5;
+const selectedNearLocationViewUpY = screen.height * 0.5;
+const selectedNearLocationViewDownY = screen.height * 1;
 
-const MapLocationInput = ({ type, required, value }) => {
+const MapLocationInput = ({ type, required, value, onValueChange }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
@@ -24,9 +28,10 @@ const MapLocationInput = ({ type, required, value }) => {
 
   const [nearLocations, setNearLocations] = useState();
   const [selectedNearLocation, setSelectedNearLocation] = useState();
-  const [showSelectedNearLocationInfo, setShowSelectedNearLocationInfo] = useState();
+  const [showSelectedNearLocationInfo, setShowSelectedNearLocationView] = useState();
 
   const webViewRef = useRef();
+  const selectedNearLocationViewPositionAnim = useRef(new Animated.ValueXY()).current;
 
   useEffect(() => {
     if (mapZoomLevel <= 5) {
@@ -42,10 +47,22 @@ const MapLocationInput = ({ type, required, value }) => {
     }
   }, [searchValue]);
 
+  useEffect(() => {
+    if (showSelectedNearLocationInfo) {
+      selectedNearLocationViewUp();
+    } else {
+      selectedNearLocationViewDown();
+    }
+  }, [showSelectedNearLocationInfo, selectedNearLocationViewUp, selectedNearLocationViewDown]);
+
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-  const openSelectedNearLocationInfo = () => setShowSelectedNearLocationInfo(true);
-  const closeSelectedNearLocationInfo = () => setShowSelectedNearLocationInfo(false);
+  const openSelectedNearLocationView = () => {
+    setShowSelectedNearLocationView(true);
+  };
+  const closeSelectedNearLocationView = () => {
+    setShowSelectedNearLocationView(false);
+  };
 
   const onMessageHandler = data => {
     processMapMessage(parseMessage(data.nativeEvent.data));
@@ -66,8 +83,9 @@ const MapLocationInput = ({ type, required, value }) => {
         setMapZoomLevel(body.level);
         break;
       case MESSAGE_TYPE.SELECT_NEAR_LOCATION:
+        console.log(body);
         setSelectedNearLocation(body);
-        openSelectedNearLocationInfo();
+        openSelectedNearLocationView();
         break;
     }
   };
@@ -109,6 +127,64 @@ const MapLocationInput = ({ type, required, value }) => {
       });
   };
 
+  const selectedNearLocationViewUp = useCallback(() => {
+    Animated.spring(selectedNearLocationViewPositionAnim, {
+      toValue: { x: 0, y: selectedNearLocationViewUpY },
+      useNativeDriver: true,
+    }).start();
+  }, [selectedNearLocationViewPositionAnim]);
+
+  const selectedNearLocationViewDown = useCallback(() => {
+    Animated.spring(selectedNearLocationViewPositionAnim, {
+      toValue: { x: 0, y: selectedNearLocationViewDownY },
+      useNativeDriver: true,
+    }).start();
+  }, [selectedNearLocationViewPositionAnim]);
+
+  const renderSelectedNearLocationInfoView = selectedNearLocation => {
+    if (!selectedNearLocation || !selectedNearLocation.name) {
+      return null;
+    }
+
+    return (
+      <View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Image
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: theme.radius.base,
+              borderWidth: 2,
+              borderColor: theme.color.border,
+            }}
+            source={{
+              uri: selectedNearLocation?.photo,
+            }}
+          />
+          <Text style={{ fontSize: 20, fontWeight: '800' }}>{selectedNearLocation?.name}</Text>
+        </View>
+        <Text>{selectedNearLocation?.address}</Text>
+        <Text>{selectedNearLocation?.category}</Text>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: theme.color.bright.blue,
+            marginTop: 30,
+            alignItems: 'center',
+            borderRadius: theme.radius.base,
+            borderWidth: 2,
+            borderColor: theme.color.border,
+          }}
+          onPress={() => {
+            onValueChange(selectedNearLocation);
+            closeModal();
+          }}>
+          <Text style={{ fontSize: 24, fontWeight: '800' }}>선택</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View>
       <Text style={styles.titleStyle}>
@@ -116,7 +192,7 @@ const MapLocationInput = ({ type, required, value }) => {
       </Text>
 
       <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>{value}</Text>
+        <Text style={{ color: theme.font.color }}>{value?.name}</Text>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 
@@ -137,6 +213,25 @@ const MapLocationInput = ({ type, required, value }) => {
           ) : null}
 
           {/* {showSearchResultList ? <MapSearchResultList items={searchResult} /> : null} */}
+
+          <Animated.View
+            style={[
+              styles.selectedNearLocationView,
+              {
+                transform: [
+                  { translateX: selectedNearLocationViewPositionAnim.x },
+                  { translateY: selectedNearLocationViewPositionAnim.y },
+                ],
+              },
+            ]}>
+            <TouchableOpacity
+              style={styles.selectedNearLocationCloseButton}
+              onPress={() => closeSelectedNearLocationView()}>
+              <Text>X</Text>
+            </TouchableOpacity>
+
+            {renderSelectedNearLocationInfoView(selectedNearLocation)}
+          </Animated.View>
         </View>
       </ModalCover>
     </View>
@@ -144,6 +239,9 @@ const MapLocationInput = ({ type, required, value }) => {
 };
 
 const styles = StyleSheet.create({
+  requiredStyle: {
+    color: theme.color.alert,
+  },
   titleStyle: {
     color: theme.font.color,
     fontWeight: '800',
@@ -167,7 +265,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mapSearchInput: {
-    width: serachInputWidth,
+    width: searchInputWidth,
     height: 40,
     margin: 12,
     borderWidth: 1,
@@ -187,6 +285,31 @@ const styles = StyleSheet.create({
   },
   mapSearchNearText: {
     color: 'white',
+  },
+  selectedNearLocationView: {
+    position: 'absolute',
+    width: selectedNearLocationViewWidth,
+    height: selectedNearLocationViewHeight,
+    padding: 20,
+    backgroundColor: theme.color.background,
+
+    alignItems: 'center',
+
+    borderRadius: theme.radius.base,
+    borderWidth: 2,
+    borderColor: theme.color.border,
+  },
+  selectedNearLocationCloseButton: {
+    height: 40,
+    width: 40,
+    backgroundColor: theme.color.bright.purple,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    borderRadius: theme.radius.base,
+    borderWidth: 2,
+    borderColor: theme.color.border,
   },
 });
 

@@ -14,14 +14,21 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
     setAmuse();
   }, []);
 
+  const onSelectMeetLocation = location => {
+    setMeet(location);
+  };
+
+  const onSelectAmuseLocation = location => {
+    setAmuse(location);
+  };
+
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <MapLocationInput type="만날 장소" required value="text" />
+        <MapLocationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} />
       </View>
       <View style={styles.inputViewStyle}>
-        <Text>약속 장소</Text>
-        <TextInput />
+        <MapLocationInput type="약속 장소" required value={amuse} onValueChange={onSelectAmuseLocation} />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="< 이전" active={false} onPress={toPrev} />
