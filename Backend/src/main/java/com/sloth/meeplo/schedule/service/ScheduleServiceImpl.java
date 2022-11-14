@@ -65,8 +65,10 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .build()
         );
-        scheduleCreateInput.getKeywords()
-                .forEach(k-> scheduleKeywordRepository.save(ScheduleKeyword.builder().keyword(k).build()));
+
+        scheduleKeywordRepository.saveAll(scheduleCreateInput.getKeywords().stream()
+                .map(k->ScheduleKeyword.builder().keyword(k).build())
+                .collect(Collectors.toList()));
 
         scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
         scheduleCreateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
@@ -112,7 +114,9 @@ public class ScheduleServiceImpl implements ScheduleService{
         scheduleRepository.save(schedule);
 
         scheduleKeywordRepository.deleteAllBySchedule(schedule);
-        scheduleUpdateInput.getKeywords().forEach(k-> scheduleKeywordRepository.save(ScheduleKeyword.builder().keyword(k).build()));
+        scheduleKeywordRepository.saveAll(scheduleUpdateInput.getKeywords().stream()
+                .map(k->ScheduleKeyword.builder().keyword(k).build())
+                .collect(Collectors.toList()));
 
         schedule.getScheduleMembers().stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
