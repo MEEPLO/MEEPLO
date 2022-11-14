@@ -8,6 +8,7 @@ import StepRenderer from '../../components/stepper/StepRenderer';
 import ScheduleCreateInfoScreen from './create/ScheduleCreateInfoScreen';
 import ScheduleCreateLocationScreen from './create/ScheduleCreateLocationScreen';
 import ScheduleCreateMemberScreen from './create/ScheduleCreateMemberScreen';
+import ScheduleCreateCheckScreen from './create/ScheduleCreateCheckScreen';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -22,15 +23,15 @@ const reducer = (state, action) => {
         ...state,
         name: action.payload,
       };
-    case 'UPDATE_GROUPID':
+    case 'UPDATE_GROUP':
       return {
         ...state,
-        groupId: action.payload,
+        group: action.payload,
       };
-    case 'UPDATE_MEETLOCATIONID':
+    case 'UPDATE_MEET':
       return {
         ...state,
-        meetLocationId: action.payload,
+        meet: action.payload,
       };
     case 'UPDATE_KEYWORDS':
       return {
@@ -42,10 +43,10 @@ const reducer = (state, action) => {
         ...state,
         members: action.payload,
       };
-    case 'UPDATE_AMUSES':
+    case 'UPDATE_AMUSE':
       return {
         ...state,
-        amuses: action.payload,
+        amuse: action.payload,
       };
     default:
       return action.type;
@@ -55,19 +56,24 @@ const reducer = (state, action) => {
 const initialSchedule = {
   date: null,
   name: null,
-  groupId: null,
-  meetLocationId: null,
+  group: null,
+  meet: null,
   keywords: [],
-  members: [],
-  amuses: [],
+  members: {},
+  amuse: {},
 };
 
-const STEP_COUNT = 3;
+const STEP_COUNT = 4;
 
 const ScheduleCreateScreen = ({ navigation }) => {
   const [step, setStep] = useState(0);
   const [schedule, dispatch] = useReducer(reducer, initialSchedule);
-  const stepItems = [ScheduleCreateInfoScreen, ScheduleCreateMemberScreen, ScheduleCreateLocationScreen];
+  const stepItems = [
+    ScheduleCreateInfoScreen,
+    ScheduleCreateMemberScreen,
+    ScheduleCreateLocationScreen,
+    ScheduleCreateCheckScreen,
+  ];
 
   useEffect(() => {
     return navigation.addListener('beforeRemove', e => {

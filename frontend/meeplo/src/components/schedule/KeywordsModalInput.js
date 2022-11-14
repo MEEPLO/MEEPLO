@@ -82,9 +82,10 @@ const KeywordsModalInput = ({ type, value, onConfirm, keywordsData }) => {
     <View>
       <Text style={styles.titleStyle}>{type}</Text>
 
-      <TouchableOpacity style={{ borderWidth: 1, minHeight: 50 }} onPress={openModal}>
+      <TouchableOpacity
+        style={{ marginTop: 10, minHeight: 40, borderBottomWidth: 1, borderColor: theme.color.disabled }}
+        onPress={openModal}>
         <View style={styles.keywordBadgeView}>{renderKeywordBadges(keywordsData)}</View>
-        <View style={styles.keywordsInputView} />
       </TouchableOpacity>
 
       <ModalRound title="키워드" visible={showModal} onRequestClose={closeModal}>
@@ -112,7 +113,6 @@ const styles = StyleSheet.create({
   titleStyle: {
     color: theme.font.color,
     fontWeight: '800',
-    marginBottom: 40,
   },
   keywordBadgeView: {
     flexDirection: 'row',

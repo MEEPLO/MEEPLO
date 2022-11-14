@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
+import Toast from 'react-native-toast-message';
 
 import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
 import DateModalInput from '../../../components/schedule/DateModalInput';
 import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput';
+
+const screen = Dimensions.get('screen');
 
 const keywordsData = [
   {
@@ -79,8 +82,14 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
     if (date && name) {
       return true;
     }
+
+    Toast.show({
+      type: 'error',
+      text1: '필수 항목이 입력되지 않았어요!',
+    });
     return false;
   };
+
   const onPressNext = () => {
     if (validateInput()) {
       const actions = [
