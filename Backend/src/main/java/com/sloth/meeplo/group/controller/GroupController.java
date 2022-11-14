@@ -94,14 +94,14 @@ public class GroupController {
 
 
     @GetMapping("{groupId}/moment/map")
-    public ResponseEntity<Map<String, List>> getMapMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+    public ResponseEntity<Map<String, List>> getMapMoments(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("moments", groupService.getMapMoments(authorization,groupId));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("{groupId}/schedule")
-    public ResponseEntity<Map<String, List>> getGroupSchedules(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+    public ResponseEntity<Map<String, List>> getGroupSchedules(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("schedules", groupService.getGroupSchedules(authorization,groupId));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
