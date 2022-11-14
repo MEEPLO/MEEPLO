@@ -153,5 +153,20 @@ public class GroupResponse {
             this.lng = location.getLng();
         }
     }
+    @Getter
+    @ToString
+    public static class GroupSchedule {
+        private Long id;
+        private String name;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        private LocalDateTime date;
+
+        @Builder
+        GroupSchedule(Schedule schedule){
+            this.id = schedule.getId();
+            this.name = schedule.getName();
+            this.date = schedule.getDate();
+        }
+    }
 
 }
