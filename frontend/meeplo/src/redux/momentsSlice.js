@@ -19,13 +19,14 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async p
   }
 });
 
-export const getMomentsCalendar = createAsyncThunk('moments/getMomentsCalendar', async () => {
+export const getMomentsCalendar = createAsyncThunk('moments/getMomentsCalendar', async params => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/calendar`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      params: params,
     });
     return response.data;
   } catch (err) {
@@ -215,6 +216,20 @@ const momentsListSlice = createSlice({
   extraReducers: { [getMomentsList.fulfilled]: (state, { payload }) => payload },
 });
 
+const momentsCalendarSlice = createSlice({
+  name: 'momentsCalendar',
+  initialState: {
+    moments: [
+      {
+        id: 0,
+        photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',
+        date: 'String',
+      },
+    ],
+  },
+  extraReducers: { [getMomentsCalendar.fulfilled]: (state, { payload }) => payload },
+});
+
 const momentDetailSlice = createSlice({
   name: 'momentDetail',
   initialState: {
@@ -264,4 +279,4 @@ const groupSchedulesSlice = createSlice({
   extraReducers: { [getGroupSchedules.fulfilled]: (state, { payload }) => payload },
 });
 
-export { momentsListSlice, momentDetailSlice, commentsSlice, groupSchedulesSlice };
+export { momentsListSlice, momentDetailSlice, commentsSlice, groupSchedulesSlice, momentsCalendarSlice };

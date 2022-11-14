@@ -1,5 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { momentsListSlice, momentDetailSlice, commentsSlice, groupSchedulesSlice } from './momentsSlice';
+import {
+  momentsListSlice,
+  momentsCalendarSlice,
+  momentDetailSlice,
+  commentsSlice,
+  groupSchedulesSlice,
+} from './momentsSlice';
 import scheduleReducer from './scheduleSlice';
 import { groupListSlice, groupDetailSlice } from './groupSlice';
 import { userSlice } from './userSlice';
@@ -9,6 +15,7 @@ import { tabBarSlice } from './navigationSlice';
 
 const rootReducer = combineReducers({
   momentsList: momentsListSlice.reducer,
+  momentsCalendar: momentsCalendarSlice.reducer,
   momentDetail: momentDetailSlice.reducer,
   commentsList: commentsSlice.reducer,
   groupSchedules: groupSchedulesSlice.reducer,
