@@ -3,7 +3,6 @@ package com.sloth.meeplo.moment.dto.response;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.moment.entity.MomentComment;
-import com.sloth.meeplo.moment.type.MomentType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
