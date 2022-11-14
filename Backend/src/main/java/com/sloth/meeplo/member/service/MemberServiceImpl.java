@@ -44,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
         MemberRequest.MemberInfo memberInfo = null;
         Member member = null;
 
-        if(Pattern.matches("^Bearer .*", authorization)) {
+        if(authorization != null && Pattern.matches("^Bearer .*", authorization)) {
             memberInfo = externalAPIRequest.getKakaoMemberInfo(authorization);
             member = memberRepository.findByProviderAndProviderId(memberInfo.getProvider(), memberInfo.getProviderId()).orElse(null);
         } else {

@@ -30,7 +30,7 @@ public class MemberController {
      * @return : accessToken, refreshToken, 신규 회원 여부
      */
     @GetMapping("/auth/kakao")
-    public ResponseEntity<MemberResponse.MemberToken> getAppTokenForKakaoLogin(@ApiIgnore @RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<MemberResponse.MemberToken> getAppTokenForKakaoLogin(@ApiIgnore @RequestHeader(value = "Authorization", required = false) String authorization) {
         MemberResponse.MemberToken memberToken = memberService.getKakaoMemberToken(authorization);
 
         return new ResponseEntity<>(memberToken, HttpStatus.OK);
