@@ -27,18 +27,12 @@ public class ScheduleRequest {
         private Long groupId;
         @NotBlank
         private Long meetLocationId;
-        private List<ScheduleInputKeyword> keywords;
+        private List<String> keywords;
         private List<ScheduleInputMember> members;
         private List<ScheduleInputAmuse> amuses;
 
     }
 
-    @Getter
-    @ToString
-    @NoArgsConstructor
-    public static class ScheduleInputKeyword{
-        private Long id;
-    }
     @Getter
     @ToString
     @NoArgsConstructor
@@ -67,7 +61,7 @@ public class ScheduleRequest {
         private Long groupId;
         @NotBlank
         private Long meetLocationId;
-        private List<ScheduleInputKeyword> keywords;
+        private List<String> keywords;
         private List<ScheduleInputMember> members;
         private List<ScheduleInputAmuse> amuses;
     }
