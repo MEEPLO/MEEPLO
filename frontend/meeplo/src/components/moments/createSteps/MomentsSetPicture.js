@@ -7,7 +7,6 @@ import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDEN
 import { decode } from 'base64-arraybuffer';
 import { theme } from '../../../assets/constant/DesignTheme';
 
-import MomentsUpload from '../MomentsUpload';
 import StepButton from '../../stepper/StepButton';
 
 const windowHeight = Dimensions.get('window').height;
@@ -37,8 +36,6 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   // load webview
   const html = mergeAndUpload(state.type);
   console.log('inpicture: ', state);
-
-  var dataString = '';
 
   // upload image
   const uploadToS3 = dataString => {
@@ -70,7 +67,6 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
         return alert(err.stack);
       }
       alert('Successfully uploaded photo.');
-      // console.log(data.Location);
       setPictureUrl(data.Location);
     });
   };
