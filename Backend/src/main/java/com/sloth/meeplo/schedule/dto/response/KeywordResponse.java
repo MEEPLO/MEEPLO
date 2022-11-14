@@ -1,7 +1,6 @@
 package com.sloth.meeplo.schedule.dto.response;
 
 import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
-import com.sloth.meeplo.schedule.type.ScheduleKeywordClassification;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -15,6 +15,7 @@ import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
 import com.sloth.meeplo.schedule.dto.response.KeywordResponse;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
+import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import com.sloth.meeplo.schedule.entity.ScheduleMember;
 import com.sloth.meeplo.schedule.exception.code.ScheduleErrorCode;
@@ -64,10 +65,8 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .build()
         );
-        scheduleCreateInput.getKeywords().stream().map(ScheduleRequest.ScheduleInputKeyword::getId)
-                .map(id -> scheduleKeywordRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                .forEach(k-> newSchedule.getScheduleKeywords().add(k));
+        scheduleCreateInput.getKeywords()
+                .forEach(k-> scheduleKeywordRepository.save(ScheduleKeyword.builder().keyword(k).build()));
 
         scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
         scheduleCreateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
@@ -112,12 +111,8 @@ public class ScheduleServiceImpl implements ScheduleService{
         schedule.updateDate(scheduleUpdateInput.getDate());
         scheduleRepository.save(schedule);
 
-        schedule.getScheduleKeywords().clear();
-        scheduleUpdateInput.getKeywords().stream()
-                .map(ScheduleRequest.ScheduleInputKeyword::getId)
-                .map(id -> scheduleKeywordRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                .forEach(k-> schedule.getScheduleKeywords().add(k));
+        scheduleKeywordRepository.deleteAllBySchedule(schedule);
+        scheduleUpdateInput.getKeywords().forEach(k-> scheduleKeywordRepository.save(ScheduleKeyword.builder().keyword(k).build()));
 
         schedule.getScheduleMembers().stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
