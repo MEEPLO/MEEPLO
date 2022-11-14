@@ -18,19 +18,26 @@ const MomentsListHalf = styled.View`
 
 const windowHeight = Dimensions.get('window').height;
 
-const MomentsList = ({ navigation, isMine }) => {
+const MomentsList = ({ navigation, isMine, groupFilter }) => {
   const [momentModal, setMomentModal] = React.useState(false);
   const [momentDetailId, setMomentDetailId] = React.useState();
-  const [isMineFilter, setIsMineFilter] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(0);
 
   const dispatch = useDispatch();
   const momentsList = useSelector(state => state.momentsList);
 
-  React.useEffect(() => {
-    // dispatch(getMomentsList());
-  }, []);
+  const params = {
+    page: 0,
+    size: 15,
+    leftSize: momentsList.leftSize,
+    rightSize: momentsList.rightSize,
+    group: groupFilter,
+    writer: isMine,
+  };
 
-  console.log('momnetlsit', momentsList);
+  React.useEffect(() => {
+    dispatch(getMomentsList(params));
+  }, [isMine, groupFilter]);
 
   const leftPics = momentsList.momentsLeft?.map(moment => (
     <MomentPic
@@ -54,7 +61,7 @@ const MomentsList = ({ navigation, isMine }) => {
 
   return (
     <>
-      {momentsList ? (
+      {!!momentsList.momentsLeft ? (
         <MomentsListView>
           <MomentsListHalf>{leftPics}</MomentsListHalf>
           <MomentsListHalf>{rightPics}</MomentsListHalf>
@@ -77,7 +84,7 @@ const MomentsList = ({ navigation, isMine }) => {
             }}>{`아직 남긴 추억이 없어요!\n\n약속을 잡고\n추억을 남겨보세요.`}</Text>
         </View>
       )}
-      {momentsList && momentDetailId && (
+      {!!momentsList.momentsLeft && momentDetailId && (
         <MomentModal
           navigation={navigation}
           momentDetailId={momentDetailId}

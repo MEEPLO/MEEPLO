@@ -1,24 +1,13 @@
 import React from 'react';
-import {
-  View,
-  Dimensions,
-  Pressable,
-  Text,
-  Modal,
-  Animated,
-  TouchableOpacity,
-  Easing,
-  ImageBackground,
-} from 'react-native';
+import { View, Dimensions, Pressable, Text, Modal, Animated, TouchableOpacity, Easing, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Images from '../../assets/image/index';
 import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
-import { faHeart as frHeart } from '@fortawesome/free-regular-svg-icons/faHeart';
 import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
 import { getMomentDetail, updateMomentReaction, deleteMomentReaction } from '../../redux/momentsSlice';
 import AnimationLikes from '../common/AnimationLikes';
+import AnimationComment from '../common/AnimationComment';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -27,35 +16,40 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
   const [touchEnd, setTouchEnd] = React.useState(0);
   const [imageFront, setImageFront] = React.useState(true);
   const [imageUri, setImageUri] = React.useState();
-  const [isLiked, setIsLiked] = React.useState(false);
 
   const dispatch = useDispatch();
   const momentDetail = useSelector(state => state.momentDetail);
 
   React.useEffect(() => {
     dispatch(getMomentDetail({ momentDetailId }));
-    setIsLiked(momentDetail.reaction.liked);
-  }, []);
+    console.log('momentDetailId changed', momentDetail);
+  }, [momentDetailId]);
 
   React.useEffect(() => {
-    console.log('modal detail id: ', momentDetailId);
     setImageUri({ uri: momentDetail.moment.photoUrl });
-  }, [momentDetail.moment]);
+  }, [momentDetail.moment.photoUrl]);
 
   const linkTo = React.useCallback((nextPage, params) => {
     setMomentModal(false);
     navigation.push(nextPage, params);
   }, []);
 
+  const closeModal = () => {
+    setMomentModal(false);
+    setImageFront(true);
+  };
+
   const momentLikeHandler = () => {
-    if (isLiked) {
+    if (momentDetail.reaction.liked) {
       console.log('isliked off');
-      setIsLiked(prev => !prev);
-      dispatch(deleteMomentReaction({ momentDetailId }));
+      dispatch(deleteMomentReaction({ momentDetailId })).then(() => {
+        dispatch(getMomentDetail({ momentDetailId }));
+      });
     } else {
       console.log('isliked on');
-      setIsLiked(prev => !prev);
-      dispatch(updateMomentReaction({ momentDetailId }));
+      dispatch(updateMomentReaction({ momentDetailId })).then(() => {
+        dispatch(getMomentDetail({ momentDetailId }));
+      });
     }
   };
 
@@ -102,17 +96,8 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
     }
   };
 
-  const imgWidth = {
-    1: windowWidth * 0.7,
-    2: windowWidth * 0.8,
-    3: windowWidth * 0.5 - 30,
-  };
-
-  const viewHeight = {
-    0: windowWidth * 0.7 * 1.17,
-    1: windowWidth * 0.8 * 0.8,
-    2: (windowWidth * 0.5 - 30) * 3.61,
-  };
+  const imgWidth = [windowWidth * 0.8, windowWidth * 0.85, windowWidth * 0.5];
+  const viewHeight = [windowWidth * 0.8 * 1.17, windowWidth * 0.85 * 0.8, windowWidth * 0.4 * 3.65];
 
   return (
     <Modal visible={momentModal} animationType={'fade'} transparent={true}>
@@ -125,7 +110,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
           position: 'relative',
         }}>
         <Pressable
-          onPressOut={() => setMomentModal(false)}
+          onPressOut={() => closeModal()}
           style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}></Pressable>
         <TouchableOpacity
           onPressIn={setStartLocation}
@@ -146,49 +131,46 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
                 height: viewHeight[momentDetail.moment.type] - 10,
                 transform: [{ rotateY: rotateData }],
               }}
-              resizeMode="contain"
-              source={imageUri}
+              resizeMode="cover"
+              source={{ uri: momentDetail.moment.photoUrl }}
             />
           ) : (
             <Animated.View
               style={{
-                marginLeft: 20,
-                width: imgWidth[momentDetail.moment.type] - 40,
+                marginLeft: momentDetail.moment.type === 2 ? 20 : 0,
+                width:
+                  momentDetail.moment.type === 2
+                    ? imgWidth[momentDetail.moment.type] - 40
+                    : imgWidth[momentDetail.moment.type],
                 height: viewHeight[momentDetail.moment.type] - 10,
                 transform: [{ rotateY: rotateData }],
                 position: 'relative',
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}
-              resizeMode="contain">
-              <View
+                overflow: 'hidden',
+              }}>
+              <Image
+                source={Images.frame.watermark}
                 style={{
-                  width:
-                    momentDetail.moment.type === 2
-                      ? (viewHeight[momentDetail.moment.type] - 10) * 0.277
-                      : imgWidth[momentDetail.moment.type],
-                  height: viewHeight[momentDetail.moment.type] - 10,
-                  overflow: 'hidden',
-                }}>
-                <ImageBackground
-                  source={Images.frame.watermark}
-                  style={{ overflow: 'hidden', width: '100%', height: '100%' }}>
-                  {momentDetail.comments?.map((comment, idx) => (
-                    <View
-                      style={{
-                        width: '80%',
-                        transform: [{ rotate: `${comment.location.angle}deg` }],
-                        position: 'absolute',
-                        top: comment.location.ypoint,
-                        left: comment.location.xpoint,
-                      }}
-                      key={idx}>
-                      <Text style={{ fontSize: 12 }}>{comment.comment}</Text>
-                    </View>
-                  ))}
-                </ImageBackground>
-              </View>
+                  width: '100%',
+                  height: '100%',
+                  resizeMode: 'cover',
+                }}
+              />
+              {momentDetail.comments?.map((comment, idx) => (
+                <View
+                  style={{
+                    width: '80%',
+                    transform: [{ rotate: `${comment.location.angle}deg` }],
+                    position: 'absolute',
+                    top: comment.location.ypoint * 0.8,
+                    left: comment.location.xpoint * 0.8,
+                  }}
+                  key={idx}>
+                  <Text style={{ fontSize: 12 }}>{comment.comment}</Text>
+                </View>
+              ))}
             </Animated.View>
           )}
         </TouchableOpacity>
@@ -207,29 +189,27 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
             alignItems: 'center',
           }}
           onPress={momentLikeHandler}>
-          {/* {isLiked ? (
-            <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={30} />
-          ) : (
-            <FontAwesomeIcon icon={frHeart} color={theme.color.alert} size={30} />
-          )} */}
-          <AnimationLikes isLiked={isLiked} />
+          <AnimationLikes isLiked={momentDetail.reaction.liked} />
         </Pressable>
-        <Pressable
-          style={{
-            width: 50,
-            height: 50,
-            backgroundColor: '#fff',
-            borderRadius: 25,
-            position: 'absolute',
-            bottom: 100,
-            right: 20,
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onPress={() => linkTo('MomentsCommentCreate', { momentId: momentDetailId })}>
-          <FontAwesomeIcon icon={faComment} color={theme.color.bright.green} size={30} />
-        </Pressable>
+        {momentDetail.commentCreated ? null : (
+          <Pressable
+            style={{
+              padding: 5,
+              width: 50,
+              height: 50,
+              backgroundColor: '#fff',
+              borderRadius: 25,
+              position: 'absolute',
+              bottom: 100,
+              right: 20,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={() => linkTo('MomentsCommentCreate', { momentId: momentDetailId })}>
+            <AnimationComment />
+          </Pressable>
+        )}
       </View>
     </Modal>
   );

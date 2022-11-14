@@ -1,22 +1,13 @@
 import React from 'react';
-import { View, Text, ScrollView, Pressable, StyleSheet, TextInput } from 'react-native';
+import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import { useDispatch, useSelector } from 'react-redux';
 import { theme } from '../assets/constant/DesignTheme';
-import { getMomentsList } from '../redux/momentsSlice';
 import MomentsList from '../components/moments/MomentsList';
 import MomentsCalendar from '../components/moments/MomentsCalendar';
-
-import AnimationLikes from '../components/common/AnimationLikes';
 
 const MomentsListScreen = props => {
   const [isMine, setIsMine] = React.useState(false);
   const [isCalendar, setIsCalendar] = React.useState(false);
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    dispatch(getMomentsList());
-  }, []);
 
   const linkTo = React.useCallback(nextPage => {
     props.navigation.push(nextPage);
@@ -27,7 +18,6 @@ const MomentsListScreen = props => {
       <View style={{ height: '100%' }}>
         <View>
           <Text style={styles.screenTitle}>추억 리스트</Text>
-          <AnimationLikes isLiked={isMine} />
         </View>
         <View style={{ paddingRight: 20, flexDirection: 'row', height: 30 }}>
           <Text style={{ flex: 6, lineHeight: 30, textAlign: 'right' }}>달력으로 보기</Text>
@@ -73,6 +63,7 @@ const MomentsListScreen = props => {
           </>
         )}
       </View>
+      <View style={{ width: '100%', height: 150 }}></View>
     </ScrollView>
   );
 };
