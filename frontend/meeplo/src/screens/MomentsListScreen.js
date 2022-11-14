@@ -1,13 +1,48 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMomentsCalendar } from '../redux/momentsSlice';
+
 import CheckBox from '@react-native-community/checkbox';
 import { theme } from '../assets/constant/DesignTheme';
 import MomentsList from '../components/moments/MomentsList';
+import { Calendar } from 'react-native-calendars';
+
 import MomentsCalendar from '../components/moments/MomentsCalendar';
 
 const MomentsListScreen = props => {
   const [isMine, setIsMine] = React.useState(false);
   const [isCalendar, setIsCalendar] = React.useState(false);
+  const [filterMonth, setFilterMonth] = React.useState();
+  const dispatch = useDispatch();
+  const momentsCalendar = useSelector(state => {
+    if (state.momentsCalendar.moments) {
+      const momentsDotMap = new Map(
+        state.momentsCalendar.moments.map(({ date }) => [date.slice(0, 10), { marked: true }]),
+      );
+      return Object.fromEntries(momentsDotMap);
+    } else {
+      return {};
+    }
+  });
+
+  React.useEffect(() => {
+    const now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth() + 1;
+
+    const yearMonth = year + '-' + month;
+    setFilterMonth(yearMonth);
+  }, []);
+
+  React.useEffect(() => {
+    dispatch(getMomentsCalendar({ month: filterMonth }));
+  }, [filterMonth]);
+
+  const onMoveMonth = date => {
+    var filteredMonth = date.year + '-' + date.month;
+    setFilterMonth(filteredMonth);
+  };
 
   const linkTo = React.useCallback(nextPage => {
     props.navigation.push(nextPage);
@@ -24,7 +59,13 @@ const MomentsListScreen = props => {
           <CheckBox disabled={false} value={isCalendar} onValueChange={() => setIsCalendar(prev => !prev)} />
         </View>
         {isCalendar ? (
-          <MomentsCalendar />
+          <Calendar
+            onMonthChange={date => {
+              onMoveMonth(date);
+            }}
+            markedDates={momentsCalendar}
+            onDayPress={data => console.log(data)}
+          />
         ) : (
           <>
             <View style={{ marginBottom: 20, paddingRight: 20 }}>
