@@ -3,13 +3,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
 
-export const getMomentsList = createAsyncThunk('moments/getMomentsList', async () => {
+export const getMomentsList = createAsyncThunk('moments/getMomentsList', async params => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/feed`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      params: params,
     });
     return response.data;
   } catch (err) {
@@ -41,7 +42,7 @@ export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(response.data);
+    console.log('detail res:', response.data);
     return response.data;
   } catch (err) {
     console.error('getMomentDetail: ', err.response.data);
@@ -52,7 +53,7 @@ export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async
 export const updateMomentReaction = createAsyncThunk('moments/updateMomentReaction', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/reaction`, {
+    const response = await axios.post(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/reaction`, [], {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -74,10 +75,41 @@ export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReacti
       },
     });
     console.log('deleteMomentReaction: ', response.data);
-
     return response.data;
   } catch (err) {
     console.error('deleteMomentReaction: ', err.response.data);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const getGroupSchedules = createAsyncThunk('schedule/getGroupSchedule', async ({ groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/schedule`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log('getGroupSchedule: ', response.data);
+    return response.data;
+  } catch (err) {
+    console.error('getGroupSchedule: ', err.response.data);
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSchedule', async ({ scheduleInfo }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.post(MEEPLO_SERVER_BASE_URL + `/schedule`, scheduleInfo, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log('createSimpleSchedule success,', response.data);
+    return response.data;
+  } catch (err) {
+    console.error('createMoment: ', err.response.data);
     return isRejectedWithValue(err.response.data);
   }
 });
@@ -96,7 +128,7 @@ export const createMoment = createAsyncThunk('moment/createMoment', async ({ mom
           {
             text: '확인',
             onPress: () => {
-              navigation.reset({ routes: [{ name: 'MomentsCreate' }] });
+              navigation.reset({ routes: [{ name: 'MomentsList' }] });
             },
           },
         ]);
@@ -138,12 +170,11 @@ export const getComments = createAsyncThunk('moment/getComments', async ({ momen
 });
 
 export const createComment = createAsyncThunk('moment/createComment', async commentInfo => {
-  console.log(commentInfo.comment, commentInfo.momentId);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.post(
-      MEEPLO_SERVER_BASE_URL + `/moment/${commentInfo.momentId}/comment`,
-      commentInfo.comment,
+      MEEPLO_SERVER_BASE_URL + `/moment/${commentInfo.commentInfo.momentId}/comment`,
+      commentInfo.commentInfo.comment,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -153,7 +184,7 @@ export const createComment = createAsyncThunk('moment/createComment', async comm
     console.log(response.data);
     return response.data;
   } catch (err) {
-    console.error('createComment: ', err);
+    console.error('createComment: ', err.response.data);
     return isRejectedWithValue(err.response.data);
   }
 });
@@ -161,6 +192,9 @@ export const createComment = createAsyncThunk('moment/createComment', async comm
 const momentsListSlice = createSlice({
   name: 'momentsList',
   initialState: {
+    moreData: false,
+    leftSize: 0,
+    rightSize: 0,
     momentsLeft: [
       {
         photo: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',
@@ -187,43 +221,20 @@ const momentDetailSlice = createSlice({
     moment: {
       id: -1,
       photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',
-      type: 1,
+      type: 0,
       writer: -1,
     },
     reaction: {
       count: 0,
-      liked: true,
+      liked: false,
     },
     comments: [],
-    isLikeSwitched: false,
   },
-  extraReducers: {
-    [getMomentDetail.fulfilled]: (state, { payload }) => {
-      state = payload;
-    },
-    [updateMomentReaction.pending]: (state, { payload }) => {
-      state.isLikeSwitched = false;
-    },
-    [updateMomentReaction.fulfilled]: (state, { payload }) => {
-      state.isLikeSwitched = true;
-    },
-    [updateMomentReaction.rejected]: (state, { payload }) => {
-      state.isLikeSwitched = false;
-    },
-    [deleteMomentReaction.pending]: (state, { payload }) => {
-      state.isLikeSwitched = false;
-    },
-    [deleteMomentReaction.fulfilled]: (state, { payload }) => {
-      state.isLikeSwitched = true;
-    },
-    [deleteMomentReaction.rejected]: (state, { payload }) => {
-      state.isLikeSwitched = false;
-    },
-  },
+  extraReducers: { [getMomentDetail.fulfilled]: (state, { payload }) => payload },
 });
 
 const commentsSlice = createSlice({
-  name: 'momentDetail',
+  name: 'comentDetail',
   initialState: {
     comments: [
       {
@@ -239,4 +250,18 @@ const commentsSlice = createSlice({
   extraReducers: { [getComments.fulfilled]: (state, { payload }) => payload },
 });
 
-export { momentsListSlice, momentDetailSlice, commentsSlice };
+const groupSchedulesSlice = createSlice({
+  name: 'groupSchedules',
+  initialState: {
+    schedules: [
+      {
+        id: 0,
+        name: 'String',
+        date: 'String',
+      },
+    ],
+  },
+  extraReducers: { [getGroupSchedules.fulfilled]: (state, { payload }) => payload },
+});
+
+export { momentsListSlice, momentDetailSlice, commentsSlice, groupSchedulesSlice };

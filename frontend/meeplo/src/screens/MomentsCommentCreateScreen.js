@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { useFocusEffect } from '@react-navigation/native';
-import { getComments, createComment } from '../redux/momentsSlice';
+import { getMomentDetail, createComment } from '../redux/momentsSlice';
 
 import helper from '../helper';
 import StepIndicator from '../components/stepper/StepIndicator';
@@ -49,7 +49,7 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
   const { momentId } = route.params;
 
   React.useEffect(() => {
-    dispatch(getComments({ momentDetailId: momentId }));
+    dispatch(getMomentDetail({ momentDetailId: momentId }));
   }, []);
 
   React.useEffect(() => {
@@ -95,7 +95,20 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
   };
 
   const onFinish = actions => {
-    dispatch(createComment(commentInfo));
+    console.log(comment);
+    var commentInfo = {
+      comment: {
+        comment: comment.comment,
+        location: {
+          xpoint: comment.location.xpoint,
+          ypoint: comment.location.ypoint,
+          angle: comment.location.angle,
+        },
+      },
+      momentId: momentId,
+    };
+    comment.location.angle === undefined ? (commentInfo.location.angle = 0) : comment.location.angle;
+    dispatch(createComment({ commentInfo }));
   };
 
   return (
