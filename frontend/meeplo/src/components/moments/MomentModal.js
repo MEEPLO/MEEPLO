@@ -1,11 +1,23 @@
 import React from 'react';
-import { View, Dimensions, Pressable, Text, Modal, Animated, TouchableOpacity, Easing, Image } from 'react-native';
+import {
+  View,
+  Dimensions,
+  Pressable,
+  Text,
+  Modal,
+  Animated,
+  TouchableOpacity,
+  Easing,
+  Image,
+  Linking,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { getMomentDetail, updateMomentReaction, deleteMomentReaction } from '../../redux/momentsSlice';
+import AWS from 'aws-sdk';
+import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
+
 import Images from '../../assets/image/index';
 import { theme } from '../../assets/constant/DesignTheme';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faComment } from '@fortawesome/free-solid-svg-icons/faComment';
-import { getMomentDetail, updateMomentReaction, deleteMomentReaction } from '../../redux/momentsSlice';
 import AnimationLikes from '../common/AnimationLikes';
 import AnimationComment from '../common/AnimationComment';
 
@@ -15,7 +27,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
   const [touchStart, setTouchStart] = React.useState(0);
   const [touchEnd, setTouchEnd] = React.useState(0);
   const [imageFront, setImageFront] = React.useState(true);
-  const [imageUri, setImageUri] = React.useState();
+  // const [imageUri, setImageUri] = React.useState();
 
   const dispatch = useDispatch();
   const momentDetail = useSelector(state => state.momentDetail);
@@ -24,10 +36,6 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
     dispatch(getMomentDetail({ momentDetailId }));
     console.log('momentDetailId changed', momentDetail);
   }, [momentDetailId]);
-
-  React.useEffect(() => {
-    setImageUri({ uri: momentDetail.moment.photoUrl });
-  }, [momentDetail.moment.photoUrl]);
 
   const linkTo = React.useCallback((nextPage, params) => {
     setMomentModal(false);
@@ -73,17 +81,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
 
   const isSwiped = () => {
     if (touchEnd - touchStart < 100) {
-      if (imageFront) {
-        setImageFront(false);
-        setTimeout(() => {
-          setImageUri(Images.frame.watermark);
-        }, 80);
-      } else {
-        setImageFront(true);
-        setTimeout(() => {
-          setImageUri({ uri: momentDetail.moment.photoUrl });
-        }, 80);
-      }
+      imageFront ? setImageFront(false) : setImageFront(true);
       swipeAnim.setValue(0);
       Animated.timing(swipeAnim, {
         toValue: 1,
@@ -96,10 +94,40 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
     }
   };
 
+  const getImage = () => {
+    AWS.config.update({
+      region: MEEPLO_APP_BUCKET_REGION,
+      credentials: new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: MEEPLO_APP_IDENTITY_POOL_ID,
+      }),
+    });
+
+    var s3 = new AWS.S3({
+      apiVersion: '2006-03-01',
+      params: { Bucket: MEEPLO_APP_ALBUM_BUCKET_NAME },
+    });
+
+    var imageName = momentDetail.moment.photoUrl.split('/')[3];
+    var contentDisposition = `attachment; filename="${imageName}"`;
+    var params = {
+      Bucket: MEEPLO_APP_ALBUM_BUCKET_NAME,
+      Key: imageName,
+      ResponseContentDisposition: contentDisposition,
+      Expires: 60,
+    };
+
+    s3.getSignedUrl('getObject', params, function (err, url) {
+      if (err) {
+        console.log(err);
+      }
+      Linking.openURL(url);
+    });
+  };
+
   const imgWidth = [windowWidth * 0.8, windowWidth * 0.85, windowWidth * 0.5];
   const viewHeight = [windowWidth * 0.8 * 1.17, windowWidth * 0.85 * 0.8, windowWidth * 0.4 * 3.65];
 
-  return (
+  return momentDetail.moment ? (
     <Modal visible={momentModal} animationType={'fade'} transparent={true}>
       <View
         style={{
@@ -210,9 +238,26 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
             <AnimationComment />
           </Pressable>
         )}
+        <Pressable
+          style={{
+            padding: 5,
+            width: 50,
+            height: 50,
+            backgroundColor: '#fff',
+            borderRadius: 25,
+            position: 'absolute',
+            bottom: 100,
+            right: 20,
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={() => getImage()}>
+          <Text>download</Text>
+        </Pressable>
       </View>
     </Modal>
-  );
+  ) : null;
 };
 
 export default MomentModal;
