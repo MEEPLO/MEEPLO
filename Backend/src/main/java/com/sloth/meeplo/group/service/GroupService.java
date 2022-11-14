@@ -35,4 +35,6 @@ public interface GroupService {
     List<GroupResponse.MapMoment> getMapMoments(String authorization, Long groupId);
 
     GroupMember getGroupMemberByGroupAndMemberId(Group group, Long memberId);
+
+    List<GroupResponse.GroupSchedule> getGroupSchedules(String authorization, Long groupId);
 }
