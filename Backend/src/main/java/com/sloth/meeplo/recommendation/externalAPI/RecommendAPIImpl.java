@@ -1,2 +1,4 @@
-package com.sloth.meeplo.recommendation.externalAPI;public class RecommendAPIImpl {
+package com.sloth.meeplo.recommendation.externalAPI;
+
+public class RecommendAPIImpl implements RecommendAPI{
 }
