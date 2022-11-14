@@ -2,11 +2,12 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
+import { axiosPrivate } from '../auth/axiosInstance';
 
 export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group`, {
+    const response = await axiosPrivate.get(`/group`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -21,7 +22,7 @@ export const getGroupList = createAsyncThunk('group/getGroupList', async () => {
 export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({ groupId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group/${groupId}`, {
+    const response = await axiosPrivate.get(`/group/${groupId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -36,7 +37,7 @@ export const getGroupDetail = createAsyncThunk('group/getGroupDetails', async ({
 export const getGroupMomentsFeed = createAsyncThunk('group/getGroupMomentsFeed', async ({ groupId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/moment/feed`, {
+    const response = await axiosPrivate.get(`/group/${groupId}/moment/feed`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -51,8 +52,8 @@ export const getGroupMomentsFeed = createAsyncThunk('group/getGroupMomentsFeed',
 export const createGroup = createAsyncThunk('group/createGroup', async ({ form, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios
-      .post(MEEPLO_SERVER_BASE_URL + `/group`, form, {
+    const response = await axiosPrivate
+      .post(`/group`, form, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -80,9 +81,9 @@ export const createGroup = createAsyncThunk('group/createGroup', async ({ form, 
 export const editGroup = createAsyncThunk('group/editGroup', async ({ form, groupId, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios
+    const response = await axiosPrivate
       .put(
-        MEEPLO_SERVER_BASE_URL + `/group/${groupId}`,
+        `/group/${groupId}`,
         { ...form },
         {
           headers: {
@@ -119,8 +120,8 @@ export const editGroup = createAsyncThunk('group/editGroup', async ({ form, grou
 export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupName, groupId, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios
-      .delete(MEEPLO_SERVER_BASE_URL + `/group/${groupId}`, {
+    const response = await axiosPrivate
+      .delete(`/group/${groupId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -148,8 +149,8 @@ export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupN
 export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName, groupId, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios
-      .delete(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/member`, {
+    const response = await axiosPrivate
+      .delete(`/group/${groupId}/member`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -180,7 +181,7 @@ export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName,
 export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async ({ groupId, memberId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/member/${memberId}`, {
+    const response = await axiosPrivate.delete(`/group/${groupId}/member/${memberId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
