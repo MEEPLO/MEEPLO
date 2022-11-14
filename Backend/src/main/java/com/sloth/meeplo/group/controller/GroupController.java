@@ -26,7 +26,7 @@ public class GroupController {
         Map<String, Long> resultMap = new HashMap<>();
         Long groupId = groupService.makeGroup(authorization, groupInput);
         resultMap.put("groupId", groupId);
-        return new ResponseEntity<Map<String, Long>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @PutMapping("/{groupId}")
@@ -49,14 +49,14 @@ public class GroupController {
     public ResponseEntity<Map<String, List>> getGroupList(@ApiIgnore @RequestHeader(value = "Authorization") String authorization){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("group", groupService.joinedGroupList(authorization));
-        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/{groupId}")
     public ResponseEntity<Map<String, Object>> getGroupDetail(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("group", groupService.getJoinedGroupDetail(authorization,groupId));
-        return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
 
@@ -64,7 +64,7 @@ public class GroupController {
     public ResponseEntity<Map<String, List>> getGroupMembers(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("members", groupService.getGroupMembers(authorization,groupId));
-        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @DeleteMapping("{groupId}/member")
@@ -89,7 +89,7 @@ public class GroupController {
     public ResponseEntity<Map<String, List>> getFeedMoments(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("moments", groupService.getFeedMoments(authorization,groupId));
-        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
 
@@ -97,6 +97,13 @@ public class GroupController {
     public ResponseEntity<Map<String, List>> getMapMoments(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
         Map<String, List> resultMap = new HashMap<>();
         resultMap.put("moments", groupService.getMapMoments(authorization,groupId));
-        return new ResponseEntity<Map<String, List>>(resultMap, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("{groupId}/schedule")
+    public ResponseEntity<Map<String, List>> getGroupSchedules(@RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
+        Map<String, List> resultMap = new HashMap<>();
+        resultMap.put("schedules", groupService.getGroupSchedules(authorization,groupId));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }
