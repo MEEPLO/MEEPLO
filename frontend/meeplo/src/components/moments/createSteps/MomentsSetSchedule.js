@@ -19,17 +19,18 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
   const [schedulePlace, setSchedulePlace] = React.useState();
 
   const dispatch = useDispatch();
-  const scheduleList = useSelector(
-    state => state.groupSchedules,
-    // ?.schedules.map(({ id, name }) => {
-    //   return { key: id, value: name };
-    // }),
+  const scheduleList = useSelector(state =>
+    state.groupSchedules.schedules.map(({ id, name }) => {
+      return { key: id, value: name };
+    }),
   );
 
   console.log('scheduleList,', scheduleList);
 
   React.useEffect(() => {
-    dispatch(getGroupSchedules({ groupId: state.groupId }));
+    if (state.groupId) {
+      dispatch(getGroupSchedules({ groupId: state.groupId }));
+    }
   }, [state.groupId]);
 
   const onPressNext = () => {
@@ -55,26 +56,6 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
     dispatch(createSimpleSchedule({ scheduleInfo }));
     setScheduleModal(false);
   };
-
-  const data = [
-    { key: '1', value: '양꼬치 먹으러 갈 ㅅㅏ람' },
-    { key: '2', value: '221101 회식 이거 선택' },
-    { key: '3', value: '약속명은최대이십자입니다이길이가딱이십자' },
-    { key: '4', value: '언젠가의 만남' },
-    { key: '5', value: '언젠가의 만남' },
-    { key: '6', value: '언젠가의 만남' },
-    { key: '7', value: '언젠가의 만남' },
-    { key: '8', value: '언젠가의 만남' },
-    { key: '9', value: '언젠가의 만남' },
-    { key: '10', value: '언젠가의 만남' },
-    { key: '11', value: '언젠가의 만남' },
-    { key: '12', value: '언젠가의 만남' },
-    { key: '13', value: '언젠가의 만남' },
-    { key: '14', value: '언젠가의 만남' },
-    { key: '15', value: '언젠가의 만남' },
-    { key: '16', value: '언젠가의 만남' },
-    { key: '17', value: '언젠가의 만남' },
-  ];
 
   return visible ? (
     <>
