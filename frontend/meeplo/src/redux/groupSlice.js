@@ -194,6 +194,20 @@ export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async (
   }
 });
 
+export const getGroupMembers = createAsyncThunk('group/getGroupMembers', async ({ groupId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/group/${groupId}/member`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data.members;
+  } catch (err) {
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
 // TODO: hrookim 그룹 초대 링크
 
 const groupListSlice = createSlice({
@@ -220,6 +234,7 @@ const groupDetailSlice = createSlice({
   initialState: {
     details: {},
     moments: [],
+    members: [],
     isLoading: false,
   },
   reducers: {},
@@ -254,6 +269,16 @@ const groupDetailSlice = createSlice({
       state.isLoading = false;
     },
     [getGroupMomentsFeed.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+    },
+    [getGroupMembers.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getGroupMembers.fulfilled]: (state, { payload }) => {
+      state.members = payload;
+      state.isLoading = false;
+    },
+    [getGroupMembers.rejected]: (state, { payload }) => {
       state.isLoading = false;
     },
   },
