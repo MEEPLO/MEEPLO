@@ -5,15 +5,14 @@ import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.global.util.ExternalAPIRequest;
 import com.sloth.meeplo.group.entity.Group;
-import com.sloth.meeplo.group.repository.GroupMemberRepository;
 import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.location.repository.LocationRepository;
 import com.sloth.meeplo.location.type.LocationType;
 import com.sloth.meeplo.member.dto.request.MemberRequest;
 import com.sloth.meeplo.member.entity.Member;
-import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
+import com.sloth.meeplo.recommendation.algorithm.GrahamScan;
 import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import com.sloth.meeplo.recommendation.dto.request.MiddlePointRequest;
 import com.sloth.meeplo.recommendation.dto.response.MiddlePointResponse;
@@ -27,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -36,6 +36,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
     private final GroupService groupService;
     private final MemberService memberService;
 
+    private final GrahamScan grahamScan;
     private final ExternalAPIRequest externalAPIRequest;
 
     @Override
@@ -85,12 +86,18 @@ public class MiddlePointServiceImpl implements MiddlePointService{
     }
 
     private List<Location> getMiddleStations(List<MiddlePointRequest.MemberStartLocation> coordinates) {
-        // TODO : fastapi로 무게중심 좌표 찾아오기 -> graham scan 알고리즘을 이용하여 concave일 경우 외곽
-        // fastapi 호출
 
+        List<MiddlePointResponse.RouteCoordinate> points = coordinates.stream()
+                .map(coord -> MiddlePointResponse.RouteCoordinate.builder()
+                        .lat(coord.getLat())
+                        .lng(coord.getLng())
+                        .build())
+                .collect(Collectors.toList());
 
-        // graham scan
+        List<MiddlePointResponse.RouteCoordinate> convexPoints = grahamScan.calcConvexHullPoints(points);
 
+        // fast api request
+        Coordinate centerPoint = new Coordinate();
 
         double lat = 37.564820366666666;
         double lng = 127.04954223333333;
