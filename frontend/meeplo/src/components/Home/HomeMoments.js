@@ -22,11 +22,11 @@ const HomeMoments = ({ data }) => {
                 <ScheduleButton
                   isData={true}
                   picture="yellow"
-                  title={item.title}
+                  title={item.name}
                   date={item.date}
-                  place={item.place}
-                  group={item.group}
-                  people={item.people}
+                  place={item.location.meetName}
+                  group={item.groupName}
+                  people={item.memberCount}
                 />
               </TouchableOpacity>
             </View>

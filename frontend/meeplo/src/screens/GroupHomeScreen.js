@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, Modal, Dimensions, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Dimensions, TextInput, Alert } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,7 @@ import { faSquarePlus } from '@fortawesome/free-regular-svg-icons/faSquarePlus';
 import { faPaste } from '@fortawesome/free-regular-svg-icons/faPaste';
 import GroupListItem from '../components/Group/GroupListItem';
 import { theme } from '../assets/constant/DesignTheme';
-import { getGroupList } from '../redux/groupSlice';
+import { getGroupList, joinGroup } from '../redux/groupSlice';
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,19 +19,26 @@ const GroupHomeScreen = ({ navigation }) => {
   const groupList = useSelector(state => state.groupList);
   const colorList = ['red', 'orange', 'yellow', 'green', 'blue', 'navy', 'purple'];
 
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => {
+    setModalVisible(false);
+    setGroupCode('');
+  };
+
   const onPressGroup = props => {
     navigation.navigate('GroupDetail', { groupId: props });
+  };
+
+  const onPressJoinGroup = () => {
+    const form = { enterCode: groupCode };
+    dispatch(joinGroup({ form, Alert, navigation })).then(() => {
+      closeModal();
+    });
   };
 
   const fetchCopiedText = async () => {
     const text = await Clipboard.getString();
     setGroupCode(text);
-  };
-
-  const openModal = () => setModalVisible(true);
-  const closeModal = () => {
-    setModalVisible(false);
-    setGroupCode('');
   };
 
   useEffect(() => {
@@ -108,6 +115,7 @@ const GroupHomeScreen = ({ navigation }) => {
                 <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>취소</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={onPressJoinGroup}
                 activeOpacity={0.6}
                 style={{
                   justifyContent: 'center',

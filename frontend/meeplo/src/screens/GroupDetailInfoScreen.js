@@ -11,8 +11,6 @@ import { theme } from '../assets/constant/DesignTheme';
 import Images from '../assets/image/index';
 import { getGroupDetail, deleteGroup, exitGroup, exitGroupMember } from '../redux/groupSlice';
 
-const DATA = 'entryCODEEEEEEEEE';
-
 const GroupDetailInfoScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const groupDetail = useSelector(state => state.group.details);
@@ -88,10 +86,10 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
   };
 
   const onPressGroupcode = async () => {
-    Clipboard.setString('여기는 미플로 ><');
+    Clipboard.setString(groupDetail.enterCode);
     try {
       const result = await Share.share({
-        message: '여기는 미플로 ><',
+        message: groupDetail.enterCode,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {

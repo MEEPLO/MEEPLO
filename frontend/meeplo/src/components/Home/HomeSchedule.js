@@ -47,7 +47,7 @@ const HomeSchedule = ({ data, navigation }) => {
 
   const onPressCreateSchedule = () => {
     // TODO: hrookim navigate to create screen
-    // navigation.navigate('ScheduleStack', { screen: 'Create' });
+    navigation.navigate('ScheduleStack', { screen: 'Create' });
   };
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
@@ -65,11 +65,11 @@ const HomeSchedule = ({ data, navigation }) => {
       <ScheduleButton
         isData={true}
         picture="blue"
-        title={item.title}
+        title={item.name}
         date={item.date}
-        place={item.place}
-        group={item.group}
-        people={item.people}
+        place={item.location.meetName}
+        group={item.groupName}
+        people={item.memberCount}
       />
     </TouchableOpacity>
   );
