@@ -4,7 +4,7 @@ import { ScrollView, View, Text, TouchableOpacity, Button, Alert } from 'react-n
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import HomeGroup from '../components/Home/HomeGroup';
-import HomeMemory from '../components/Home/HomeMemory';
+import HomeMoments from '../components/Home/HomeMoments';
 import HomeSchedule from '../components/Home/HomeSchedule';
 import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation';
 import { getGroupList } from '../redux/groupSlice';
@@ -25,34 +25,31 @@ const HomeScreen = ({ navigation }) => {
       people: 5,
       place: '역삼역',
     },
-    {
-      id: 2,
-      title: '둘',
-      date: '2022.10.30',
-      group: '근데 다른 그룹',
-      people: 4,
-      place: '강남역',
-    },
-    {
-      id: 3,
-      title: '셋',
-      date: '2022.11.06',
-      group: 'another group',
-      people: 6,
-      place: '모르는역',
-    },
+    // {
+    //   id: 2,
+    //   title: '둘',
+    //   date: '2022.10.30',
+    //   group: '근데 다른 그룹',
+    //   people: 4,
+    //   place: '강남역',
+    // },
+    // {
+    //   id: 3,
+    //   title: '셋',
+    //   date: '2022.11.06',
+    //   group: 'another group',
+    //   people: 6,
+    //   place: '모르는역',
+    // },
   ];
 
   const onPressMoreSchedule = () => {
-    // TODO: navigation으로 페이지 옮기기
     navigation.navigate('ScheduleStack', { screen: 'Home' });
   };
   const onPressMoreGroup = () => {
-    // TODO: navigation으로 페이지 옮기기
     navigation.navigate('GroupStack', { screen: 'GroupHome' });
   };
   const onPressMoreMoment = () => {
-    // TODO: navigation으로 페이지 옮기기
     navigation.navigate('MomentsStack', { screen: 'MomentsList' });
   };
 
@@ -79,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900' }}>예정된 약속</Text>
+        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>예정된 약속</Text>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreSchedule}
@@ -88,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
-      <HomeSchedule data={data} />
+      <HomeSchedule data={data} navigation={navigation} />
       <View
         style={{
           margin: 20,
@@ -96,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900' }}>내가 속한 그룹</Text>
+        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>내가 속한 그룹</Text>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreGroup}
@@ -113,7 +110,7 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900' }}>추억 남기기</Text>
+        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>추억 남기기</Text>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreMoment}
@@ -122,7 +119,7 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
-      <HomeMemory data={data} />
+      <HomeMoments data={data} navigation={navigation} />
       <View
         style={{
           margin: 20,

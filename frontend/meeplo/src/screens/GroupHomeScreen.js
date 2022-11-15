@@ -1,12 +1,19 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Dimensions, TextInput } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faSquarePlus } from '@fortawesome/free-regular-svg-icons/faSquarePlus';
 import GroupListItem from '../components/Group/GroupListItem';
 import { theme } from '../assets/constant/DesignTheme';
 import { getGroupList } from '../redux/groupSlice';
 
+const { width, height } = Dimensions.get('window');
+
 const GroupHomeScreen = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [groupCode, setGroupCode] = useState('');
   const dispatch = useDispatch();
   const groupList = useSelector(state => state.groupList);
   const colorList = ['red', 'orange', 'yellow', 'green', 'blue', 'navy', 'purple'];
@@ -15,19 +22,107 @@ const GroupHomeScreen = ({ navigation }) => {
     navigation.navigate('GroupDetail', { groupId: props });
   };
 
+  const fetchCopiedText = async () => {
+    const text = await Clipboard.getString();
+    setCopiedText(text);
+  };
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+
   useEffect(() => {
     dispatch(getGroupList());
   }, []);
   return (
     <ScrollView>
-      <View
-        style={{
-          margin: 20,
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'baseline',
-        }}>
-        <Text style={{ fontSize: 24, fontWeight: '900', fontColor: theme.font.color }}>그룹 리스트</Text>
+      <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={closeModal}>
+        <View
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              borderRadius: 20,
+              width: width * 0.8,
+              height: width * 0.6,
+              backgroundColor: 'white',
+              borderWidth: 2,
+              borderColor: theme.color.border,
+            }}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: theme.color.bright.navy,
+                borderTopLeftRadius: 18,
+                borderTopRightRadius: 18,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{ fontSize: width * 0.06, fontWeight: 'bold' }}>다른 그룹 참여하기</Text>
+            </View>
+            {/* 내용물 */}
+            <View style={{ flex: 3, marginHorizontal: 20 }}>
+              <Text>공유받은 그룹 코드를 입력해주세요!</Text>
+              <TextInput
+                onChangeText={setGroupCode}
+                value={groupCode}
+                style={{ width: width * 0.6, borderBottomColor: theme.color.border, borderBottomWidth: 1, padding: 3 }}
+              />
+            </View>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 35,
+                  width: width * 0.35,
+                  borderColor: theme.color.border,
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  backgroundColor: theme.color.disabled,
+                }}>
+                <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>취소</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: 35,
+                  width: width * 0.35,
+                  borderColor: theme.color.border,
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  backgroundColor: theme.color.bright.green,
+                }}>
+                <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>참여하기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 20 }}>
+        <View
+          style={{
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            alignItems: 'baseline',
+          }}>
+          <Text style={{ fontSize: 24, fontWeight: '900', fontColor: theme.font.color }}>그룹 리스트</Text>
+        </View>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={openModal}>
+          <Text style={{ marginRight: 5 }}>다른 그룹 참여</Text>
+          <FontAwesomeIcon icon={faSquarePlus} size={14} color="gray" />
+        </TouchableOpacity>
       </View>
       {groupList?.map((item, i) => (
         <View style={{ marginVertical: 4 }} key={`groupList-${i}`}>

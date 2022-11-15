@@ -2,8 +2,8 @@ import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Tabs } from 'react-native-collapsible-tab-view';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons/faMapLocationDot';
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+// import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons/faMapLocationDot';
 import { renderTabBar, renderScheduleLabel, renderMomentsLabel } from '../components/Group/GroupDetailTabBar';
 import GroupDetailHeader from '../components/Group/GroupDetailHeader';
 import GroupDetailScheduleItem from '../components/Group/GroupDetailScheduleItem';
@@ -63,7 +63,7 @@ const GroupDetailScreen = ({ route, navigation }) => {
       </Tabs.Tab>
       <Tabs.Tab name="momentsLabel" label={renderMomentsLabel}>
         <Tabs.ScrollView>
-          <TouchableOpacity activeOpacity={0.6}>
+          {/* <TouchableOpacity activeOpacity={0.6}>
             <View
               style={{
                 justifyContent: 'center',
@@ -90,7 +90,7 @@ const GroupDetailScreen = ({ route, navigation }) => {
                 <Text style={{ fontSize: 20, fontWeight: '900', alignItems: 'center' }}>{`  지도로 추억 보기`}</Text>
               </View>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <View style={{ marginBottom: 105, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {groupMomentsFeed?.map((item, i) => (
               <TouchableOpacity activeOpacity={0.6} key={item.id}>
