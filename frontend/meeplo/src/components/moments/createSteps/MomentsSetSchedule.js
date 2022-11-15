@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, Pressable, Modal, Dimensions } from 'react-native';
+import { View, Text, Pressable, Modal, Dimensions, Alert } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
 import { createSimpleSchedule, getGroupSchedules } from '../../../redux/momentsSlice';
 
@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 
 const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
   const [scheduleModal, setScheduleModal] = React.useState(false);
-  const [selectedSchedule, setSelectedSchedule] = React.useState('');
+  const [selectedSchedule, setSelectedSchedule] = React.useState();
   const [scheduleDate, setScheduleDate] = React.useState();
   const [scheduleName, setScheduleName] = React.useState();
   const [schedulePlace, setSchedulePlace] = React.useState();
@@ -25,8 +25,12 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
     }),
   );
 
-  console.log('scheduleList,', scheduleList);
+  const scheduleNameIndex = useSelector(state => {
+    const scheduleNameIndexMap = new Map(state.groupSchedules.schedules.map(({ id, name }) => [id, name]));
+    return Object.fromEntries(scheduleNameIndexMap);
+  });
 
+  console.log('name', scheduleNameIndex);
   React.useEffect(() => {
     if (state.groupId) {
       dispatch(getGroupSchedules({ groupId: state.groupId }));
@@ -39,8 +43,12 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
         type: 'UPDATE_SCHEDULEID',
         payload: selectedSchedule,
       },
+      {
+        type: 'UPDATE_SCHEDULENAME',
+        payload: scheduleNameIndex[selectedSchedule],
+      },
     ];
-    toNext(actions);
+    !!selectedSchedule ? toNext(actions) : Alert.alert('약속을 선택해주세요.');
   };
 
   const submitSchedule = () => {
@@ -53,8 +61,12 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
       members: [],
       amuses: [],
     };
-    dispatch(createSimpleSchedule({ scheduleInfo }));
-    setScheduleModal(false);
+    dispatch(createSimpleSchedule({ scheduleInfo })).then(() =>
+      dispatch(getGroupSchedules({ groupId: state.groupId })).then(() => {
+        setScheduleModal(false);
+        console.log('new schedules in');
+      }),
+    );
   };
 
   return visible ? (

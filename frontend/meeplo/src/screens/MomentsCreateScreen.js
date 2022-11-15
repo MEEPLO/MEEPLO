@@ -21,11 +21,20 @@ const reducer = (state, action) => {
         ...state,
         groupId: action.payload,
       };
-
+    case 'UPDATE_GROUPNAME':
+      return {
+        ...state,
+        groupName: action.payload,
+      };
     case 'UPDATE_SCHEDULEID':
       return {
         ...state,
         schedulePlaceId: action.payload,
+      };
+    case 'UPDATE_SCHEDULENAME':
+      return {
+        ...state,
+        scheduleName: action.payload,
       };
     case 'UPDATE_FRAME':
       return {
@@ -44,7 +53,9 @@ const reducer = (state, action) => {
 
 const initialMoment = {
   groupId: null,
+  groupName: '',
   schedulePlaceId: null,
+  scheduleName: '',
   photoUrl: null,
   content: 'null',
   type: null,
@@ -55,7 +66,7 @@ const STEP_COUNT = 5;
 const MomentsCreateScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
-  const [moment, stepDispatch] = React.useReducer(reducer, initialMoment);
+  const [momentData, stepDispatch] = React.useReducer(reducer, initialMoment);
   const stepItems = [MomentsSetGroup, MomentsSetSchedule, MomentsSetFrame, MomentsSetPicture, MomentSetCheck];
 
   React.useEffect(() => {
@@ -101,7 +112,13 @@ const MomentsCreateScreen = ({ navigation }) => {
   };
 
   const onFinish = actions => {
-    console.log(moment);
+    const moment = {
+      groupId: momentData.groupId,
+      schedulePlaceId: momentData.schedulePlaceId,
+      photoUrl: momentData.photoUrl,
+      content: 'null',
+      type: momentData.type,
+    };
     dispatch(createMoment({ moment, navigation, Alert }));
   };
 
@@ -111,7 +128,7 @@ const MomentsCreateScreen = ({ navigation }) => {
         <StepIndicator stepCount={STEP_COUNT} currentStep={step} />
       </View>
       <StepRenderer
-        state={moment}
+        state={momentData}
         items={stepItems}
         currentStep={step}
         toNext={toNext}
