@@ -41,9 +41,8 @@ public class GroupResponse {
         private String description;
         private String photo;
         private String leader;
-
+        private String enterCode;
         private Long leaderMemberId;
-
         private List<GroupDetailMember> members;
         private List<GroupDetailSchedule> schedules;
 
@@ -53,6 +52,7 @@ public class GroupResponse {
             this.name = group.getName();
             this.description = group.getDescription();
             this.photo = group.getGroupPhoto();
+            this.enterCode = group.getEnterCode();
             this.leader = leader.getNickname();
             this.leaderMemberId = leader.getMember().getId();
             this.members=members;

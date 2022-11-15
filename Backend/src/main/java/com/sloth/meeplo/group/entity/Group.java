@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -28,6 +29,9 @@ public class Group extends BaseTimeEntity {
 
     private String groupPhoto;
 
+    @Column(length = 40)
+    private String enterCode;
+
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupMember> groupMembers;
 
@@ -38,9 +42,14 @@ public class Group extends BaseTimeEntity {
         this.id = id;
     }
 
+    public void updateEnterCode(String enterCode) {
+        this.enterCode = enterCode;
+    }
+
     @Builder
     public Group(String name, String description, String groupPhoto){
         this.name = name;
+        this.enterCode = UUID.randomUUID().toString();
         this.description = description;
         this.groupPhoto = groupPhoto;
     }
