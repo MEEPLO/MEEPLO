@@ -37,9 +37,9 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
     console.log('momentDetailId changed', momentDetail);
   }, [momentDetailId]);
 
-  const linkTo = React.useCallback((nextPage, params) => {
+  const linkToCommentCreate = React.useCallback(() => {
     setMomentModal(false);
-    navigation.push(nextPage, params);
+    navigation.navigate('MomentsStack', { screen: 'MomentsCommentCreate', params: { momentId: momentDetailId } });
   }, []);
 
   const closeModal = () => {
@@ -234,7 +234,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => linkTo('MomentsCommentCreate', { momentId: momentDetailId })}>
+            onPress={() => linkToCommentCreate()}>
             <AnimationComment />
           </Pressable>
         )}

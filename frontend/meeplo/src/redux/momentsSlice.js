@@ -115,7 +115,6 @@ export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSched
 });
 
 export const createMoment = createAsyncThunk('moment/createMoment', async ({ moment, Alert, navigation }) => {
-  console.log('ㅠㅠㅠㅠ', moment);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axiosPrivate
