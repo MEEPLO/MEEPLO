@@ -1,7 +1,11 @@
 package com.sloth.meeplo.member.dto.request;
 
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import lombok.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class MemberRequest {
 
@@ -36,7 +40,9 @@ public class MemberRequest {
     @ToString
     @NoArgsConstructor
     public static class MemberUpdateInfo{
+        @NotBlank
         private String nickname;
+        @NotBlank
         private String profilePhoto;
 
         @Builder
@@ -51,17 +57,25 @@ public class MemberRequest {
     @ToString
     @NoArgsConstructor
     public static class MemberLocationAddInfo{
+        @NotBlank
         private String name;
+        @NotBlank
         private String address;
-        private Double lat;
-        private Double lng;
+
 
         @Builder
-        public MemberLocationAddInfo(String name, String address, Double lat, Double lng){
+        public MemberLocationAddInfo(String name, String address){
             this.name = name;
             this.address= address;
-            this.lat=lat;
-            this.lng=lng;
+        }
+    }
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class ConvertedCoordinate extends Coordinate {
+        @Builder
+        ConvertedCoordinate(Double lat, Double lng){
+            super(lat, lng);
         }
     }
 

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class MemberController {
      * @return : accessToken, refreshToken, 신규 회원 여부
      */
     @GetMapping("/auth/kakao")
-    public ResponseEntity<MemberResponse.MemberToken> getAppTokenForKakaoLogin(@ApiIgnore @RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<MemberResponse.MemberToken> getAppTokenForKakaoLogin(@ApiIgnore @RequestHeader(value = "Authorization", required = false) String authorization) {
         MemberResponse.MemberToken memberToken = memberService.getKakaoMemberToken(authorization);
 
         return new ResponseEntity<>(memberToken, HttpStatus.OK);
@@ -49,7 +51,8 @@ public class MemberController {
     }
 
     @PutMapping("/member")
-    public ResponseEntity<Void> updateMemberInfo(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberUpdateInfo memberUpdateInfo){
+    public ResponseEntity<Void> updateMemberInfo(@ApiIgnore @RequestHeader("Authorization") String authorization,
+                                                 @RequestBody @Valid MemberRequest.MemberUpdateInfo memberUpdateInfo){
         memberService.updateMemberInfo(authorization,memberUpdateInfo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -68,7 +71,8 @@ public class MemberController {
     }
 
     @PostMapping("/member/location")
-    public ResponseEntity<Void> addMemberStartLocation(@RequestHeader("Authorization") String authorization, @RequestBody MemberRequest.MemberLocationAddInfo memberLocationAddInfo){
+    public ResponseEntity<Void> addMemberStartLocation(@RequestHeader("Authorization") String authorization,
+                                                       @RequestBody @Valid MemberRequest.MemberLocationAddInfo memberLocationAddInfo){
         memberService.addMemberStartLocation(authorization,memberLocationAddInfo);
         return new ResponseEntity<>(HttpStatus.OK);
     }

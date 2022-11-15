@@ -51,7 +51,11 @@ public class MomentServiceImpl implements MomentService{
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
         scheduleService.checkMemberInSchedule(moment.getScheduleLocation().getSchedule(),member);
-        return MomentResponse.MomentDetail.builder().moment(moment).member(member).build();
+        return MomentResponse.MomentDetail.builder()
+                .moment(moment)
+                .member(member)
+                .commentCreated(momentCommentRepository.existsByMemberAndMoment(member,moment))
+                .build();
     }
 
     @Override
