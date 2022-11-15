@@ -8,3 +8,6 @@ class Coordinate(BaseModel):
 
 class CoordinateList(BaseModel):
     coordinates: List[Coordinate]
+
+class TagList(BaseModel):
+    tags: List[str]
