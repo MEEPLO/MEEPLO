@@ -71,7 +71,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
 
   return visible ? (
     <>
-      <View style={{ position: 'relative', height: windowHeight - 150, marginHorizontal: 20 }}>
+      <View style={{ position: 'relative', height: windowHeight - 250, marginHorizontal: 20 }}>
         <View
           style={{
             width: '100%',
