@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroupList } from '../../../redux/groupSlice';
 
@@ -14,8 +14,12 @@ const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
     }),
   );
 
-  const [selectedGroup, setSelectedGroup] = React.useState('');
-  const [groupsData, setGroupsData] = React.useState([]);
+  const groupNameIndex = useSelector(state => {
+    const groupNameIndexMap = new Map(state.groupList.map(({ id, name }) => [id, name]));
+    return Object.fromEntries(groupNameIndexMap);
+  });
+
+  const [selectedGroup, setSelectedGroup] = React.useState();
 
   const windowHeight = Dimensions.get('window').height;
 
@@ -23,21 +27,18 @@ const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
     dispatch(getGroupList());
   }, []);
 
-  // React.useEffect(() => {
-  //   console.log(groupList.group);
-  //   groupList.forEach(group => {
-  //     setGroupsData(prevData => [...prevData, { key: group.id, value: group.name }]);
-  //   });
-  // }, [groupList.group]);
-
   const onPressNext = () => {
     const actions = [
       {
         type: 'UPDATE_GROUPID',
         payload: selectedGroup,
       },
+      {
+        type: 'UPDATE_GROUPNAME',
+        payload: groupNameIndex[selectedGroup],
+      },
     ];
-    toNext(actions);
+    !!selectedGroup ? toNext(actions) : Alert.alert('그룹을 선택해주세요.');
   };
 
   return visible ? (

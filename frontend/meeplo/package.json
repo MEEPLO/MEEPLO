@@ -27,6 +27,7 @@
     "aws-sdk": "^2.1245.0",
     "axios": "0.27.2",
     "base64-arraybuffer": "^1.0.2",
+    "lottie-react-native": "^5.1.4",
     "moment": "^2.29.4",
     "react": "18.1.0",
     "react-daum-postcode": "^3.1.1",
