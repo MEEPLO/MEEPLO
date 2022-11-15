@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons/faSquarePlus';
+import { faPaste } from '@fortawesome/free-regular-svg-icons/faPaste';
 import GroupListItem from '../components/Group/GroupListItem';
 import { theme } from '../assets/constant/DesignTheme';
 import { getGroupList } from '../redux/groupSlice';
@@ -24,11 +25,14 @@ const GroupHomeScreen = ({ navigation }) => {
 
   const fetchCopiedText = async () => {
     const text = await Clipboard.getString();
-    setCopiedText(text);
+    setGroupCode(text);
   };
 
   const openModal = () => setModalVisible(true);
-  const closeModal = () => setModalVisible(false);
+  const closeModal = () => {
+    setModalVisible(false);
+    setGroupCode('');
+  };
 
   useEffect(() => {
     dispatch(getGroupList());
@@ -65,19 +69,31 @@ const GroupHomeScreen = ({ navigation }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{ fontSize: width * 0.06, fontWeight: 'bold' }}>다른 그룹 참여하기</Text>
+              <Text style={{ fontSize: width * 0.06, fontWeight: 'bold', color: 'black' }}>다른 그룹 참여하기</Text>
             </View>
             {/* 내용물 */}
-            <View style={{ flex: 3, marginHorizontal: 20 }}>
-              <Text>공유받은 그룹 코드를 입력해주세요!</Text>
-              <TextInput
-                onChangeText={setGroupCode}
-                value={groupCode}
-                style={{ width: width * 0.6, borderBottomColor: theme.color.border, borderBottomWidth: 1, padding: 3 }}
-              />
+            <View style={{ flex: 3, marginHorizontal: 20, alignItems: 'center', justifyContent: 'space-around' }}>
+              <Text style={{ fontSize: 18 }}>공유받은 그룹 코드를 입력해주세요!</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TextInput
+                  onChangeText={setGroupCode}
+                  value={groupCode}
+                  style={{
+                    width: width * 0.55,
+                    borderBottomColor: theme.color.border,
+                    borderBottomWidth: 1,
+                    paddingHorizontal: 10,
+                    paddingVertical: 3,
+                  }}
+                />
+                <TouchableOpacity onPress={fetchCopiedText}>
+                  <FontAwesomeIcon icon={faPaste} size={18} color="gray" />
+                </TouchableOpacity>
+              </View>
             </View>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
               <TouchableOpacity
+                onPress={closeModal}
                 activeOpacity={0.6}
                 style={{
                   justifyContent: 'center',
