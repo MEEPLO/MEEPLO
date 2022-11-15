@@ -10,9 +10,7 @@ const screen = Dimensions.get('screen');
 
 const memberListMaxHeight = screen.height * 0.5;
 
-const GroupMemberSelectList = ({ type, members, selectedMembers, required, onSelect }) => {
-  const userInfo = useSelector(state => state.user.info);
-
+const GroupMemberSelectList = ({ type, members, selectedMembers, user, required, onSelect }) => {
   return (
     <View style={styles.memberListViewStyle}>
       <Text style={{ color: '#000', fontWeight: '800', marginBottom: 20 }}>
@@ -26,7 +24,7 @@ const GroupMemberSelectList = ({ type, members, selectedMembers, required, onSel
             <GroupMemberSelectListItem
               member={item.item}
               selected={!!selectedMembers.find(member => member.id === item.item.id)}
-              disabled={item.item.id === userInfo.id}
+              disabled={item.item.id === user.id}
               onClick={onSelect}
             />
           )}

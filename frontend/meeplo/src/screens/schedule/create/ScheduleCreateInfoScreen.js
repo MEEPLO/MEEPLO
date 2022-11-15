@@ -24,19 +24,19 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
   }, [state]);
 
   const validateInput = () => {
-    if (!name || name.length === 0) {
-      Toast.show({
-        type: 'error',
-        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
-      });
-
-      return false;
-    } else if (!date || date.length === 0) {
+    if (!date || date.length === 0) {
       Toast.show({
         type: 'error',
         text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
         text2: TOAST_MESSAGE.SCHEDULE_NO_DATE,
+      });
+
+      return false;
+    } else if (!name || name.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
       });
 
       return false;

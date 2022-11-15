@@ -18,6 +18,7 @@ const SelectDropdown = props => {
         <SelectList
           placeholder={placeholder}
           setSelected={props.setSelected}
+          defaultOption={props.defaultOption}
           data={props.data}
           onSelect={() => {}}
           maxHeight={windowHeight * 0.4}

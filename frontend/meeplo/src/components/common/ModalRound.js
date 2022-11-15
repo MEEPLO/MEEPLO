@@ -5,17 +5,19 @@ import { theme } from '../../assets/constant/DesignTheme';
 const screen = Dimensions.get('screen');
 const modalWidth = screen.width * 0.85;
 
-const ModalRound = ({ title, visible, onRequestClose, children }) => {
+const ModalRound = ({ hideHeader, title, visible, onRequestClose, children }) => {
   return (
     <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={onRequestClose}>
       <View style={styles.centeredView}>
         <View style={styles.roundedView}>
-          <View style={styles.headerView}>
-            <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
-              <Text style={styles.closeButtonTextStyle}> X </Text>
-            </TouchableOpacity>
-            <Text style={styles.title}>{title}</Text>
-          </View>
+          {hideHeader ? null : (
+            <View style={styles.headerView}>
+              <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
+                <Text style={styles.closeButtonTextStyle}> X </Text>
+              </TouchableOpacity>
+              <Text style={styles.title}>{title}</Text>
+            </View>
+          )}
           <View style={styles.childrenView}>{children}</View>
         </View>
       </View>

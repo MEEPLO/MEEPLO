@@ -14,50 +14,53 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
   const dispatch = useDispatch();
 
   const [group, setGroup] = useState();
-  const [members, setMembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [groupNameList, setGroupNameList] = useState([]);
 
-  const groupNameList = useSelector(state => {
-    if (!state || !Array.isArray(state.groupList)) return [];
+  const groupList = useSelector(state => state.groupList);
 
-    return state.groupList.map(({ id, name }) => {
-      return { key: id, value: name };
-    });
-  });
+  useEffect(() => {
+    setGroup(state.group);
+    setSelectedMembers(state.members);
+    dispatch(getGroupList());
+  }, []);
+
+  useEffect(() => {
+    if (Array.isArray(groupList)) {
+      setGroupNameList(
+        groupList.map(({ id, name }) => {
+          return { key: id, value: name };
+        }),
+      );
+    }
+  }, [groupList]);
 
   const groupMemberList = useSelector(state => {
     if (!state || !state.group || !Array.isArray(state.group.members)) return [];
-
     return state.group.members;
   });
 
   const userInfo = useSelector(state => state.user.info);
 
   useEffect(() => {
-    setGroup(state.group);
-    setMembers(state.members);
-  }, [state]);
-
-  useEffect(() => {
-    dispatch(getGroupList());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getGroupMembers({ groupId: group }));
-  }, [dispatch, group]);
-
-  useEffect(() => {
-    setMembers([...members, userInfo]);
+    setSelectedMembers([...selectedMembers, userInfo]);
   }, [userInfo]);
 
-  const onSelectGroup = group => {
-    setGroup(group);
-  };
+  useEffect(() => {}, [selectedMembers]);
+
+  useEffect(() => {
+    if (group && group.id) {
+      dispatch(getGroupMembers({ groupId: group.id }));
+    }
+  }, [group]);
+
+  const onSelectGroup = groupId => setGroup(groupList.find(g => g.id === groupId));
 
   const onSelectMember = member => {
-    if (members.find(m => m.id === member.id)) {
-      setMembers(members.filter(m => m.id !== member.id));
+    if (selectedMembers.find(m => m.id === member.id)) {
+      setSelectedMembers(selectedMembers.filter(m => m.id !== member.id));
     } else {
-      setMembers([...members, member]);
+      setSelectedMembers([...selectedMembers, member]);
     }
   };
 
@@ -69,7 +72,7 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
         text2: TOAST_MESSAGE.SCHEDULE_NO_GROUP,
       });
       return false;
-    } else if (!Array.isArray(members) || members.length === 0) {
+    } else if (!Array.isArray(selectedMembers) || selectedMembers.length === 0) {
       Toast.show({
         type: 'error',
         text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
@@ -90,7 +93,7 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
         },
         {
           type: 'UPDATE_MEMBERS',
-          payload: members,
+          payload: selectedMembers,
         },
       ];
 
@@ -101,15 +104,22 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <SelectDropdown setSelected={onSelectGroup} type="모임" data={groupNameList} required={true} />
+        <SelectDropdown
+          setSelected={onSelectGroup}
+          type="모임"
+          data={groupNameList}
+          required={true}
+          defaultOption={{ key: group?.id, value: group?.name }}
+        />
       </View>
 
-      {Number.isInteger(group) ? (
+      {group && group.id ? (
         <View style={styles.inputViewStyle}>
           <GroupMemberSelectList
             type="모임 멤버 초대"
             members={groupMemberList}
-            members={members}
+            selectedMembers={selectedMembers}
+            user={userInfo}
             required
             onSelect={onSelectMember}
           />

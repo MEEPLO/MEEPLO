@@ -121,7 +121,7 @@ const ScheduleCreateScreen = ({ navigation }) => {
   };
 
   const onFinish = () => {
-    console.log(schedule);
+    console.log('on finish', schedule);
   };
 
   return (
