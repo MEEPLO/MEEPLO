@@ -11,8 +11,10 @@ export const createSchedule = createAsyncThunk('schedule/createSchedule', async 
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    console.log('response', response);
     return response.data;
   } catch (err) {
+    console.log('error', err);
     return isRejectedWithValue(err.response.data);
   }
 });
