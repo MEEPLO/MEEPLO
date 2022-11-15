@@ -299,6 +299,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .schedule(sm.getSchedule())
                         .build()
                 )
+                .sorted((s1,s2)->s2.getDate().compareTo(s1.getDate()))
                 .collect(Collectors.toList());
     }
 }
