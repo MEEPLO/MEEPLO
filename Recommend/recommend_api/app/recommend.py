@@ -6,4 +6,7 @@ import zipfile
 # from nltk.tokenize import word_tokenize, sent_tokenize
 
 def recommend_keywords(tags: List[str]):
-    return tags
+    json = {
+        "tags": tags
+    }
+    return json
