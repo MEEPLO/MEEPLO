@@ -15,6 +15,7 @@ import com.sloth.meeplo.schedule.dto.request.ScheduleRequest;
 import com.sloth.meeplo.schedule.dto.response.KeywordResponse;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
+import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import com.sloth.meeplo.schedule.entity.ScheduleMember;
 import com.sloth.meeplo.schedule.exception.code.ScheduleErrorCode;
@@ -33,6 +34,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,10 +66,10 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .build()
         );
-        scheduleCreateInput.getKeywords().stream().map(ScheduleRequest.ScheduleInputKeyword::getId)
-                .map(id -> scheduleKeywordRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                .forEach(k-> newSchedule.getScheduleKeywords().add(k));
+
+        scheduleKeywordRepository.saveAll(scheduleCreateInput.getKeywords().stream()
+                .map(k->ScheduleKeyword.builder().keyword(k).build())
+                .collect(Collectors.toList()));
 
         scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
         scheduleCreateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
@@ -112,12 +114,10 @@ public class ScheduleServiceImpl implements ScheduleService{
         schedule.updateDate(scheduleUpdateInput.getDate());
         scheduleRepository.save(schedule);
 
-        schedule.getScheduleKeywords().clear();
-        scheduleUpdateInput.getKeywords().stream()
-                .map(ScheduleRequest.ScheduleInputKeyword::getId)
-                .map(id -> scheduleKeywordRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                .forEach(k-> schedule.getScheduleKeywords().add(k));
+        scheduleKeywordRepository.deleteAllBySchedule(schedule);
+        scheduleKeywordRepository.saveAll(scheduleUpdateInput.getKeywords().stream()
+                .map(k->ScheduleKeyword.builder().keyword(k).build())
+                .collect(Collectors.toList()));
 
         schedule.getScheduleMembers().stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
@@ -270,5 +270,36 @@ public class ScheduleServiceImpl implements ScheduleService{
     public void checkMemberInSchedule(Schedule schedule, Member member) {
         if(!scheduleMemberRepository.existsByMemberAndScheduleAndStatus(member, schedule, ScheduleMemberStatus.JOINED))
             throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
+    }
+
+    @Override
+    public List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        // TODO: 2022-11-15 status 변경후 확인 필요 
+        return member.getScheduleMembers().stream()
+                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
+                        && sm.getSchedule().getDate().isAfter(LocalDateTime.now()))
+                .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
+                        .schedule(sm.getSchedule())
+                        .build()
+                )
+                .sorted(Comparator.comparing(ScheduleResponse.ScheduleListInfo::getDate))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        return member.getScheduleMembers().stream()
+                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
+                        && sm.getSchedule().getDate().isBefore(LocalDateTime.now())
+                        && sm.getSchedule().getScheduleLocations().stream().mapToLong(sl->sl.getMoments().size()).sum()==0)
+                .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
+                        .schedule(sm.getSchedule())
+                        .build()
+                )
+                .sorted((s1,s2)->s2.getDate().compareTo(s1.getDate()))
+                .collect(Collectors.toList());
     }
 }

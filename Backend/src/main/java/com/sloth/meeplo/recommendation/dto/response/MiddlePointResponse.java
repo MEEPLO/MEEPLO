@@ -28,7 +28,7 @@ public class MiddlePointResponse {
     public static class RecommendedStation extends Coordinate{
         private Long stationId;
         private String name;
-        private int avgTime;
+        private Integer avgTime;
         private List<StationRoute> requiredTimes;
 
         @Builder
@@ -49,17 +49,17 @@ public class MiddlePointResponse {
     public static class StationRoute {
         private Long memberId;
         private String groupMemberName;
-        private int time;
+        private Integer time;
         private StartLocation startLocation;
         private List<RouteCoordinate> coordinates;
 
         @Builder
-        StationRoute(GroupMember groupMember, int time, StartLocation startLocation, List<RouteCoordinate> coordinates) {
+        StationRoute(GroupMember groupMember, StartLocation startLocation, RouteMetaData routeMetaData) {
             this.memberId = groupMember.getMember().getId();
             this.groupMemberName = groupMember.getNickname();
-            this.time = time;
+            this.time = (int) routeMetaData.getTime();
             this.startLocation = startLocation;
-            this.coordinates = coordinates;
+            this.coordinates = routeMetaData.getPointCoordinate();
         }
     }
 
@@ -78,7 +78,7 @@ public class MiddlePointResponse {
     @Getter
     public static class RouteCoordinate extends Coordinate{
         @Builder
-        RouteCoordinate(double lat, double lng) {
+        RouteCoordinate(Double lat, Double lng) {
             super(lat, lng);
         }
     }

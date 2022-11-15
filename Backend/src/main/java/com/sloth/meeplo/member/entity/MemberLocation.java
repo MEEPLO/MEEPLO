@@ -27,12 +27,12 @@ public class MemberLocation extends GeoDataEntity {
     private Member member;
 
     @Builder
-    public MemberLocation(MemberRequest.MemberLocationAddInfo memberLocationAddInfo, Member member){
+    public MemberLocation(MemberRequest.MemberLocationAddInfo memberLocationAddInfo, Member member, MemberRequest.ConvertedCoordinate convertedCoordinate){
         this.member = member;
         this.name = memberLocationAddInfo.getName();
         this.address= memberLocationAddInfo.getAddress();
-        this.lat = memberLocationAddInfo.getLat();
-        this.lng = memberLocationAddInfo.getLng();
+        this.lat = convertedCoordinate.getLat();
+        this.lng = convertedCoordinate.getLng();
 
     }
 }

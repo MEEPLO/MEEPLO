@@ -16,6 +16,7 @@ import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.schedule.entity.Schedule;
+import com.sloth.meeplo.schedule.entity.ScheduleMember;
 import com.sloth.meeplo.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,12 +62,14 @@ public class GroupServiceImpl implements GroupService{
     public void updateGroup(String authorization, Long groupId, GroupRequest.GroupInput groupInput) {
         Group group = getGroupEntityByGroupId(groupId);
         Member member = memberService.getMemberByAuthorization(authorization);
-// TODO: 2022-11-01 ID만 바꿔서 가능한지 확인필요
-        if(isGroupLeader(group, member)){
-            group = groupInput.toEntity();
-            group.updateGroupId(groupId);
-            groupRepository.save(group);
-        }
+
+        if(!isGroupLeader(group, member))
+            throw new MeeploException(GroupErrorCode.UNAUTHORIZED);
+
+        group = groupInput.toEntity();
+        group.updateGroupId(groupId);
+        groupRepository.save(group);
+
     }
 
     @Override
@@ -232,6 +235,22 @@ public class GroupServiceImpl implements GroupService{
         return groupMemberRepository.findByGroupAndMember(group, memberService.getMemberById(memberId))
                 .filter(gm -> GroupMemberStatus.ACTIVATED.equals(gm.getStatus()))
                 .orElseThrow(() -> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP_MEMBER));
+    }
+
+    @Override
+    public List<GroupResponse.GroupSchedule> getGroupSchedules(String authorization, Long groupId) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Group group = getGroupEntityByGroupId(groupId);
+
+        checkMemberInGroup(member, group);
+
+        return group.getSchedules().stream()
+                .filter(s-> s.getScheduleMembers().stream().map(ScheduleMember::getMember).anyMatch(m->m.getId().equals(member.getId())))
+                .map(s-> GroupResponse.GroupSchedule.builder()
+                        .schedule(s)
+                        .build())
+                .collect(Collectors.toList());
+
     }
 
     private boolean isGroupLeader(Group group, Member member){

@@ -1,7 +1,7 @@
 package com.sloth.meeplo.schedule.entity;
 
-import com.sloth.meeplo.schedule.type.ScheduleKeywordClassification;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +19,13 @@ public class ScheduleKeyword {
     @Column(length = 6)
     private String keyword;
 
-    private ScheduleKeywordClassification classification;
+    @ManyToOne
+    @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    private Schedule schedule;
 
+    @Builder
+    ScheduleKeyword(String keyword){
+        this.keyword = keyword;
+    }
 
 }
