@@ -1,7 +1,5 @@
 package com.sloth.meeplo.recommendation.service;
 
-import com.sloth.meeplo.global.exception.MeeploException;
-import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.global.util.ExternalAPIRequest;
 import com.sloth.meeplo.group.entity.Group;
@@ -17,16 +15,16 @@ import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import com.sloth.meeplo.recommendation.dto.request.MiddlePointRequest;
 import com.sloth.meeplo.recommendation.dto.response.MiddlePointResponse;
 import com.sloth.meeplo.recommendation.dto.response.RouteMetaData;
+import com.sloth.meeplo.recommendation.util.RecommendAPIRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -38,6 +36,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
 
     private final GrahamScan grahamScan;
     private final ExternalAPIRequest externalAPIRequest;
+    private final RecommendAPIRequest recommendAPIRequest;
 
     @Override
     public MiddlePointResponse.StationList calcMiddleStations(String authorization, MiddlePointRequest.CoordinationList startData) {
@@ -65,7 +64,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
                                         )
                                         .collect(Collectors.toList()))
                                 .build())
-                        .sorted((e1, e2) -> (int) (e1.getAvgTime() - e2.getAvgTime()))
+                        .sorted(Comparator.comparingInt(MiddlePointResponse.RecommendedStation::getAvgTime))
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -94,15 +93,9 @@ public class MiddlePointServiceImpl implements MiddlePointService{
                         .build())
                 .collect(Collectors.toList());
 
-        List<MiddlePointResponse.RouteCoordinate> convexPoints = grahamScan.calcConvexHullPoints(points);
+        Coordinate centerPoint = recommendAPIRequest.callMiddlePointAPI(grahamScan.calcConvexHullPoints(points));
 
-        // fast api request
-        Coordinate centerPoint = new Coordinate();
-
-        double lat = 37.564820366666666;
-        double lng = 127.04954223333333;
-
-        return locationRepository.findLocationsWithCoordination(lat, lng,
+        return locationRepository.findLocationsWithCoordination(centerPoint.getLat(), centerPoint.getLng(),
                 Double.parseDouble(DefaultValue.STATION_SEARCH_RADIUS.getValue()), LocationType.STATION).stream()
                 .limit(3)
                 .collect(Collectors.toList());
