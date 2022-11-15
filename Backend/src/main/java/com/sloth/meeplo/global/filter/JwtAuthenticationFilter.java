@@ -62,7 +62,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             }
         }
 
-//        logger.info("response -> " + response);
         chain.doFilter(request, response);
     }
 }
