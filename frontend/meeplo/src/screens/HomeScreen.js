@@ -10,38 +10,13 @@ import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation'
 import { getGroupList } from '../redux/groupSlice';
 import { logInWithKakao, logOutWithKakao } from '../auth/Authentication';
 import { getUserInfo } from '../redux/userSlice';
+import { getUpcomingSchedule, getNoMomentsSchedule } from '../redux/scheduleSlice';
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const groupList = useSelector(state => state.groupList);
-
-  // TODO: hrookim Change dummy data to redux state data
-  const data = [
-    {
-      id: 1,
-      title: '하나',
-      date: '2022.10.20',
-      group: '아아아그룹',
-      people: 5,
-      place: '역삼역',
-    },
-    // {
-    //   id: 2,
-    //   title: '둘',
-    //   date: '2022.10.30',
-    //   group: '근데 다른 그룹',
-    //   people: 4,
-    //   place: '강남역',
-    // },
-    // {
-    //   id: 3,
-    //   title: '셋',
-    //   date: '2022.11.06',
-    //   group: 'another group',
-    //   people: 6,
-    //   place: '모르는역',
-    // },
-  ];
+  const upComingScheduleList = useSelector(state => state.schedule.upComing);
+  const noMomentsScheduleList = useSelector(state => state.schedule.noMoments);
 
   const onPressMoreSchedule = () => {
     navigation.navigate('ScheduleStack', { screen: 'Home' });
@@ -60,6 +35,8 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     dispatch(getUserInfo());
     dispatch(getGroupList());
+    dispatch(getUpcomingSchedule());
+    dispatch(getNoMomentsSchedule());
   }, []);
 
   return (
@@ -85,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
-      <HomeSchedule data={data} navigation={navigation} />
+      <HomeSchedule data={upComingScheduleList} navigation={navigation} />
       <View
         style={{
           margin: 20,
@@ -119,7 +96,7 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
-      <HomeMoments data={data} navigation={navigation} />
+      <HomeMoments data={noMomentsScheduleList} navigation={navigation} />
       <View
         style={{
           margin: 20,

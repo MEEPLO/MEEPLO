@@ -228,7 +228,38 @@ export const getGroupMembers = createAsyncThunk('group/getGroupMembers', async (
   }
 });
 
-// TODO: hrookim 그룹 초대 링크
+export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Alert, navigation }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    await axiosPrivate
+      .post(
+        `/group/member`,
+        { ...form },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
+      .then(res => {
+        Alert.alert(`그룹에 참여습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'GroupHome' }],
+              });
+            },
+          },
+        ]);
+      });
+    console.log('you are JOINED!');
+  } catch (err) {
+    console.error('ERROR in joinGroup!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
 
 const groupListSlice = createSlice({
   name: 'groupList',
