@@ -177,22 +177,42 @@ export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName,
 });
 
 // Only available to LEADER
-// TODO: hrookim 강퇴 후 navigate 로직!!!
-export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async ({ groupId, memberId }) => {
-  try {
-    const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axiosPrivate.delete(`/group/${groupId}/member/${memberId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log('group member EXITED');
-    return response?.data;
-  } catch (err) {
-    console.error('ERROR in exitGroupMember', err);
-    return isRejectedWithValue(err.response?.data);
-  }
-});
+export const exitGroupMember = createAsyncThunk(
+  'group/exitGroupMember',
+  async ({ groupId, memberId, memberName, Alert, navigation }) => {
+    try {
+      const accessToken = await AsyncStorage.getItem('@accessToken');
+      const response = await axiosPrivate
+        .delete(`/group/${groupId}/member/${memberId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(() => {
+          Alert.alert(`${memberName} 님이 강퇴되었습니다.`, '', [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.reset({
+                  index: 2,
+                  routes: [
+                    { name: 'GroupHome' },
+                    { name: 'GroupDetail', params: { groupId } },
+                    { name: 'GroupDetailInfo', params: { groupId } },
+                  ],
+                });
+              },
+            },
+          ]);
+        });
+      console.log('group member EXITED');
+      return response?.data;
+    } catch (err) {
+      console.error('ERROR in exitGroupMember', err);
+      return isRejectedWithValue(err.response?.data);
+    }
+  },
+);
 
 // TODO: hrookim 그룹 초대 링크
 
