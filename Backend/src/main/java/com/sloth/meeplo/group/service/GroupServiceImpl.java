@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -65,9 +66,10 @@ public class GroupServiceImpl implements GroupService{
 
         if(!isGroupLeader(group, member))
             throw new MeeploException(GroupErrorCode.UNAUTHORIZED);
-
+        String enterCode = group.getEnterCode();
         group = groupInput.toEntity();
         group.updateGroupId(groupId);
+        group.updateEnterCode(enterCode);
         groupRepository.save(group);
 
     }
@@ -168,11 +170,14 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     @Transactional
-    public void joinToGroup(String authorization, Long groupId) {
+    public void joinToGroup(String authorization, GroupRequest.GroupJoinCode groupJoinCode) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        Group group = getGroupEntityByGroupId(groupId);
+        Group group = groupRepository.findByEnterCode(groupJoinCode.getEnterCode())
+                .orElseThrow(()-> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP_CODE));
+
         if(groupMemberRepository.countByGroupAndStatus(group, GroupMemberStatus.ACTIVATED)>GROUP_MEMBER_LIMIT)
             throw new MeeploException(GroupErrorCode.NO_MORE_MEMBER);
+
         joinGroup(group, member, Role.MEMBER);
     }
 
