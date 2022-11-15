@@ -43,9 +43,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             String token = null;
             try {
                 token = jwtUtil.resolveToken((HttpServletRequest) request);
-//                logger.info("Token resolved...");
                 if(!jwtUtil.validateToken(token)) throw new MeeploException(CommonErrorCode.WRONG_TOKEN);   // 중복
-//                logger.info("Token verified...");
                 Member member = memberService.getMemberById(jwtUtil.getUserIdFromToken(token));
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member, null, member.getAuthority());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -53,6 +51,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 return;
             } catch(Exception e) {
 //                logger.info("Sth wrong with token...");
+                e.printStackTrace();
                 ErrorCode errorCode = CommonErrorCode.WRONG_TOKEN;
                 ObjectMapper mapper = new ObjectMapper();
                 String jsonString = mapper.registerModule(new JavaTimeModule()).writeValueAsString(ErrorResponse.builder().name(errorCode.name()).message(errorCode.getMessage()).build());

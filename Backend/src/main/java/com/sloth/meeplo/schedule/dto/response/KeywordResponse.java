@@ -12,13 +12,11 @@ public class KeywordResponse {
     @ToString
     @NoArgsConstructor
     public static class KeyWordListInfo {
-        private ScheduleKeywordClassification classification;
         private String keyword;
         private Long id;
 
         @Builder
         KeyWordListInfo(ScheduleKeyword scheduleKeyword){
-            this.classification = scheduleKeyword.getClassification();
             this.keyword = scheduleKeyword.getKeyword();
             this.id = scheduleKeyword.getId();
         }
