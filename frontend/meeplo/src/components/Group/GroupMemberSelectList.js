@@ -12,11 +12,6 @@ const memberListMaxHeight = screen.height * 0.5;
 
 const GroupMemberSelectList = ({ type, members, selectedMembers, required, onSelect }) => {
   const userInfo = useSelector(state => state.user.info);
-  const [testMembers, setTestMembers] = useState([]);
-
-  useEffect(() => {
-    setTestMembers([...members, ...members, ...members, ...members, ...members]);
-  }, [members]);
 
   useEffect(() => {
     console.log('user', userInfo);
@@ -30,7 +25,7 @@ const GroupMemberSelectList = ({ type, members, selectedMembers, required, onSel
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <FlatList
           style={styles.memberListStyle}
-          data={testMembers}
+          data={members}
           renderItem={item => (
             <GroupMemberSelectListItem
               member={item.item}
