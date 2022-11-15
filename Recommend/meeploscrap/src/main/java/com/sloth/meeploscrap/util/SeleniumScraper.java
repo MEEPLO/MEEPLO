@@ -116,7 +116,7 @@ public class SeleniumScraper implements Scraper{
     }
 
     public void closeDriver() {
-        driver.close();
+        driver.quit();
     }
 
     private Map<String, String> initClickableMap() {
