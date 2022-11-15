@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import Toast from 'react-native-toast-message';
 
 import { getGroupList, getGroupMembers } from '../../../redux/groupSlice';
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
 
 import StepButton from '../../../components/stepper/StepButton';
 import SelectDropdown from '../../../components/common/SelectDropdown';
@@ -10,6 +12,10 @@ import GroupMemberSelectList from '../../../components/Group/GroupMemberSelectLi
 
 const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const dispatch = useDispatch();
+
+  const [group, setGroup] = useState();
+  const [members, setMembers] = useState([]);
+
   const groupNameList = useSelector(state => {
     if (!state || !Array.isArray(state.groupList)) return [];
 
@@ -26,48 +32,92 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
 
   const userInfo = useSelector(state => state.user.info);
 
-  const [selectedGroup, setSelectedGroup] = useState();
-  const [selectedMembers, setSelectedMembers] = useState([]);
+  useEffect(() => {
+    setGroup(state.group);
+    setMembers(state.members);
+  }, [state]);
 
   useEffect(() => {
     dispatch(getGroupList());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getGroupMembers({ groupId: selectedGroup }));
-  }, [dispatch, selectedGroup]);
+    dispatch(getGroupMembers({ groupId: group }));
+  }, [dispatch, group]);
 
   useEffect(() => {
-    setSelectedMembers([...selectedMembers, userInfo]);
+    setMembers([...members, userInfo]);
   }, [userInfo]);
 
+  const onSelectGroup = group => {
+    setGroup(group);
+  };
+
   const onSelectMember = member => {
-    if (selectedMembers.find(selectedMember => selectedMember.id === member.id)) {
-      setSelectedMembers(selectedMembers.filter(selectedMember => selectedMember.id !== member.id));
+    if (members.find(m => m.id === member.id)) {
+      setMembers(members.filter(m => m.id !== member.id));
     } else {
-      setSelectedMembers([...selectedMembers, member]);
+      setMembers([...members, member]);
+    }
+  };
+
+  const validateInput = () => {
+    if (!group || !group.id) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_GROUP,
+      });
+      return false;
+    } else if (!Array.isArray(members) || members.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_MEMBERS,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const onPressNext = () => {
+    if (validateInput()) {
+      const actions = [
+        {
+          type: 'UPDATE_GROUP',
+          payload: group,
+        },
+        {
+          type: 'UPDATE_MEMBERS',
+          payload: members,
+        },
+      ];
+
+      toNext(actions);
     }
   };
 
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <SelectDropdown setSelected={setSelectedGroup} type="모임" data={groupNameList} required={true} />
+        <SelectDropdown setSelected={onSelectGroup} type="모임" data={groupNameList} required={true} />
       </View>
 
-      {Number.isInteger(selectedGroup) ? (
+      {Number.isInteger(group) ? (
         <View style={styles.inputViewStyle}>
           <GroupMemberSelectList
             type="모임 멤버 초대"
             members={groupMemberList}
-            selectedMembers={selectedMembers}
+            members={members}
+            required
             onSelect={onSelectMember}
           />
         </View>
       ) : null}
       <View style={styles.navigateViewStyle}>
         <StepButton text="< 이전" active={false} onPress={toPrev} />
-        <StepButton text="다음 >" active={true} onPress={toNext} />
+        <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
     </View>
   ) : null;

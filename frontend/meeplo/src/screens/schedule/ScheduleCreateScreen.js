@@ -56,12 +56,12 @@ const reducer = (state, action) => {
 };
 
 const initialSchedule = {
-  date: null,
-  name: null,
-  group: null,
-  meet: null,
+  date: '',
+  name: '',
+  group: {},
+  meet: {},
   keywords: [],
-  members: {},
+  members: [],
   amuse: {},
 };
 

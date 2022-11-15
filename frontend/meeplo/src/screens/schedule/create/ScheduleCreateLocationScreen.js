@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
+
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
 
 import StepButton from '../../../components/stepper/StepButton';
 import MapLocationInput from '../../../components/map/MapLocationInput';
@@ -10,9 +13,9 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
 
   useEffect(() => {
     // TODO : set meet
-    setMeet();
-    setAmuse();
-  }, []);
+    setMeet(state.meet);
+    setAmuse(state.amuse);
+  }, [state]);
 
   const onSelectMeetLocation = location => {
     setMeet(location);
@@ -23,6 +26,22 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   };
 
   const validateInput = () => {
+    if (!meet || !meet.id) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+      });
+
+      return false;
+    } else if (!amuse || !amuse.id) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+      });
+    }
+
     return true;
   };
   const onPressNext = () => {
@@ -39,7 +58,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
       ];
 
       toNext(actions);
-    } else toNext();
+    }
   };
 
   return visible ? (

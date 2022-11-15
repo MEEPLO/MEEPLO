@@ -3,6 +3,8 @@ import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
 import Toast from 'react-native-toast-message';
 
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
+
 import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
 import DateModalInput from '../../../components/schedule/DateModalInput';
@@ -22,15 +24,25 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
   }, [state]);
 
   const validateInput = () => {
-    if (date && name) {
-      return true;
+    if (!name || name.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+      });
+
+      return false;
+    } else if (!date || date.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_DATE,
+      });
+
+      return false;
     }
 
-    Toast.show({
-      type: 'error',
-      text1: '필수 항목이 입력되지 않았어요!',
-    });
-    return false;
+    return true;
   };
 
   const onPressNext = () => {
@@ -51,7 +63,7 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
       ];
 
       toNext(actions);
-    } else toNext();
+    }
   };
 
   const onConfirmDate = confirmedDate => {
