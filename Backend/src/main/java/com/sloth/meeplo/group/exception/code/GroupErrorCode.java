@@ -15,6 +15,7 @@ public enum GroupErrorCode implements ErrorCode {
     UNAUTHORIZED(HttpStatus.ACCEPTED, "방장만 수정가능 합니다."),
     NO_MORE_MEMBER(HttpStatus.ACCEPTED, "모임이 가득 찼습니다."),
     NOT_EXIST_GROUP_MEMBER(HttpStatus.ACCEPTED, "그룹에 존재하지 않는 멤버입니다."),
+    NOT_EXIST_GROUP_CODE(HttpStatus.ACCEPTED, "존재하지 않는 그룹 코드입니다."),
     ;
 
     private final HttpStatus httpStatus;
