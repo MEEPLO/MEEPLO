@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, Dimensions } from 'react-native';
+import { View, Text, Pressable, Dimensions, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
 import mergeAndUpload from '../mergeAndUpload';
 import AWS from 'aws-sdk';
@@ -31,11 +31,10 @@ const getImageTitle = date => {
 
 const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   const webviewRef = React.useRef();
-  const [pictureUrl, setPictureUrl] = React.useState('');
+  const [pictureUrl, setPictureUrl] = React.useState();
 
   // load webview
   const html = mergeAndUpload(state.type);
-  console.log('inpicture: ', state);
 
   // upload image
   const uploadToS3 = dataString => {
@@ -83,13 +82,12 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
       },
     ];
 
-    toNext(actions);
+    !!pictureUrl ? toNext(actions) : Alert.alert('사진을 확정해주세요.');
   };
 
   return visible ? (
     <>
       <View style={{ height: windowHeight - 150, marginHorizontal: 20 }}>
-        {/* <MomentsUpload setPictureUrl={setPictureUrl} frameType={state.type} /> */}
         <View
           style={{
             marginHorizontal: 20,

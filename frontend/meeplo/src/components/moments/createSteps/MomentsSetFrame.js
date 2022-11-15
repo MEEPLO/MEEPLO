@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions, Pressable } from 'react-native';
+import { View, Text, Dimensions, Pressable, Alert } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
 import AutoHeightImage from 'react-native-auto-height-image';
 import Images from '../../../assets/image/index';
@@ -20,8 +20,7 @@ const MomentsSetFrame = ({ toNext, toPrev, onFinish, visible }) => {
         payload: frameType,
       },
     ];
-
-    toNext(actions);
+    frameType === -1 ? Alert.alert('프레임을 선택해주세요.') : toNext(actions);
   };
 
   return visible ? (

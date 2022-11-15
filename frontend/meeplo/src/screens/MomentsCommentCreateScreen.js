@@ -95,7 +95,6 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
   };
 
   const onFinish = actions => {
-    console.log(comment);
     var commentInfo = {
       comment: {
         comment: comment.comment,
