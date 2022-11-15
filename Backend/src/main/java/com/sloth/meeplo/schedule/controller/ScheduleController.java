@@ -77,4 +77,18 @@ public class ScheduleController {
         resultMap.put("moments", scheduleService.getMomentListBySchedule(authorization, scheduleId));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<Map<String, List<ScheduleResponse.ScheduleListInfo>>> getScheduleByUpcoming(@ApiIgnore @RequestHeader("Authorization") String authorization){
+        Map<String, List<ScheduleResponse.ScheduleListInfo>> resultMap = new HashMap<>();
+        resultMap.put("schedules", scheduleService.getScheduleByUpcoming(authorization));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/unwritten")
+    public ResponseEntity<Map<String, List<ScheduleResponse.ScheduleListInfo>>> getScheduleByUnwritten(@ApiIgnore @RequestHeader("Authorization") String authorization){
+        Map<String, List<ScheduleResponse.ScheduleListInfo>> resultMap = new HashMap<>();
+        resultMap.put("schedules", scheduleService.getScheduleByUnwritten(authorization));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
 }

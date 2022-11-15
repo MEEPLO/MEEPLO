@@ -270,4 +270,33 @@ public class ScheduleServiceImpl implements ScheduleService{
         if(!scheduleMemberRepository.existsByMemberAndScheduleAndStatus(member, schedule, ScheduleMemberStatus.JOINED))
             throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
     }
+
+    @Override
+    public List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        // TODO: 2022-11-15 status 변경후 확인 필요 
+        return member.getScheduleMembers().stream()
+                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
+                        && sm.getSchedule().getDate().isAfter(LocalDateTime.now()))
+                .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
+                        .schedule(sm.getSchedule())
+                        .build()
+                )
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        return member.getScheduleMembers().stream()
+                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
+                        && sm.getSchedule().getDate().isBefore(LocalDateTime.now())
+                        && sm.getSchedule().getScheduleLocations().stream().mapToLong(sl->sl.getMoments().size()).sum()==0)
+                .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
+                        .schedule(sm.getSchedule())
+                        .build()
+                )
+                .collect(Collectors.toList());
+    }
 }
