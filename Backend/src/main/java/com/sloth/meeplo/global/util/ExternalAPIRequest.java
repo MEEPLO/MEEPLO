@@ -7,7 +7,10 @@ import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.member.dto.request.MemberRequest;
 import com.sloth.meeplo.recommendation.dto.common.Coordinate;
+import com.sloth.meeplo.recommendation.dto.response.MiddlePointResponse;
+import com.sloth.meeplo.recommendation.dto.response.RouteMetaData;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,7 +21,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -152,7 +157,7 @@ public class ExternalAPIRequest {
         return address;
     }
 
-    public MemberRequest.ConvertedCoordinate getTimeAndRouteInfo(Coordinate start, Coordinate dest) {
+    public RouteMetaData getTimeAndRouteInfo(Coordinate start, Coordinate dest) {
         URL url;
         try {
             url = new URL("https://api.openrouteservice.org/v2/directions/driving-car/json");
@@ -164,17 +169,26 @@ public class ExternalAPIRequest {
         requestMap.put("coordinates",new Double[][] {{start.getLng(),start.getLat()},{dest.getLng(), dest.getLat()}});
 
         String response = postHttpResponse(url, header, requestMap);
-        log.info(response);
+//        log.info(response);
         JsonObject fullResponse = JsonParser.parseString(response).getAsJsonObject();
 
         //시간
         JsonArray routes = fullResponse.get("routes").getAsJsonArray();
         JsonObject summary = routes.get(0).getAsJsonObject().get("summary").getAsJsonObject();
-        Double duration = summary.getAsJsonObject().get("duration").getAsDouble();
-        log.info(duration.toString());
+        double duration = summary.getAsJsonObject().get("duration").getAsDouble();
         String geometry = routes.get(0).getAsJsonObject().get("geometry").getAsString();
-        log.info(geometry);
-        log.info(GeometryDecoder.decodeGeometry(geometry, true).toString());
-        return null;
+
+        JSONArray coordinates = GeometryDecoder.decodeGeometry(geometry, false);
+
+        return RouteMetaData.builder()
+                .time(duration)
+                .pointCoordinate(coordinates.toList().stream()
+                        .map(c->((List<Double>)c))
+                        .map(dl-> MiddlePointResponse.RouteCoordinate.builder()
+                                .lat(dl.get(0))
+                                .lng(dl.get(1))
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

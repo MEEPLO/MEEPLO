@@ -2,6 +2,7 @@ package com.sloth.meeplo.recommendation.service;
 
 import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
+import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.global.util.ExternalAPIRequest;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.repository.GroupMemberRepository;
@@ -51,22 +52,19 @@ public class MiddlePointServiceImpl implements MiddlePointService{
                         .map(station -> MiddlePointResponse.RecommendedStation.builder()
                                 .location(station)
                                 .requiredTimes(startData.getStartLocations().stream()
-                                        .map(start -> {
-                                            RouteMetaData route = calcDurationAndRoute(start, station);
-
-                                            return MiddlePointResponse.StationRoute.builder()
+                                        .map(start -> MiddlePointResponse.StationRoute.builder()
                                                     .groupMember(groupService.getGroupMemberByGroupAndMemberId(group, start.getMemberId()))
-                                                    .time((int) route.getTime())
                                                     .startLocation(MiddlePointResponse.StartLocation.builder()
                                                             .lat(start.getLat())
                                                             .lng(start.getLng())
                                                             .address(convertAddressFromCoordinate(start.getLat(), start.getLng()))
                                                             .build())
-                                                    .coordinates(route.getPointCoordinate())
-                                                    .build();
-                                        })
+                                                    .routeMetaData(calcDurationAndRoute(start, station))
+                                                    .build()
+                                        )
                                         .collect(Collectors.toList()))
                                 .build())
+                        .sorted((e1, e2) -> (int) (e1.getAvgTime() - e2.getAvgTime()))
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -80,15 +78,10 @@ public class MiddlePointServiceImpl implements MiddlePointService{
     }
 
     private RouteMetaData calcDurationAndRoute(MiddlePointRequest.MemberStartLocation start, Location destination) {
-        // TODO : openroutemap을 사용하여 시간과 경로를 얻어오기
-        // api 호출
-        externalAPIRequest.getTimeAndRouteInfo(
+
+        return externalAPIRequest.getTimeAndRouteInfo(
                 MemberRequest.ConvertedCoordinate.builder().lng(start.getLng()).lat(start.getLat()).build(),
                 MemberRequest.ConvertedCoordinate.builder().lat(destination.getLat()).lng(destination.getLng()).build());
-        return RouteMetaData.builder()
-                .time(30)
-                .pointCoordinate(new ArrayList<>())
-                .build();
     }
 
     private List<Location> getMiddleStations(List<MiddlePointRequest.MemberStartLocation> coordinates) {
@@ -101,6 +94,10 @@ public class MiddlePointServiceImpl implements MiddlePointService{
 
         double lat = 37.564820366666666;
         double lng = 127.04954223333333;
-        return locationRepository.findLocationsWithCoordination(lat, lng, 1, LocationType.STATION);
+
+        return locationRepository.findLocationsWithCoordination(lat, lng,
+                Double.parseDouble(DefaultValue.STATION_SEARCH_RADIUS.getValue()), LocationType.STATION).stream()
+                .limit(3)
+                .collect(Collectors.toList());
     }
 }
