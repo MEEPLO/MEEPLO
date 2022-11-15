@@ -13,10 +13,6 @@ const memberListMaxHeight = screen.height * 0.5;
 const GroupMemberSelectList = ({ type, members, selectedMembers, required, onSelect }) => {
   const userInfo = useSelector(state => state.user.info);
 
-  useEffect(() => {
-    console.log('user', userInfo);
-  }, [userInfo]);
-
   return (
     <View style={styles.memberListViewStyle}>
       <Text style={{ color: '#000', fontWeight: '800', marginBottom: 20 }}>
