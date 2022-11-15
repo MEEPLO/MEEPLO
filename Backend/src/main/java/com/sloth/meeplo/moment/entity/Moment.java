@@ -1,8 +1,10 @@
 package com.sloth.meeplo.moment.entity;
 
 import com.sloth.meeplo.common.BaseTimeEntity;
+import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.dto.request.MomentRequest;
+import com.sloth.meeplo.moment.exception.code.MomentErrorCode;
 import com.sloth.meeplo.moment.type.MomentType;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import lombok.AccessLevel;
@@ -49,7 +51,8 @@ public class Moment extends BaseTimeEntity {
     public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member, ScheduleLocation scheduleLocation){
         this.momentPhoto = createMomentInfo.getPhotoUrl();
         this.member = member;
-        this.type = createMomentInfo.getType();
+        if(MomentType.values().length<=createMomentInfo.getType()) throw new MeeploException(MomentErrorCode.NO_MOMENT_TYPE);
+        this.type = MomentType.values()[createMomentInfo.getType()];
         this.scheduleLocation = scheduleLocation;
     }
 }

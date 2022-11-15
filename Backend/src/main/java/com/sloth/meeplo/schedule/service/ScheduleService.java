@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,8 @@ public interface ScheduleService {
     void checkAfterScheduleDate(Schedule schedule);
 
     void checkMemberInSchedule(Schedule schedule, Member member);
+    List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization);
+    List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization);
 
 
 }
