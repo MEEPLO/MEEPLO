@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
+
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
 
 import StepButton from '../../../components/stepper/StepButton';
 import MapLocationInput from '../../../components/map/MapLocationInput';
@@ -10,22 +13,65 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
 
   useEffect(() => {
     // TODO : set meet
-    setMeet();
-    setAmuse();
-  }, []);
+    setMeet(state.meet);
+    setAmuse(state.amuse);
+  }, [state]);
+
+  const onSelectMeetLocation = location => {
+    setMeet(location);
+  };
+
+  const onSelectAmuseLocation = location => {
+    setAmuse(location);
+  };
+
+  const validateInput = () => {
+    if (!meet || !meet.id) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+      });
+
+      return false;
+    } else if (!amuse || !amuse.id) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+      });
+    }
+
+    return true;
+  };
+  const onPressNext = () => {
+    if (validateInput()) {
+      const actions = [
+        {
+          type: 'UPDATE_MEET',
+          payload: meet,
+        },
+        {
+          type: 'UPDATE_AMUSE',
+          payload: amuse,
+        },
+      ];
+
+      toNext(actions);
+    }
+  };
 
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <MapLocationInput type="만날 장소" required value="text" />
+        <MapLocationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} />
       </View>
       <View style={styles.inputViewStyle}>
-        <Text>약속 장소</Text>
-        <TextInput />
+        <MapLocationInput type="약속 장소" required value={amuse} onValueChange={onSelectAmuseLocation} />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="< 이전" active={false} onPress={toPrev} />
-        <StepButton text="만들기" active={true} onPress={onFinish} />
+        <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
     </View>
   ) : null;
@@ -43,7 +89,7 @@ const styles = StyleSheet.create({
     width: '100%',
 
     position: 'absolute',
-    bottom: 150,
+    bottom: 100,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
