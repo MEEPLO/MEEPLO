@@ -10,8 +10,6 @@ import com.sloth.meeplo.global.util.JwtUtil;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -49,9 +47,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 chain.doFilter(request, response);
                 return;
-            } catch(Exception e) {
-//                logger.info("Sth wrong with token...");
-                e.printStackTrace();
+            } catch(MeeploException e) {
+                logger.error(e.getMessage());
                 ErrorCode errorCode = CommonErrorCode.WRONG_TOKEN;
                 ObjectMapper mapper = new ObjectMapper();
                 String jsonString = mapper.registerModule(new JavaTimeModule()).writeValueAsString(ErrorResponse.builder().name(errorCode.name()).message(errorCode.getMessage()).build());
@@ -60,6 +57,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 response.getWriter().write(jsonString);
                 ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
