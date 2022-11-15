@@ -44,7 +44,7 @@ const NavigationBar = () => {
           paddingBottom: 10,
           elevation: 0,
           backgroundColor: '#ffffff',
-          height: 70,
+          height: 55,
         },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: theme.color.disabled,

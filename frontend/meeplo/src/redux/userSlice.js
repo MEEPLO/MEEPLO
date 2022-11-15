@@ -2,11 +2,13 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
+import Images from '../assets/image/index';
+import { axiosPrivate } from '../auth/axiosInstance';
 
 export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/member`, {
+    const response = await axiosPrivate.get(`/member`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -21,9 +23,9 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
 export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form, Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    await axios
+    await axiosPrivate
       .put(
-        MEEPLO_SERVER_BASE_URL + `/member`,
+        `/member`,
         { ...form },
         {
           headers: {
@@ -35,12 +37,6 @@ export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form,
         Alert.alert(`프로필을 수정했습니다.`, '', [
           {
             text: '확인',
-            onPress: () => {
-              navigation.reset({
-                index: 1,
-                routes: [{ name: 'Home' }, { name: 'MyPage' }],
-              });
-            },
           },
         ]);
       });
@@ -54,8 +50,8 @@ export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form,
 export const deleteUser = createAsyncThunk('user/deleteUser', async ({ Alert, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    await axios
-      .delete(MEEPLO_SERVER_BASE_URL + `/member`, {
+    await axiosPrivate
+      .delete(`/member`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -83,11 +79,15 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async ({ Alert, na
 export const createStartLocation = createAsyncThunk('user/createStartLocation', async ({ form }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    await axios.post(MEEPLO_SERVER_BASE_URL + `/member/location`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    await axiosPrivate.post(
+      `/member/location`,
+      { ...form },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
   } catch (err) {
     console.error('ERROR in createStartLocation', err);
     return isRejectedWithValue(err.response?.data);
@@ -97,7 +97,7 @@ export const createStartLocation = createAsyncThunk('user/createStartLocation', 
 export const deleteStartLocation = createAsyncThunk('user/deleteStartLocation', async ({ locationId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    await axios.delete(MEEPLO_SERVER_BASE_URL + `/member/location/${locationId}`, {
+    await axiosPrivate.delete(`/member/location/${locationId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -114,7 +114,7 @@ const userSlice = createSlice({
     info: {
       nickname: 'String',
       id: 1,
-      profilePhoto: 'http://www.pharmnews.com/news/photo/202206/205376_75336_1939.png',
+      profilePhoto: Images.frame.defaultImage.uri,
       startLocations: [
         {
           id: -1,

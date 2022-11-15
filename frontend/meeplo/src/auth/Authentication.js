@@ -1,6 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getProfile, login, logout, unlink } from '@react-native-seoul/kakao-login';
+import { getUserInfo } from '../redux/userSlice';
 
 async function userLogin(kakaoAccessToken) {
   try {
@@ -24,21 +25,36 @@ async function userLogin(kakaoAccessToken) {
  * kakao에서 토큰을 받아오는 함수
  * @returns message: 카카오에서 받아오기 성공했는지
  */
-export const logInWithKakao = async () => {
+export const logInWithKakao = async ({ Alert, navigation }) => {
   try {
     const kakaoToken = await login();
     const { accessToken } = kakaoToken;
-    userLogin(accessToken);
+    userLogin(accessToken).then(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+    });
   } catch (err) {
     console.error('login err =======', err);
   }
 };
 
-export const logOutWithKakao = async () => {
+export const logOutWithKakao = async ({ Alert, navigation }) => {
   try {
     const message = await logout();
+    AsyncStorage.clear();
     console.log('signout', message);
-    return message;
+    Alert.alert('로그아웃 되었습니다.', '', [
+      {
+        text: '확인',
+        onPress: () => {
+          navigation.reset({
+            routes: [{ name: 'Login' }],
+          });
+        },
+      },
+    ]);
   } catch (err) {
     console.error('signOut error', err);
   }
