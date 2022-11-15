@@ -3,6 +3,7 @@ package com.sloth.meeplo.group.service;
 import com.sloth.meeplo.group.dto.request.GroupRequest;
 import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.group.entity.Group;
+import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.member.entity.Member;
 
 import java.util.List;
@@ -32,4 +33,8 @@ public interface GroupService {
     void checkMemberInGroup(Member member, Group group);
     List<GroupResponse.FeedMoment> getFeedMoments(String authorization, Long groupId);
     List<GroupResponse.MapMoment> getMapMoments(String authorization, Long groupId);
+
+    GroupMember getGroupMemberByGroupAndMemberId(Group group, Long memberId);
+
+    List<GroupResponse.GroupSchedule> getGroupSchedules(String authorization, Long groupId);
 }

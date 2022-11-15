@@ -31,7 +31,7 @@ public interface MomentService {
 
     List<ScheduleResponse.JoinedScheduleMoment> getCalenderMoments(String authorization, String month);
 
-    MomentResponse.MomentFeedTwoList getFeedMoment(String authorization, Integer page, Integer size, Long group, Integer leftSize, Integer rightSize);
+    MomentResponse.MomentFeedTwoList getFeedMoment(String authorization, Integer page, Integer size, Long group, Integer leftSize, Integer rightSize, Boolean writer);
 
 
 }

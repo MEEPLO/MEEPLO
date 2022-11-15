@@ -30,7 +30,7 @@ public class ScheduleResponse {
         private LocalDateTime date;
         private String name;
         private ScheduleDetailGroupInfo group;
-        private List<ScheduleDetailKeywordInfo> keywords;
+        private List<String> keywords;
         private List<ScheduleDetailMemberInfo> members;
         private ScheduleDetailMeetLocationInfo meetLocation;
         private List<ScheduleDetailAmuseLocationInfo> amuseLocations;
@@ -39,11 +39,7 @@ public class ScheduleResponse {
         ScheduleDetailInfo(Schedule schedule){
             this.date = schedule.getDate();
             this.name = schedule.getName();
-            this.keywords = schedule.getScheduleKeywords().stream()
-                    .map(kw -> ScheduleDetailKeywordInfo.builder()
-                            .keyword(kw)
-                            .build())
-                    .collect(Collectors.toList());
+            this.keywords = schedule.getScheduleKeywords().stream().map(ScheduleKeyword::getKeyword).collect(Collectors.toList());
             this.group = ScheduleDetailGroupInfo.builder()
                     .group(schedule.getGroup())
                     .build();
@@ -75,21 +71,6 @@ public class ScheduleResponse {
             this.id = group.getId();
             this.name = group.getName();
         }
-    }
-
-    @Getter
-    @ToString
-    @NoArgsConstructor
-    public static class ScheduleDetailKeywordInfo{
-        private Long id;
-        private String content;
-
-        @Builder
-        ScheduleDetailKeywordInfo(ScheduleKeyword keyword){
-            this.id = keyword.getId();
-            this.content = keyword.getKeyword();
-        }
-
     }
 
     @Getter

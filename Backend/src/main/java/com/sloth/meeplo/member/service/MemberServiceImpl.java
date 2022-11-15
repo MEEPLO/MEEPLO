@@ -10,8 +10,10 @@ import com.sloth.meeplo.member.dto.request.MemberRequest;
 import com.sloth.meeplo.member.dto.response.MemberResponse;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.entity.MemberLocation;
+import com.sloth.meeplo.member.exception.code.MemberErrorCode;
 import com.sloth.meeplo.member.repository.MemberLocationRepository;
 import com.sloth.meeplo.member.repository.MemberRepository;
+import com.sloth.meeplo.moment.exception.code.MomentErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
         MemberRequest.MemberInfo memberInfo = null;
         Member member = null;
 
-        if(Pattern.matches("^Bearer .*", authorization)) {
+        if(authorization != null && Pattern.matches("^Bearer .*", authorization)) {
             memberInfo = externalAPIRequest.getKakaoMemberInfo(authorization);
             member = memberRepository.findByProviderAndProviderId(memberInfo.getProvider(), memberInfo.getProviderId()).orElse(null);
         } else {
@@ -78,8 +80,6 @@ public class MemberServiceImpl implements MemberService {
         authorization = authorization.replaceFirst("Bearer ", "");
         refresh = refresh.replaceFirst("Bearer ", "");
         long id = jwtUtil.getUserIdFromToken(authorization);
-        log.info(refresh);
-        log.info(redisUtil.getData(String.valueOf(id)));
         if(!refresh.equals(redisUtil.getData(String.valueOf(id)))) throw new MeeploException(CommonErrorCode.INVALID_TOKEN);
         Member member = getMemberById(id);
 
@@ -139,9 +139,14 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void addMemberStartLocation(String authorization, MemberRequest.MemberLocationAddInfo memberLocationAddInfo) {
         Member member = getMemberByAuthorization(authorization);
+        String address = memberLocationAddInfo.getAddress();
+
+        MemberRequest.ConvertedCoordinate convertedCoordinate = externalAPIRequest.getKakaoCoordinateInfo(address);
+
         memberLocationRepository.save(MemberLocation.builder()
                 .memberLocationAddInfo(memberLocationAddInfo)
                 .member(member)
+                .convertedCoordinate(convertedCoordinate)
                 .build()
         );
     }

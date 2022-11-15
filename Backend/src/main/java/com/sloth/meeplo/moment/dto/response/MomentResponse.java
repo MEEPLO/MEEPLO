@@ -3,7 +3,6 @@ package com.sloth.meeplo.moment.dto.response;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.moment.entity.MomentComment;
-import com.sloth.meeplo.moment.type.MomentType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,9 +34,10 @@ public class MomentResponse {
         private MomentDetailInfo moment;
         private MomentDetailReaction reaction;
         private List<MomentDetailComment> comments;
+        private Boolean commentCreated;
 
         @Builder
-        MomentDetail(Moment moment, Member member){
+        MomentDetail(Moment moment, Member member, Boolean commentCreated){
             this.moment = MomentDetailInfo.builder().moment(moment).build();
             this.reaction =MomentDetailReaction.builder()
                     .member(member)
@@ -48,6 +48,7 @@ public class MomentResponse {
                             .momentComment(mc)
                             .build())
                     .collect(Collectors.toList());
+            this.commentCreated = commentCreated;
         }
 
     }
@@ -58,14 +59,14 @@ public class MomentResponse {
         private Long id;
         private String photoUrl;
         private Long writer;
-        private MomentType type;
+        private Integer type;
 
         @Builder
         MomentDetailInfo(Moment moment){
             this.id = moment.getId();
             this.photoUrl = moment.getMomentPhoto();
             this.writer = moment.getMember().getId();
-            this.type = moment.getType();
+            this.type = moment.getType().ordinal();
         }
 
     }
@@ -144,13 +145,13 @@ public class MomentResponse {
         private Long id;
         private String photo;
         private int reactionCount;
-        private MomentType type;
+        private Integer type;
         @Builder
         MomentFeedData(Moment moment){
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
             this.reactionCount = moment.getMomentReactions().size();
-            this.type = moment.getType();
+            this.type = moment.getType().ordinal();
         }
     }
 }
