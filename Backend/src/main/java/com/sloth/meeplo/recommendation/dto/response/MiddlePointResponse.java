@@ -75,7 +75,6 @@ public class MiddlePointResponse {
         }
     }
 
-    @ToString
     @Getter
     public static class RouteCoordinate extends Coordinate{
         @Builder
