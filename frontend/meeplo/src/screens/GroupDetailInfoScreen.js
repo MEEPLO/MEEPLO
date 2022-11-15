@@ -159,8 +159,10 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
               alignItems: 'center',
             }}>
             <View style={{ flex: 3, justifyContent: 'space-evenly', height: width * 0.2 }}>
-              {groupDetail.members.map((item, i) => (
-                <View key={'groupMember' + i} style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {groupDetail?.members?.map((item, i) => (
+                <View
+                  key={'groupMember' + i}
+                  style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
                   <Image
                     source={{ uri: item.photo }}
                     style={{
