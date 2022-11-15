@@ -9,6 +9,9 @@ public enum DefaultValue {
     STATION_AVERAGE_TIME("-1"),
 
     STATION_SEARCH_RADIUS("2"),
+    AMUSE_SEARCH_RADIUS("0.5"),
+    AMUSE_SEARCH_CATEGORY("음식"),
+
     NO_TOKEN("NO_TOKEN")
     ;
 
