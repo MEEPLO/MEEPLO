@@ -24,6 +24,7 @@ const theme = {
     border: '#585858',
     disabled: '#E9E9E9',
     alert: '#F45151',
+    dim: 'rgba(0, 0, 0, 0.3)',
   },
   font: {
     family: '',
@@ -32,6 +33,10 @@ const theme = {
   radius: {
     base: 20,
     input: 15,
+  },
+  border: {
+    thick: 2,
+    thin: 1,
   },
 };
 
