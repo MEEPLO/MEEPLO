@@ -132,7 +132,7 @@ const KakaoMap = () => {
         center={state.center}
         level={state.level}
         isPanto={state.isPanto}
-        style={{ width: '100%', height: '1024px' }}
+        style={{ width: '100%', height: '800px' }}
         onClick={onClickHandler}
         onZoomChanged={onZoomChangedHandler}
         onDragEnd={onDragEnd}>

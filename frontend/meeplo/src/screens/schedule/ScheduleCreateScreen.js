@@ -1,5 +1,7 @@
 import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { hideTabBar, showTabBar } from '../../redux/navigationSlice';
 
 import helper from '../../helper';
 
@@ -8,6 +10,7 @@ import StepRenderer from '../../components/stepper/StepRenderer';
 import ScheduleCreateInfoScreen from './create/ScheduleCreateInfoScreen';
 import ScheduleCreateLocationScreen from './create/ScheduleCreateLocationScreen';
 import ScheduleCreateMemberScreen from './create/ScheduleCreateMemberScreen';
+import ScheduleCreateCheckScreen from './create/ScheduleCreateCheckScreen';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -22,15 +25,15 @@ const reducer = (state, action) => {
         ...state,
         name: action.payload,
       };
-    case 'UPDATE_GROUPID':
+    case 'UPDATE_GROUP':
       return {
         ...state,
-        groupId: action.payload,
+        group: action.payload,
       };
-    case 'UPDATE_MEETLOCATIONID':
+    case 'UPDATE_MEET':
       return {
         ...state,
-        meetLocationId: action.payload,
+        meet: action.payload,
       };
     case 'UPDATE_KEYWORDS':
       return {
@@ -42,10 +45,10 @@ const reducer = (state, action) => {
         ...state,
         members: action.payload,
       };
-    case 'UPDATE_AMUSES':
+    case 'UPDATE_AMUSE':
       return {
         ...state,
-        amuses: action.payload,
+        amuse: action.payload,
       };
     default:
       return action.type;
@@ -53,21 +56,34 @@ const reducer = (state, action) => {
 };
 
 const initialSchedule = {
-  date: null,
-  name: null,
-  groupId: null,
-  meetLocationId: null,
+  date: '',
+  name: '',
+  group: {},
+  meet: {},
   keywords: [],
   members: [],
-  amuses: [],
+  amuse: {},
 };
 
-const STEP_COUNT = 3;
+const STEP_COUNT = 4;
 
 const ScheduleCreateScreen = ({ navigation }) => {
+  const reduxDispatch = useDispatch();
   const [step, setStep] = useState(0);
   const [schedule, dispatch] = useReducer(reducer, initialSchedule);
-  const stepItems = [ScheduleCreateInfoScreen, ScheduleCreateMemberScreen, ScheduleCreateLocationScreen];
+  const stepItems = [
+    ScheduleCreateInfoScreen,
+    ScheduleCreateMemberScreen,
+    ScheduleCreateLocationScreen,
+    ScheduleCreateCheckScreen,
+  ];
+
+  useEffect(() => {
+    reduxDispatch(hideTabBar());
+    return () => {
+      reduxDispatch(showTabBar());
+    };
+  }, []);
 
   useEffect(() => {
     return navigation.addListener('beforeRemove', e => {
@@ -105,7 +121,7 @@ const ScheduleCreateScreen = ({ navigation }) => {
   };
 
   const onFinish = () => {
-    console.log(schedule);
+    console.log('on finish', schedule);
   };
 
   return (

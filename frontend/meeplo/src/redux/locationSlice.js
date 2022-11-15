@@ -21,12 +21,7 @@ const locationSlice = createSlice({
   name: 'location',
   initialState: {},
   reducers: {},
-  extraReducers: {
-    [getNearLocations.fulfilled]: (state, { payload }) => {
-      console.log('asdfsadf', payload);
-      return payload;
-    },
-  },
+  extraReducers: {},
 });
 
 export { locationSlice };
