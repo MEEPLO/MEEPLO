@@ -6,16 +6,16 @@ import HomeScreen from './HomeScreen';
 import LoadingBar from '../components/common/LoadingBar';
 import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/navigator/ToolBar';
 import MyPageScreen from './mypage/MyPageScreen';
-import MyPageEditScreen from './mypage/MyPageEditScreen';
+import MyPageLocationScreen from './mypage/MyPageLocationScreen';
+import MyPageLocationEditScreen from './mypage/MyPageLocationEditScreen';
 
 const HomeStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
   const user = useSelector(state => state.user.info);
-  console.log(user.profilePhoto);
 
   return (
-    <HomeStack.Navigator initialRouteName="Login">
+    <HomeStack.Navigator initialRouteName="Home">
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
@@ -47,8 +47,8 @@ const HomeStackScreen = () => {
         }}
       />
       <HomeStack.Screen
-        name="MyPageEdit"
-        component={MyPageEditScreen}
+        name="MyPageLocation"
+        component={MyPageLocationScreen}
         options={{
           headerShadowVisible: false,
           headerShown: true,
@@ -57,6 +57,24 @@ const HomeStackScreen = () => {
           headerLeft: props => {
             return props.canGoBack && <ToolBarLeft {...props} />;
           },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <HomeStack.Screen
+        name="MyPageLocationEdit"
+        component={MyPageLocationEditScreen}
+        // if locationId is 0, this is CREATE screen
+        initialParams={{ locationId: 0 }}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerBackVisible: false,
+          headerLeft: props => {
+            return props.canGoBack && <ToolBarLeft {...props} />;
+          },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
           headerTitle: () => <ToolBarTitle />,
         }}
       />
