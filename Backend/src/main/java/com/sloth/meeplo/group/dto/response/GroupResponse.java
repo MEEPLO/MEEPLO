@@ -169,4 +169,17 @@ public class GroupResponse {
         }
     }
 
+    @Getter
+    @ToString
+    public static class GroupJoinedResponse {
+        private Long id;
+        private String groupName;
+
+        @Builder
+        GroupJoinedResponse(Group group){
+            this.id = group.getId();
+            this.groupName = group.getName();
+        }
+    }
+
 }
