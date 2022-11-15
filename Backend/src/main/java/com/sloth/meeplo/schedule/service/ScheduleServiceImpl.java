@@ -34,6 +34,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -282,6 +283,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .schedule(sm.getSchedule())
                         .build()
                 )
+                .sorted(Comparator.comparing(ScheduleResponse.ScheduleListInfo::getDate))
                 .collect(Collectors.toList());
 
     }
