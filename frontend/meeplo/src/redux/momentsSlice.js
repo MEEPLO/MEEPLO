@@ -1,12 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
-import { MEEPLO_SERVER_BASE_URL } from '@env';
+import { axiosPrivate } from '../auth/axiosInstance';
 
 export const getMomentsList = createAsyncThunk('moments/getMomentsList', async params => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/feed`, {
+    const response = await axiosPrivate.get(`/moment/feed`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -22,7 +22,7 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async p
 export const getMomentsCalendar = createAsyncThunk('moments/getMomentsCalendar', async params => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/calendar`, {
+    const response = await axiosPrivate.get(`/moment/calendar`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -38,12 +38,11 @@ export const getMomentsCalendar = createAsyncThunk('moments/getMomentsCalendar',
 export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}`, {
+    const response = await axiosPrivate.get(`/moment/${momentDetailId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('detail res:', response.data);
     return response.data;
   } catch (err) {
     console.error('getMomentDetail: ', err.response.data);
@@ -54,12 +53,12 @@ export const getMomentDetail = createAsyncThunk('moments/getMomentDetail', async
 export const updateMomentReaction = createAsyncThunk('moments/updateMomentReaction', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/reaction`, [], {
+    const response = await axiosPrivate.post(`/moment/${momentDetailId}/reaction`, [], {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('updateMomentReaction: ', response.data);
+    console.log('updateMomentReaction success: ', response.data);
     return response.data;
   } catch (err) {
     console.error('updateMomentReaction: ', err.response.data);
@@ -70,12 +69,12 @@ export const updateMomentReaction = createAsyncThunk('moments/updateMomentReacti
 export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReaction', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/reaction`, {
+    const response = await axiosPrivate.delete(`/moment/${momentDetailId}/reaction`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('deleteMomentReaction: ', response.data);
+    console.log('deleteMomentReaction success: ', response.data);
     return response.data;
   } catch (err) {
     console.error('deleteMomentReaction: ', err.response.data);
@@ -86,12 +85,11 @@ export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReacti
 export const getGroupSchedules = createAsyncThunk('schedule/getGroupSchedule', async ({ groupId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/group/${groupId}/schedule`, {
+    const response = await axiosPrivate.get(`/group/${groupId}/schedule`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('getGroupSchedule: ', response.data);
     return response.data;
   } catch (err) {
     console.error('getGroupSchedule: ', err.response.data);
@@ -100,26 +98,28 @@ export const getGroupSchedules = createAsyncThunk('schedule/getGroupSchedule', a
 });
 
 export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSchedule', async ({ scheduleInfo }) => {
+  console.log('scheduleInfo', scheduleInfo);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(MEEPLO_SERVER_BASE_URL + `/schedule`, scheduleInfo, {
+    const response = await axiosPrivate.post(`/schedule`, scheduleInfo, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('createSimpleSchedule success,', response.data);
+    console.log('createSimpleSchedule success:', response.data);
     return response.data;
   } catch (err) {
-    console.error('createMoment: ', err.response.data);
+    console.error('createSimpleSchedule: ', err.response.data);
     return isRejectedWithValue(err.response.data);
   }
 });
 
 export const createMoment = createAsyncThunk('moment/createMoment', async ({ moment, Alert, navigation }) => {
+  console.log('ㅠㅠㅠㅠ', moment);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios
-      .post(MEEPLO_SERVER_BASE_URL + `/moment`, moment, {
+    const response = await axiosPrivate
+      .post(`/moment`, moment, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -143,7 +143,7 @@ export const createMoment = createAsyncThunk('moment/createMoment', async ({ mom
 export const deleteMoment = createAsyncThunk('moments/deleteMoment', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.delete(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}`, {
+    const response = await axiosPrivate.delete(`/moment/${momentDetailId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -158,7 +158,7 @@ export const deleteMoment = createAsyncThunk('moments/deleteMoment', async ({ mo
 export const getComments = createAsyncThunk('moment/getComments', async ({ momentDetailId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(MEEPLO_SERVER_BASE_URL + `/moment/${momentDetailId}/comment`, {
+    const response = await axiosPrivate.get(`/moment/${momentDetailId}/comment`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -173,8 +173,8 @@ export const getComments = createAsyncThunk('moment/getComments', async ({ momen
 export const createComment = createAsyncThunk('moment/createComment', async commentInfo => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(
-      MEEPLO_SERVER_BASE_URL + `/moment/${commentInfo.commentInfo.momentId}/comment`,
+    const response = await axiosPrivate.post(
+      `/moment/${commentInfo.commentInfo.momentId}/comment`,
       commentInfo.commentInfo.comment,
       {
         headers: {
@@ -182,7 +182,7 @@ export const createComment = createAsyncThunk('moment/createComment', async comm
         },
       },
     );
-    console.log(response.data);
+    console.log('comment created: ', response.data);
     return response.data;
   } catch (err) {
     console.error('createComment: ', err.response.data);
