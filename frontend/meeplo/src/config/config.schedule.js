@@ -1,5 +1,5 @@
 const schedule = {};
 
-schedule.MAX_SELECT_KEYWORD_COUNT = 3;
+schedule.MAX_SELECT_KEYWORD_COUNT = 5;
 
 export default schedule;
