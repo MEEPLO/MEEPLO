@@ -17,9 +17,9 @@ import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 
 import Images from '../../assets/image/index';
-import { theme } from '../../assets/constant/DesignTheme';
 import AnimationLikes from '../common/AnimationLikes';
 import AnimationComment from '../common/AnimationComment';
+import AnimationDownload from '../common/AnimationDownload';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -219,7 +219,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
           onPress={momentLikeHandler}>
           <AnimationLikes isLiked={momentDetail.reaction.liked} />
         </Pressable>
-        {momentDetail.commentCreated ? null : (
+        {momentDetail.commentCreated || imageFront ? null : (
           <Pressable
             style={{
               padding: 5,
@@ -238,23 +238,25 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
             <AnimationComment />
           </Pressable>
         )}
-        <Pressable
-          style={{
-            padding: 5,
-            width: 50,
-            height: 50,
-            backgroundColor: '#fff',
-            borderRadius: 25,
-            position: 'absolute',
-            bottom: 100,
-            right: 20,
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onPress={() => getImage()}>
-          <Text>download</Text>
-        </Pressable>
+        {imageFront ? (
+          <Pressable
+            style={{
+              padding: 5,
+              width: 50,
+              height: 50,
+              backgroundColor: '#fff',
+              borderRadius: 25,
+              position: 'absolute',
+              bottom: 100,
+              right: 20,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={() => getImage()}>
+            <AnimationDownload />
+          </Pressable>
+        ) : null}
       </View>
     </Modal>
   ) : null;
