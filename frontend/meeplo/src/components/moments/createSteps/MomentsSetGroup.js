@@ -42,7 +42,7 @@ const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
   };
 
   return visible ? (
-    <View style={{ height: windowHeight - 150, marginHorizontal: 20 }}>
+    <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
       <SelectDropdown setSelected={setSelectedGroup} type="모임" data={groupNameList} required={true} />
       <View
         style={{

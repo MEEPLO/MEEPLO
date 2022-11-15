@@ -10,7 +10,7 @@ const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   const momentDetail = useSelector(state => state.momentDetail);
 
   return visible ? (
-    <View style={{ height: windowHeight - 150, marginHorizontal: 20 }}>
+    <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
       <View>
         <Text>입력 사항 체크</Text>
       </View>
