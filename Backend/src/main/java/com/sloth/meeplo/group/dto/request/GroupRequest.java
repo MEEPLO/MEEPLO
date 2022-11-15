@@ -37,4 +37,11 @@ public class GroupRequest {
                     .build();
         }
     }
+    @Getter
+    @ToString
+    @NoArgsConstructor
+    public static class GroupJoinCode {
+        @NotBlank
+        private String enterCode;
+    }
 }

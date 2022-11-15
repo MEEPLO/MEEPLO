@@ -73,9 +73,9 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("{groupId}/member")
-    public ResponseEntity<Void> joinToGroup(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long groupId){
-        groupService.joinToGroup(authorization, groupId);
+    @PostMapping("/member")
+    public ResponseEntity<Void> joinToGroup(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody GroupRequest.GroupJoinCode groupJoinCode){
+        groupService.joinToGroup(authorization, groupJoinCode);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
