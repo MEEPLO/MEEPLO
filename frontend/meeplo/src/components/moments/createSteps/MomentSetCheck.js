@@ -32,7 +32,11 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
           <AutoHeightImage
             source={{ uri: state.photoUrl }}
             width={state.type === 2 ? windowWidth * 0.2 : windowWidth * 0.8}
-            style={{ marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.1 - 40 }}
+            style={{
+              borderWidth: 1,
+              borderColor: '#ddd',
+              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.1 - 40,
+            }}
           />
         </View>
       </View>
