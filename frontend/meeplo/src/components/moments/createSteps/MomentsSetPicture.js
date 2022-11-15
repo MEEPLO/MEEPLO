@@ -87,7 +87,7 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
 
   return visible ? (
     <>
-      <View style={{ height: windowHeight - 150, marginHorizontal: 20 }}>
+      <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
         <View
           style={{
             marginHorizontal: 20,
