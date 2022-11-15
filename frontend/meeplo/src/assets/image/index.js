@@ -2,6 +2,10 @@ const images = {
   scheduleButton: {
     picBlue: require('./schedule1.png'),
     picYellow: require('./schedule2.png'),
+    picRed: require('./schedule3.png'),
+  },
+  linkToButton: {
+    picRed: require('./button1.png'),
   },
   meeploLogo: require('./meeploLogo.png'),
   kakaoLogin: require('./kakao_login_large_wide.png'),
