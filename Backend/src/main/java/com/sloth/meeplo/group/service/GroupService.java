@@ -5,6 +5,7 @@ import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.member.entity.Member;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface GroupService {
 
     void exitGroupMember(String authorization, Long groupId);
 
-    void joinToGroup(String authorization, Long groupId);
+    void joinToGroup(String authorization, GroupRequest.GroupJoinCode groupJoinCode);
 
     void kickGroupMember(String authorization, Long groupId, Long memberId);
 
