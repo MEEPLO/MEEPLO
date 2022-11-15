@@ -44,7 +44,7 @@ const AddButton = () => {
   };
   const onPressCreateMoment = () => {
     // TODO: hrookim navigate to create screen
-    // navigation.navigate('MomentsStack', { screen: 'MomentsCreate' });
+    navigation.navigate('MomentsStack', { screen: 'MomentsCreate' });
   };
   const onPressAddButton = () => {
     dispatch(setOpened(!opened));
