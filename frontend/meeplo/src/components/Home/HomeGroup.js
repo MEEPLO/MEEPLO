@@ -8,7 +8,7 @@ const HomeGroup = ({ data, navigation }) => {
       activeOpacity={0.6}
       onPress={() => {
         // TODO: hrookim navigate to Group-DETAIL page
-        navigation.navigate('HomeStack', { screen: 'Login' });
+        navigation.navigate('GroupStack', { screen: 'GroupDetail', params: { groupId: item.id } });
         // navigation.navigate()
       }}>
       <HomeGroupItem
