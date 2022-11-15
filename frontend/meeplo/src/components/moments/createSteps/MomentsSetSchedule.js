@@ -1,29 +1,41 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, Pressable, Modal, Dimensions } from 'react-native';
+import { View, Text, Pressable, Modal, Dimensions, Alert } from 'react-native';
 import { theme } from '../../../assets/constant/DesignTheme';
-// import { getScheduleList } from '../../../redux/scheduleSlice';
-import StepButton from '../../stepper/StepButton';
+import { createSimpleSchedule, getGroupSchedules } from '../../../redux/momentsSlice';
 
+import StepButton from '../../stepper/StepButton';
 import SelectDropdown from '../../common/SelectDropdown';
 import StepTextInput from '../../common/StepTextInput';
-import StepDateInput from '../../common/StepDateInput';
+import DateModalInput from '../../schedule/DateModalInput';
 
 const windowHeight = Dimensions.get('window').height;
 
-const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible }) => {
+const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
   const [scheduleModal, setScheduleModal] = React.useState(false);
-  const [selectedSchedule, setSelectedSchedule] = React.useState('');
-  // const [schedulesData, setSchedulesData] = React.useState([]);
-  // const dispatch = useDispatch();
-  // const scheduleList = useSelector(state => state.scheduleList);
+  const [selectedSchedule, setSelectedSchedule] = React.useState();
+  const [scheduleDate, setScheduleDate] = React.useState();
+  const [scheduleName, setScheduleName] = React.useState();
+  const [schedulePlace, setSchedulePlace] = React.useState();
 
+  const dispatch = useDispatch();
+  const scheduleList = useSelector(state =>
+    state.groupSchedules.schedules.map(({ id, name }) => {
+      return { key: id, value: name };
+    }),
+  );
+
+  const scheduleNameIndex = useSelector(state => {
+    const scheduleNameIndexMap = new Map(state.groupSchedules.schedules.map(({ id, name }) => [id, name]));
+    return Object.fromEntries(scheduleNameIndexMap);
+  });
+
+  console.log('name', scheduleNameIndex);
   React.useEffect(() => {
-    // scheduleList.group.forEach(schedule => {
-    //   setSchedulesData(prevData => [...prevData, { key: schedule.id, value: schedule.name }]);
-    // });
-    // dispatch(getScheduleList());
-  }, []);
+    if (state.groupId) {
+      dispatch(getGroupSchedules({ groupId: state.groupId }));
+    }
+  }, [state.groupId]);
 
   const onPressNext = () => {
     const actions = [
@@ -31,29 +43,31 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible }) => {
         type: 'UPDATE_SCHEDULEID',
         payload: selectedSchedule,
       },
+      {
+        type: 'UPDATE_SCHEDULENAME',
+        payload: scheduleNameIndex[selectedSchedule],
+      },
     ];
-    toNext(actions);
+    !!selectedSchedule ? toNext(actions) : Alert.alert('약속을 선택해주세요.');
   };
 
-  const data = [
-    { key: '1', value: '양꼬치 먹으러 갈 ㅅㅏ람' },
-    { key: '2', value: '221101 회식 이거 선택' },
-    { key: '3', value: '약속명은최대이십자입니다이길이가딱이십자' },
-    { key: '4', value: '언젠가의 만남' },
-    { key: '5', value: '언젠가의 만남' },
-    { key: '6', value: '언젠가의 만남' },
-    { key: '7', value: '언젠가의 만남' },
-    { key: '8', value: '언젠가의 만남' },
-    { key: '9', value: '언젠가의 만남' },
-    { key: '10', value: '언젠가의 만남' },
-    { key: '11', value: '언젠가의 만남' },
-    { key: '12', value: '언젠가의 만남' },
-    { key: '13', value: '언젠가의 만남' },
-    { key: '14', value: '언젠가의 만남' },
-    { key: '15', value: '언젠가의 만남' },
-    { key: '16', value: '언젠가의 만남' },
-    { key: '17', value: '언젠가의 만남' },
-  ];
+  const submitSchedule = () => {
+    const scheduleInfo = {
+      date: scheduleDate,
+      name: scheduleName,
+      groupId: state.groupId,
+      meetLocationId: schedulePlace,
+      keywords: [],
+      members: [],
+      amuses: [],
+    };
+    dispatch(createSimpleSchedule({ scheduleInfo })).then(() =>
+      dispatch(getGroupSchedules({ groupId: state.groupId })).then(() => {
+        setScheduleModal(false);
+        console.log('new schedules in');
+      }),
+    );
+  };
 
   return visible ? (
     <>
@@ -66,11 +80,11 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible }) => {
           }}>
           <Pressable onPress={() => setScheduleModal(true)}>
             <Text style={{ textAlign: 'center', fontSize: 16, color: theme.color.bright.red, fontWeight: '800' }}>
-              아직 약속을 만들지 않았어요! >
+              아직 약속을 만들지 않았어요! {'>'}
             </Text>
           </Pressable>
         </View>
-        <SelectDropdown setSelected={setSelectedSchedule} type="약속" data={data} required={true} />
+        <SelectDropdown setSelected={setSelectedSchedule} type="약속" data={scheduleList} required={true} />
         <View
           style={{
             width: '100%',
@@ -85,17 +99,22 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible }) => {
       </View>
 
       {/* date modal */}
-      {/* <Modal visible={scheduleModal} animationType={'slide'} presentationStyle={'pageSheet'}>
-        <View style={{ marginTop: 50, marginHorizontal: 40 }}>
+      <Modal visible={scheduleModal} animationType={'slide'} presentationStyle={'pageSheet'}>
+        <View style={{ marginTop: 150, marginHorizontal: 40, overflow: 'hidden' }}>
           <View style={{ marginBottom: 30 }}>
-            <StepDateInput type="일시" required={true} />
+            <DateModalInput type="일시" value={scheduleDate} required onConfirm={data => setScheduleDate(data)} />
           </View>
           <View style={{ marginBottom: 30 }}>
-            <StepTextInput type="약속 이름" maxLength={20} required={true} />
+            <StepTextInput
+              type="약속 이름"
+              maxLength={20}
+              required={true}
+              onValueChange={setScheduleName}
+              value={scheduleName}
+            />
           </View>
           <View style={{ marginBottom: 30 }}>
-            <StepTextInput type="약속 장소" required={true} />
-            <Text>약속 장소</Text>
+            <StepTextInput type="약속 장소" required={true} onValueChange={setSchedulePlace} value={schedulePlace} />
           </View>
           <View
             style={{
@@ -108,7 +127,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible }) => {
               borderWidth: 2,
               backgroundColor: theme.color.pale.red,
             }}>
-            <Pressable onPress={() => setScheduleModal(false)}>
+            <Pressable onPress={submitSchedule}>
               <Text
                 style={{
                   color: theme.font.color,
@@ -122,7 +141,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible }) => {
             </Pressable>
           </View>
         </View>
-      </Modal> */}
+      </Modal>
     </>
   ) : null;
 };

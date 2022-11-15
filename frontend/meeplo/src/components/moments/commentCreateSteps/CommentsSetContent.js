@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, Alert } from 'react-native';
 import StepTextInput from '../../common/StepTextInput';
 import StepButton from '../../stepper/StepButton';
 
@@ -15,7 +15,7 @@ const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
         payload: value,
       },
     ];
-    toNext(actions);
+    value.trim() === '' ? Alert.alert('댓글을 작성해주세요.') : toNext(actions);
   };
 
   return visible ? (
