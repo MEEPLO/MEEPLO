@@ -11,10 +11,9 @@ export const createSchedule = createAsyncThunk('schedule/createSchedule', async 
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('res', response);
+
     return response.data;
   } catch (err) {
-    console.log('err', err);
     return isRejectedWithValue(err.response.data);
   }
 });
@@ -29,17 +28,15 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('res', response);
 
     return response.data;
   } catch (err) {
-    console.log('err', err);
     return isRejectedWithValue(err.response.data);
   }
 });
 
 // ex) date === '2022-11-11'
-export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesMonthly', async ({ date }) => {
+export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesMonthly', async date => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/daily/${date}`, {
