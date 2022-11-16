@@ -170,7 +170,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     @Transactional
-    public void joinToGroup(String authorization, GroupRequest.GroupJoinCode groupJoinCode) {
+    public GroupResponse.GroupJoinedResponse joinToGroup(String authorization, GroupRequest.GroupJoinCode groupJoinCode) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Group group = groupRepository.findByEnterCode(groupJoinCode.getEnterCode())
                 .orElseThrow(()-> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP_CODE));
@@ -179,6 +179,8 @@ public class GroupServiceImpl implements GroupService{
             throw new MeeploException(GroupErrorCode.NO_MORE_MEMBER);
 
         joinGroup(group, member, Role.MEMBER);
+
+        return GroupResponse.GroupJoinedResponse.builder().group(group).build();
     }
 
     @Override

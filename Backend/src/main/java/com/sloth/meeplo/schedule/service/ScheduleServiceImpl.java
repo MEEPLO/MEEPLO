@@ -215,6 +215,25 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    public List<ScheduleResponse.ScheduleListInfo> getScheduleDetailMonthList(String authorization, String yearMonth) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM")
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                .toFormatter();
+        LocalDate localDate = LocalDate.parse(yearMonth, formatter);
+        LocalDateTime targetYearMonth = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
+        return member.getGroupMembers().stream()
+                .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
+                .flatMap(gm-> scheduleRepository
+                        .findByGroupAndDateBetween(gm.getGroup(),targetYearMonth, targetYearMonth.plusMonths(1)).stream())
+                .map(s -> ScheduleResponse.ScheduleListInfo.builder()
+                        .schedule(s)
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ScheduleResponse.ScheduleListInfo> getScheduleDailyList(String authorization, String date) {
         Member member = memberService.getMemberByAuthorization(authorization);
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));

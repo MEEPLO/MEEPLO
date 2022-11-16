@@ -1,6 +1,7 @@
 package com.sloth.meeplo.group.controller;
 
 import com.sloth.meeplo.group.dto.request.GroupRequest;
+import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -74,9 +75,10 @@ public class GroupController {
     }
 
     @PostMapping("/member")
-    public ResponseEntity<Void> joinToGroup(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody GroupRequest.GroupJoinCode groupJoinCode){
-        groupService.joinToGroup(authorization, groupJoinCode);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Map<String, GroupResponse.GroupJoinedResponse>> joinToGroup(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody GroupRequest.GroupJoinCode groupJoinCode){
+        Map<String, GroupResponse.GroupJoinedResponse> resultMap = new HashMap<>();
+        resultMap.put("members", groupService.joinToGroup(authorization, groupJoinCode));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @DeleteMapping("{groupId}/member/{memberId}")
