@@ -64,6 +64,13 @@ public class ScheduleController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
+    @GetMapping("/monthly/{yearMonth}/list")
+    public ResponseEntity<Map<String, List<ScheduleResponse.ScheduleListInfo>>> getScheduleDetailMonthList(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable String yearMonth){
+        Map<String, List<ScheduleResponse.ScheduleListInfo>> resultMap = new HashMap<>();
+        resultMap.put("schedules", scheduleService.getScheduleDetailMonthList(authorization, yearMonth));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
     @GetMapping("/daily/{date}")
     public ResponseEntity<Map<String, List<ScheduleResponse.ScheduleListInfo>>> getScheduleDailyList(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable String date){
         Map<String, List<ScheduleResponse.ScheduleListInfo>> resultMap = new HashMap<>();
