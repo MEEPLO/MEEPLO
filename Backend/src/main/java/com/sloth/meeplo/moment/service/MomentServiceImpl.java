@@ -121,7 +121,7 @@ public class MomentServiceImpl implements MomentService{
     @Override
     public Moment getMomentByMomentId(Long momentId){
         return momentRepository.findById(momentId)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+                .orElseThrow(()-> new MeeploException(MomentErrorCode.NOT_EXIST_MOMENT));
     }
 
     @Override
