@@ -48,14 +48,14 @@ public class GroupResponse {
         private List<GroupDetailSchedule> schedules;
 
         @Builder
-        JoinedGroupDetail(Group group, Member leader, List<GroupDetailMember> members, List<GroupDetailSchedule> schedules){
+        JoinedGroupDetail(Group group, GroupMember leader, List<GroupDetailMember> members, List<GroupDetailSchedule> schedules){
             this.id = group.getId();
             this.name = group.getName();
             this.description = group.getDescription();
             this.photo = group.getGroupPhoto();
             this.enterCode = group.getEnterCode();
-            this.leader = leader.getUsername();
-            this.leaderMemberId = leader.getId();
+            this.leader = leader.getNickname();
+            this.leaderMemberId = leader.getMember().getId();
             this.members=members;
             this.schedules=schedules;
         }
@@ -71,7 +71,7 @@ public class GroupResponse {
         @Builder
         GroupDetailMember(GroupMember groupMember){
             this.id = groupMember.getMember().getId();
-            this.nickname = groupMember.getMember().getUsername();
+            this.nickname = groupMember.getNickname();
             this.photo = groupMember.getMember().getProfilePhoto();
         }
     }

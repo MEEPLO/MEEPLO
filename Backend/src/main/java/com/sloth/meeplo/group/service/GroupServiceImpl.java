@@ -97,7 +97,7 @@ public class GroupServiceImpl implements GroupService{
             int count = groupMemberRepository.countByGroupAndStatus(groupMember.getGroup(),GroupMemberStatus.ACTIVATED);
             String leaderName = groupMemberRepository
                     .findByGroupAndRoleAndStatus(groupMember.getGroup(), Role.LEADER, GroupMemberStatus.ACTIVATED)
-                    .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)).getMember().getUsername();
+                    .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)).getNickname();
             LocalDateTime lastSchedule = scheduleRepository.findFirstByGroupOrderByIdDesc(groupMember.getGroup())
                     .orElse(Schedule.EmptyBuilder()
                             .date(LocalDateTime.of(date,time))
@@ -127,7 +127,7 @@ public class GroupServiceImpl implements GroupService{
 
         return GroupResponse.JoinedGroupDetail.builder()
                 .group(group)
-                .leader(leader.getMember())
+                .leader(leader)
                 .members(groupMembers.stream()
                         .map(m-> GroupResponse.GroupDetailMember.builder()
                                 .groupMember(m)
