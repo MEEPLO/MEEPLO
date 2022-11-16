@@ -6,8 +6,11 @@ import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
+import com.sloth.meeplo.location.exception.code.LocationErrorCode;
 import com.sloth.meeplo.location.repository.LocationRepository;
+import com.sloth.meeplo.location.service.LocationService;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.member.exception.code.MemberErrorCode;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.moment.dto.response.MomentResponse;
@@ -45,6 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     private final MemberService memberService;
     private final GroupService groupService;
+    private final LocationService locationService;
 
     private final ScheduleRepository scheduleRepository;
     private final ScheduleLocationRepository scheduleLocationRepository;
@@ -62,8 +66,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .name(scheduleCreateInput.getName())
                 .date(scheduleCreateInput.getDate())
                 .group(group)
-                .location(locationRepository.findById(scheduleCreateInput.getMeetLocationId())
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .location(locationService.getLocationById(scheduleCreateInput.getMeetLocationId()))
                 .build()
         );
 
@@ -78,14 +81,13 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .map(id -> ScheduleMember.builder()
                                 .schedule(newSchedule)
                                 .member(memberRepository.findById(id)
-                                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                                        .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER)))
                                 .role(Role.MEMBER).build())
                         .collect(Collectors.toList())
         );
 
         scheduleCreateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
-                .map(id -> locationRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .map(locationService::getLocationById)
                 .forEach(location -> scheduleLocationRepository
                         .save(ScheduleLocation
                                 .createScheduleLocation()
@@ -106,8 +108,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .name(scheduleTempCreateInput.getName())
                 .date(scheduleTempCreateInput.getDate())
                 .group(group)
-                .location(locationRepository.findById(scheduleTempCreateInput.getMeetLocationId())
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .location(locationService.getLocationById(scheduleTempCreateInput.getMeetLocationId()))
                 .build()
         );
 
@@ -117,8 +118,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .save(ScheduleLocation
                         .createScheduleLocation()
                         .schedule(newSchedule)
-                        .location(locationRepository.findById(scheduleTempCreateInput.getMeetLocationId())
-                                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                        .location(locationService.getLocationById(scheduleTempCreateInput.getMeetLocationId()))
                         .build()
                 );
 
@@ -135,8 +135,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         checkAfterScheduleDate(schedule);
 
         schedule.updateName(scheduleUpdateInput.getName());
-        schedule.updateLocation(locationRepository.findById(scheduleUpdateInput.getMeetLocationId())
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)));
+        schedule.updateLocation(locationService.getLocationById(scheduleUpdateInput.getMeetLocationId()));
         schedule.updateDate(scheduleUpdateInput.getDate());
         scheduleRepository.save(schedule);
 
@@ -163,8 +162,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                                 .noneMatch(o->o.getMember().getId().equals(i.getId())))
                         .map(i -> ScheduleMember.builder()
                                 .schedule(schedule)
-                                .member(memberRepository.findById(i.getId())
-                                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                                .member(memberService.getMemberById(i.getId()))
                                 .role(Role.MEMBER)
                                 .build())
                         .collect(Collectors.toList())
@@ -172,8 +170,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         scheduleLocationRepository.deleteAllBySchedule(schedule);
         scheduleUpdateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
-                .map(id -> locationRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .map(locationService::getLocationById)
                 .forEach(location -> scheduleLocationRepository
                         .save(ScheduleLocation
                                 .createScheduleLocation()
@@ -207,13 +204,13 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public Schedule getScheduleByScheduleId(Long scheduleId){
         return scheduleRepository.findById(scheduleId)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+                .orElseThrow(()-> new MeeploException(ScheduleErrorCode.NOT_EXIST_SCHEDULE));
     }
 
     @Override
     public ScheduleLocation getScheduleLocationById(Long scheduleLocationId){
         return scheduleLocationRepository.findById(scheduleLocationId)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+                .orElseThrow(()-> new MeeploException(ScheduleErrorCode.NOT_EXIST_SCHEDULE_LOCATION));
     }
 
     @Override
