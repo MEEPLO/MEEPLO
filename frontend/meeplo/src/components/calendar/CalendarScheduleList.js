@@ -1,10 +1,11 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { Tabs } from 'react-native-collapsible-tab-view';
+
 import CalendarScheduleListItem from './CalendarScheduleListItem';
 
 const CalendarScheduleList = ({ data }) => {
   return (
-    <FlatList
+    <Tabs.FlatList
       data={data}
       renderItem={CalendarScheduleListItem}
       keyExtractor={item => item.id}
