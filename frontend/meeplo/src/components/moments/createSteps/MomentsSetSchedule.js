@@ -1,9 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Pressable, Modal, Dimensions, Alert } from 'react-native';
-import { theme } from '../../../assets/constant/DesignTheme';
 import { createSimpleSchedule, getGroupSchedules } from '../../../redux/momentsSlice';
+import Toast from 'react-native-toast-message';
 
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
+import { theme } from '../../../assets/constant/DesignTheme';
 import StepButton from '../../stepper/StepButton';
 import SelectDropdown from '../../common/SelectDropdown';
 import StepTextInput from '../../common/StepTextInput';
@@ -18,6 +20,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
   const [scheduleName, setScheduleName] = React.useState();
   const [schedulePlace, setSchedulePlace] = React.useState();
 
+  const hey = useSelector(state => state.groupSchedules);
   const dispatch = useDispatch();
   const scheduleList = useSelector(state =>
     state.groupSchedules.schedules.map(({ id, name }) => {
@@ -25,12 +28,12 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
     }),
   );
 
+  console.log('hye', hey);
   const scheduleNameIndex = useSelector(state => {
     const scheduleNameIndexMap = new Map(state.groupSchedules.schedules.map(({ id, name }) => [id, name]));
     return Object.fromEntries(scheduleNameIndexMap);
   });
 
-  console.log('name', scheduleNameIndex);
   React.useEffect(() => {
     if (state.groupId) {
       dispatch(getGroupSchedules({ groupId: state.groupId }));
@@ -48,7 +51,13 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
         payload: scheduleNameIndex[selectedSchedule],
       },
     ];
-    !!selectedSchedule ? toNext(actions) : Alert.alert('약속을 선택해주세요.');
+    !!selectedSchedule
+      ? toNext(actions)
+      : Toast.show({
+          type: 'error',
+          text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+          text2: TOAST_MESSAGE.MOMENT_NO_SCHEDULE,
+        });
   };
 
   const submitSchedule = () => {
@@ -61,12 +70,36 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
       members: [],
       amuses: [],
     };
-    dispatch(createSimpleSchedule({ scheduleInfo })).then(() =>
-      dispatch(getGroupSchedules({ groupId: state.groupId })).then(() => {
-        setScheduleModal(false);
-        console.log('new schedules in');
-      }),
-    );
+
+    if (!scheduleDate) {
+      // Toast.show({
+      //   type: 'error',
+      //   text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+      //   text2: TOAST_MESSAGE.SCHEDULE_NO_DATE,
+      // });
+      Alert.alert('약속 일시가 필요해요!');
+    } else if (!scheduleName) {
+      // Toast.show({
+      //   type: 'error',
+      //   text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+      //   text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+      // });
+      Alert.alert('약속의 이름을 적어주세요!');
+    } else if (!schedulePlace) {
+      // Toast.show({
+      //   type: 'error',
+      //   text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+      //   text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
+      // });
+      Alert.alert('약속 장소를 정해주세요!');
+    } else {
+      dispatch(createSimpleSchedule({ scheduleInfo })).then(() =>
+        dispatch(getGroupSchedules({ groupId: state.groupId })).then(() => {
+          setScheduleModal(false);
+          console.log('new schedules in');
+        }),
+      );
+    }
   };
 
   return visible ? (
@@ -133,10 +166,31 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
                   color: theme.font.color,
                   fontSize: 20,
                   textAlign: 'center',
-                  lineHeight: 59,
+                  lineHeight: 56,
                   fontWeight: '800',
                 }}>
                 생성하기
+              </Text>
+            </Pressable>
+          </View>
+          <View
+            style={{
+              marginTop: 70,
+              marginHorizontal: '5%',
+              width: '90%',
+              height: 60,
+              borderRadius: 20,
+            }}>
+            <Pressable onPress={() => setScheduleModal(false)}>
+              <Text
+                style={{
+                  color: theme.font.color,
+                  fontSize: 17,
+                  textAlign: 'center',
+                  lineHeight: 59,
+                  fontWeight: '800',
+                }}>
+                뒤로 가기
               </Text>
             </Pressable>
           </View>
