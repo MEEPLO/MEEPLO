@@ -8,6 +8,7 @@ import { decode } from 'base64-arraybuffer';
 import { theme } from '../../../assets/constant/DesignTheme';
 
 import StepButton from '../../stepper/StepButton';
+import LoadingModal from '../../common/LoadingModal';
 
 const windowHeight = Dimensions.get('window').height;
 const viewWidth = Dimensions.get('window').width - 120;
@@ -32,12 +33,14 @@ const getImageTitle = date => {
 const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   const webviewRef = React.useRef();
   const [pictureUrl, setPictureUrl] = React.useState();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // load webview
   const html = mergeAndUpload(state.type);
 
   // upload image
   const uploadToS3 = dataString => {
+    setIsLoading(true);
     let now = new Date();
     const imageTitle = getImageTitle(now);
     const base64 = dataString.split(',')[1];
@@ -65,6 +68,7 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
       if (err) {
         return alert(err.stack);
       }
+      setIsLoading(false);
       alert('Successfully uploaded photo.');
       setPictureUrl(data.Location);
     });
@@ -87,12 +91,12 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
 
   return visible ? (
     <>
-      <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
+      <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
         <View
           style={{
             marginHorizontal: 20,
             width: viewWidth,
-            height: windowHeight - 250,
+            height: windowHeight - 300,
             position: 'relative',
           }}>
           <Pressable
@@ -142,6 +146,8 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
         <StepButton text="< 이전" active={true} onPress={toPrev} />
         <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
+
+      <LoadingModal visible={isLoading} />
     </>
   ) : null;
 };

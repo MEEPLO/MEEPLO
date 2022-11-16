@@ -20,7 +20,7 @@ const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
 
   return visible ? (
     <>
-      <View style={{ position: 'relative', height: windowHeight - 250, marginHorizontal: 20 }}>
+      <View style={{ position: 'relative', height: windowHeight - 200, marginHorizontal: 20 }}>
         <StepTextInput value={value} onValueChange={onValueChange} type="댓글" maxLength={50} required={true} />
       </View>
       <View
