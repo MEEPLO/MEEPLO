@@ -35,6 +35,7 @@ public interface ScheduleService {
 
     List<String> getScheduleMonthList(String authorization, String yearMonth);
 
+    List<ScheduleResponse.ScheduleListInfo> getScheduleDetailMonthList(String authorization, String yearMonth);
     List<ScheduleResponse.ScheduleListInfo> getScheduleDailyList(String authorization, String date);
 
     List<KeywordResponse.KeyWordListInfo> getKeywordList();
