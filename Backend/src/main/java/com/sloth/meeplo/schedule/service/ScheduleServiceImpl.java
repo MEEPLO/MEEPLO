@@ -68,7 +68,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         );
 
         scheduleKeywordRepository.saveAll(scheduleCreateInput.getKeywords().stream()
-                .map(k->ScheduleKeyword.builder().keyword(k).build())
+                .map(k->ScheduleKeyword.builder().keyword(k).schedule(newSchedule).build())
                 .collect(Collectors.toList()));
 
         scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
@@ -98,10 +98,37 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    public Long createTempSchedule(String authorization, ScheduleRequest.ScheduleTempCreateInput scheduleTempCreateInput) {
+        Member member = memberService.getMemberByAuthorization(authorization);
+        Group group = groupService.getGroupEntityByGroupId(scheduleTempCreateInput.getGroupId());
+
+        Schedule newSchedule = scheduleRepository.save(Schedule.CreateSchedule()
+                .name(scheduleTempCreateInput.getName())
+                .date(scheduleTempCreateInput.getDate())
+                .group(group)
+                .location(locationRepository.findById(scheduleTempCreateInput.getMeetLocationId())
+                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                .build()
+        );
+
+        scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
+
+        scheduleLocationRepository
+                .save(ScheduleLocation
+                        .createScheduleLocation()
+                        .schedule(newSchedule)
+                        .location(locationRepository.findById(scheduleTempCreateInput.getMeetLocationId())
+                                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                        .build()
+                );
+
+        return newSchedule.getId();
+    }
+
+    @Override
     @Transactional
     public void updateSchedule(String authorization, ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        Group group = groupService.getGroupEntityByGroupId(scheduleUpdateInput.getGroupId());
         Schedule schedule = getScheduleByScheduleId(scheduleUpdateInput.getId());
 
         checkMemberScheduleLeader(member, schedule);
@@ -299,7 +326,6 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        // TODO: 2022-11-15 status 변경후 확인 필요 
         return member.getScheduleMembers().stream()
                 .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
                         && sm.getSchedule().getDate().isAfter(LocalDateTime.now()))
