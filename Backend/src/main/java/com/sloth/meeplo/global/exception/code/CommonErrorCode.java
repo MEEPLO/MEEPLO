@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum CommonErrorCode implements ErrorCode {
-    NOT_EXIST_RESOURCE(HttpStatus.NOT_FOUND, "This resource doesn't exist."),
+    NOT_EXIST_RESOURCE(HttpStatus.NOT_FOUND, "존재하지않는 자원입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "접근할 권한이 없습니다."),
     HTTP_RESPONSE_ERROR(HttpStatus.REQUEST_TIMEOUT, "외부 API 호출 중 문제가 발생했습니다."),
     WRONG_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 토큰입니다."),

@@ -50,6 +50,22 @@ public class ScheduleRequest {
     @Getter
     @ToString
     @NoArgsConstructor
+    public static class ScheduleTempCreateInput{
+        @NotNull
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        private LocalDateTime date;
+        @NotBlank
+        private String name;
+        @NotNull
+        private Long groupId;
+        @NotNull
+        private Long meetLocationId;
+
+    }
+
+    @Getter
+    @ToString
+    @NoArgsConstructor
     public static class ScheduleUpdateInput{
         @NotNull
         private Long id;
