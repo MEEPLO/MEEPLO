@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
+
+import { theme } from '../../assets/constant/DesignTheme';
 
 /*
  API data 형태
@@ -17,15 +19,6 @@ import styled from 'styled-components/native';
 			}
 		}
 */
-
-const ItemView = styled.View`
-  margin: 2.5%;
-  padding-vertical: 2.5%;
-  padding-horizontal: 5%;
-  background-color: #ffc5c5;
-  border-width: 2px;
-  border-radius: 25px;
-`;
 
 const TitleView = styled.View`
   display: flex;
@@ -47,17 +40,31 @@ const ContentText = styled.Text`
   margin-vertical: 2px;
 `;
 
+const screen = Dimensions.get('screen');
+
 const CalendarScheduleListItem = ({ item }) => {
   return (
-    <ItemView>
+    <View style={styles.itemView}>
       <TitleView>
         <TitleText>{item?.date}</TitleText>
         <TitleText>{item?.location?.amuseName}</TitleText>
       </TitleView>
       <ContentText>{item?.name}</ContentText>
       <ContentText>{`${item?.groupName} | ${item?.memberCount}명`}</ContentText>
-    </ItemView>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  itemView: {
+    width: screen.width * 0.9,
+    margin: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    backgroundColor: theme.color.bright.red,
+    borderWidth: theme.border.thick,
+    borderRadius: theme.radius.base,
+  },
+});
 
 export default CalendarScheduleListItem;
