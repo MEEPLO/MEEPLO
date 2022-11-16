@@ -13,6 +13,7 @@ import com.sloth.meeplo.group.repository.GroupMemberRepository;
 import com.sloth.meeplo.group.repository.GroupRepository;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.member.exception.code.MemberErrorCode;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
 import com.sloth.meeplo.schedule.entity.Schedule;
@@ -22,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -95,9 +95,7 @@ public class GroupServiceImpl implements GroupService{
         for (GroupMember groupMember :  groupMemberList) {
 
             int count = groupMemberRepository.countByGroupAndStatus(groupMember.getGroup(),GroupMemberStatus.ACTIVATED);
-            String leaderName = groupMemberRepository
-                    .findByGroupAndRoleAndStatus(groupMember.getGroup(), Role.LEADER, GroupMemberStatus.ACTIVATED)
-                    .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)).getNickname();
+            String leaderName = getGroupLeader(groupMember.getGroup()).getNickname();
             LocalDateTime lastSchedule = scheduleRepository.findFirstByGroupOrderByIdDesc(groupMember.getGroup())
                     .orElse(Schedule.EmptyBuilder()
                             .date(LocalDateTime.of(date,time))
@@ -120,9 +118,7 @@ public class GroupServiceImpl implements GroupService{
     public GroupResponse.JoinedGroupDetail getJoinedGroupDetail(String authorization, Long groupId) {
         Group group = getGroupEntityByGroupId(groupId);
         List<GroupMember> groupMembers = groupMemberRepository.findByGroupAndStatus(group, GroupMemberStatus.ACTIVATED);
-        GroupMember leader = groupMemberRepository
-                .findByGroupAndRoleAndStatus(group, Role.LEADER, GroupMemberStatus.ACTIVATED)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+        GroupMember leader = getGroupLeader(group);
         List<Schedule> schedules = scheduleRepository.findByGroup(group);
 
         return GroupResponse.JoinedGroupDetail.builder()
@@ -160,7 +156,7 @@ public class GroupServiceImpl implements GroupService{
         Member member = memberService.getMemberByAuthorization(authorization);
         Group group = getGroupEntityByGroupId(groupId);
         GroupMember groupMember= groupMemberRepository.findByGroupAndMember(group, member)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+                .orElseThrow(()-> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP_MEMBER));
         if(groupMember.getRole().equals(Role.LEADER)){
             throw new MeeploException(GroupErrorCode.EXIT_UNABLE);
         }
@@ -192,11 +188,9 @@ public class GroupServiceImpl implements GroupService{
         checkKickable(group, member, targetId);
 
         Member target = memberRepository.findById(targetId)
-                .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+                .orElseThrow(() -> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER));
 
-        GroupMember groupMember =  groupMemberRepository
-                .findByGroupAndMemberAndStatus(group, target, GroupMemberStatus.ACTIVATED)
-                .orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+        GroupMember groupMember =  getActivatedGroupMemberByGroupAndMember(group,member);
 
         groupMember.unactivateMember();
         groupMemberRepository.save(groupMember);
@@ -210,7 +204,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Group getGroupEntityByGroupId(Long groupId){
         return groupRepository.findById(groupId)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+                .orElseThrow(()-> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP));
     }
 
     @Override
@@ -261,9 +255,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     private boolean isGroupLeader(Group group, Member member){
-        GroupMember groupMember = groupMemberRepository
-                .findByGroupAndMemberAndStatus(group, member, GroupMemberStatus.ACTIVATED).
-                orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+        GroupMember groupMember = getActivatedGroupMemberByGroupAndMember(group,member);
 
         if(groupMember.getRole()==Role.LEADER){
             return true;
@@ -291,5 +283,17 @@ public class GroupServiceImpl implements GroupService{
         }
         groupMember.activateMember();
         groupMemberRepository.save(groupMember);
+    }
+
+    private GroupMember getGroupLeader(Group group){
+        return groupMemberRepository
+                .findByGroupAndRoleAndStatus(group, Role.LEADER, GroupMemberStatus.ACTIVATED)
+                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_GROUP_LEADER));
+    }
+
+    private GroupMember getActivatedGroupMemberByGroupAndMember(Group group, Member member){
+        return groupMemberRepository
+                .findByGroupAndMemberAndStatus(group, member, GroupMemberStatus.ACTIVATED).
+                orElseThrow(()-> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP_MEMBER));
     }
 }

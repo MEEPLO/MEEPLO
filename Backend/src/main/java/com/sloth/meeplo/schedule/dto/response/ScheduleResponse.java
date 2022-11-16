@@ -10,6 +10,7 @@ import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
 import com.sloth.meeplo.schedule.entity.ScheduleMember;
+import com.sloth.meeplo.schedule.exception.code.ScheduleErrorCode;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -87,7 +88,7 @@ public class ScheduleResponse {
             this.id = scheduleMember.getId();
             this.nickname = scheduleMember.getMember().getGroupMembers().stream()
                     .filter(gm -> gm.getMember().getId().equals(scheduleMember.getMember().getId()))
-                    .findFirst().orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE))
+                    .findFirst().orElseThrow(()-> new MeeploException(ScheduleErrorCode.NOT_EXIST_SCHEDULE_MEMBER))
                     .getNickname();
             this.photo = scheduleMember.getMember().getProfilePhoto();
             this.status = scheduleMember.getStatus();
