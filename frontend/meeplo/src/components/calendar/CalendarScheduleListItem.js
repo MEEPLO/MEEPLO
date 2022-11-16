@@ -57,7 +57,6 @@ const CalendarScheduleListItem = ({ item }) => {
 
 const styles = StyleSheet.create({
   itemView: {
-    width: screen.width * 0.9,
     margin: 10,
     paddingVertical: 10,
     paddingHorizontal: 5,
