@@ -41,7 +41,7 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
 
   return visible ? (
     <>
-      <View style={{ position: 'relative', width: '100%', height: windowHeight - 250, marginLeft: -20 }}>
+      <View style={{ position: 'relative', width: '100%', height: windowHeight - 200, marginLeft: -20 }}>
         <TouchableOpacity
           style={{
             marginHorizontal: imgMargin,

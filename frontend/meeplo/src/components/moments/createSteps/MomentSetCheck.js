@@ -10,7 +10,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   console.log(state);
 
   return visible ? (
-    <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
+    <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
       <View style={{ height: 90 }}>
         <Text style={{ lineHeight: 90 }}>입력 사항 체크</Text>
       </View>
