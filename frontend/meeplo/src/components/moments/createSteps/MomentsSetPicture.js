@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Text, Pressable, Dimensions, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
-import mergeAndUpload from '../mergeAndUpload';
 import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { decode } from 'base64-arraybuffer';
-import { theme } from '../../../assets/constant/DesignTheme';
+import Toast from 'react-native-toast-message';
 
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
+import { theme } from '../../../assets/constant/DesignTheme';
+import mergeAndUpload from '../mergeAndUpload';
 import StepButton from '../../stepper/StepButton';
 import LoadingModal from '../../common/LoadingModal';
 
@@ -86,7 +88,13 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
       },
     ];
 
-    !!pictureUrl ? toNext(actions) : Alert.alert('사진을 확정해주세요.');
+    !!pictureUrl
+      ? toNext(actions)
+      : Toast.show({
+          type: 'error',
+          text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+          text2: TOAST_MESSAGE.MOMENT_NO_PICTURE,
+        });
   };
 
   return visible ? (
