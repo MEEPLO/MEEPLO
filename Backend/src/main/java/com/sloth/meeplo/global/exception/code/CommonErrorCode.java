@@ -15,6 +15,7 @@ public enum CommonErrorCode implements ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "없는 멤버입니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "존재하지 않는 로그인 정보입니다."),
     NOT_EXIST_GROUP_LEADER(HttpStatus.ACCEPTED, "그룹 리더가 존재하지 않습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
