@@ -85,7 +85,10 @@ public class ScheduleResponse {
         @Builder
         ScheduleDetailMemberInfo(ScheduleMember scheduleMember){
             this.id = scheduleMember.getId();
-            this.nickname = scheduleMember.getMember().getUsername();
+            this.nickname = scheduleMember.getMember().getGroupMembers().stream()
+                    .filter(gm -> gm.getMember().getId().equals(scheduleMember.getMember().getId()))
+                    .findFirst().orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE))
+                    .getNickname();
             this.photo = scheduleMember.getMember().getProfilePhoto();
             this.status = scheduleMember.getStatus();
         }

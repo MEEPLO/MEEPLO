@@ -88,7 +88,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
                 .forEach(location -> scheduleLocationRepository
                         .save(ScheduleLocation
-                                .createScheduleLocation()   
+                                .createScheduleLocation()
                                 .schedule(newSchedule)
                                 .location(location)
                                 .build()
