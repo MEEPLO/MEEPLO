@@ -26,7 +26,7 @@ const reducer = (state, action) => {
         ...state,
         groupName: action.payload,
       };
-    case 'UPDATE_SCHEDULEID':
+    case 'UPDATE_LOCATIONID':
       return {
         ...state,
         schedulePlaceId: action.payload,
@@ -35,6 +35,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         scheduleName: action.payload,
+      };
+    case 'UPDATE_PLACENAME':
+      return {
+        ...state,
+        placeName: action.payload,
       };
     case 'UPDATE_FRAME':
       return {
@@ -56,6 +61,7 @@ const initialMoment = {
   groupName: '',
   schedulePlaceId: null,
   scheduleName: '',
+  placeName: '',
   photoUrl: null,
   content: 'null',
   type: null,
