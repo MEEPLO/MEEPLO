@@ -8,6 +8,7 @@ import com.sloth.meeplo.recommendation.dto.response.AmuseRecommendResponse;
 import com.sloth.meeplo.recommendation.util.RecommendAPIRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ public class AmuseRecommendServiceImpl implements AmuseRecommendService{
     private final RecommendAPIRequest recommendAPIRequest;
 
     @Override
+    @Transactional(readOnly = true)
     public AmuseRecommendResponse.AmuseList gatherAmuseRecommendation(AmuseRecommendRequest.CreateRecommendAmuse recommendAmuse) {
 
         double radius = Double.parseDouble(DefaultValue.AMUSE_SEARCH_RADIUS.getValue());
