@@ -3,6 +3,7 @@ package com.sloth.meeplo.recommendation.controller;
 import com.sloth.meeplo.recommendation.dto.request.AmuseRecommendRequest;
 import com.sloth.meeplo.recommendation.dto.request.MiddlePointRequest;
 import com.sloth.meeplo.recommendation.dto.response.AmuseRecommendResponse;
+import com.sloth.meeplo.recommendation.dto.response.MiddlePointResponse;
 import com.sloth.meeplo.recommendation.service.AmuseRecommendService;
 import com.sloth.meeplo.recommendation.service.MiddlePointService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class RecommendController {
     private final MiddlePointService middlePointService;
 
     @PostMapping("/middle")
-    public ResponseEntity<?> getMiddlePoint(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody MiddlePointRequest.CoordinationList startLocations) {
+    public ResponseEntity<MiddlePointResponse.StationList> getMiddlePoint(@ApiIgnore @RequestHeader("Authorization") String authorization, @RequestBody MiddlePointRequest.CoordinationList startLocations) {
         return ResponseEntity.ok().body(middlePointService.calcMiddleStations(authorization, startLocations));
     }
 

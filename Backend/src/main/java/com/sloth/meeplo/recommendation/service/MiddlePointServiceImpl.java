@@ -19,6 +19,7 @@ import com.sloth.meeplo.recommendation.util.RecommendAPIRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -39,6 +40,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
     private final RecommendAPIRequest recommendAPIRequest;
 
     @Override
+    @Transactional(readOnly = true)
     public MiddlePointResponse.StationList calcMiddleStations(String authorization, MiddlePointRequest.CoordinationList startData) {
 
         Member mySelf = memberService.getMemberByAuthorization(authorization);
@@ -97,7 +99,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
 
         return locationRepository.findLocationsWithCoordination(centerPoint.getLat(), centerPoint.getLng(),
                 Double.parseDouble(DefaultValue.STATION_SEARCH_RADIUS.getValue()), LocationType.STATION).stream()
-                .limit(3)
+                .limit(Integer.parseInt(DefaultValue.STATION_LIMIT.getValue()))
                 .collect(Collectors.toList());
     }
 }

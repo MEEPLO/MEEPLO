@@ -14,12 +14,21 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
             " cos(radians(l.lng) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(l.lat))))";
 
 
-    @Query(value = "SELECT l FROM Location l WHERE " + HAVERSINE_FORMULA + " < :distance and type = :type ORDER BY " + HAVERSINE_FORMULA + " ASC")
+    @Query(value = "SELECT l FROM Location l WHERE " + HAVERSINE_FORMULA + " < :distance and type = :type ORDER BY " + HAVERSINE_FORMULA)
     List<Location> findLocationsWithCoordination(
             @Param("latitude") double latitude,
             @Param("longitude") double longitude,
             @Param("distance") double distanceWithInKM,
             @Param("type") LocationType type
+    );
+
+    @Query(value = "SELECT distinct l FROM LocationKeyword lk join lk.location l  WHERE " + HAVERSINE_FORMULA + " < :distance and l.type = :type and lk.keyword in :keywords ORDER BY " + HAVERSINE_FORMULA)
+    List<Location> findAmuseLocations(
+            @Param("latitude") double latitude,
+            @Param("longitude") double longitude,
+            @Param("distance") double distanceWithInKM,
+            @Param("type") LocationType type,
+            @Param("keywords") List<String> keywords
     );
 
     List<Location> findByTypeAndNameStartingWith(LocationType type, String name);
