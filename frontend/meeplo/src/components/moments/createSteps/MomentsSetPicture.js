@@ -71,7 +71,11 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
         return alert(err.stack);
       }
       setIsLoading(false);
-      alert('Successfully uploaded photo.');
+      Toast.show({
+        type: 'success',
+        text1: '멋진 추억을 남길 사진이 완성되었어요!',
+        text2: "'다음'을 눌러주세요.",
+      });
       setPictureUrl(data.Location);
     });
   };
