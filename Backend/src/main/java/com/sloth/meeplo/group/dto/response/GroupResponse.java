@@ -16,6 +16,7 @@ import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroupResponse {
 
@@ -161,11 +162,29 @@ public class GroupResponse {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
 
+        private List<GroupScheduleLocation> scheduleLocations;
+
         @Builder
         GroupSchedule(Schedule schedule){
             this.id = schedule.getId();
             this.name = schedule.getName();
             this.date = schedule.getDate();
+            this.scheduleLocations = schedule.getScheduleLocations().stream()
+                    .map(sl->GroupScheduleLocation.builder().scheduleLocation(sl).build())
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class GroupScheduleLocation {
+        private Long scheduleLocationId;
+        private String name;
+
+        @Builder
+        GroupScheduleLocation(ScheduleLocation scheduleLocation){
+            this.scheduleLocationId = scheduleLocation.getId();
+            this.name = scheduleLocation.getLocation().getName();
         }
     }
 
