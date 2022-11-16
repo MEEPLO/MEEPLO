@@ -18,7 +18,9 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
   const closeModal = () => setShowModal(false);
 
   const onPressConfirm = () => {
-    onConfirm(`${date.dateString} ${time.getHours()}:${time.getMinutes()}`);
+    onConfirm(
+      `${date.dateString} ${time.getHours()}:${time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes()}`,
+    );
     closeModal();
   };
 

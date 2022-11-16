@@ -30,7 +30,7 @@ calendar.meeploCalendarParam = {
   },
 
   enableSwipeMonths: true,
-  initialDate: `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate() - 2}`,
+  initialDate: `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`,
   // minDate: '2020-10-01',
   // maxDate: `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate() - 1}`,
 };
