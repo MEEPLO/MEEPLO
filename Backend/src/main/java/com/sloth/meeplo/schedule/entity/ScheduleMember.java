@@ -34,20 +34,14 @@ public class ScheduleMember extends GeoDataEntity {
     public void unactivateStatus(){
         this.status = ScheduleMemberStatus.UNACTIVATED;
     }
-    public void pendingStatus(){
-        this.status = ScheduleMemberStatus.PENDING;
+    public void joinStatus(){
+        this.status = ScheduleMemberStatus.JOINED;
     }
 
     @Builder
     ScheduleMember(Schedule schedule, Member member, Role role){
-//          해당 약속의 Leader / Member 를 구분한다.
-        if(role.equals(Role.LEADER)){
-            this.role = Role.LEADER;
-            this.status = ScheduleMemberStatus.JOINED;
-        }else{
-            this.role = Role.MEMBER;
-            this.status = ScheduleMemberStatus.PENDING;
-        }
+        this.status = ScheduleMemberStatus.JOINED;
+        this.role = role;
         this.schedule = schedule;
         this.member = member;
     }
