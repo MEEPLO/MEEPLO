@@ -1,10 +1,10 @@
 package com.sloth.meeplo.location.service;
 
 import com.sloth.meeplo.global.exception.MeeploException;
-import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.location.dto.response.LocationResponse;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.location.exception.code.LocationErrorCode;
 import com.sloth.meeplo.location.repository.LocationRepository;
 import com.sloth.meeplo.location.type.LocationType;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,8 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationResponse.LocationDetail getDetailLocation(Long locationId) {
-        Location location=locationRepository.findById(locationId).orElseThrow(() -> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+        Location location=locationRepository.findById(locationId)
+                .orElseThrow(() -> new MeeploException(LocationErrorCode.NOT_EXIST_LOCATION));
         return LocationResponse.LocationDetail.builder().location(location).build();
     }
 
@@ -45,5 +46,10 @@ public class LocationServiceImpl implements LocationService {
                         .location(l)
                         .build())
                 .collect(Collectors.toList());
+    }
+    @Override
+    public Location getLocationById(Long locationId){
+        return locationRepository.findById(locationId)
+                .orElseThrow(()-> new MeeploException(LocationErrorCode.NOT_EXIST_LOCATION));
     }
 }

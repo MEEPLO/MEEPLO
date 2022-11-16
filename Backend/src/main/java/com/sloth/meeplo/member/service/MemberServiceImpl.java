@@ -132,7 +132,7 @@ public class MemberServiceImpl implements MemberService {
     public Member getMemberByAuthorization(String authorization){
         authorization = authorization.replaceFirst("Bearer ", "");
         return memberRepository.findById(jwtUtil.getUserIdFromToken(authorization))
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE));
+                .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER));
     }
 
     @Override
@@ -156,7 +156,7 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMemberStartLocation(String authorization, Long id) {
         Member member = getMemberByAuthorization(authorization);
         if(memberLocationRepository.findById(id)
-                .orElseThrow(()-> new MeeploException(CommonErrorCode.UNAUTHORIZED))
+                .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION))
                 .getMember().equals(member)){
             memberLocationRepository.deleteById(id);
         }
