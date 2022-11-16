@@ -1,5 +1,8 @@
 import React from 'react';
 import { View, Dimensions, Alert } from 'react-native';
+import Toast from 'react-native-toast-message';
+
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
 import StepTextInput from '../../common/StepTextInput';
 import StepButton from '../../stepper/StepButton';
 
@@ -15,12 +18,18 @@ const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
         payload: value,
       },
     ];
-    value.trim() === '' ? Alert.alert('댓글을 작성해주세요.') : toNext(actions);
+    value.trim() === ''
+      ? Toast.show({
+          type: 'error',
+          text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+          text2: TOAST_MESSAGE.MOMENT_NO_COMMENT,
+        })
+      : toNext(actions);
   };
 
   return visible ? (
     <>
-      <View style={{ position: 'relative', height: windowHeight - 250, marginHorizontal: 20 }}>
+      <View style={{ position: 'relative', height: windowHeight - 200, marginHorizontal: 20 }}>
         <StepTextInput value={value} onValueChange={onValueChange} type="댓글" maxLength={50} required={true} />
       </View>
       <View

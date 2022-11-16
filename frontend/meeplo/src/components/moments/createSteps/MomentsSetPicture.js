@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, Text, Pressable, Dimensions, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
-import mergeAndUpload from '../mergeAndUpload';
 import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { decode } from 'base64-arraybuffer';
-import { theme } from '../../../assets/constant/DesignTheme';
+import Toast from 'react-native-toast-message';
 
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
+import { theme } from '../../../assets/constant/DesignTheme';
+import mergeAndUpload from '../mergeAndUpload';
 import StepButton from '../../stepper/StepButton';
+import LoadingModal from '../../common/LoadingModal';
 
 const windowHeight = Dimensions.get('window').height;
 const viewWidth = Dimensions.get('window').width - 120;
@@ -32,12 +35,14 @@ const getImageTitle = date => {
 const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   const webviewRef = React.useRef();
   const [pictureUrl, setPictureUrl] = React.useState();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // load webview
   const html = mergeAndUpload(state.type);
 
   // upload image
   const uploadToS3 = dataString => {
+    setIsLoading(true);
     let now = new Date();
     const imageTitle = getImageTitle(now);
     const base64 = dataString.split(',')[1];
@@ -65,6 +70,7 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
       if (err) {
         return alert(err.stack);
       }
+      setIsLoading(false);
       alert('Successfully uploaded photo.');
       setPictureUrl(data.Location);
     });
@@ -82,17 +88,23 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
       },
     ];
 
-    !!pictureUrl ? toNext(actions) : Alert.alert('사진을 확정해주세요.');
+    !!pictureUrl
+      ? toNext(actions)
+      : Toast.show({
+          type: 'error',
+          text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+          text2: TOAST_MESSAGE.MOMENT_NO_PICTURE,
+        });
   };
 
   return visible ? (
     <>
-      <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
+      <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
         <View
           style={{
             marginHorizontal: 20,
             width: viewWidth,
-            height: windowHeight - 250,
+            height: windowHeight - 300,
             position: 'relative',
           }}>
           <Pressable
@@ -142,6 +154,8 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
         <StepButton text="< 이전" active={true} onPress={toPrev} />
         <StepButton text="다음 >" active={true} onPress={onPressNext} />
       </View>
+
+      <LoadingModal visible={isLoading} />
     </>
   ) : null;
 };
