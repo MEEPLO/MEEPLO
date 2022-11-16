@@ -72,18 +72,16 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .collect(Collectors.toList()));
 
         scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
-        scheduleCreateInput.getMembers().stream().map(ScheduleRequest.ScheduleInputMember::getId)
-                .map(id -> memberRepository.findById(id)
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                .forEach(m -> scheduleMemberRepository
-                        .save(ScheduleMember
-                                .builder()
+        scheduleMemberRepository.saveAll(
+                scheduleCreateInput.getMembers().stream()
+                        .map(ScheduleRequest.ScheduleInputMember::getId)
+                        .map(id -> ScheduleMember.builder()
                                 .schedule(newSchedule)
-                                .member(m)
-                                .role(Role.MEMBER)
-                                .build()
-                        )
-                );
+                                .member(memberRepository.findById(id)
+                                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                                .role(Role.MEMBER).build())
+                        .collect(Collectors.toList())
+        );
 
         scheduleCreateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
                 .map(id -> locationRepository.findById(id)
@@ -108,6 +106,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         checkMemberScheduleLeader(member, schedule);
         checkAfterScheduleDate(schedule);
+
         schedule.updateName(scheduleUpdateInput.getName());
         schedule.updateLocation(locationRepository.findById(scheduleUpdateInput.getMeetLocationId())
                 .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)));
@@ -119,25 +118,30 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(k->ScheduleKeyword.builder().keyword(k).build())
                 .collect(Collectors.toList()));
 
+        // 기존에 가입했지만 나간 사람 중 다시 추가된 경우
         schedule.getScheduleMembers().stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
                         .anyMatch(o-> o.getId().equals(sm.getMember().getId()) && sm.getStatus().equals(ScheduleMemberStatus.UNACTIVATED)))
-                .forEach(ScheduleMember::pendingStatus);
+                .forEach(ScheduleMember::joinStatus);
+        // 기존에 존재 했지만 리더도 아니며 추가되지 않은 경우
         schedule.getScheduleMembers().stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
                         .noneMatch(o-> o.getId().equals(sm.getMember().getId()) || sm.getRole().equals(Role.LEADER)))
                 .forEach(ScheduleMember::unactivateStatus);
-        scheduleUpdateInput.getMembers().stream()
-                .filter(i -> schedule.getScheduleMembers().stream()
-                        .noneMatch(o->o.getMember().getId().equals(i.getId())))
-                .map(i -> memberRepository.findById(i.getId())
-                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
-                .forEach(m -> scheduleMemberRepository.save(ScheduleMember.builder()
-                        .schedule(schedule)
-                        .member(m)
-                        .role(Role.MEMBER)
-                        .build())
-                );
+
+        // 기존에 없고 새로 추가된 경우
+        scheduleMemberRepository.saveAll(
+                scheduleUpdateInput.getMembers().stream()
+                        .filter(i -> schedule.getScheduleMembers().stream()
+                                .noneMatch(o->o.getMember().getId().equals(i.getId())))
+                        .map(i -> ScheduleMember.builder()
+                                .schedule(schedule)
+                                .member(memberRepository.findById(i.getId())
+                                        .orElseThrow(()-> new MeeploException(CommonErrorCode.NOT_EXIST_RESOURCE)))
+                                .role(Role.MEMBER)
+                                .build())
+                        .collect(Collectors.toList())
+        );
 
         scheduleLocationRepository.deleteAllBySchedule(schedule);
         scheduleUpdateInput.getAmuses().stream().map(ScheduleRequest.ScheduleInputAmuse::getId)
@@ -215,6 +219,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleDetailMonthList(String authorization, String yearMonth) {
         Member member = memberService.getMemberByAuthorization(authorization);
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
