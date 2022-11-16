@@ -20,6 +20,8 @@ public interface ScheduleService {
 
     Long createSchedule(String authorization, ScheduleRequest.ScheduleCreateInput scheduleCreateInput);
 
+    Long createTempSchedule(String authorization, ScheduleRequest.ScheduleTempCreateInput scheduleTempCreateInput);
+
     void updateSchedule(String authorization, ScheduleRequest.ScheduleUpdateInput scheduleUpdateInput);
 
     void deleteSchedule(String authorization, Long scheduleId);
