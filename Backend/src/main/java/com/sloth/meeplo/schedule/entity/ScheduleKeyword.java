@@ -24,8 +24,9 @@ public class ScheduleKeyword {
     private Schedule schedule;
 
     @Builder
-    ScheduleKeyword(String keyword){
+    ScheduleKeyword(String keyword, Schedule schedule){
         this.keyword = keyword;
+        this.schedule = schedule;
     }
 
 }
