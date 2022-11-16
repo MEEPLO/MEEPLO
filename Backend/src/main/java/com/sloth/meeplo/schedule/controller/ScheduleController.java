@@ -27,8 +27,15 @@ public class ScheduleController {
     public ResponseEntity<Map<String, Long>> createSchedule(@ApiIgnore @RequestHeader("Authorization") String authorization,
                                                             @RequestBody @Valid ScheduleRequest.ScheduleCreateInput scheduleCreateInput){
         Map<String, Long> resultMap = new HashMap<>();
-        Long scheduleId = scheduleService.createSchedule(authorization, scheduleCreateInput);
-        resultMap.put("scheduleId", scheduleId);
+        resultMap.put("scheduleId", scheduleService.createSchedule(authorization, scheduleCreateInput));
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/temp")
+    public ResponseEntity<Map<String, Long>> createTempSchedule(@ApiIgnore @RequestHeader("Authorization") String authorization,
+                                                            @RequestBody @Valid ScheduleRequest.ScheduleTempCreateInput scheduleTempCreateInput){
+        Map<String, Long> resultMap = new HashMap<>();
+        resultMap.put("scheduleId", scheduleService.createTempSchedule(authorization, scheduleTempCreateInput));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
