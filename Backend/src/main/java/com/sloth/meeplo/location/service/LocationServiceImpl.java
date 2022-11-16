@@ -2,6 +2,7 @@ package com.sloth.meeplo.location.service;
 
 import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
+import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.location.dto.response.LocationResponse;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.location.repository.LocationRepository;
@@ -24,6 +25,7 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationResponse.PointNearLocation> getNearLocation(Double lat, Double lng, Double radius) {
 
         return locationRepository.findLocationsWithCoordination(lat, lng, radius, LocationType.AMUSE).stream()
+                .filter(l -> l.getCategory().startsWith(DefaultValue.AMUSE_SEARCH_CATEGORY.getValue()))
                 .map(l-> LocationResponse.PointNearLocation.builder()
                         .location(l)
                         .build())
