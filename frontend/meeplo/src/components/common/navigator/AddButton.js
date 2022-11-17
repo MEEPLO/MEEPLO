@@ -39,11 +39,9 @@ const AddButton = () => {
     dispatch(setOpened(!opened));
   };
   const onPressCreateSchedule = () => {
-    // TODO: hrookim navigate to create screen
-    // navigation.navigate('ScheduleStack', { screen: 'Create' });
+    navigation.navigate('ScheduleStack', { screen: 'Create' });
   };
   const onPressCreateMoment = () => {
-    // TODO: hrookim navigate to create screen
     navigation.navigate('MomentsStack', { screen: 'MomentsCreate' });
   };
   const onPressAddButton = () => {

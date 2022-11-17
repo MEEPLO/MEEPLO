@@ -2,8 +2,10 @@ import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { hideTabBar, showTabBar } from '../../redux/navigationSlice';
+import Toast from 'react-native-toast-message';
 
 import helper from '../../helper';
+import { TOAST_MESSAGE, ALERT_MESSAGE } from '../../assets/constant/string';
 
 import StepIndicator from '../../components/stepper/StepIndicator';
 import StepRenderer from '../../components/stepper/StepRenderer';
@@ -93,10 +95,10 @@ const ScheduleCreateScreen = ({ navigation }) => {
       if (step > 0) {
         setStepClamp(step - 1);
       } else if (step === 0) {
-        Alert.alert('약속 생성을 취소하시겠습니까?', '입력 중인 값들이 모두 초기화됩니다.', [
-          { text: '남아있기', style: 'cancel' },
+        Alert.alert(ALERT_MESSAGE.SCHEDULE_ASK_CANCEL_CREATE_TEXT1, ALERT_MESSAGE.SCHEDULE_ASK_CANCEL_CREATE_TEXT2, [
+          { text: ALERT_MESSAGE.STAY, style: 'cancel' },
           {
-            text: '나가기',
+            text: ALERT_MESSAGE.STAY,
             style: 'destructive',
             onPress: () => navigation.dispatch(action),
           },
@@ -121,7 +123,17 @@ const ScheduleCreateScreen = ({ navigation }) => {
   };
 
   const onFinish = () => {
-    console.log('on finish', schedule);
+    Toast.show({
+      type: 'success',
+      text1: TOAST_MESSAGE.SCHEDULE_SUCCESS_CREATE_TEXT1,
+      text2: TOAST_MESSAGE.SCHEDULE_SUCCESS_CREATE_TEXT2,
+    });
+
+    // TODO-jekwan: 생성된 약속의 상세 페이지로 이동
+    // navigation.reset({
+    //   routes: [{ name: 'Home' }],
+    // });
+    navigation.navigate('Home');
   };
 
   return (
