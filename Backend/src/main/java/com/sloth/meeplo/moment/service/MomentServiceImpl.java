@@ -84,11 +84,11 @@ public class MomentServiceImpl implements MomentService{
     public Long deleteReaction(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-        int idx = moment.getMomentReactions().indexOf(member);
-        if(idx<0){
+
+        if(!moment.getMomentReactions().remove(member)){
             throw new MeeploException(MomentErrorCode.NOT_YET_REACTED);
         }
-        moment.getMomentReactions().remove(member);
+
         momentRepository.save(moment);
         return (long) moment.getMomentReactions().size();
     }

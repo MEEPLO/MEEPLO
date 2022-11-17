@@ -20,6 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ScheduleResponse {
@@ -154,7 +155,12 @@ public class ScheduleResponse {
                 return false;
             ScheduleListInfo sli = ((ScheduleListInfo)x);
 
-            return this.id == sli.id;
+            return Objects.equals(this.id, sli.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
 
         @Builder

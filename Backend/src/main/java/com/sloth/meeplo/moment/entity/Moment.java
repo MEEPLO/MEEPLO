@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -42,10 +43,10 @@ public class Moment extends BaseTimeEntity {
             joinColumns = @JoinColumn(name="moment_id"),
             inverseJoinColumns = @JoinColumn(name="member_id")
     )
-    private List<Member> momentReactions = new ArrayList<>();
+    private Set<Member> momentReactions;
 
     @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL)
-    private List<MomentComment> momentComments;
+    private Set<MomentComment> momentComments;
 
     @Builder
     public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member, ScheduleLocation scheduleLocation){
