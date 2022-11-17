@@ -1,7 +1,10 @@
 import React from 'react';
 import { View, Text, Dimensions, Pressable, Alert } from 'react-native';
-import { theme } from '../../../assets/constant/DesignTheme';
 import AutoHeightImage from 'react-native-auto-height-image';
+import Toast from 'react-native-toast-message';
+
+import { theme } from '../../../assets/constant/DesignTheme';
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
 import Images from '../../../assets/image/index';
 import StepButton from '../../stepper/StepButton';
 
@@ -20,11 +23,17 @@ const MomentsSetFrame = ({ toNext, toPrev, onFinish, visible }) => {
         payload: frameType,
       },
     ];
-    frameType === -1 ? Alert.alert('프레임을 선택해주세요.') : toNext(actions);
+    frameType === -1
+      ? Toast.show({
+          type: 'error',
+          text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+          text2: TOAST_MESSAGE.MOMENT_NO_FRAME,
+        })
+      : toNext(actions);
   };
 
   return visible ? (
-    <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
+    <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
       <Text style={{ marginBottom: 10, color: theme.font.color, fontWeight: '800' }}>프레임 선택</Text>
       <View style={{ marginLeft: 20 }}>
         <Pressable

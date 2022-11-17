@@ -2,7 +2,9 @@ import React from 'react';
 import { View, Dimensions, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroupList } from '../../../redux/groupSlice';
+import Toast from 'react-native-toast-message';
 
+import { TOAST_MESSAGE } from '../../../assets/constant/string';
 import StepButton from '../../stepper/StepButton';
 import SelectDropdown from '../../common/SelectDropdown';
 
@@ -38,11 +40,17 @@ const MomentsSetGroup = ({ toNext, toPrev, onFinish, visible }) => {
         payload: groupNameIndex[selectedGroup],
       },
     ];
-    !!selectedGroup ? toNext(actions) : Alert.alert('그룹을 선택해주세요.');
+    !!selectedGroup
+      ? toNext(actions)
+      : Toast.show({
+          type: 'error',
+          text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+          text2: TOAST_MESSAGE.MOMENT_NO_GROUP,
+        });
   };
 
   return visible ? (
-    <View style={{ height: windowHeight - 250, marginHorizontal: 20 }}>
+    <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
       <SelectDropdown setSelected={setSelectedGroup} type="모임" data={groupNameList} required={true} />
       <View
         style={{
