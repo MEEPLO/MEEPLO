@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, CalendarContext } from 'react-native-calendars';
 import DatePicker from 'react-native-date-picker';
 
 import ModalRound from '../common/ModalRound';
@@ -10,16 +10,25 @@ import config from '../../config';
 const screen = Dimensions.get('screen');
 
 const DateModalInput = ({ type, required, value, onConfirm }) => {
+  const calendarContext = useContext(CalendarContext);
   const [showModal, setShowModal] = useState(false);
   const [date, setDate] = useState(config.calendar.getTodayDateObject());
   const [time, setTime] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState({});
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
   const onPressConfirm = () => {
-    onConfirm(`${date.dateString} ${time.getHours()}:${time.getMinutes()}`);
+    onConfirm(
+      `${date.dateString} ${time.getHours()}:${time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes()}`,
+    );
     closeModal();
+  };
+
+  const onDayPress = date => {
+    setDate(date);
+    setSelectedDate({ [date.dateString]: { selected: true, selectedColor: theme.color.bright.orange } });
   };
 
   return (
@@ -39,7 +48,9 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
           theme={{
             ...config.calendar.meeploCalendarParamTheme,
           }}
-          onDayPress={setDate}
+          context={calendarContext}
+          onDayPress={onDayPress}
+          markedDates={selectedDate}
         />
 
         <View style={styles.datePickerView}>
