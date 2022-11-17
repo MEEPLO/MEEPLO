@@ -1,7 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getProfile, login, logout, unlink } from '@react-native-seoul/kakao-login';
-import { getUserInfo } from '../redux/userSlice';
 
 async function userLogin(kakaoAccessToken) {
   try {
