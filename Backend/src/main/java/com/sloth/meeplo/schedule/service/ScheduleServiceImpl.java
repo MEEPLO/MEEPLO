@@ -6,7 +6,6 @@ import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
-import com.sloth.meeplo.location.exception.code.LocationErrorCode;
 import com.sloth.meeplo.location.repository.LocationRepository;
 import com.sloth.meeplo.location.service.LocationService;
 import com.sloth.meeplo.member.entity.Member;
@@ -55,7 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     private final MemberRepository memberRepository;
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final ScheduleKeywordRepository scheduleKeywordRepository;
-    private final LocationRepository locationRepository;
+
     @Override
     @Transactional
     public Long createSchedule(String authorization, ScheduleRequest.ScheduleCreateInput scheduleCreateInput) {
@@ -100,6 +99,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional
     public Long createTempSchedule(String authorization, ScheduleRequest.ScheduleTempCreateInput scheduleTempCreateInput) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Group group = groupService.getGroupEntityByGroupId(scheduleTempCreateInput.getGroupId());
@@ -192,6 +192,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleDetailInfo getScheduleDetail(String authorization, Long scheduleId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Schedule schedule = getScheduleByScheduleId(scheduleId);
@@ -225,6 +226,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<String> getScheduleMonthList(String authorization, String yearMonth) {
         Member member = memberService.getMemberByAuthorization(authorization);
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
@@ -263,6 +265,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleDailyList(String authorization, String date) {
         Member member = memberService.getMemberByAuthorization(authorization);
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -287,6 +290,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MomentResponse.MomentSimpleList> getMomentListBySchedule(String authorization, Long scheduleId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Schedule schedule = getScheduleByScheduleId(scheduleId);
@@ -321,6 +325,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
         return member.getScheduleMembers().stream()
@@ -336,6 +341,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
         return member.getScheduleMembers().stream()

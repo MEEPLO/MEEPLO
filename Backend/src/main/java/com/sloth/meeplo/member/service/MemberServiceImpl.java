@@ -13,7 +13,6 @@ import com.sloth.meeplo.member.entity.MemberLocation;
 import com.sloth.meeplo.member.exception.code.MemberErrorCode;
 import com.sloth.meeplo.member.repository.MemberLocationRepository;
 import com.sloth.meeplo.member.repository.MemberRepository;
-import com.sloth.meeplo.moment.exception.code.MomentErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,6 +40,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberResponse.MemberToken getKakaoMemberToken(String authorization) {
 
         MemberRequest.MemberInfo memberInfo = null;
@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
             isNewMember = true;
         } else if (member.isUnactivated()) {
             member.activated();
-//            memberRepository.save(member);
+            memberRepository.save(member);
         }
 
         String accessToken = jwtUtil.generateJwtToken(member, TokenType.ACCESS_TOKEN);
