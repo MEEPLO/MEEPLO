@@ -17,14 +17,14 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
-  const imgWidth = [windowWidth * 0.8, windowWidth * 0.85, windowWidth * 0.5];
-  const viewHeight = [windowWidth * 0.8 * 1.17, windowWidth * 0.85 * 0.8, windowWidth * 0.4 * 3.65];
+  const imgWidth = [windowWidth * 0.8, windowWidth * 0.85, windowWidth * 0.35];
+  const viewHeight = [windowWidth * 0.8 * 1.17, windowWidth * 0.85 * 0.8, windowWidth * 0.35 * 3.65];
 
   const onPressNext = () => {
     const actions = [
       {
         type: 'UPDATE_LOCATION',
-        payload: { xpoint: delX * 1.05, ypoint: delY * 1.05, angle: tilt[0] },
+        payload: { xpoint: delX * 1.08, ypoint: delY * 1.25, angle: tilt[0] },
       },
     ];
     toNext(actions);
@@ -68,7 +68,7 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             <Text
               style={{
                 width: '80%',
-                fontSize: 10,
+                fontSize: 11,
                 color: theme.font.color,
                 transform: [{ rotate: `${tilt}deg` }],
                 position: 'absolute',
@@ -79,7 +79,7 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             </Text>
           </ImageBackground>
         </TouchableOpacity>
-        <View style={{ marginHorizontal: 40, width: windowWidth - 80, height: 150, position: 'absolute', bottom: 150 }}>
+        <View style={{ marginHorizontal: 40, width: windowWidth - 80, height: 150, position: 'absolute', bottom: 0 }}>
           <Slider
             value={tilt}
             onValueChange={value => setTilt(value)}
