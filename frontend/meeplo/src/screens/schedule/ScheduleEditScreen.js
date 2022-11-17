@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 
-const ScheduleDetailScreen = ({ navigation }) => {
+const ScheduleEditScreen = ({ navigation }) => {
   return (
     <View style={styles.screenStyle}>
-      <Text>ScheduleDetailScreen</Text>
+      <Text>asdasd</Text>
     </View>
   );
 };
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScheduleDetailScreen;
+export default ScheduleEditScreen;

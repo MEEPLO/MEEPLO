@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Tabs } from 'react-native-collapsible-tab-view';
 
 import CalendarScheduleListItem from './CalendarScheduleListItem';
+import { COMMON_MESSAGE } from '../../assets/constant/string';
 
 const screen = Dimensions.get('screen');
 
@@ -19,7 +20,7 @@ const CalendarScheduleList = ({ data }) => {
   ) : (
     <Tabs.ScrollView>
       <View style={styles.noDataView}>
-        <Text>아무 약속이 없습니다.</Text>
+        <Text>{COMMON_MESSAGE.NO_SHCEDULE_EXISTS}</Text>
       </View>
     </Tabs.ScrollView>
   );
