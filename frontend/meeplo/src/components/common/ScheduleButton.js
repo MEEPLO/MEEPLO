@@ -26,15 +26,16 @@ const ScheduleButton = props => {
           <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
             <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
               <View style={{ marginBottom: 5 }}>
-                <Text
-                  style={{
-                    color: theme.font.color,
-                    fontWeight: '800',
-                    fontSize: 19,
-                    textAlign: 'center',
-                    lineHeight: imageWidth * 0.21,
-                  }}>
-                  {props.empty}
+                <Text style={{ color: theme.font.color, fontWeight: '800', fontSize: 18 }}>
+                  {props.date} <Text> {props.place}</Text>
+                </Text>
+              </View>
+              <View style={{ marginBottom: 5 }}>
+                <Text>{props.title}</Text>
+              </View>
+              <View>
+                <Text>
+                  {props.group} <Text> | </Text> {props.people}명
                 </Text>
               </View>
             </View>
@@ -53,16 +54,15 @@ const ScheduleButton = props => {
           <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
             <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
               <View style={{ marginBottom: 5 }}>
-                <Text style={{ color: theme.font.color, fontWeight: '800', fontSize: 18 }}>
-                  {props.date} <Text> {props.place}</Text>
-                </Text>
-              </View>
-              <View style={{ marginBottom: 5 }}>
-                <Text>{props.title}</Text>
-              </View>
-              <View>
-                <Text>
-                  {props.group} <Text> | </Text> {props.people}명
+                <Text
+                  style={{
+                    color: theme.font.color,
+                    fontWeight: '800',
+                    fontSize: 19,
+                    textAlign: 'center',
+                    lineHeight: imageWidth * 0.21,
+                  }}>
+                  {props.empty}
                 </Text>
               </View>
             </View>

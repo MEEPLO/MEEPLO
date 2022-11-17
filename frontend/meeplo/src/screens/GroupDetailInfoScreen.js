@@ -1,6 +1,7 @@
-import { View, Text, ScrollView, TouchableOpacity, Dimensions, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Dimensions, Image, Alert, Share } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
@@ -8,7 +9,7 @@ import { faCrown } from '@fortawesome/free-solid-svg-icons/faCrown';
 import GroupDetailHeader from '../components/Group/GroupDetailHeader';
 import { theme } from '../assets/constant/DesignTheme';
 import Images from '../assets/image/index';
-import { getGroupDetail, deleteGroup, exitGroup } from '../redux/groupSlice';
+import { getGroupDetail, deleteGroup, exitGroup, exitGroupMember } from '../redux/groupSlice';
 
 const GroupDetailInfoScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -21,10 +22,10 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
   const { width } = Dimensions.get('window');
   const memberCount = groupDetail?.members.length;
 
-  const onPressKick = nickname => {
+  const onPressKick = ({ memberName, memberId }) => {
     Alert.alert(
       '그룹 멤버 강퇴',
-      `${nickname}님을 강퇴하시겠습니까?`,
+      `${memberName}님을 강퇴하시겠습니까?`,
       [
         {
           text: '취소',
@@ -32,8 +33,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
         {
           text: '강퇴하기',
           onPress: () => {
-            // TODO: hrookim 강퇴 dispatch
-            Alert.alert(`${nickname}님을 강퇴했습니다.`);
+            dispatch(exitGroupMember({ memberId, groupId: groupDetail.id, Alert, navigation, memberName }));
           },
         },
       ],
@@ -54,9 +54,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
         {
           text: '삭제',
           onPress: () => {
-            dispatch(deleteGroup({ groupName: groupDetail.name, groupId: groupDetail.id, Alert, navigation })).then(
-              () => {},
-            );
+            dispatch(deleteGroup({ groupName: groupDetail.name, groupId: groupDetail.id, Alert, navigation }));
           },
         },
       ],
@@ -87,6 +85,26 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
     );
   };
 
+  const onPressGroupcode = async () => {
+    Clipboard.setString(groupDetail.enterCode);
+    try {
+      const result = await Share.share({
+        message: groupDetail.enterCode,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   useEffect(() => {
     dispatch(getGroupDetail({ groupId: groupDetail.id }));
   }, []);
@@ -101,22 +119,24 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
         </View>
 
         {/* Inviting button */}
-        <TouchableOpacity activeOpacity={0.6}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 35,
-              width: width - 150,
-              marginVertical: 15,
-              borderColor: theme.color.border,
-              borderWidth: 2,
-              borderRadius: 10,
-              backgroundColor: theme.color.pale.blue,
-            }}>
-            <Text style={{ fontSize: 20, fontWeight: '900', color: 'black' }}>친구 초대하기</Text>
-          </View>
-        </TouchableOpacity>
+        {isLeader && (
+          <TouchableOpacity activeOpacity={0.6} onPress={onPressGroupcode}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 35,
+                width: width - 150,
+                marginVertical: 15,
+                borderColor: theme.color.border,
+                borderWidth: 2,
+                borderRadius: 10,
+                backgroundColor: theme.color.pale.blue,
+              }}>
+              <Text style={{ fontSize: 20, fontWeight: '900', color: 'black' }}>그룹 코드 공유하기</Text>
+            </View>
+          </TouchableOpacity>
+        )}
 
         {/* member list*/}
         <View
@@ -162,7 +182,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
               {groupDetail?.members?.map((item, i) => (
                 <View
                   key={'groupMember' + i}
-                  style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+                  style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 15 }}>
                   <Image
                     source={{ uri: item.photo }}
                     style={{
@@ -179,7 +199,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                     <TouchableOpacity
                       activeOpacity={0.6}
                       onPress={() => {
-                        onPressKick(item.nickname);
+                        onPressKick({ memberName: item.nickname, memberId: item.id });
                       }}>
                       <Image source={Images.faDoor} style={{ width: 14, height: 14 }} />
                     </TouchableOpacity>
