@@ -242,7 +242,8 @@ export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Aler
         },
       )
       .then(res => {
-        Alert.alert(`그룹에 참여습니다.`, '', [
+        console.log(res.data);
+        Alert.alert(`그룹에 참여했습니다!`, '', [
           {
             text: '확인',
             onPress: () => {
@@ -257,7 +258,7 @@ export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Aler
     console.log('you are JOINED!');
   } catch (err) {
     console.error('ERROR in joinGroup!', err);
-    return isRejectedWithValue(err.response?.data);
+    // return isRejectedWithValue(err.response?.data);
   }
 });
 
