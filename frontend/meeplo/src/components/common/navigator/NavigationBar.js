@@ -54,6 +54,13 @@ const NavigationBar = () => {
       <Tab.Screen
         name="HomeStack"
         component={HomeStackScreen}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('HomeStack', { screen: 'Home' });
+          },
+        })}
         options={{
           unmountOnBlur: true,
           tabBarLabel: '홈',
@@ -63,9 +70,6 @@ const NavigationBar = () => {
               <Text style={{ color }}>홈</Text>
             </View>
           ),
-        }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
         }}
       />
       <Tab.Screen
@@ -80,9 +84,13 @@ const NavigationBar = () => {
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
-        }}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('GroupStack', { screen: 'GroupHome' });
+          },
+        })}
       />
 
       <Tab.Screen
@@ -105,9 +113,13 @@ const NavigationBar = () => {
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
-        }}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('ScheduleStack', { screen: 'Home' });
+          },
+        })}
       />
       <Tab.Screen
         name="MomentsStack"
@@ -121,9 +133,13 @@ const NavigationBar = () => {
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
-        }}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('MomentsStack', { screen: 'MomentsList' });
+          },
+        })}
       />
     </Tab.Navigator>
   );
