@@ -7,11 +7,11 @@ import { COMMON_MESSAGE } from '../../assets/constant/string';
 
 const screen = Dimensions.get('screen');
 
-const CalendarScheduleList = ({ data }) => {
+const CalendarScheduleList = ({ data, onItemPress }) => {
   return data?.length > 0 ? (
     <Tabs.FlatList
       data={data}
-      renderItem={CalendarScheduleListItem}
+      renderItem={item => <CalendarScheduleListItem item={item.item} onItemPress={onItemPress} />}
       keyExtractor={item => item.id}
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
