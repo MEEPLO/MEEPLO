@@ -23,6 +23,23 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
   try {
     console.log('yearmonth', yearMonth);
     const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}/list`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  } catch (err) {
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+// ex) yearMonth === '2022-11'
+export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesMonthly', async yearMonth => {
+  try {
+    console.log('yearmonth', yearMonth);
+    const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -67,8 +84,9 @@ export const getSchedules = createAsyncThunk('schedule/getSchedules', async ({ y
 });
 
 const initialState = {
-  // TODO: API 명세에 적혀있는대로 초기값 설정
-  value: '초기약속',
+  isLoading: false,
+  schedules: [],
+  scheduleDates: [],
 };
 const scheduleSlice = createSlice({
   name: 'schedule',
@@ -81,6 +99,13 @@ const scheduleSlice = createSlice({
     [getSchedulesMonthly.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       state.schedules = payload;
+    },
+    [getSchedulesDatesMonthly.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getSchedulesDatesMonthly.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.scheduleDates = payload;
     },
     [getSchedules.pending]: (state, { payload }) => {
       state.isLoading = true;

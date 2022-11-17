@@ -7,7 +7,7 @@ import { Calendar } from 'react-native-calendars';
 import { theme } from '../../assets/constant/DesignTheme';
 import config from '../../config';
 
-import { getSchedulesMonthly, getSchedulesDaily } from '../../redux/scheduleSlice';
+import { getSchedulesDatesMonthly, getSchedulesMonthly, getSchedulesDaily } from '../../redux/scheduleSlice';
 
 import CalendarScheduleList from '../../components/calendar/CalendarScheduleList';
 
