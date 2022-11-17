@@ -2,6 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
+import { axiosPrivate } from '../auth/axiosInstance';
 
 export const createSchedule = createAsyncThunk('schedule/createSchedule', async schedule => {
   try {
@@ -83,14 +84,46 @@ export const getSchedules = createAsyncThunk('schedule/getSchedules', async ({ y
   }
 });
 
-const initialState = {
-  isLoading: false,
-  schedules: [],
-  scheduleDates: [],
-};
+export const getUpcomingSchedule = createAsyncThunk('schedule/getUpcomingSchedule', async () => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/upcoming`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data.schedules;
+  } catch (err) {
+    console.error('ERROR in getUpcomingSchedule!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const getNoMomentsSchedule = createAsyncThunk('schedule/getNoMomentsSchedule', async () => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/unwritten`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data.schedules;
+  } catch (err) {
+    console.error('ERROR in getUpcomingSchedule!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
 const scheduleSlice = createSlice({
   name: 'schedule',
-  initialState,
+  initialState: {
+    value: '초기약속',
+    isLoading: false,
+    schedules: [],
+    scheduleDates: [],
+    upComing: [],
+    noMoments: [],
+  },
   reducers: {},
   extraReducers: {
     [getSchedulesMonthly.pending]: (state, { payload }) => {
@@ -120,6 +153,12 @@ const scheduleSlice = createSlice({
     [getSchedulesDaily.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       state.schedules = payload;
+    },
+    [getUpcomingSchedule.fulfilled]: (state, { payload }) => {
+      state.upComing = payload.slice(0, 3);
+    },
+    [getNoMomentsSchedule.fulfilled]: (state, { payload }) => {
+      state.noMoments = payload.slice(0, 3);
     },
   },
 });

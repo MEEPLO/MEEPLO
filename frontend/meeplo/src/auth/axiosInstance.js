@@ -1,6 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
+import { navigate } from '../components/common/navigator/RootNavigator';
 
 export const axiosPrivate = axios.create({
   baseURL: MEEPLO_SERVER_BASE_URL,
@@ -25,7 +26,6 @@ axiosPrivate.interceptors.response.use(
     console.log(originalRequest);
     if (errorCode === 401) {
       if (isTokenRefreshing === false) {
-        console.log('리프레시 토큰 다시 받아오기');
         isTokenRefreshing = true;
         const currentAccessToken = await AsyncStorage.getItem('@accessToken');
         const currentRefreshToken = await AsyncStorage.getItem('@refreshToken');
@@ -47,7 +47,8 @@ axiosPrivate.interceptors.response.use(
           .catch(err => {
             console.log('재 로그인 필요');
             AsyncStorage.clear();
-            // TODO: hrookim navigate to login screen
+            // TODO: hrookim 홈에 쌓임... 어떻게 해야 reset이 가능한것인가..
+            navigate('HomeStack', { screen: 'Login' });
           });
       }
       const retryOriginalRequest = new Promise(resolve => {

@@ -40,9 +40,11 @@ const AddButton = () => {
   };
   const onPressCreateSchedule = () => {
     navigation.navigate('ScheduleStack', { screen: 'Create' });
+    dispatch(setOpened(!opened));
   };
   const onPressCreateMoment = () => {
     navigation.navigate('MomentsStack', { screen: 'MomentsCreate' });
+    dispatch(setOpened(!opened));
   };
   const onPressAddButton = () => {
     dispatch(setOpened(!opened));
