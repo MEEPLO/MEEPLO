@@ -17,7 +17,9 @@ const TOAST_MESSAGE = {
   MOMENT_NO_COMMENT: '댓글을 작성해주세요!',
 };
 
-const COMMON_MESSAGE = {};
+const COMMON_MESSAGE = {
+  NO_SHCEDULE_EXISTS: '아무 약속이 없습니다.',
+};
 
 const ALERT_MESSAGE = {
   SCHEDULE_ASK_CANCEL_CREATE_TEXT1: '약속 생성을 취소하시겠습니까?',
