@@ -4,15 +4,13 @@ import { getProfile, login, logout, unlink } from '@react-native-seoul/kakao-log
 
 async function userLogin(kakaoAccessToken) {
   try {
-    console.log('카카오 액세스 토큰:', kakaoAccessToken);
-    // TODO: kakao 로그인 후 kakaoAccessToken 백에 전달
+    // console.log('카카오 액세스 토큰:', kakaoAccessToken);
     const tokens = await axios.get('http://meeplo.co.kr/meeplo/api/v1/auth/kakao', {
       headers: {
         Authorization: `Bearer ${kakaoAccessToken}`,
       },
     });
-    // 백에서 전달받은 accessToken refreshToken AsyncStorage에 저장
-    console.log('백에서 받아온 데이터: ', tokens.data);
+    // console.log('백에서 받아온 데이터: ', tokens.data);
     await AsyncStorage.setItem('@accessToken', tokens.data.accessToken);
     await AsyncStorage.setItem('@refreshToken', tokens.data.refreshToken);
   } catch (err) {
@@ -35,7 +33,7 @@ export const logInWithKakao = async ({ Alert, navigation }) => {
       });
     });
   } catch (err) {
-    console.error('login err =======', err);
+    Alert.alert('로그인에 실패하였습니다.');
   }
 };
 
