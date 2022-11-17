@@ -7,8 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -33,13 +32,13 @@ public class Schedule extends BaseTimeEntity {
     private Location location;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
-    private List<ScheduleMember> scheduleMembers;
+    private Set<ScheduleMember> scheduleMembers;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
-    private List<ScheduleLocation> scheduleLocations;
+    private Set<ScheduleLocation> scheduleLocations;
 
     @OneToMany(mappedBy = "schedule",cascade = CascadeType.ALL)
-    private List<ScheduleKeyword> scheduleKeywords = new ArrayList<>();
+    private Set<ScheduleKeyword> scheduleKeywords;
 
     @Builder(builderClassName = "EmptyBuilder",builderMethodName = "EmptyBuilder")
     Schedule(LocalDateTime date){
