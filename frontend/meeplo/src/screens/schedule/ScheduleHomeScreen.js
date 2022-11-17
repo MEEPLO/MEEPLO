@@ -14,7 +14,7 @@ import LoadingModal from '../../components/common/LoadingModal';
 
 const screen = Dimensions.get('screen');
 
-const ScheduleHomeScreen = () => {
+const ScheduleHomeScreen = ({ navigation }) => {
   const calendarContext = useContext(CalendarContext);
   const [selectedDate, setSelectedDate] = useState();
   const [schedueledDates, setSchedueledDates] = useState({});
@@ -24,6 +24,10 @@ const ScheduleHomeScreen = () => {
   const schedules = useSelector(state => state?.schedule?.schedules);
   const scheduleDates = useSelector(state => state?.schedule?.scheduleDates);
   const isLoading = useSelector(state => state?.schedule?.isLoading);
+
+  const onScheduleItemPress = scheduleId => {
+    navigation.navigate('Detail', { scheduleId: scheduleId });
+  };
 
   const onDayPress = date => {
     setTabLabel(`${date.month}월 ${date.day}일`);
@@ -77,7 +81,7 @@ const ScheduleHomeScreen = () => {
     <View style={styles.screenView}>
       <Tabs.Container renderHeader={renderCalendar}>
         <Tabs.Tab name="scheduleList" label={tabLabel}>
-          <CalendarScheduleList data={schedules?.schedules} />
+          <CalendarScheduleList data={schedules?.schedules} onItemPress={onScheduleItemPress} />
         </Tabs.Tab>
       </Tabs.Container>
 
