@@ -141,7 +141,7 @@ export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupN
       });
     return response?.data;
   } catch (err) {
-    console.error('ERROR in getGroupList!', err);
+    console.error('ERROR in deleteGroup!', err);
     return isRejectedWithValue(err.response?.data);
   }
 });

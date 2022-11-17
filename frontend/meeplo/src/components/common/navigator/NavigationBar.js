@@ -65,7 +65,7 @@ const NavigationBar = () => {
           unmountOnBlur: true,
           tabBarLabel: '홈',
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faHouseChimney} color={color} size={size} />
               <Text style={{ color }}>홈</Text>
             </View>
@@ -78,7 +78,7 @@ const NavigationBar = () => {
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faUsers} color={color} size={size} />
               <Text style={{ color }}>그룹</Text>
             </View>
@@ -107,7 +107,7 @@ const NavigationBar = () => {
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faCalendarDays} color={color} size={size} />
               <Text style={{ color }}>약속</Text>
             </View>
@@ -127,7 +127,7 @@ const NavigationBar = () => {
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faCameraRetro} color={color} size={size} />
               <Text style={{ color }}>추억</Text>
             </View>
