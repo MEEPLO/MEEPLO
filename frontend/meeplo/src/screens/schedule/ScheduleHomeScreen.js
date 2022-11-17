@@ -7,7 +7,7 @@ import { Calendar } from 'react-native-calendars';
 import { theme } from '../../assets/constant/DesignTheme';
 import config from '../../config';
 
-import { getSchedulesDatesMonthly, getSchedulesMonthly, getSchedulesDaily } from '../../redux/scheduleSlice';
+import { getSchedulesMonthly, getSchedulesDaily } from '../../redux/scheduleSlice';
 
 import CalendarScheduleList from '../../components/calendar/CalendarScheduleList';
 
@@ -28,6 +28,7 @@ const ScheduleHomeScreen = () => {
 
   const onMonthChange = date => {
     dispatch(getSchedulesMonthly(`${date.year}-${date.month}`));
+    setSelectedDate();
   };
 
   const getMarkedDates = (schedueledDates, selectedDate) => {
@@ -46,8 +47,8 @@ const ScheduleHomeScreen = () => {
 
   useEffect(() => {
     console.log('wow', schedules);
-    if (schedules && schedules.scheduledDates && Array.isArray(schedules.scheduledDates)) {
-      setSchedueledDates(schedules.scheduledDates);
+    if (schedules && schedules.schedules && Array.isArray(schedules.schedules)) {
+      setSchedueledDates(schedules.schedules.date);
     }
   }, [schedules]);
 
@@ -69,7 +70,7 @@ const ScheduleHomeScreen = () => {
     <View style={styles.screenView}>
       <Tabs.Container renderHeader={renderCalendar}>
         <Tabs.Tab name="scheduleList" label="약속 리스트">
-          <CalendarScheduleList data={tmpData} />
+          <CalendarScheduleList data={schedules?.schedules} />
         </Tabs.Tab>
       </Tabs.Container>
     </View>
