@@ -36,7 +36,7 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
 });
 
 // ex) yearMonth === '2022-11'
-export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesMonthly', async yearMonth => {
+export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesDatesMonthly', async yearMonth => {
   try {
     console.log('yearmonth', yearMonth);
     const accessToken = await AsyncStorage.getItem('@accessToken');
@@ -53,7 +53,7 @@ export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesM
 });
 
 // ex) date === '2022-11-11'
-export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesMonthly', async date => {
+export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesDaily', async date => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/daily/${date}`, {
@@ -105,7 +105,7 @@ const scheduleSlice = createSlice({
     },
     [getSchedulesDatesMonthly.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      state.scheduleDates = payload;
+      state.scheduleDates = payload.scheduledDates;
     },
     [getSchedules.pending]: (state, { payload }) => {
       state.isLoading = true;

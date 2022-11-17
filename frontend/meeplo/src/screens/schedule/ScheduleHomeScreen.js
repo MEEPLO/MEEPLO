@@ -1,32 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { SafeAreaView, View, Text, Dimensions, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tabs } from 'react-native-collapsible-tab-view';
 
-import { Calendar } from 'react-native-calendars';
+import { Calendar, CalendarContext } from 'react-native-calendars';
 import { theme } from '../../assets/constant/DesignTheme';
 import config from '../../config';
 
-import { getSchedulesMonthly, getSchedulesDaily } from '../../redux/scheduleSlice';
+import { getSchedulesDatesMonthly, getSchedulesMonthly, getSchedulesDaily } from '../../redux/scheduleSlice';
 
 import CalendarScheduleList from '../../components/calendar/CalendarScheduleList';
+import LoadingModal from '../../components/common/LoadingModal';
 
 const screen = Dimensions.get('screen');
 
 const ScheduleHomeScreen = () => {
+  const calendarContext = useContext(CalendarContext);
   const [selectedDate, setSelectedDate] = useState();
   const [schedueledDates, setSchedueledDates] = useState({});
   const dispatch = useDispatch();
 
   const schedules = useSelector(state => state?.schedule?.schedules);
+  const scheduleDates = useSelector(state => state?.schedule?.scheduleDates);
+  const isLoading = useSelector(state => state?.schedule?.isLoading);
 
   const onDayPress = date => {
-    console.log('date', date.dateString);
     setSelectedDate(date.dateString);
     dispatch(getSchedulesDaily(date.dateString));
   };
 
   const onMonthChange = date => {
+    dispatch(getSchedulesDatesMonthly(`${date.year}-${date.month}`));
     dispatch(getSchedulesMonthly(`${date.year}-${date.month}`));
     setSelectedDate();
   };
@@ -39,18 +43,18 @@ const ScheduleHomeScreen = () => {
     }
 
     if (schedueledDates && Array.isArray(schedueledDates)) {
-      schedueledDates.forEach(date => (markedDates[date] = { marked: true }));
+      schedueledDates.forEach(date => (markedDates[date] = { ...markedDates[date], marked: true }));
     }
 
     return markedDates;
   };
 
   useEffect(() => {
-    console.log('wow', schedules);
-    if (schedules && schedules.schedules && Array.isArray(schedules.schedules)) {
-      setSchedueledDates(schedules.schedules.date);
+    console.log('wowowowow', scheduleDates);
+    if (Array.isArray(scheduleDates)) {
+      setSchedueledDates(scheduleDates);
     }
-  }, [schedules]);
+  }, [scheduleDates]);
 
   const renderCalendar = () => {
     return (
@@ -59,6 +63,7 @@ const ScheduleHomeScreen = () => {
         theme={{
           ...config.calendar.meeploCalendarParamTheme,
         }}
+        context={calendarContext}
         onDayPress={onDayPress}
         onMonthChange={onMonthChange}
         markedDates={getMarkedDates(schedueledDates, selectedDate)}
@@ -73,6 +78,8 @@ const ScheduleHomeScreen = () => {
           <CalendarScheduleList data={schedules?.schedules} />
         </Tabs.Tab>
       </Tabs.Container>
+
+      <LoadingModal visible={isLoading} />
     </View>
   );
 };
