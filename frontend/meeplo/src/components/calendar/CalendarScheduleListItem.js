@@ -28,6 +28,7 @@ const CalendarScheduleListItem = ({ item }) => {
   return (
     <TouchableOpacity style={styles.itemView}>
       <ScheduleButton
+        isData={true}
         picture="yellow"
         title={item?.name}
         date={item?.date}
