@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum LocationErrorCode implements ErrorCode{
 
-    NOT_EXIST_LOCATION(HttpStatus.ACCEPTED, "존재하지 않는 장소입니다."),
+    NOT_EXIST_LOCATION(HttpStatus.NOT_FOUND, "존재하지 않는 장소입니다."),
     ;
 
     private final HttpStatus httpStatus;
