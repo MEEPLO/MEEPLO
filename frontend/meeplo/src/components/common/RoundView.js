@@ -1,38 +1,28 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
+import { theme } from '../../assets/constant/DesignTheme';
+
 const screen = Dimensions.get('screen');
 const modalWidth = screen.width * 0.85;
 
 const RoundView = ({ children, onRequestClose, hideHeader, title }) => {
   return (
-    <View style={styles.centeredView}>
-      <View style={styles.roundedView}>
-        {hideHeader ? null : (
-          <View style={styles.headerView}>
-            <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
-              <Text style={styles.closeButtonTextStyle}> X </Text>
-            </TouchableOpacity>
-            <Text style={styles.title}>{title}</Text>
-          </View>
-        )}
-        <View style={styles.childrenView}>{children}</View>
-      </View>
+    <View style={styles.roundedView}>
+      {hideHeader ? null : (
+        <View style={styles.headerView}>
+          <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
+            <Text style={styles.closeButtonTextStyle}> X </Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>{title}</Text>
+        </View>
+      )}
+      <View style={styles.childrenView}>{children}</View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   roundedView: {
     width: modalWidth,
     backgroundColor: 'white',
