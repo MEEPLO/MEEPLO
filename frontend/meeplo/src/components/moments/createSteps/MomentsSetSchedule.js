@@ -10,29 +10,49 @@ import StepButton from '../../stepper/StepButton';
 import SelectDropdown from '../../common/SelectDropdown';
 import StepTextInput from '../../common/StepTextInput';
 import DateModalInput from '../../schedule/DateModalInput';
+import LoadingModal from '../../common/LoadingModal';
 
 const windowHeight = Dimensions.get('window').height;
 
 const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
   const [scheduleModal, setScheduleModal] = React.useState(false);
   const [selectedSchedule, setSelectedSchedule] = React.useState();
+  const [selectedLocation, setSelectedLocation] = React.useState();
+  const [scheduleLocations, setScheduleLocations] = React.useState([]);
   const [scheduleDate, setScheduleDate] = React.useState();
   const [scheduleName, setScheduleName] = React.useState();
   const [schedulePlace, setSchedulePlace] = React.useState();
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const hey = useSelector(state => state.groupSchedules);
   const dispatch = useDispatch();
+
   const scheduleList = useSelector(state =>
     state.groupSchedules.schedules.map(({ id, name }) => {
       return { key: id, value: name };
     }),
   );
 
-  console.log('hye', hey);
   const scheduleNameIndex = useSelector(state => {
-    const scheduleNameIndexMap = new Map(state.groupSchedules.schedules.map(({ id, name }) => [id, name]));
+    const scheduleNameIndexMap = new Map(
+      state.groupSchedules.schedules.map(({ id, name, scheduleLocations }) => [
+        id,
+        { name: name, scheduleLocations: scheduleLocations },
+      ]),
+    );
     return Object.fromEntries(scheduleNameIndexMap);
   });
+
+  const locationNameIndex = useSelector(state => {
+    const locationNameIndexMap = new Map(
+      scheduleNameIndex[selectedSchedule]?.scheduleLocations.map(({ scheduleLocationId, name }) => [
+        scheduleLocationId,
+        name,
+      ]),
+    );
+    return Object.fromEntries(locationNameIndexMap);
+  });
+
+  console.log('WHY', scheduleNameIndex, '///////', locationNameIndex);
 
   React.useEffect(() => {
     if (state.groupId) {
@@ -40,15 +60,27 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
     }
   }, [state.groupId]);
 
+  React.useEffect(() => {
+    if (selectedSchedule) {
+      scheduleNameIndex[selectedSchedule].scheduleLocations.map(({ name, scheduleLocationId }) => {
+        setScheduleLocations([...scheduleLocations, { key: scheduleLocationId, value: name }]);
+      });
+    }
+  }, [selectedSchedule]);
+
   const onPressNext = () => {
     const actions = [
       {
-        type: 'UPDATE_SCHEDULEID',
-        payload: selectedSchedule,
+        type: 'UPDATE_LOCATIONID',
+        payload: selectedLocation,
       },
       {
         type: 'UPDATE_SCHEDULENAME',
-        payload: scheduleNameIndex[selectedSchedule],
+        payload: scheduleNameIndex[selectedSchedule].name,
+      },
+      {
+        type: 'UPDATE_PLACENAME',
+        payload: locationNameIndex[selectedLocation],
       },
     ];
     !!selectedSchedule
@@ -65,10 +97,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
       date: scheduleDate,
       name: scheduleName,
       groupId: state.groupId,
-      meetLocationId: schedulePlace,
-      keywords: [],
-      members: [],
-      amuses: [],
+      meetLocationId: schedulePlace * 1,
     };
 
     if (!scheduleDate) {
@@ -93,10 +122,11 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
       // });
       Alert.alert('약속 장소를 정해주세요!');
     } else {
+      setIsLoading(true);
       dispatch(createSimpleSchedule({ scheduleInfo })).then(() =>
         dispatch(getGroupSchedules({ groupId: state.groupId })).then(() => {
+          setIsLoading(false);
           setScheduleModal(false);
-          console.log('new schedules in');
         }),
       );
     }
@@ -109,15 +139,20 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
           style={{
             width: '100%',
             position: 'absolute',
-            top: 220,
+            top: 400,
           }}>
           <Pressable onPress={() => setScheduleModal(true)}>
             <Text style={{ textAlign: 'center', fontSize: 16, color: theme.color.bright.red, fontWeight: '800' }}>
-              아직 약속을 만들지 않았어요! {'>'}
+              아직 약속을 만들지 않았다면? {' >'}
             </Text>
           </Pressable>
         </View>
-        <SelectDropdown setSelected={setSelectedSchedule} type="약속" data={scheduleList} required={true} />
+        <View style={{ width: '100%', position: 'absolute', top: 150 }}>
+          <SelectDropdown setSelected={setSelectedLocation} type="약속 장소" data={scheduleLocations} required={true} />
+        </View>
+        <View style={{ width: '100%', position: 'absolute', top: 0 }}>
+          <SelectDropdown setSelected={setSelectedSchedule} type="약속" data={scheduleList} required={true} />
+        </View>
         <View
           style={{
             width: '100%',
@@ -196,6 +231,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
           </View>
         </View>
       </Modal>
+      <LoadingModal visible={isLoading} />
     </>
   ) : null;
 };

@@ -91,7 +91,7 @@ const MomentsList = ({ navigation, isMine }) => {
               marginTop: 40,
               marginHorizontal: '10%',
               width: '80%',
-              height: 60,
+              height: 65,
               borderRadius: 15,
               borderColor: theme.color.border,
               borderWidth: 2,
@@ -106,7 +106,7 @@ const MomentsList = ({ navigation, isMine }) => {
                   fontWeight: '800',
                   fontSize: 19,
                   color: theme.font.color,
-                  lineHeight: 56,
+                  lineHeight: 59,
                 }}>
                 지금 추억 만들어보기
               </Text>

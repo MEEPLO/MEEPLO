@@ -101,7 +101,7 @@ export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSched
   console.log('scheduleInfo', scheduleInfo);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axiosPrivate.post(`/schedule`, scheduleInfo, {
+    const response = await axiosPrivate.post(`/schedule/temp`, scheduleInfo, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
