@@ -18,6 +18,7 @@ const ScheduleHomeScreen = () => {
   const calendarContext = useContext(CalendarContext);
   const [selectedDate, setSelectedDate] = useState();
   const [schedueledDates, setSchedueledDates] = useState({});
+  const [tabLabel, setTabLabel] = useState('');
   const dispatch = useDispatch();
 
   const schedules = useSelector(state => state?.schedule?.schedules);
@@ -25,6 +26,7 @@ const ScheduleHomeScreen = () => {
   const isLoading = useSelector(state => state?.schedule?.isLoading);
 
   const onDayPress = date => {
+    setTabLabel(`${date.month}월 ${date.day}일`);
     setSelectedDate(date.dateString);
     dispatch(getSchedulesDaily(date.dateString));
   };
@@ -32,6 +34,7 @@ const ScheduleHomeScreen = () => {
   const onMonthChange = date => {
     dispatch(getSchedulesDatesMonthly(`${date.year}-${date.month}`));
     dispatch(getSchedulesMonthly(`${date.year}-${date.month}`));
+    setTabLabel(`${date.month}월`);
     setSelectedDate();
   };
 
@@ -50,7 +53,6 @@ const ScheduleHomeScreen = () => {
   };
 
   useEffect(() => {
-    console.log('wowowowow', scheduleDates);
     if (Array.isArray(scheduleDates)) {
       setSchedueledDates(scheduleDates);
     }
@@ -74,7 +76,7 @@ const ScheduleHomeScreen = () => {
   return (
     <View style={styles.screenView}>
       <Tabs.Container renderHeader={renderCalendar}>
-        <Tabs.Tab name="scheduleList" label="약속 리스트">
+        <Tabs.Tab name="scheduleList" label={tabLabel}>
           <CalendarScheduleList data={schedules?.schedules} />
         </Tabs.Tab>
       </Tabs.Container>
@@ -92,66 +94,3 @@ const styles = StyleSheet.create({
 });
 
 export default ScheduleHomeScreen;
-
-const tmpData = [
-  {
-    id: 1,
-    name: '약속 이름',
-    date: '22.10.21 12:00',
-    groupName: '아직20대초딩들',
-    memberCount: 4,
-    memberRecorded: false,
-    location: {
-      meetName: '역삼역',
-      amuseName: '경성양육관',
-    },
-  },
-  {
-    id: 2,
-    name: '이건 무슨 약속이지',
-    date: '22.11.03 18:00',
-    groupName: '아직20대초딩들',
-    memberCount: 6,
-    memberRecorded: false,
-    location: {
-      meetName: '역삼역',
-      amuseName: '양꼬치구이',
-    },
-  },
-  {
-    id: 3,
-    name: '이건 무슨 약속이지',
-    date: '22.11.03 18:00',
-    groupName: '아직20대초딩들',
-    memberCount: 6,
-    memberRecorded: false,
-    location: {
-      meetName: '역삼역',
-      amuseName: '양꼬치구이',
-    },
-  },
-  {
-    id: 4,
-    name: '이건 무슨 약속이지',
-    date: '22.11.03 18:00',
-    groupName: '아직20대초딩들',
-    memberCount: 6,
-    memberRecorded: false,
-    location: {
-      meetName: '역삼역',
-      amuseName: '양꼬치구이',
-    },
-  },
-  {
-    id: 5,
-    name: '이건 무슨 약속이지',
-    date: '22.11.03 18:00',
-    groupName: '아직20대초딩들',
-    memberCount: 6,
-    memberRecorded: false,
-    location: {
-      meetName: '역삼역',
-      amuseName: '양꼬치구이',
-    },
-  },
-];
