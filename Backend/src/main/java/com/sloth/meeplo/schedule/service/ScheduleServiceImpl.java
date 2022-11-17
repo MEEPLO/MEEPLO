@@ -328,15 +328,18 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        return member.getScheduleMembers().stream()
+        List<ScheduleResponse.ScheduleListInfo> TMP = member.getScheduleMembers().stream()
                 .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
                         && sm.getSchedule().getDate().isAfter(LocalDateTime.now()))
                 .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(sm.getSchedule())
                         .build()
                 )
+                .distinct()
                 .sorted(Comparator.comparing(ScheduleResponse.ScheduleListInfo::getDate))
                 .collect(Collectors.toList());
+        log.info(TMP.toString());
+        return TMP;
 
     }
 
@@ -352,6 +355,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                         .schedule(sm.getSchedule())
                         .build()
                 )
+                .distinct()
                 .sorted((s1,s2)->s2.getDate().compareTo(s1.getDate()))
                 .collect(Collectors.toList());
     }
