@@ -37,7 +37,7 @@ public class Moment extends BaseTimeEntity {
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinTable(name = "MomentReaction",
             joinColumns = @JoinColumn(name="moment_id"),
             inverseJoinColumns = @JoinColumn(name="member_id")
