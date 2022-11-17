@@ -2,6 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
+import { axiosPrivate } from '../auth/axiosInstance';
 
 export const createSchedule = createAsyncThunk('schedule/createSchedule', async schedule => {
   try {
@@ -19,15 +20,52 @@ export const createSchedule = createAsyncThunk('schedule/createSchedule', async 
   }
 });
 
-const initialState = {
-  // TODO: API 명세에 적혀있는대로 초기값 설정
-  value: '초기약속',
-};
+export const getUpcomingSchedule = createAsyncThunk('schedule/getUpcomingSchedule', async () => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/upcoming`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data.schedules;
+  } catch (err) {
+    console.error('ERROR in getUpcomingSchedule!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const getNoMomentsSchedule = createAsyncThunk('schedule/getNoMomentsSchedule', async () => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/unwritten`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data.schedules;
+  } catch (err) {
+    console.error('ERROR in getUpcomingSchedule!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
 const scheduleSlice = createSlice({
   name: 'schedule',
-  initialState,
+  initialState: {
+    value: '초기약속',
+    upComing: [],
+    noMoments: [],
+  },
   reducers: {},
-  extraReducers: {},
+  extraReducers: {
+    [getUpcomingSchedule.fulfilled]: (state, { payload }) => {
+      state.upComing = payload.slice(0, 3);
+    },
+    [getNoMomentsSchedule.fulfilled]: (state, { payload }) => {
+      state.noMoments = payload.slice(0, 3);
+    },
+  },
 });
 
 export default scheduleSlice.reducer;
