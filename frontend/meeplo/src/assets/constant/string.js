@@ -7,6 +7,8 @@ const TOAST_MESSAGE = {
   SCHEDULE_NO_GROUP: '모임을 선택해주세요!',
   SCHEDULE_NO_MEMBERS: '약속 인원이 없어요!',
   SCHEDULE_NO_PLACE: '장소를 선택해주세요!',
+  SCHEDULE_SUCCESS_CREATE_TEXT1: '약속 생성 성공',
+  SCHEDULE_SUCCESS_CREATE_TEXT2: '새로운 약속이 만들어졌어요!',
 
   MOMENT_NO_GROUP: '모임을 선택해주세요!',
   MOMENT_NO_SCHEDULE: '약속을 선택해주세요!',
@@ -15,4 +17,13 @@ const TOAST_MESSAGE = {
   MOMENT_NO_COMMENT: '댓글을 작성해주세요!',
 };
 
-export { TOAST_MESSAGE };
+const COMMON_MESSAGE = {};
+
+const ALERT_MESSAGE = {
+  SCHEDULE_ASK_CANCEL_CREATE_TEXT1: '약속 생성을 취소하시겠습니까?',
+  SCHEDULE_ASK_CANCEL_CREATE_TEXT2: '입력 중인 값들이 모두 초기화됩니다.',
+  STAY: '남아있기',
+  LEAVE: '나가기',
+};
+
+export { TOAST_MESSAGE, COMMON_MESSAGE, ALERT_MESSAGE };

@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { View, SafeAreaView, Animated, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, Animated, FlatList, Dimensions, TouchableOpacity, Text } from 'react-native';
 import ScheduleButton from '../common/ScheduleButton';
+import { theme } from '../../assets/constant/DesignTheme';
 
 const { width } = Dimensions.get('screen');
+const imageWidth = Dimensions.get('window').width - 40;
 
 const Indicator = ({ scrollX, data }) => {
   return (
@@ -38,10 +40,15 @@ const Indicator = ({ scrollX, data }) => {
   );
 };
 
-const HomeSchedule = ({ data }) => {
+const HomeSchedule = ({ data, navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const slideRef = useRef(null);
+
+  const onPressCreateSchedule = () => {
+    // TODO: hrookim navigate to create screen
+    navigation.navigate('ScheduleStack', { screen: 'Create' });
+  };
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
     setCurrentIndex(viewableItems[0].index);
@@ -58,34 +65,62 @@ const HomeSchedule = ({ data }) => {
       <ScheduleButton
         isData={true}
         picture="blue"
-        title={item.title}
+        title={item.name}
         date={item.date}
-        place={item.place}
-        group={item.group}
-        people={item.people}
+        place={item.location.meetName}
+        group={item.groupName}
+        people={item.memberCount}
       />
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={{ alignItems: 'center' }}>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        horizontal={true}
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-          useNativeDriver: false,
-        })}
-        onViewableItemsChanged={viewableItemsChanged}
-        viewabilityConfig={viewConfig}
-        ref={slideRef}
-      />
-      <Indicator scrollX={scrollX} data={data} />
-    </SafeAreaView>
+    <>
+      {data?.length > 0 ? (
+        <SafeAreaView style={{ alignItems: 'center' }}>
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            horizontal={true}
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            bounces={false}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+              useNativeDriver: false,
+            })}
+            onViewableItemsChanged={viewableItemsChanged}
+            viewabilityConfig={viewConfig}
+            ref={slideRef}
+          />
+          <Indicator scrollX={scrollX} data={data} />
+        </SafeAreaView>
+      ) : (
+        <TouchableOpacity style={{ alignItems: 'center' }} onPress={onPressCreateSchedule} activeOpacity={0.6}>
+          <ScheduleButton isData={false} empty="약속을 생성해 보아요" picture="blue" />
+          {/* <View
+            style={{
+              width: imageWidth,
+              height: imageWidth * 0.3,
+              backgroundColor: 'yellow',
+              borderColor: theme.color.disabled,
+              borderWidth: 3,
+              borderRadius: 20,
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                color: theme.font.color,
+                fontWeight: '800',
+                fontSize: 19,
+                textAlign: 'center',
+              }}>
+              약속을 생성해 보아요
+            </Text>
+          </View> */}
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 
