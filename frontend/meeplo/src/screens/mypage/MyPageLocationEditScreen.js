@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons/faLocationDot';
+import Toast from 'react-native-toast-message';
 import MyPageLocationSearch from '../../components/mypage/MyPageLocationSearch';
 import { theme } from '../../assets/constant/DesignTheme';
 import { createStartLocation, getUserInfo } from '../../redux/userSlice';
 import LoadingModal from '../../components/common/LoadingModal';
+import { TOAST_MESSAGE } from '../../assets/constant/string';
 
 const MyPageLocationEditScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -18,6 +20,32 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
   const isEditLoading = useSelector(state => state.user.isEditLoading);
+
+  const validateInput = () => {
+    if (!form.name || form.name.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.START_LOCATION_NO_NAME,
+      });
+      return false;
+    } else if (!form.address || form.address.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.START_LOCATION_NO_ADDRESS,
+      });
+      return false;
+    } else if (form.name.length > 10) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.INPUT_ERROR,
+        text2: TOAST_MESSAGE.START_LOCATION_NAME_LENGTH_EXCESS,
+      });
+      return false;
+    }
+    return true;
+  };
 
   const handleOnChange = (text, field) => {
     setForm(prevState => ({ ...prevState, [field]: text }));
@@ -36,10 +64,12 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
   };
 
   const onPressAdd = () => {
-    dispatch(createStartLocation({ form })).then(() => {
-      dispatch(getUserInfo());
-      navigation.pop();
-    });
+    if (validateInput()) {
+      dispatch(createStartLocation({ form })).then(() => {
+        dispatch(getUserInfo());
+        navigation.pop();
+      });
+    }
   };
 
   return (

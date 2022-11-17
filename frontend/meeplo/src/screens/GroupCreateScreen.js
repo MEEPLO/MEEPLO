@@ -35,6 +35,8 @@ const GroupCreateScreen = ({ navigation }) => {
   const [isProfilePictureEdit, setIsprofilePrictureEdit] = useState(false);
   const isLoading = useSelector(state => state.group.isLoading);
 
+  const validateInput = () => {};
+
   const addImage = async () => {
     const result = await launchImageLibrary();
     const file = {

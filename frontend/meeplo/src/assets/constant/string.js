@@ -15,6 +15,10 @@ const TOAST_MESSAGE = {
   MOMENT_NO_FRAME: '프레임을 선택해주세요!',
   MOMENT_NO_PICTURE: '사진을 확정해주세요!',
   MOMENT_NO_COMMENT: '댓글을 작성해주세요!',
+
+  START_LOCATION_NO_NAME: '출발지 이름을 입력해주세요!',
+  START_LOCATION_NO_ADDRESS: '주소를 입력해주세요!',
+  START_LOCATION_NAME_LENGTH_EXCESS: '제목은 최대 10자까지 입력 가능합니다.',
 };
 
 const COMMON_MESSAGE = {};
