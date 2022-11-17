@@ -22,7 +22,6 @@ export const createSchedule = createAsyncThunk('schedule/createSchedule', async 
 // ex) yearMonth === '2022-11'
 export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthly', async yearMonth => {
   try {
-    console.log('yearmonth', yearMonth);
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}/list`, {
       headers: {
@@ -38,7 +37,6 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
 // ex) yearMonth === '2022-11'
 export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesDatesMonthly', async yearMonth => {
   try {
-    console.log('yearmonth', yearMonth);
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}`, {
       headers: {
@@ -113,11 +111,27 @@ export const getNoMomentsSchedule = createAsyncThunk('schedule/getNoMomentsSched
   }
 });
 
+export const getScheduleDetail = createAsyncThunk('schedule/getScheduleDetail', async scheduleId => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/${scheduleId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data;
+  } catch (err) {
+    console.error('ERROR in getUpcomingSchedule!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
 const scheduleSlice = createSlice({
   name: 'schedule',
   initialState: {
     value: '초기약속',
     isLoading: false,
+    schedule: {},
     schedules: [],
     scheduleDates: [],
     upComing: [],
@@ -158,6 +172,13 @@ const scheduleSlice = createSlice({
     },
     [getNoMomentsSchedule.fulfilled]: (state, { payload }) => {
       state.noMoments = payload.slice(0, 3);
+    },
+    [getScheduleDetail.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getScheduleDetail.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.schedule = payload;
     },
   },
 });
