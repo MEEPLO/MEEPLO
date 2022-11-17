@@ -1,7 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
-
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 
 import ScheduleButton from '../common/ScheduleButton';
@@ -24,9 +22,13 @@ import ScheduleButton from '../common/ScheduleButton';
 
 const screen = Dimensions.get('screen');
 
-const CalendarScheduleListItem = ({ item }) => {
+const CalendarScheduleListItem = ({ item, onItemPress }) => {
   return (
-    <TouchableOpacity style={styles.itemView}>
+    <TouchableOpacity
+      style={styles.itemView}
+      onPress={() => {
+        onItemPress(item.id);
+      }}>
       <ScheduleButton
         isData={true}
         picture="yellow"
