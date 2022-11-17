@@ -27,7 +27,7 @@ public class ScheduleLocation {
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
-    @OneToMany(mappedBy = "scheduleLocation")
+    @OneToMany(mappedBy = "scheduleLocation", cascade = CascadeType.ALL)
     private List<Moment> moments;
 
     @Builder(builderClassName = "EmptyScheduleLocation",builderMethodName = "EmptyScheduleLocation")
