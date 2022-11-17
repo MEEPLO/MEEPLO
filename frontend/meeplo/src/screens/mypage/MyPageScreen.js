@@ -8,25 +8,55 @@ import fs from 'react-native-fs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import Toast from 'react-native-toast-message';
 import { theme } from '../../assets/constant/DesignTheme';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { editUserInfo, getUserInfo } from '../../redux/userSlice';
 import LoadingModal from '../../components/common/LoadingModal';
+import { useIsFocused } from '@react-navigation/native';
+import { TOAST_MESSAGE } from '../../assets/constant/string';
+
+const { width } = Dimensions.get('window');
 
 const MyPageScreen = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.info);
   const [userPhotoFile, setUserPhotoFile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [userInitialNickname, setUserInitialNickname] = useState(user?.nickname);
-  const [userInitialPhoto, setUserInitialPhoto] = useState(user?.profilePhoto);
   const [userNickname, setUserNickname] = useState(user?.nickname);
   const [userPhoto, setUserPhoto] = useState(user?.profilePhoto);
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
-  const { width } = Dimensions.get('window');
-
   const [isProfilePictureEdit, setIsprofilePrictureEdit] = useState(false);
+  const userInitialNickname = user?.nickname;
+  const userInitialPhoto = user?.profilePhoto;
   const isEditLoading = useSelector(state => state.user.isEditLoading);
+
+  const validateInput = () => {
+    if (!userNickname || userNickname.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.USER_NO_NICKNAME,
+      });
+      return false;
+    } else if (!userPhoto || userPhoto.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.USER_NO_PROFILEPHOTO,
+      });
+      return false;
+    } else if (userNickname.length > 8) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.INPUT_ERROR,
+        text2: TOAST_MESSAGE.USER_NAME_LENGTH_EXCESS,
+      });
+      return false;
+    }
+    return true;
+  };
 
   const addImage = async () => {
     const result = await launchImageLibrary();
@@ -65,15 +95,11 @@ const MyPageScreen = ({ navigation }) => {
     setIsprofilePrictureEdit(true);
     s3.upload(params, function (err, data) {
       if (err) {
-        // 로딩 모달 -> 실패
         setIsprofilePrictureEdit(false);
         setIsEditing(!isEditing);
         return alert(err.stack);
       }
-      // console.log(data.Location);
-      // setGroupPhoto(data.Location);
 
-      // 로딩 모달 -> 성공 -> 닫기 + 상세(?)로 이동
       const form = {
         nickname: userNickname,
         profilePhoto: data.Location,
@@ -84,10 +110,6 @@ const MyPageScreen = ({ navigation }) => {
       dispatch(editUserInfo({ form, Alert, navigation })).then(() => {
         dispatch(getUserInfo());
       });
-      // 이동 여기서 바로
-      // 상세 컴포넌트에서 리덕스의 값을 가져오는데
-      // 아직 업데이트 전이면 -> 스피너, 로딩
-      // 업데이트가 되면(값이 제대로 왔다면) -> 상세 스크린 보여주기
     });
   };
 
@@ -100,18 +122,19 @@ const MyPageScreen = ({ navigation }) => {
   };
 
   const onPressEdit = () => {
-    if (userPhoto === userInitialPhoto) {
-      const form = {
-        nickname: userNickname,
-        profilePhoto: userPhoto,
-      };
-      dispatch(editUserInfo({ form, Alert, navigation })).then(() => {
-        dispatch(getUserInfo());
-      });
-      setIsEditing(!isEditing);
-    } else {
-      uploadToS3(userPhotoFile);
-      // 로딩 모달 열기
+    if (validateInput()) {
+      if (userPhoto === userInitialPhoto) {
+        const form = {
+          nickname: userNickname,
+          profilePhoto: userPhoto,
+        };
+        dispatch(editUserInfo({ form, Alert, navigation })).then(() => {
+          dispatch(getUserInfo());
+        });
+        setIsEditing(!isEditing);
+      } else {
+        uploadToS3(userPhotoFile);
+      }
     }
   };
 
@@ -124,6 +147,12 @@ const MyPageScreen = ({ navigation }) => {
   const onPressEditLocations = () => {
     navigation.navigate('MyPageLocation');
   };
+
+  useEffect(() => {
+    if (!isFocused) {
+      setIsEditing(false);
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     dispatch(getUserInfo());
