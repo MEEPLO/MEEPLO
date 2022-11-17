@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../../components/common/navigator/ToolBar';
 
-import TestHome from './TestHome';
 import ScheduleHomeScreen from './ScheduleHomeScreen';
 import ScheduleCreateScreen from './ScheduleCreateScreen';
 import ScheduleDetailScreen from './ScheduleDetailScreen';
