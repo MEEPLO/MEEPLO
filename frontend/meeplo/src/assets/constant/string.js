@@ -4,13 +4,13 @@ const TOAST_MESSAGE = {
 
   SCHEDULE_NO_NAME: '약속의 이름은 필요해요!',
   SCHEDULE_NO_DATE: '약속 일시가 필요해요!',
-  SCHEDULE_NO_GROUP: '모임을 선택해주세요!',
+  SCHEDULE_NO_GROUP: '그룹을 선택해주세요!',
   SCHEDULE_NO_MEMBERS: '약속 인원이 없어요!',
   SCHEDULE_NO_PLACE: '장소를 선택해주세요!',
   SCHEDULE_SUCCESS_CREATE_TEXT1: '약속 생성 성공',
   SCHEDULE_SUCCESS_CREATE_TEXT2: '새로운 약속이 만들어졌어요!',
 
-  MOMENT_NO_GROUP: '모임을 선택해주세요!',
+  MOMENT_NO_GROUP: '그룹을 선택해주세요!',
   MOMENT_NO_SCHEDULE: '약속을 선택해주세요!',
   MOMENT_NO_FRAME: '프레임을 선택해주세요!',
   MOMENT_NO_PICTURE: '사진을 확정해주세요!',
@@ -19,6 +19,15 @@ const TOAST_MESSAGE = {
   START_LOCATION_NO_NAME: '출발지 이름을 입력해주세요!',
   START_LOCATION_NO_ADDRESS: '주소를 입력해주세요!',
   START_LOCATION_NAME_LENGTH_EXCESS: '제목은 최대 10자까지 입력 가능합니다.',
+
+  USER_NO_NICKNAME: '닉네임을 입력해주세요!',
+  USER_NO_PROFILEPHOTO: '사진을 선택해주세요!',
+  USER_NAME_LENGTH_EXCESS: '닉네임은 최대 8자까지 입력 가능합니다.',
+
+  GROUP_NO_NAME: '그룹 이름을 입력해주세요!',
+  GROUP_NO_PHOTO: '사진을 선택해주세요!',
+  GROUP_NAME_LENGTH_EXCESS: '그룹 이름은 최대 20자까지 입력 가능합니다.',
+  GROUP_DESCRIPTION_LENGTH_EXCESS: '그룹 설명은 최대 200자까지 입력 가능합니다.',
 };
 
 const COMMON_MESSAGE = {};
