@@ -61,7 +61,6 @@ public class MemberServiceImpl implements MemberService {
             isNewMember = true;
         } else if (member.isUnactivated()) {
             member.activated();
-            memberRepository.save(member);
         }
 
         String accessToken = jwtUtil.generateJwtToken(member, TokenType.ACCESS_TOKEN);
