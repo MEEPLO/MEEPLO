@@ -1,8 +1,10 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 
 import { theme } from '../../assets/constant/DesignTheme';
+
+import ScheduleButton from '../common/ScheduleButton';
 
 /*
  API data 형태
@@ -20,49 +22,26 @@ import { theme } from '../../assets/constant/DesignTheme';
 		}
 */
 
-const TitleView = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-vertical: 2px;
-`;
-
-const TitleText = styled.Text`
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const ContentText = styled.Text`
-  color: #8a8a8a;
-  font-size: 14px;
-  font-weight: 400;
-  margin-vertical: 2px;
-`;
-
 const screen = Dimensions.get('screen');
 
 const CalendarScheduleListItem = ({ item }) => {
   return (
-    <View style={styles.itemView}>
-      <TitleView>
-        <TitleText>{item?.date}</TitleText>
-        <TitleText>{item?.location?.amuseName}</TitleText>
-      </TitleView>
-      <ContentText>{item?.name}</ContentText>
-      <ContentText>{`${item?.groupName} | ${item?.memberCount}명`}</ContentText>
-    </View>
+    <TouchableOpacity style={styles.itemView}>
+      <ScheduleButton
+        picture="yellow"
+        title={item?.name}
+        date={item?.date}
+        place={item?.location?.amuseName}
+        group={item?.groupName}
+        people={item?.memberCount}
+      />
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   itemView: {
-    margin: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 5,
-    backgroundColor: theme.color.bright.red,
-    borderWidth: theme.border.thick,
-    borderRadius: theme.radius.base,
+    marginVertical: 10,
   },
 });
 
