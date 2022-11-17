@@ -17,15 +17,18 @@ const { width } = Dimensions.get('window');
 const GroupDetailScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
+  const [momentId, setMomentId] = useState(0);
   const { groupId } = route.params;
   const groupDetail = useSelector(state => state.group.details);
   const groupMomentsFeed = useSelector(state => state.group.moments);
 
   const colorList = ['purple', 'red', 'navy', 'yellow', 'green', 'orange', 'blue'];
 
-  const onPressMoment = () => {
+  const onPressMoment = ({ momentId }) => {
     // TODO: hrookim moment modal 연결하기!!!!!
+    console.log(momentId);
     setModalVisible(true);
+    setMomentId(momentId);
   };
 
   const renderHeader = () => {
@@ -67,16 +70,15 @@ const GroupDetailScreen = ({ route, navigation }) => {
       </Tabs.Tab>
       <Tabs.Tab name="momentsLabel" label={renderMomentsLabel}>
         <Tabs.ScrollView>
-          <View style={{ marginBottom: 105, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          <View style={{ marginBottom: 105, flexDirection: 'row', flexWrap: 'wrap' }}>
             {groupMomentsFeed?.map((item, i) => (
               <View key={item.id}>
-                <MomentModal
-                  momentDetailId={item.id}
-                  setMomentModal={setModalVisible}
-                  momentModal={modalVisible}
-                  navigation={navigation}
-                />
-                <TouchableOpacity activeOpacity={0.6} key={item.id} onPress={onPressMoment}>
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  key={item.id}
+                  onPress={() => {
+                    onPressMoment({ momentId: item.id });
+                  }}>
                   <GroupDetailMomentsItem
                     key={item.id}
                     id={item.id}
@@ -87,6 +89,14 @@ const GroupDetailScreen = ({ route, navigation }) => {
                 </TouchableOpacity>
               </View>
             ))}
+            {momentId > 0 && (
+              <MomentModal
+                momentDetailId={momentId}
+                setMomentModal={setModalVisible}
+                momentModal={modalVisible}
+                navigation={navigation}
+              />
+            )}
           </View>
         </Tabs.ScrollView>
       </Tabs.Tab>
