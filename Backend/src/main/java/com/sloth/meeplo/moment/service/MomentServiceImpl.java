@@ -1,6 +1,5 @@
 package com.sloth.meeplo.moment.service;
 
-import com.sloth.meeplo.common.BaseTimeEntity;
 import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.group.service.GroupService;
@@ -19,10 +18,8 @@ import com.sloth.meeplo.schedule.service.ScheduleService;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,7 +27,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,10 +43,11 @@ public class MomentServiceImpl implements MomentService{
     private final MomentCommentRepository momentCommentRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public MomentResponse.MomentDetail getMomentDetail(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-        scheduleService.checkMemberInSchedule(moment.getScheduleLocation().getSchedule(),member);
+
         return MomentResponse.MomentDetail.builder()
                 .moment(moment)
                 .member(member)
@@ -136,16 +133,22 @@ public class MomentServiceImpl implements MomentService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MomentResponse.MomentDetailComment> getComments(String authorization, Long momentId) {
         Moment moment = getMomentByMomentId(momentId);
         Member member = memberService.getMemberByAuthorization(authorization);
 
         groupService.checkMemberInGroup(member, moment.getScheduleLocation().getSchedule().getGroup());
 
-        return moment.getMomentComments().stream().map(mc -> MomentResponse.MomentDetailComment.builder().momentComment(mc).build()).collect(Collectors.toList());
+        return moment.getMomentComments().stream()
+                .map(mc -> MomentResponse.MomentDetailComment.builder()
+                        .momentComment(mc)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ScheduleResponse.JoinedScheduleMoment> getCalenderMoments(String authorization, String month) {
         Member member = memberService.getMemberByAuthorization(authorization);
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
@@ -154,17 +157,21 @@ public class MomentServiceImpl implements MomentService{
                 .toFormatter();
         LocalDate localDate = LocalDate.parse(month, formatter);
         LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        // TODO: 2022-11-08 native query 적용 고려 
+
         return member.getScheduleMembers().stream()
-                .filter(sm->sm.getSchedule().getDate().isBefore(targetDate.plusMonths(1)) && sm.getSchedule().getDate().isAfter(targetDate))
+                .filter(sm->sm.getSchedule().getDate().isBefore(targetDate.plusMonths(1))
+                        && sm.getSchedule().getDate().isAfter(targetDate))
                 .flatMap(sm -> sm.getSchedule().getScheduleLocations().stream())
                 .flatMap(sl->sl.getMoments().stream())
-                .map(m-> ScheduleResponse.JoinedScheduleMoment.builder().moment(m).build())
+                .map(m-> ScheduleResponse.JoinedScheduleMoment.builder()
+                        .moment(m)
+                        .build())
                 .collect(Collectors.toList());
 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MomentResponse.MomentFeedTwoList getFeedMoment(String authorization, Integer page, Integer size, Long group, Integer leftSize, Integer rightSize, Boolean writer) {
         Member member = memberService.getMemberByAuthorization(authorization);
 
