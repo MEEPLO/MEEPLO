@@ -148,6 +148,15 @@ public class ScheduleResponse {
         private Boolean momentRecorded;
         private ScheduleListLocationInfo location;
 
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof ScheduleListInfo))
+                return false;
+            ScheduleListInfo sli = ((ScheduleListInfo)x);
+
+            return this.id == sli.id;
+        }
+
         @Builder
         ScheduleListInfo(Schedule schedule){
             this.id = schedule.getId();
