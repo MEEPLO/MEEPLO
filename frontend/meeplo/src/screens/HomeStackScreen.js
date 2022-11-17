@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
-import LoadingBar from '../components/common/LoadingBar';
 import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/navigator/ToolBar';
 import MyPageScreen from './mypage/MyPageScreen';
 import MyPageLocationScreen from './mypage/MyPageLocationScreen';
@@ -31,7 +30,6 @@ const HomeStackScreen = () => {
         }}
       />
       <HomeStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-      <HomeStack.Screen name="Loading" component={LoadingBar} options={{ headerShown: false }} />
       <HomeStack.Screen
         name="MyPage"
         component={MyPageScreen}
@@ -64,8 +62,6 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="MyPageLocationEdit"
         component={MyPageLocationEditScreen}
-        // if locationId is 0, this is CREATE screen
-        initialParams={{ locationId: 0 }}
         options={{
           headerShadowVisible: false,
           headerShown: true,

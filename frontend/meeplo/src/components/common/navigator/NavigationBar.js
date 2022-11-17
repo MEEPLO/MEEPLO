@@ -16,7 +16,6 @@ import { theme } from '../../../assets/constant/DesignTheme';
 import AddButton from './AddButton';
 import { getUserInfo } from '../../../redux/userSlice';
 import { setOpened } from '../../../redux/navigationSlice';
-import LoadingBar from '../LoadingBar';
 import LoginScreen from '../../../screens/LoginScreen';
 
 const Tab = createBottomTabNavigator();
