@@ -85,6 +85,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GroupResponse.JoinedGroupSummary> joinedGroupList(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
 
@@ -115,6 +116,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public GroupResponse.JoinedGroupDetail getJoinedGroupDetail(String authorization, Long groupId) {
         Group group = getGroupEntityByGroupId(groupId);
         List<GroupMember> groupMembers = groupMemberRepository.findByGroupAndStatus(group, GroupMemberStatus.ACTIVATED);
@@ -208,6 +210,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GroupResponse.FeedMoment> getFeedMoments(String authorization, Long groupId) {
         Group group = getGroupEntityByGroupId(groupId);
         Member member = memberService.getMemberByAuthorization(authorization);
@@ -220,6 +223,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GroupResponse.MapMoment> getMapMoments(String authorization, Long groupId) {
         Group group = getGroupEntityByGroupId(groupId);
         Member member = memberService.getMemberByAuthorization(authorization);
