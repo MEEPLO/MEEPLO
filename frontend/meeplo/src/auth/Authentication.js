@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNRestart from 'react-native-restart';
 import { getProfile, login, logout, unlink } from '@react-native-seoul/kakao-login';
 
 async function userLogin(kakaoAccessToken) {
@@ -27,10 +28,7 @@ export const logInWithKakao = async ({ Alert, navigation }) => {
     const kakaoToken = await login();
     const { accessToken } = kakaoToken;
     userLogin(accessToken).then(() => {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Home' }],
-      });
+      RNRestart.Restart();
     });
   } catch (err) {
     Alert.alert('로그인에 실패하였습니다.');
