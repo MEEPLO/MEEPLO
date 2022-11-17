@@ -141,7 +141,7 @@ export const deleteGroup = createAsyncThunk('group/deleteGroup', async ({ groupN
       });
     return response?.data;
   } catch (err) {
-    console.error('ERROR in getGroupList!', err);
+    console.error('ERROR in deleteGroup!', err);
     return isRejectedWithValue(err.response?.data);
   }
 });
@@ -177,22 +177,42 @@ export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName,
 });
 
 // Only available to LEADER
-// TODO: hrookim 강퇴 후 navigate 로직!!!
-export const exitGroupMember = createAsyncThunk('group/exitGroupMember', async ({ groupId, memberId }) => {
-  try {
-    const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axiosPrivate.delete(`/group/${groupId}/member/${memberId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log('group member EXITED');
-    return response?.data;
-  } catch (err) {
-    console.error('ERROR in exitGroupMember', err);
-    return isRejectedWithValue(err.response?.data);
-  }
-});
+export const exitGroupMember = createAsyncThunk(
+  'group/exitGroupMember',
+  async ({ groupId, memberId, memberName, Alert, navigation }) => {
+    try {
+      const accessToken = await AsyncStorage.getItem('@accessToken');
+      const response = await axiosPrivate
+        .delete(`/group/${groupId}/member/${memberId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(() => {
+          Alert.alert(`${memberName} 님이 강퇴되었습니다.`, '', [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.reset({
+                  index: 2,
+                  routes: [
+                    { name: 'GroupHome' },
+                    { name: 'GroupDetail', params: { groupId } },
+                    { name: 'GroupDetailInfo', params: { groupId } },
+                  ],
+                });
+              },
+            },
+          ]);
+        });
+      console.log('group member EXITED');
+      return response?.data;
+    } catch (err) {
+      console.error('ERROR in exitGroupMember', err);
+      return isRejectedWithValue(err.response?.data);
+    }
+  },
+);
 
 export const getGroupMembers = createAsyncThunk('group/getGroupMembers', async ({ groupId }) => {
   try {
@@ -208,7 +228,39 @@ export const getGroupMembers = createAsyncThunk('group/getGroupMembers', async (
   }
 });
 
-// TODO: hrookim 그룹 초대 링크
+export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Alert, navigation }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    await axiosPrivate
+      .post(
+        `/group/member`,
+        { ...form },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
+      .then(res => {
+        console.log(res.data);
+        Alert.alert(`그룹에 참여했습니다!`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'GroupHome' }],
+              });
+            },
+          },
+        ]);
+      });
+    console.log('you are JOINED!');
+  } catch (err) {
+    console.error('ERROR in joinGroup!', err);
+    // return isRejectedWithValue(err.response?.data);
+  }
+});
 
 const groupListSlice = createSlice({
   name: 'groupList',

@@ -54,18 +54,22 @@ const NavigationBar = () => {
       <Tab.Screen
         name="HomeStack"
         component={HomeStackScreen}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('HomeStack', { screen: 'Home' });
+          },
+        })}
         options={{
           unmountOnBlur: true,
           tabBarLabel: '홈',
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faHouseChimney} color={color} size={size} />
               <Text style={{ color }}>홈</Text>
             </View>
           ),
-        }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
         }}
       />
       <Tab.Screen
@@ -74,15 +78,19 @@ const NavigationBar = () => {
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faUsers} color={color} size={size} />
               <Text style={{ color }}>그룹</Text>
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
-        }}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('GroupStack', { screen: 'GroupHome' });
+          },
+        })}
       />
 
       <Tab.Screen
@@ -99,15 +107,19 @@ const NavigationBar = () => {
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faCalendarDays} color={color} size={size} />
               <Text style={{ color }}>약속</Text>
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
-        }}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('ScheduleStack', { screen: 'Home' });
+          },
+        })}
       />
       <Tab.Screen
         name="MomentsStack"
@@ -115,15 +127,19 @@ const NavigationBar = () => {
         options={{
           unmountOnBlur: true,
           tabBarIcon: ({ color, size }) => (
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faCameraRetro} color={color} size={size} />
               <Text style={{ color }}>추억</Text>
             </View>
           ),
         }}
-        listeners={{
-          tabPress: e => opened && dispatch(setOpened(!opened)),
-        }}
+        listeners={({ navigation }) => ({
+          tabPress: e => {
+            opened && dispatch(setOpened(!opened));
+            e.preventDefault();
+            navigation.navigate('MomentsStack', { screen: 'MomentsList' });
+          },
+        })}
       />
     </Tab.Navigator>
   );

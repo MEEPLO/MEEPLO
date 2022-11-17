@@ -7,6 +7,7 @@ import NavigationBar from './src/components/common/navigator/NavigationBar';
 import { theme } from './src/assets/constant/DesignTheme';
 import SplashScreen from 'react-native-splash-screen';
 import Toast from 'react-native-toast-message';
+import { navigationRef } from './src/components/common/navigator/RootNavigator';
 
 const App = () => {
   const navTheme = {
@@ -26,7 +27,7 @@ const App = () => {
 
   return (
     <>
-      <NavigationContainer theme={navTheme}>
+      <NavigationContainer theme={navTheme} ref={navigationRef}>
         <Provider store={store}>
           <ThemeProvider theme={theme}>
             <NavigationBar />
