@@ -8,6 +8,7 @@ import { axiosPrivate } from '../auth/axiosInstance';
 export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
+    console.log('백에서 받아온 토큰: ', accessToken);
     const response = await axiosPrivate.get(`/member`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -33,13 +34,7 @@ export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form,
           },
         },
       )
-      .then(() => {
-        Alert.alert(`프로필을 수정했습니다.`, '', [
-          {
-            text: '확인',
-          },
-        ]);
-      });
+      .then(() => {});
     console.log('userInfo EDITED!');
   } catch (err) {
     console.error('ERROR in editUserInfo!', err);
@@ -127,6 +122,7 @@ const userSlice = createSlice({
     },
     isLoginLoading: false,
     isLoggedIn: false,
+    isEditLoading: false,
   },
   extraReducers: {
     [getUserInfo.pending]: (state, { payload }) => {
@@ -137,6 +133,18 @@ const userSlice = createSlice({
       state.isLoginLoading = false;
       state.isLoggedIn = true;
       state.info = payload;
+    },
+    [editUserInfo.pending]: (state, { payload }) => {
+      state.isEditLoading = true;
+    },
+    [editUserInfo.fulfilled]: (state, { payload }) => {
+      state.isEditLoading = false;
+    },
+    [createStartLocation.pending]: (state, { payload }) => {
+      state.isEditLoading = true;
+    },
+    [createStartLocation.fulfilled]: (state, { payload }) => {
+      state.isEditLoading = false;
     },
   },
 });

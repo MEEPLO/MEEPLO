@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
 import { decode } from 'base64-arraybuffer';
@@ -21,6 +21,9 @@ import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { createGroup } from '../redux/groupSlice';
 import { useFocusEffect } from '@react-navigation/native';
+import LoadingModal from '../components/common/LoadingModal';
+
+const { width } = Dimensions.get('window');
 
 const GroupCreateScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -29,7 +32,8 @@ const GroupCreateScreen = ({ navigation }) => {
   const [groupPhoto, setGroupPhoto] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
-  const { width, height } = Dimensions.get('window');
+  const [isProfilePictureEdit, setIsprofilePrictureEdit] = useState(false);
+  const isLoading = useSelector(state => state.group.isLoading);
 
   const addImage = async () => {
     const result = await launchImageLibrary();
@@ -43,6 +47,7 @@ const GroupCreateScreen = ({ navigation }) => {
   };
 
   const uploadToS3 = async file => {
+    setIsprofilePrictureEdit(true);
     AWS.config.update({
       region: MEEPLO_APP_BUCKET_REGION,
       credentials: new AWS.CognitoIdentityCredentials({
@@ -67,23 +72,17 @@ const GroupCreateScreen = ({ navigation }) => {
 
     s3.upload(params, function (err, data) {
       if (err) {
-        // 로딩 모달 -> 실패
+        setIsprofilePrictureEdit(false);
         return alert(err.stack);
       }
-      // console.log(data.Location);
-      // setGroupPhoto(data.Location);
 
-      // 로딩 모달 -> 성공 -> 닫기 + 상세(?)로 이동
       const form = {
         name: groupName,
         photo: data.Location,
         description: groupDescription,
       };
+      setIsprofilePrictureEdit(false);
       dispatch(createGroup({ form, Alert, navigation }));
-      // 이동 여기서 바로
-      // 상세 컴포넌트에서 리덕스의 값을 가져오는데
-      // 아직 업데이트 전이면 -> 스피너, 로딩
-      // 업데이트가 되면(값이 제대로 왔다면) -> 상세 스크린 보여주기
     });
   };
 
@@ -97,7 +96,6 @@ const GroupCreateScreen = ({ navigation }) => {
 
   const onPressCreate = () => {
     uploadToS3(groupPhotoFile);
-    // 로딩 모달 열기
   };
 
   useFocusEffect(() => {
@@ -182,6 +180,7 @@ const GroupCreateScreen = ({ navigation }) => {
         onPress={onPressCreate}>
         <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>만들기</Text>
       </TouchableOpacity>
+      <LoadingModal visible={isLoading || isProfilePictureEdit} />
     </SafeAreaView>
   );
 };
