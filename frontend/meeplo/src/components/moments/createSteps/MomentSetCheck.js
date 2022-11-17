@@ -2,6 +2,7 @@ import { View, Text, Dimensions } from 'react-native';
 import React from 'react';
 import AutoHeightImage from 'react-native-auto-height-image';
 import StepButton from '../../stepper/StepButton';
+import { theme } from '../../../assets/constant/DesignTheme';
 
 const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   const windowWidth = Dimensions.get('window').width - 40;
@@ -12,7 +13,10 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
       <View style={{ height: 90 }}>
-        <Text style={{ lineHeight: 90 }}>입력 사항 체크</Text>
+        <Text style={{ lineHeight: 50, fontWeight: '800', fontSize: 18 }}>입력 사항 체크</Text>
+        <Text style={{ fontSize: 14, color: theme.font.color }}>
+          <Text style={{ color: theme.color.alert, fontWeight: '900' }}>! </Text> 생성된 추억은 다시 지울 수 없어요.
+        </Text>
       </View>
       <View style={{ marginHorizontal: 20 }}>
         <View style={{ height: 50 }}>
@@ -23,8 +27,11 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
         </View>
         <View style={{ height: 50 }}>
           <Text style={{ lineHeight: 50, fontSize: 15 }}>
-            약속 장소:
-            <Text style={{ lineHeight: 50, fontWeight: '800', fontSize: 17 }}> {state.scheduleName}</Text>
+            약속:
+            <Text style={{ lineHeight: 50, fontWeight: '800', fontSize: 17 }}>
+              {' '}
+              {state.scheduleName} / {state.placeName}
+            </Text>
           </Text>
         </View>
         <View>

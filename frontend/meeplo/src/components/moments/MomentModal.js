@@ -128,7 +128,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
   const viewHeight = [windowWidth * 0.8 * 1.17, windowWidth * 0.85 * 0.8, windowWidth * 0.4 * 3.65];
 
   return momentDetail.moment ? (
-    <Modal visible={momentModal} animationType={'fade'} transparent={true}>
+    <Modal visible={momentModal} animationType={'fade'} transparent={true} onRequestClose={() => setMomentModal(false)}>
       <View
         style={{
           backgroundColor: 'rgba(0, 0, 0, 0.7)',

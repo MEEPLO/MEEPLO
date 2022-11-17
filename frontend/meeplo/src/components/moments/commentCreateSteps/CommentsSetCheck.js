@@ -2,6 +2,8 @@ import { View, Text, Dimensions } from 'react-native';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import AutoHeightImage from 'react-native-auto-height-image';
+
+import { theme } from '../../../assets/constant/DesignTheme';
 import StepButton from '../../stepper/StepButton';
 
 const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
@@ -11,20 +13,27 @@ const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
 
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
-      <View>
-        <Text>입력 사항 체크</Text>
+      <View style={{ height: 90 }}>
+        <Text style={{ lineHeight: 50, fontWeight: '800', fontSize: 18 }}>입력 사항 체크</Text>
+        <Text style={{ fontSize: 14, color: theme.font.color }}>
+          <Text style={{ color: theme.color.alert, fontWeight: '900' }}>! </Text> 생성된 추억은 다시 지울 수 없어요.
+        </Text>
       </View>
       <View style={{ marginHorizontal: 20 }}>
         <View>
           <AutoHeightImage
             source={{ uri: momentDetail.moment.photoUrl }}
             width={momentDetail.moment.type === 2 ? windowWidth * 0.2 : windowWidth * 0.8}
-            style={{ marginLeft: momentDetail.moment.type === 2 ? windowWidth * 0.4 - 40 : windowWidth * 0.1 - 40 }}
+            style={{
+              marginLeft: momentDetail.moment.type === 2 ? windowWidth * 0.4 - 40 : windowWidth * 0.1 - 40,
+              borderWidth: 1,
+              borderColor: theme.color.disabled,
+            }}
           />
         </View>
         <View style={{ height: 90 }}>
           <Text style={{ lineHeight: 90, fontSize: 15 }}>댓글 내용: </Text>
-          <Text style={{ lineHeight: 90, fontWeight: '800', fontSize: 17 }}>{state.comment}</Text>
+          <Text style={{ fontSize: 17, color: theme.font.color }}>{state.comment}</Text>
         </View>
       </View>
       <View
