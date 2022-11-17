@@ -8,6 +8,7 @@ import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../../components/common
 import TestHome from './TestHome';
 import ScheduleHomeScreen from './ScheduleHomeScreen';
 import ScheduleCreateScreen from './ScheduleCreateScreen';
+import ScheduleDetailScreen from './ScheduleDetailScreen';
 
 const ScheduleStack = createNativeStackNavigator();
 
@@ -16,11 +17,10 @@ const ScheduleStackScreen = ({ navigation }) => {
 
   return (
     <ScheduleStack.Navigator
-      initialRouteName="Test"
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
       }}>
-      <ScheduleStack.Screen name="Test" component={TestHome} />
       <ScheduleStack.Screen
         name="Home"
         component={ScheduleHomeScreen}
@@ -38,6 +38,20 @@ const ScheduleStackScreen = ({ navigation }) => {
       <ScheduleStack.Screen
         name="Create"
         component={ScheduleCreateScreen}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerLeft: props => {
+            props.canGoBack && <ToolBarLeft {...props} />;
+          },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <ScheduleStack.Screen
+        name="Detail"
+        component={ScheduleDetailScreen}
         options={{
           headerShadowVisible: false,
           headerShown: true,
