@@ -8,6 +8,7 @@ import GroupDetailScreen from './GroupDetailScreen';
 import GroupHomeScreen from './GroupHomeScreen';
 import GroupDetailInfoScreen from './GroupDetailInfoScreen';
 import GroupEditScreen from './GroupEditScreen';
+import GroupJoinScreen from './GroupJoinScreen';
 
 const GroupStack = createNativeStackNavigator();
 
@@ -78,6 +79,21 @@ const GroupStackScreen = () => {
         name="GroupDetailInfo"
         component={GroupDetailInfoScreen}
         initialParams={{ groupId: 1 }}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerLeft: props => {
+            props.canGoBack && <ToolBarLeft {...props} />;
+          },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <GroupStack.Screen
+        name="GroupJoin"
+        component={GroupJoinScreen}
+        initialParams={{ groupId: 0, from: 'kakao' }}
         options={{
           headerShadowVisible: false,
           headerShown: true,
