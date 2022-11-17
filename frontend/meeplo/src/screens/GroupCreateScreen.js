@@ -15,13 +15,15 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
 import { decode } from 'base64-arraybuffer';
 import fs from 'react-native-fs';
+import Toast from 'react-native-toast-message';
+import { useFocusEffect } from '@react-navigation/native';
 import { theme } from '../assets/constant/DesignTheme';
 import StepTextInput from '../components/common/StepTextInput';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { createGroup } from '../redux/groupSlice';
-import { useFocusEffect } from '@react-navigation/native';
 import LoadingModal from '../components/common/LoadingModal';
+import { TOAST_MESSAGE } from '../assets/constant/string';
 
 const { width } = Dimensions.get('window');
 
@@ -35,7 +37,38 @@ const GroupCreateScreen = ({ navigation }) => {
   const [isProfilePictureEdit, setIsprofilePrictureEdit] = useState(false);
   const isLoading = useSelector(state => state.group.isLoading);
 
-  const validateInput = () => {};
+  const validateInput = () => {
+    if (!groupName || groupName.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.GROUP_NO_NAME,
+      });
+      return false;
+    } else if (!groupPhoto || groupPhoto.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.GROUP_NO_PHOTO,
+      });
+      return false;
+    } else if (groupName.length > 20) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.INPUT_ERROR,
+        text2: TOAST_MESSAGE.GROUP_NAME_LENGTH_EXCESS,
+      });
+      return false;
+    } else if (groupDescription.length > 200) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.INPUT_ERROR,
+        text2: TOAST_MESSAGE.GROUP_DESCRIPTION_LENGTH_EXCESS,
+      });
+      return false;
+    }
+    return true;
+  };
 
   const addImage = async () => {
     const result = await launchImageLibrary();
@@ -97,7 +130,9 @@ const GroupCreateScreen = ({ navigation }) => {
   };
 
   const onPressCreate = () => {
-    uploadToS3(groupPhotoFile);
+    if (validateInput()) {
+      uploadToS3(groupPhotoFile);
+    }
   };
 
   useFocusEffect(() => {
