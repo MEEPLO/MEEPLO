@@ -98,7 +98,7 @@ const ScheduleCreateScreen = ({ navigation }) => {
         Alert.alert(ALERT_MESSAGE.SCHEDULE_ASK_CANCEL_CREATE_TEXT1, ALERT_MESSAGE.SCHEDULE_ASK_CANCEL_CREATE_TEXT2, [
           { text: ALERT_MESSAGE.STAY, style: 'cancel' },
           {
-            text: ALERT_MESSAGE.STAY,
+            text: ALERT_MESSAGE.LEAVE,
             style: 'destructive',
             onPress: () => navigation.dispatch(action),
           },
