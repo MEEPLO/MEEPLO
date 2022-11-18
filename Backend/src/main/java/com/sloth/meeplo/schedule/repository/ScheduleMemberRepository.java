@@ -7,6 +7,7 @@ import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -17,6 +18,6 @@ public interface ScheduleMemberRepository extends JpaRepository<ScheduleMember, 
     @Query(value = "select distinct sm from ScheduleMember sm where sm.schedule = :schedule")
     List<ScheduleMember> findBySchedule(@Param("schedule")Schedule schedule);
 
-    @Query(value = "select distinct sm from ScheduleMember sm where sm.member = :member")
-    List<ScheduleMember> findByMember(@Param("member")Member member);
+    @Query(value = "select distinct sm from ScheduleMember sm where sm.member = :member and sm.status = :status")
+    List<ScheduleMember> findByMemberAndStatus(@Param("member")Member member, @Param("status")ScheduleMemberStatus scheduleMemberStatus);
 }
