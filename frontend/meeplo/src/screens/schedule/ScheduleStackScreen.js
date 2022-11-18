@@ -8,6 +8,7 @@ import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../../components/common
 import ScheduleHomeScreen from './ScheduleHomeScreen';
 import ScheduleCreateScreen from './ScheduleCreateScreen';
 import ScheduleDetailScreen from './ScheduleDetailScreen';
+import ScheduleEditScreen from './ScheduleEditScreen';
 
 const ScheduleStack = createNativeStackNavigator();
 
@@ -51,6 +52,20 @@ const ScheduleStackScreen = ({ navigation }) => {
       <ScheduleStack.Screen
         name="Detail"
         component={ScheduleDetailScreen}
+        options={{
+          headerShadowVisible: false,
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerLeft: props => {
+            props.canGoBack && <ToolBarLeft {...props} />;
+          },
+          headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
+          headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <ScheduleStack.Screen
+        name="Edit"
+        component={ScheduleEditScreen}
         options={{
           headerShadowVisible: false,
           headerShown: true,
