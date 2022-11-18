@@ -6,14 +6,16 @@ import { theme } from '../../assets/constant/DesignTheme';
 const screen = Dimensions.get('screen');
 const modalWidth = screen.width * 0.85;
 
-const RoundView = ({ children, onRequestClose, hideHeader, title }) => {
+const RoundView = ({ children, onRequestClose, hideHeader, hideCloseButton, title }) => {
   return (
     <View style={styles.roundedView}>
       {hideHeader ? null : (
         <View style={styles.headerView}>
-          <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
-            <Text style={styles.closeButtonTextStyle}> X </Text>
-          </TouchableOpacity>
+          {hideCloseButton ? null : (
+            <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
+              <Text style={styles.closeButtonTextStyle}> X </Text>
+            </TouchableOpacity>
+          )}
           <Text style={styles.title}>{title}</Text>
         </View>
       )}
