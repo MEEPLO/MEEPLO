@@ -222,6 +222,7 @@ export const getGroupMembers = createAsyncThunk('group/getGroupMembers', async (
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
     return response?.data.members;
   } catch (err) {
     return isRejectedWithValue(err.response?.data);
