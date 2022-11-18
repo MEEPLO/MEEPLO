@@ -56,6 +56,7 @@ public class MemberResponse {
     public static class MemberDetailStartLocation{
         private Long id;
         private String name;
+        private Boolean defaultLocation;
         private Double lat;
         private Double lng;
         private String address;
@@ -64,6 +65,7 @@ public class MemberResponse {
         MemberDetailStartLocation(MemberLocation memberLocation){
             this.id = memberLocation.getId();
             this.name = memberLocation.getName();
+            this.defaultLocation = memberLocation.getDefaultLocation();
             this.lat = memberLocation.getLat();
             this.lng = memberLocation.getLng();
             this.address = memberLocation.getAddress();
