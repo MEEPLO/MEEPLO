@@ -364,13 +364,4 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<ScheduleMember> getScheduleMemberByMember(Member member){
-        return scheduleMemberRepository.findByMember(member);
-    }
-
-    @Override
-    public List<ScheduleMember> getScheduleMemberBySchedule(Schedule schedule){
-        return scheduleMemberRepository.findBySchedule(schedule);
-    }
 }
