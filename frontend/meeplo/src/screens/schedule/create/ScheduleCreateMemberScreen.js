@@ -93,7 +93,7 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
         },
         {
           type: 'UPDATE_MEMBERS',
-          payload: selectedMembers,
+          payload: selectedMembers.filter(member => member.id !== userInfo.id),
         },
       ];
 
