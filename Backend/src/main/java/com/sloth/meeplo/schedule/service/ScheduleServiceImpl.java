@@ -4,6 +4,7 @@ import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.entity.Group;
+import com.sloth.meeplo.group.repository.GroupMemberRepository;
 import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.location.repository.LocationRepository;
@@ -28,6 +29,8 @@ import com.sloth.meeplo.schedule.repository.ScheduleRepository;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     private final MemberRepository memberRepository;
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final ScheduleKeywordRepository scheduleKeywordRepository;
+    private final GroupMemberRepository groupMemberRepository;
 
     @Override
     @Transactional
@@ -77,6 +81,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         scheduleMemberRepository.saveAll(
                 scheduleCreateInput.getMembers().stream()
                         .map(ScheduleRequest.ScheduleInputMember::getId)
+                        .filter(id-> !id.equals(member.getId()))
                         .map(id -> ScheduleMember.builder()
                                 .schedule(newSchedule)
                                 .member(memberRepository.findById(id)
@@ -144,13 +149,15 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(k->ScheduleKeyword.builder().keyword(k).build())
                 .collect(Collectors.toList()));
 
+
+        List<ScheduleMember> scheduleMembers = scheduleMemberRepository.findBySchedule(schedule);
         // 기존에 가입했지만 나간 사람 중 다시 추가된 경우
-        schedule.getScheduleMembers().stream()
+        scheduleMembers.stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
                         .anyMatch(o-> o.getId().equals(sm.getMember().getId()) && sm.getStatus().equals(ScheduleMemberStatus.UNACTIVATED)))
                 .forEach(ScheduleMember::joinStatus);
         // 기존에 존재 했지만 리더도 아니며 추가되지 않은 경우
-        schedule.getScheduleMembers().stream()
+        scheduleMembers.stream()
                 .filter(sm -> scheduleUpdateInput.getMembers().stream()
                         .noneMatch(o-> o.getId().equals(sm.getMember().getId()) || sm.getRole().equals(Role.LEADER)))
                 .forEach(ScheduleMember::unactivateStatus);
@@ -217,7 +224,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<ScheduleResponse.ScheduleListInfo> getScheduleList(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        return member.getScheduleMembers().stream()
+        return scheduleMemberRepository.findByMember(member).stream()
                 .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED))
                 .map(sm -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(sm.getSchedule())
@@ -235,7 +242,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .toFormatter();
         LocalDate localDate = LocalDate.parse(yearMonth, formatter);
         LocalDateTime targetYearMonth = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        return member.getGroupMembers().stream()
+        return groupMemberRepository.findByMember(member).stream()
                 .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
                 .flatMap(gm-> scheduleRepository
                         .findByGroupAndDateBetween(gm.getGroup(),targetYearMonth,targetYearMonth.plusMonths(1)).stream())
@@ -254,7 +261,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .toFormatter();
         LocalDate localDate = LocalDate.parse(yearMonth, formatter);
         LocalDateTime targetYearMonth = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        return member.getGroupMembers().stream()
+        return groupMemberRepository.findByMember(member).stream()
                 .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
                 .flatMap(gm-> scheduleRepository
                         .findByGroupAndDateBetween(gm.getGroup(),targetYearMonth, targetYearMonth.plusMonths(1)).stream())
@@ -270,7 +277,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Member member = memberService.getMemberByAuthorization(authorization);
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        return member.getGroupMembers().stream()
+        return groupMemberRepository.findByMember(member).stream()
                 .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
                 .flatMap(gm-> scheduleRepository
                         .findByGroupAndDateBetween(gm.getGroup(),targetDate, targetDate.plusDays(1)).stream())
@@ -297,18 +304,18 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         groupService.checkMemberInGroup(member, schedule.getGroup());
 
-        return schedule
-                .getScheduleLocations().stream()
+        return scheduleLocationRepository.findBySchedule(schedule).stream()
                 .flatMap(sl->sl.getMoments().stream())
                 .map(m-> MomentResponse.MomentSimpleList.builder()
                         .moment(m)
                         .build())
+                .distinct()
                 .collect(Collectors.toList());
     }
 
     @Override
     public void checkMemberScheduleLeader(Member member, Schedule schedule){
-        if(schedule.getScheduleMembers().stream().noneMatch(
+        if(scheduleMemberRepository.findBySchedule(schedule).stream().noneMatch(
                 sm->sm.getRole().equals(Role.LEADER) && sm.getMember().getId().equals(member.getId())))
             throw new MeeploException(CommonErrorCode.UNAUTHORIZED);
     }
@@ -328,7 +335,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        List<ScheduleResponse.ScheduleListInfo> TMP = member.getScheduleMembers().stream()
+        return scheduleMemberRepository.findByMember(member).stream()
                 .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
                         && sm.getSchedule().getDate().isAfter(LocalDateTime.now()))
                 .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
@@ -338,16 +345,13 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .distinct()
                 .sorted(Comparator.comparing(ScheduleResponse.ScheduleListInfo::getDate))
                 .collect(Collectors.toList());
-        log.info(TMP.toString());
-        return TMP;
-
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        return member.getScheduleMembers().stream()
+        return scheduleMemberRepository.findByMember(member).stream()
                 .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
                         && sm.getSchedule().getDate().isBefore(LocalDateTime.now())
                         && sm.getSchedule().getScheduleLocations().stream().mapToLong(sl->sl.getMoments().size()).sum()==0)
@@ -359,4 +363,5 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .sorted((s1,s2)->s2.getDate().compareTo(s1.getDate()))
                 .collect(Collectors.toList());
     }
+
 }

@@ -3,12 +3,14 @@ package com.sloth.meeplo.location.dto.response;
 import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.location.entity.*;
 import com.sloth.meeplo.location.type.LocationType;
+import com.sloth.meeplo.schedule.entity.ScheduleMember;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class LocationResponse {
@@ -73,15 +75,19 @@ public class LocationResponse {
                 this.info = LocationDetailInfo.builder().locationInfo(location.getLocationInfo()).build();
             this.keywords=location.getLocationKeywords().stream()
                     .map(lk->LocationDetailKeyword.builder().locationKeyword(lk).build())
+                    .distinct()
                     .collect(Collectors.toList());
             this.photos=location.getLocationPhotos().stream()
                     .map(lp-> LocationDetailPhoto.builder().locationPhoto(lp).build())
+                    .distinct()
                     .collect(Collectors.toList());
             this.menus=location.getLocationContents().stream()
                     .map(lc->LocationDetailMenu.builder().locationContent(lc).build())
+                    .distinct()
                     .collect(Collectors.toList());
             this.times=location.getLocationTimes().stream()
                     .map(lt-> LocationDetailTime.builder().locationTime(lt).build())
+                    .distinct()
                     .collect(Collectors.toList());
         }
     }
@@ -111,6 +117,20 @@ public class LocationResponse {
         LocationDetailKeyword(LocationKeyword locationKeyword){
             this.content = locationKeyword.getKeyword();
         }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof LocationDetailKeyword))
+                return false;
+            LocationDetailKeyword sm = ((LocationDetailKeyword)x);
+
+            return Objects.equals(this.content, sm.content);
+        }
+
+        @Override
+        public int hashCode() {
+            return content.hashCode();
+        }
     }
 
     @Getter
@@ -122,6 +142,21 @@ public class LocationResponse {
         LocationDetailPhoto(LocationPhoto locationPhoto){
             this.url = locationPhoto.getPhoto();
         }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof LocationDetailPhoto))
+                return false;
+            LocationDetailPhoto sm = ((LocationDetailPhoto)x);
+
+            return Objects.equals(this.url, sm.url);
+        }
+
+        @Override
+        public int hashCode() {
+            return url.hashCode();
+        }
+
     }
 
     @Getter
@@ -135,6 +170,20 @@ public class LocationResponse {
             this.content = locationContent.getContent();
             this.price = locationContent.getPrice();
         }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof LocationDetailMenu))
+                return false;
+            LocationDetailMenu sm = ((LocationDetailMenu)x);
+
+            return Objects.equals(this.content, sm.content);
+        }
+
+        @Override
+        public int hashCode() {
+            return content.hashCode();
+        }
     }
 
     @Getter
@@ -147,6 +196,20 @@ public class LocationResponse {
         LocationDetailTime(LocationTime locationTime){
             this.content = locationTime.getContent();
             this.day = locationTime.getDay();
+        }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof LocationDetailTime))
+                return false;
+            LocationDetailTime sm = ((LocationDetailTime)x);
+
+            return Objects.equals(this.day, sm.day);
+        }
+
+        @Override
+        public int hashCode() {
+            return day.hashCode();
         }
     }
     @Getter
