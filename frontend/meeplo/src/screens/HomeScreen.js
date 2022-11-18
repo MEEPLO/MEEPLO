@@ -8,7 +8,6 @@ import HomeMoments from '../components/Home/HomeMoments';
 import HomeSchedule from '../components/Home/HomeSchedule';
 import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation';
 import { getGroupList } from '../redux/groupSlice';
-import { logInWithKakao, logOutWithKakao } from '../auth/Authentication';
 import { getUserInfo } from '../redux/userSlice';
 import { getUpcomingSchedule, getNoMomentsSchedule } from '../redux/scheduleSlice';
 
@@ -28,10 +27,6 @@ const HomeScreen = ({ navigation }) => {
     navigation.navigate('MomentsStack', { screen: 'MomentsList' });
   };
 
-  const onPressLogout = () => {
-    logOutWithKakao({ Alert, navigation });
-  };
-
   useEffect(() => {
     dispatch(getUserInfo());
     dispatch(getGroupList());
@@ -41,11 +36,6 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <ScrollView>
-      <Button title="로그아웃" onPress={onPressLogout} />
-      <TouchableOpacity style={{ top: 15, alignItems: 'center' }} onPress={logInWithKakao}>
-        <Text> 로그인 </Text>
-      </TouchableOpacity>
-
       <View
         style={{
           margin: 20,
