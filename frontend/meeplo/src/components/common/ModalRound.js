@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, StyleSheet } from 'react-native';
+import { View, Modal, StyleSheet } from 'react-native';
 
 import { theme } from '../../assets/constant/DesignTheme';
 
