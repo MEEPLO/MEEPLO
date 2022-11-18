@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -55,5 +56,19 @@ public class Moment extends BaseTimeEntity {
         if(MomentType.values().length<=createMomentInfo.getType()) throw new MeeploException(MomentErrorCode.NO_MOMENT_TYPE);
         this.type = MomentType.values()[createMomentInfo.getType()];
         this.scheduleLocation = scheduleLocation;
+    }
+
+    @Override
+    public boolean equals(Object x) {
+        if(!(x instanceof Moment))
+            return false;
+        Moment m = ((Moment)x);
+
+        return Objects.equals(this.id, m.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
