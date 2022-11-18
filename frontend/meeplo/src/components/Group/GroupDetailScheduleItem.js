@@ -1,10 +1,10 @@
-import { View, Text, Image, Dimensions } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { View, Text, Dimensions } from 'react-native';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { theme } from '../../assets/constant/DesignTheme';
 
-const GroupDetailScheduleItem = ({ name, date, memberCount, location, color, isLast }) => {
+const GroupDetailScheduleItem = ({ name, date, memberCount, location, color }) => {
   const rawDate = new Date(date);
   const scheduleDate = {
     year: rawDate.getFullYear(),
@@ -20,7 +20,7 @@ const GroupDetailScheduleItem = ({ name, date, memberCount, location, color, isL
       style={[
         {
           marginHorizontal: 20,
-          marginTop: 20,
+          marginVertical: 10,
           width,
           height,
           borderRadius: 20,
@@ -28,7 +28,6 @@ const GroupDetailScheduleItem = ({ name, date, memberCount, location, color, isL
           borderColor: theme.color.border,
           borderWidth: 3,
         },
-        isLast && { marginBottom: 105 },
       ]}>
       <View
         style={{

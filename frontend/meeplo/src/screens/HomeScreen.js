@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <HomeGroup data={groupList?.slice(0, 3)} navigation={navigation} />
-      <View style={{ margin: 20 }}>
+      <View style={{ margin: 20, marginTop: 30 }}>
         <View
           style={{
             justifyContent: 'space-between',
@@ -94,6 +94,7 @@ const HomeScreen = ({ navigation }) => {
       <View
         style={{
           margin: 20,
+          marginTop: 30,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
