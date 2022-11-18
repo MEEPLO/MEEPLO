@@ -54,6 +54,10 @@ const GroupHomeScreen = ({ navigation }) => {
     }
   };
 
+  const onPressCreateGroup = () => {
+    navigation.navigate('GroupCreate');
+  };
+
   const fetchCopiedText = async () => {
     const text = await Clipboard.getString();
     setGroupCode(text);
@@ -64,6 +68,7 @@ const GroupHomeScreen = ({ navigation }) => {
   }, []);
   return (
     <ScrollView>
+      {/* joinGroup Modal */}
       <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={closeModal}>
         <View
           style={{
@@ -166,24 +171,45 @@ const GroupHomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faSquarePlus} size={14} color="gray" />
         </TouchableOpacity>
       </View>
-      {groupList?.map((item, i) => (
-        <View style={{ marginVertical: 4 }} key={`groupList-${i}`}>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-              onPressGroup(item.id);
-            }}>
-            <GroupListItem
-              name={item.name}
-              photo={item.photo}
-              memberCount={item.memberCount}
-              leaderName={item.leaderName}
-              lastSchedule={item.lastSchedule}
-              color={colorList[i % 7]}
-            />
-          </TouchableOpacity>
-        </View>
-      ))}
+      {groupList?.length === 0 ? (
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={onPressCreateGroup}
+          style={{
+            margin: 20,
+            borderWidth: 2,
+            borderColor: theme.color.disabled,
+            height: 120,
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{ fontSize: 16, marginVertical: 5 }}>아직 소속된 그룹이 없네요!</Text>
+          {/* <Text style={{ fontSize: 16, marginVertical: 5 }}>다른 그룹에 참여하거나,</Text> */}
+          <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>새로운 그룹을 만들어 보세요.</Text>
+        </TouchableOpacity>
+      ) : (
+        <>
+          {groupList?.map((item, i) => (
+            <View style={{ marginVertical: 4 }} key={`groupList-${i}`}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  onPressGroup(item.id);
+                }}>
+                <GroupListItem
+                  name={item.name}
+                  photo={item.photo}
+                  memberCount={item.memberCount}
+                  leaderName={item.leaderName}
+                  lastSchedule={item.lastSchedule}
+                  color={colorList[i % 7]}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </>
+      )}
       <View style={{ height: 90 }} />
     </ScrollView>
   );
