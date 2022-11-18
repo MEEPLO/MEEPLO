@@ -11,6 +11,7 @@ import SelectDropdown from '../../common/SelectDropdown';
 import StepTextInput from '../../common/StepTextInput';
 import DateModalInput from '../../schedule/DateModalInput';
 import LoadingModal from '../../common/LoadingModal';
+import MapLocationInput from '../../map/MapLocationInput';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -95,7 +96,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
       date: scheduleDate,
       name: scheduleName,
       groupId: state.groupId,
-      meetLocationId: schedulePlace * 1,
+      meetLocationId: schedulePlace.id,
     };
 
     if (!scheduleDate) {
@@ -180,7 +181,8 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
             />
           </View>
           <View style={{ marginBottom: 30 }}>
-            <StepTextInput type="약속 장소" required={true} onValueChange={setSchedulePlace} value={schedulePlace} />
+            {/* <StepTextInput type="약속 장소" required={true} onValueChange={setSchedulePlace} value={schedulePlace} /> */}
+            <MapLocationInput type="약속 장소" required value={schedulePlace} onValueChange={setSchedulePlace} />
           </View>
           <View
             style={{

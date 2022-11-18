@@ -11,6 +11,9 @@ export const getNearLocations = createAsyncThunk('location/getNearLocations', as
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    console.log(response.data);
+
     return response.data;
   } catch (err) {
     return isRejectedWithValue(err.response.data);
