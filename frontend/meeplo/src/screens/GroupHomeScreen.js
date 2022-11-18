@@ -1,8 +1,18 @@
-import { View, Text, ScrollView, TouchableOpacity, Modal, Dimensions, TextInput, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  Dimensions,
+  TextInput,
+  Alert,
+  ToastAndroid,
+} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons/faSquarePlus';
 import { faPaste } from '@fortawesome/free-regular-svg-icons/faPaste';
@@ -10,7 +20,7 @@ import GroupListItem from '../components/Group/GroupListItem';
 import { theme } from '../assets/constant/DesignTheme';
 import { getGroupList, joinGroup } from '../redux/groupSlice';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const GroupHomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,6 +28,12 @@ const GroupHomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const groupList = useSelector(state => state.groupList);
   const colorList = ['red', 'orange', 'yellow', 'green', 'blue', 'navy', 'purple'];
+
+  const validateInput = () => {
+    if (!groupCode || groupCode.length === 0) {
+      ToastAndroid.show('그룹 코드를 입력해주세요!', ToastAndroid.LONG);
+    }
+  };
 
   const openModal = () => setModalVisible(true);
   const closeModal = () => {
@@ -31,9 +47,11 @@ const GroupHomeScreen = ({ navigation }) => {
 
   const onPressJoinGroup = () => {
     const form = { enterCode: groupCode };
-    dispatch(joinGroup({ form, Alert, navigation })).then(() => {
-      closeModal();
-    });
+    if (validateInput()) {
+      dispatch(joinGroup({ form, Alert, navigation, Toast })).then(() => {
+        closeModal();
+      });
+    }
   };
 
   const fetchCopiedText = async () => {
