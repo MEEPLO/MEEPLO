@@ -106,7 +106,7 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
       <View style={styles.inputViewStyle}>
         <SelectDropdown
           setSelected={onSelectGroup}
-          type="모임"
+          type="그룹"
           data={groupNameList}
           required={true}
           defaultOption={{ key: group?.id, value: group?.name }}
@@ -116,7 +116,7 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
       {group && group.id ? (
         <View style={styles.inputViewStyle}>
           <GroupMemberSelectList
-            type="모임 멤버 초대"
+            type="그룹 멤버 초대"
             members={groupMemberList}
             selectedMembers={selectedMembers}
             user={userInfo}

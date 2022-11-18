@@ -106,7 +106,7 @@ export const getNoMomentsSchedule = createAsyncThunk('schedule/getNoMomentsSched
     });
     return response?.data.schedules;
   } catch (err) {
-    console.error('ERROR in getUpcomingSchedule!', err);
+    console.error('ERROR in getNoMomentsSchedule!', err);
     return isRejectedWithValue(err.response?.data);
   }
 });
@@ -121,7 +121,41 @@ export const getScheduleDetail = createAsyncThunk('schedule/getScheduleDetail', 
     });
     return response?.data;
   } catch (err) {
-    console.error('ERROR in getUpcomingSchedule!', err);
+    console.error('ERROR in getScheduleDetail!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const editSchedule = createAsyncThunk('schedule/editGroup', async ({ form, scheduleId, Alert, navigation }) => {
+  console.log(form);
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate
+      .put(
+        `/schedule`,
+        { ...form },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
+      .then(() => {
+        Alert.alert(`약속을 수정했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({
+                index: 1,
+                routes: [{ name: 'Home' }, { name: 'Detail', params: { scheduleId } }],
+              });
+            },
+          },
+        ]);
+      });
+    console.log('schedule EDITED!');
+  } catch (err) {
+    console.error('ERROR in editSchedule!', err);
     return isRejectedWithValue(err.response?.data);
   }
 });
