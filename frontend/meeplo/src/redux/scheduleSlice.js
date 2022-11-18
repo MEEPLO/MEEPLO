@@ -160,6 +160,21 @@ export const editSchedule = createAsyncThunk('schedule/editGroup', async ({ form
   }
 });
 
+export const getScheduleMomentsFeed = createAsyncThunk('schedule/getScheduleMomentsFeed', async ({ scheduleId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/${scheduleId}/moment`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data.moments;
+  } catch (err) {
+    console.error('ERROR in getScheduleMomentsFeed', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
 const scheduleSlice = createSlice({
   name: 'schedule',
   initialState: {
@@ -170,6 +185,7 @@ const scheduleSlice = createSlice({
     scheduleDates: [],
     upComing: [],
     noMoments: [],
+    moments: [],
   },
   reducers: {},
   extraReducers: {
@@ -213,6 +229,13 @@ const scheduleSlice = createSlice({
     [getScheduleDetail.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       state.schedule = payload;
+    },
+    [getScheduleMomentsFeed.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getScheduleMomentsFeed.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.moments = payload;
     },
   },
 });

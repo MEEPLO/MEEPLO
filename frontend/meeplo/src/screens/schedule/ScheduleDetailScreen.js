@@ -44,13 +44,15 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
     navigation.navigate('Edit', { scheduleId });
   };
 
+  const onPressMoments = () => {
+    navigation.navigate('Feed', { scheduleId });
+  };
+
   useEffect(() => {
     dispatch(getScheduleDetail(scheduleId));
   }, []);
 
-  useEffect(() => {
-    console.log(schedule);
-  }, [schedule]);
+  useEffect(() => {}, [schedule]);
 
   const openMemberModal = () => setShowMemberModal(true);
   const closeMemberModal = () => setShowMemberModal(false);
@@ -202,10 +204,11 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
           {isDone ? (
             <View>
               <TouchableOpacity
+                onPress={onPressMoments}
                 style={[
                   styles.buttonContainer,
                   {
-                    backgroundColor: theme.color.bright.orange,
+                    backgroundColor: theme.color.pale.orange,
                   },
                 ]}>
                 <Text style={styles.buttonTitle}>추억 보기</Text>
@@ -214,7 +217,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                 style={[
                   styles.buttonContainer,
                   {
-                    backgroundColor: theme.color.bright.red,
+                    backgroundColor: theme.color.pale.yellow,
                   },
                 ]}>
                 <Text style={styles.buttonTitle}>추억 남기기</Text>
