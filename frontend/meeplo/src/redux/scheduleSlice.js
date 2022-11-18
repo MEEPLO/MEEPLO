@@ -29,7 +29,6 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
     return response.data;
   } catch (err) {
     return isRejectedWithValue(err.response.data);
