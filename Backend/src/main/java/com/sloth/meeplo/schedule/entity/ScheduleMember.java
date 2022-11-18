@@ -1,6 +1,7 @@
 package com.sloth.meeplo.schedule.entity;
 
 import com.sloth.meeplo.common.GeoDataEntity;
+import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -44,5 +46,21 @@ public class ScheduleMember extends GeoDataEntity {
         this.role = role;
         this.schedule = schedule;
         this.member = member;
+    }
+
+    @Override
+    public boolean equals(Object x) {
+        if(!(x instanceof ScheduleMember))
+            return false;
+        ScheduleMember sm = ((ScheduleMember)x);
+
+        return Objects.equals(this.id, sm.id)
+                && this.getSchedule().getId().equals(sm.getSchedule().getId())
+                && this.getMember().getId().equals(sm.getMember().getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

@@ -7,6 +7,7 @@ import com.sloth.meeplo.schedule.dto.response.KeywordResponse;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
+import com.sloth.meeplo.schedule.entity.ScheduleMember;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +52,10 @@ public interface ScheduleService {
     void checkMemberInSchedule(Schedule schedule, Member member);
     List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization);
     List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization);
+
+    List<ScheduleMember> getScheduleMemberByMember(Member member);
+
+    List<ScheduleMember> getScheduleMemberBySchedule(Schedule schedule);
 
 
 }
