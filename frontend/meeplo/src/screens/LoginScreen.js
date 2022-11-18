@@ -47,7 +47,6 @@ const LoginScreen = ({ navigation }) => {
       <Text>중간장소를 찾고</Text>
       <Text>약속 장소를 추천받아</Text>
       <Text>함께한 기록을 남겨보아요</Text>
-      <Text style={{ fontSize: 20 }}>카카오 로그인 성공해주세요:::::: {text}</Text>
 
       <TouchableOpacity style={{ top: 15, alignItems: 'center' }} onPress={onPressLogin}>
         <Image style={{ width: 300 }} resizeMode="contain" source={Images.kakaoLogin} />
