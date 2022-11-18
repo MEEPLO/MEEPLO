@@ -1,17 +1,18 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNRestart from 'react-native-restart';
+import { MEEPLO_SERVER_BASE_URL } from '@env';
 import { getProfile, login, logout, unlink } from '@react-native-seoul/kakao-login';
 
 async function userLogin(kakaoAccessToken) {
   try {
-    // console.log('카카오 액세스 토큰:', kakaoAccessToken);
-    const tokens = await axios.get('http://meeplo.co.kr/meeplo/api/v1/auth/kakao', {
+    console.log('카카오 액세스 토큰:', kakaoAccessToken);
+    const tokens = await axios.get(`${MEEPLO_SERVER_BASE_URL}/auth/kakao`, {
       headers: {
         Authorization: `Bearer ${kakaoAccessToken}`,
       },
     });
-    // console.log('백에서 받아온 데이터: ', tokens.data);
+    console.log('백에서 받아온 데이터: ', tokens.data);
     await AsyncStorage.setItem('@accessToken', tokens.data.accessToken);
     await AsyncStorage.setItem('@refreshToken', tokens.data.refreshToken);
   } catch (err) {

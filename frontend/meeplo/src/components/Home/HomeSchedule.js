@@ -51,7 +51,9 @@ const HomeSchedule = ({ data, navigation }) => {
   };
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
-    setCurrentIndex(viewableItems[0].index);
+    if (Array.isArray(viewableItems) && viewableItems[0] && viewableItems[0].index) {
+      setCurrentIndex(viewableItems[0].index);
+    }
   }).current;
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
@@ -81,7 +83,7 @@ const HomeSchedule = ({ data, navigation }) => {
           <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={(item, index) => item.id + index}
             horizontal={true}
             pagingEnabled
             showsHorizontalScrollIndicator={false}
@@ -98,26 +100,6 @@ const HomeSchedule = ({ data, navigation }) => {
       ) : (
         <TouchableOpacity style={{ alignItems: 'center' }} onPress={onPressCreateSchedule} activeOpacity={0.6}>
           <ScheduleButton isData={false} empty="약속을 생성해 보아요" picture="blue" />
-          {/* <View
-            style={{
-              width: imageWidth,
-              height: imageWidth * 0.3,
-              backgroundColor: 'yellow',
-              borderColor: theme.color.disabled,
-              borderWidth: 3,
-              borderRadius: 20,
-              justifyContent: 'center',
-            }}>
-            <Text
-              style={{
-                color: theme.font.color,
-                fontWeight: '800',
-                fontSize: 19,
-                textAlign: 'center',
-              }}>
-              약속을 생성해 보아요
-            </Text>
-          </View> */}
         </TouchableOpacity>
       )}
     </>

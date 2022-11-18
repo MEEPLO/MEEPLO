@@ -23,7 +23,7 @@ axiosPrivate.interceptors.response.use(
   async err => {
     const errorCode = err.response.status;
     const originalRequest = err.config;
-    console.log(originalRequest);
+    // console.log(originalRequest);
     if (errorCode === 401) {
       if (isTokenRefreshing === false) {
         isTokenRefreshing = true;
@@ -45,7 +45,7 @@ axiosPrivate.interceptors.response.use(
             onTokenRefreshed(accessToken);
           })
           .catch(err => {
-            console.log('재 로그인 필요');
+            console.log('새로운 로그인 필요');
             AsyncStorage.clear();
             // TODO: hrookim 홈에 쌓임... 어떻게 해야 reset이 가능한것인가..
             navigate('HomeStack', { screen: 'Login' });
