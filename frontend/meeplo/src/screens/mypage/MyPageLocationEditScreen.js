@@ -67,7 +67,10 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
     if (validateInput()) {
       dispatch(createStartLocation({ form })).then(() => {
         dispatch(getUserInfo());
-        navigation.pop();
+        navigation.reset({
+          index: 1,
+          routes: [{ name: 'Home' }, { name: 'MyPage' }],
+        });
       });
     }
   };
