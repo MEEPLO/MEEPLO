@@ -1,15 +1,14 @@
 import React from 'react';
-import { View, SafeAreaView, TouchableOpacity, Dimensions, Text } from 'react-native';
-import { theme } from '../../assets/constant/DesignTheme';
+import { View, SafeAreaView, TouchableOpacity } from 'react-native';
 import ScheduleButton from '../common/ScheduleButton';
 
-const imageWidth = Dimensions.get('window').width - 40;
-
-const HomeMoments = ({ data }) => {
-  // TODO: hrookim change the color option from blue to red
+const HomeMoments = ({ data, navigation }) => {
   const onPressCreateMoment = () => {
-    // TODO: hrookim navigate to create screen
-    // navigation.navigate('MomentsStack', { screen: 'MomentsCreate' });
+    navigation.navigate('MomentsStack', { screen: 'MomentsCreate' });
+  };
+
+  const onPressSchedule = ({ scheduleId }) => {
+    navigation.navigate('ScheduleStack', { screen: 'Detail', params: { scheduleId } });
   };
 
   return (
@@ -18,7 +17,11 @@ const HomeMoments = ({ data }) => {
         <SafeAreaView style={{ alignItems: 'center' }}>
           {data.map((item, i) => (
             <View style={{ marginVertical: 4 }} key={`homeMemory-${i}`}>
-              <TouchableOpacity activeOpacity={0.6}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  onPressSchedule({ scheduleId: item.id });
+                }}>
                 <ScheduleButton
                   isData={true}
                   picture="yellow"
