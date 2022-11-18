@@ -51,6 +51,7 @@ public class MomentServiceImpl implements MomentService{
         return MomentResponse.MomentDetail.builder()
                 .moment(moment)
                 .member(member)
+                .comments(momentCommentRepository.findByMomentId(momentId))
                 .commentCreated(momentCommentRepository.existsByMemberAndMoment(member,moment))
                 .build();
     }
@@ -84,11 +85,11 @@ public class MomentServiceImpl implements MomentService{
     public Long deleteReaction(String authorization, Long momentId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Moment moment = getMomentByMomentId(momentId);
-        int idx = moment.getMomentReactions().indexOf(member);
-        if(idx<0){
+
+        if(!moment.getMomentReactions().remove(member)){
             throw new MeeploException(MomentErrorCode.NOT_YET_REACTED);
         }
-        moment.getMomentReactions().remove(member);
+
         momentRepository.save(moment);
         return (long) moment.getMomentReactions().size();
     }
@@ -108,7 +109,7 @@ public class MomentServiceImpl implements MomentService{
                 .moment(moment)
                 .member(member)
                 .build());
-        return moment.getMomentComments().stream()
+        return momentCommentRepository.findByMomentId(momentId).stream()
                 .map(mc -> MomentResponse.MomentDetailComment.builder()
                         .momentComment(mc)
                         .build())
@@ -140,7 +141,7 @@ public class MomentServiceImpl implements MomentService{
 
         groupService.checkMemberInGroup(member, moment.getScheduleLocation().getSchedule().getGroup());
 
-        return moment.getMomentComments().stream()
+        return momentCommentRepository.findByMomentId(momentId).stream()
                 .map(mc -> MomentResponse.MomentDetailComment.builder()
                         .momentComment(mc)
                         .build())
@@ -166,6 +167,7 @@ public class MomentServiceImpl implements MomentService{
                 .map(m-> ScheduleResponse.JoinedScheduleMoment.builder()
                         .moment(m)
                         .build())
+                .distinct()
                 .collect(Collectors.toList());
 
     }
@@ -181,6 +183,7 @@ public class MomentServiceImpl implements MomentService{
                 .flatMap(sm->sm.getSchedule().getScheduleLocations().stream())
                 .flatMap(sl->momentRepository.findByScheduleLocation(sl).stream())
                 .filter(m-> !writer || m.getMember().getId().equals(member.getId()))
+                .distinct()
                 .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
                 .collect(Collectors.toList());
 
