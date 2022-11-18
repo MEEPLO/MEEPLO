@@ -45,6 +45,7 @@ axiosPrivate.interceptors.response.use(
             onTokenRefreshed(accessToken);
           })
           .catch(err => {
+            console.log(err);
             console.log('새로운 로그인 필요');
             AsyncStorage.clear();
             // TODO: hrookim 홈에 쌓임... 어떻게 해야 reset이 가능한것인가..
