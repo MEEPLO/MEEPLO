@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -27,6 +28,20 @@ public class ScheduleKeyword {
     ScheduleKeyword(String keyword, Schedule schedule){
         this.keyword = keyword;
         this.schedule = schedule;
+    }
+
+    @Override
+    public boolean equals(Object x) {
+        if(!(x instanceof ScheduleKeyword))
+            return false;
+        ScheduleKeyword sk = ((ScheduleKeyword)x);
+
+        return Objects.equals(this.id, sk.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
 }

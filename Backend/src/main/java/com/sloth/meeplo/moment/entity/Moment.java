@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -42,10 +44,10 @@ public class Moment extends BaseTimeEntity {
             joinColumns = @JoinColumn(name="moment_id"),
             inverseJoinColumns = @JoinColumn(name="member_id")
     )
-    private List<Member> momentReactions = new ArrayList<>();
+    private Set<Member> momentReactions;
 
     @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL)
-    private List<MomentComment> momentComments;
+    private Set<MomentComment> momentComments;
 
     @Builder
     public Moment(MomentRequest.CreateMomentInfo createMomentInfo, Member member, ScheduleLocation scheduleLocation){
@@ -54,5 +56,19 @@ public class Moment extends BaseTimeEntity {
         if(MomentType.values().length<=createMomentInfo.getType()) throw new MeeploException(MomentErrorCode.NO_MOMENT_TYPE);
         this.type = MomentType.values()[createMomentInfo.getType()];
         this.scheduleLocation = scheduleLocation;
+    }
+
+    @Override
+    public boolean equals(Object x) {
+        if(!(x instanceof Moment))
+            return false;
+        Moment m = ((Moment)x);
+
+        return Objects.equals(this.id, m.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

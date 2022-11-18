@@ -61,19 +61,19 @@ public class Member extends BaseTimeEntity {
 
 
     @OneToMany(mappedBy = "member")
-    private List<GroupMember> groupMembers;
+    private Set<GroupMember> groupMembers;
+
+    @OneToMany(mappedBy = "member", fetch=FetchType.EAGER)
+    private Set<ScheduleMember> scheduleMembers;
 
     @OneToMany(mappedBy = "member")
-    private List<ScheduleMember> scheduleMembers;
+    private Set<MemberLocation> memberLocations;
 
     @OneToMany(mappedBy = "member")
-    private List<MemberLocation> memberLocations;
+    private Set<Moment> moments;
 
     @OneToMany(mappedBy = "member")
-    private List<Moment> moments;
-
-    @OneToMany(mappedBy = "member")
-    private List<MomentComment> momentComments;
+    private Set<MomentComment> momentComments;
 
     public void updateProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;

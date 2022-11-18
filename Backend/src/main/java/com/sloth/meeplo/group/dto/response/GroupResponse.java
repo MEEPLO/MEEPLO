@@ -3,22 +3,29 @@ package com.sloth.meeplo.group.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.entity.GroupMember;
+import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.entity.Moment;
+import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleLocation;
+import com.sloth.meeplo.schedule.service.ScheduleService;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
-
+@Slf4j
 public class GroupResponse {
+
 
     @Getter
     @ToString
@@ -54,7 +61,7 @@ public class GroupResponse {
             this.description = group.getDescription();
             this.photo = group.getGroupPhoto();
             this.enterCode = group.getEnterCode();
-            this.leader = leader.getNickname();
+            this.leader = leader.getMember().getUsername();
             this.leaderMemberId = leader.getMember().getId();
             this.members=members;
             this.schedules=schedules;
@@ -71,7 +78,7 @@ public class GroupResponse {
         @Builder
         GroupDetailMember(GroupMember groupMember){
             this.id = groupMember.getMember().getId();
-            this.nickname = groupMember.getNickname();
+            this.nickname = groupMember.getMember().getUsername();
             this.photo = groupMember.getMember().getProfilePhoto();
         }
     }
@@ -91,7 +98,10 @@ public class GroupResponse {
             this.id = schedule.getId();
             this.name = schedule.getName();
             this.date = schedule.getDate();
-            this.memberCount = schedule.getScheduleMembers().stream().filter(sm -> sm.getStatus().equals(ScheduleMemberStatus.JOINED)).count();
+            this.memberCount = schedule.getScheduleMembers().stream()
+                    .filter(sm -> sm.getStatus().equals(ScheduleMemberStatus.JOINED))
+                    .distinct()
+                    .count();
             this.location = GroupDetailScheduleLocation.builder().schedule(schedule).build();
         }
     }
@@ -124,6 +134,20 @@ public class GroupResponse {
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
         }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof FeedMoment))
+                return false;
+            FeedMoment fm = ((FeedMoment)x);
+
+            return Objects.equals(this.id, fm.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
+        }
     }
 
     @Getter
@@ -139,6 +163,20 @@ public class GroupResponse {
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
             this.location = MapMomentLocation.builder().location(moment.getScheduleLocation().getLocation()).build();
+        }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof MapMoment))
+                return false;
+            MapMoment fm = ((MapMoment)x);
+
+            return Objects.equals(this.id, fm.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
     }
 
@@ -171,7 +209,22 @@ public class GroupResponse {
             this.date = schedule.getDate();
             this.scheduleLocations = schedule.getScheduleLocations().stream()
                     .map(sl->GroupScheduleLocation.builder().scheduleLocation(sl).build())
+                    .distinct()
                     .collect(Collectors.toList());
+        }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof GroupSchedule))
+                return false;
+            GroupSchedule fm = ((GroupSchedule)x);
+
+            return Objects.equals(this.id, fm.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
     }
 
@@ -185,6 +238,20 @@ public class GroupResponse {
         GroupScheduleLocation(ScheduleLocation scheduleLocation){
             this.scheduleLocationId = scheduleLocation.getId();
             this.name = scheduleLocation.getLocation().getName();
+        }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof GroupScheduleLocation))
+                return false;
+            GroupScheduleLocation gsl = ((GroupScheduleLocation)x);
+
+            return Objects.equals(this.scheduleLocationId, gsl.scheduleLocationId);
+        }
+
+        @Override
+        public int hashCode() {
+            return scheduleLocationId.hashCode();
         }
     }
 
