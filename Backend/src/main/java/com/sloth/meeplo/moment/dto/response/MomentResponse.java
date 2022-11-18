@@ -20,12 +20,14 @@ public class MomentResponse {
         private Long id;
         private String photo;
         private Long reactionCount;
+        private Integer type;
 
         @Builder
         MomentSimpleList(Moment moment){
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
             this.reactionCount = (long) moment.getMomentReactions().size();
+            this.type = moment.getType().ordinal();
         }
 
         @Override
