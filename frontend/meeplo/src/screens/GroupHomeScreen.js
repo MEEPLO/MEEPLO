@@ -32,7 +32,9 @@ const GroupHomeScreen = ({ navigation }) => {
   const validateInput = () => {
     if (!groupCode || groupCode.length === 0) {
       ToastAndroid.show('그룹 코드를 입력해주세요!', ToastAndroid.LONG);
+      return false;
     }
+    return true;
   };
 
   const openModal = () => setModalVisible(true);
