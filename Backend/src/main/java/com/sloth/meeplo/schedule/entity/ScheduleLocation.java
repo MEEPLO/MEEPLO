@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,7 +29,7 @@ public class ScheduleLocation {
     private Location location;
 
     @OneToMany(mappedBy = "scheduleLocation", cascade = CascadeType.ALL)
-    private List<Moment> moments;
+    private Set<Moment> moments;
 
     @Builder(builderClassName = "EmptyScheduleLocation",builderMethodName = "EmptyScheduleLocation")
     ScheduleLocation(Location location){
