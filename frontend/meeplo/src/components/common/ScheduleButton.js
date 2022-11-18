@@ -9,6 +9,8 @@ const ScheduleButton = props => {
     var picture = Images.scheduleButton.picBlue;
   } else if (props.picture === 'yellow') {
     var picture = Images.scheduleButton.picYellow;
+  } else if (props.picture === 'red') {
+    var picture = Images.linkToButton.picRed;
   }
 
   return (

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, Alert } from 'react-native';
+import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHouseChimney } from '@fortawesome/free-solid-svg-icons/faHouseChimney';
@@ -23,8 +23,6 @@ const Tab = createBottomTabNavigator();
 const NavigationBar = () => {
   const dispatch = useDispatch();
   const opened = useSelector(state => state.tabBar.opened);
-  const isLoginLoading = useSelector(state => state.user.isLoginLoading);
-  const isLoggedIn = useSelector(state => state.user.isLoggedIn);
 
   const tabBarDisplay = useSelector(state => state.tabBar.display);
 
