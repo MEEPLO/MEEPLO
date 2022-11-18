@@ -52,8 +52,6 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
     return Object.fromEntries(locationNameIndexMap);
   });
 
-  console.log('WHY', scheduleNameIndex, '///////', locationNameIndex);
-
   React.useEffect(() => {
     if (state.groupId) {
       dispatch(getGroupSchedules({ groupId: state.groupId }));

@@ -12,6 +12,7 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async p
       },
       params: params,
     });
+    console.log('getMomentsList res', response.data);
     return response.data;
   } catch (err) {
     console.error('getMomentsList: ', err.response.data);
@@ -128,7 +129,12 @@ export const createMoment = createAsyncThunk('moment/createMoment', async ({ mom
           {
             text: '확인',
             onPress: () => {
-              navigation.reset({ routes: [{ name: 'MomentsList' }] });
+              // navigation.reset({ routes: [{ name: 'MomentsList' }] }); // 안됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              // navigation.push('MomentsList'); // 됨
+              // navigation.goBack(); // 됨
+              navigation.jumpTo('GroupStack'); // 되지만 소용없음
+              navigation.jumpTo('MomentsStack'); // 이렇게까지 해야함
+              // navigation.navigate('MomentsStack', { screen: 'MomentsList' }); // 됨
             },
           },
         ]);
@@ -169,18 +175,31 @@ export const getComments = createAsyncThunk('moment/getComments', async ({ momen
   }
 });
 
-export const createComment = createAsyncThunk('moment/createComment', async commentInfo => {
+export const createComment = createAsyncThunk('moment/createComment', async ({ commentInfo, navigation, Alert }) => {
+  console.log('navigation', navigation);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axiosPrivate.post(
-      `/moment/${commentInfo.commentInfo.momentId}/comment`,
-      commentInfo.commentInfo.comment,
-      {
+    const response = await axiosPrivate
+      .post(`/moment/${commentInfo.momentId}/comment`, commentInfo.comment, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      },
-    );
+      })
+      .then(res => {
+        Alert.alert(`댓글을 생성했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              // navigation.reset({ routes: [{ name: 'MomentsList' }] }); // 안됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              // navigation.push('MomentsList'); // 됨
+              // navigation.goBack(); // 됨
+              navigation.jumpTo('GroupStack'); // 되지만 소용없음
+              navigation.jumpTo('MomentsStack'); // 이렇게까지 해야함
+              // navigation.navigate('MomentsStack', { screen: 'MomentsList' }); // 됨
+            },
+          },
+        ]);
+      });
     console.log('comment created: ', response.data);
     return response.data;
   } catch (err) {
