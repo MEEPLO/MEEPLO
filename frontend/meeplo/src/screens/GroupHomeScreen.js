@@ -141,7 +141,7 @@ const GroupHomeScreen = ({ navigation }) => {
             flexDirection: 'row',
             alignItems: 'baseline',
           }}>
-          <Text style={{ fontSize: 24, fontWeight: '900', fontColor: theme.font.color }}>그룹 리스트</Text>
+          <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>내 그룹 모아보기</Text>
         </View>
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={openModal}>
           <Text style={{ marginRight: 5 }}>다른 그룹 참여</Text>

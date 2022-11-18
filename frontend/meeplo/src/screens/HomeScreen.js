@@ -10,6 +10,7 @@ import HomePlaceRecommendation from '../components/Home/HomePlaceRecommendation'
 import { getGroupList } from '../redux/groupSlice';
 import { getUserInfo } from '../redux/userSlice';
 import { getUpcomingSchedule, getNoMomentsSchedule } from '../redux/scheduleSlice';
+import { theme } from '../assets/constant/DesignTheme';
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -60,7 +61,7 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>내가 속한 그룹</Text>
+        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>내가 참여하는 그룹</Text>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreGroup}
@@ -70,21 +71,24 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <HomeGroup data={groupList?.slice(0, 3)} navigation={navigation} />
-      <View
-        style={{
-          margin: 20,
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'baseline',
-        }}>
-        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>추억 남기기</Text>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={onPressMoreMoment}
-          style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text>더보기</Text>
-          <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
-        </TouchableOpacity>
+      <View style={{ margin: 20 }}>
+        <View
+          style={{
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            alignItems: 'baseline',
+          }}>
+          <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>추억 남기기</Text>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={onPressMoreMoment}
+            style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text>더보기</Text>
+            <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
+          </TouchableOpacity>
+        </View>
+
+        <Text style={{ color: theme.color.dim }}>아직 추억을 기록하지 않은 약속에 추억을 남겨보아요~</Text>
       </View>
       <HomeMoments data={noMomentsScheduleList} navigation={navigation} />
       <View
