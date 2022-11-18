@@ -32,6 +32,7 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         },
       ],
     };
+
     openLoadingModal();
     dispatch(createSchedule(reqObject))
       .unwrap()
