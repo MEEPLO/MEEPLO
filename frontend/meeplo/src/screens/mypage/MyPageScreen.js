@@ -148,6 +148,10 @@ const MyPageScreen = ({ navigation }) => {
     navigation.navigate('MyPageLocation');
   };
 
+  const onPressCreateLocations = () => {
+    navigation.navigate('MyPageLocationEdit');
+  };
+
   useEffect(() => {
     if (!isFocused) {
       setIsEditing(false);
@@ -291,7 +295,7 @@ const MyPageScreen = ({ navigation }) => {
             {user.startLocations.length === 0 && (
               <TouchableOpacity
                 activeOpacity={0.6}
-                onPress={onPressEditLocations}
+                onPress={onPressCreateLocations}
                 style={{
                   borderWidth: 2,
                   borderColor: theme.color.disabled,
