@@ -10,6 +10,7 @@ import { getScheduleDetail } from '../../redux/scheduleSlice';
 import RoundView from '../../components/common/RoundView';
 import ModalCover from '../../components/common/ModalCover';
 import LoadingModal from '../../components/common/LoadingModal';
+import FlatButton from '../../components/common/FlatButton';
 
 const screen = Dimensions.get('screen');
 const memberModalContentWidth = screen.width * 0.5;
@@ -78,51 +79,56 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
   return (
     <View style={styles.screenStyle}>
       {!isLoading ? (
-        <RoundView title={schedule?.date} hideCloseButton={true}>
-          <View style={styles.itemView}>
-            <View style={styles.itemTitleView}>
-              <Text style={styles.itemTitle}>약속 모임</Text>
+        <View style={styles.centeredView}>
+          <RoundView title={schedule?.date} hideCloseButton={true} style={{ marginBottom: 30 }}>
+            <View style={styles.itemView}>
+              <View style={styles.itemTitleView}>
+                <Text style={styles.itemTitle}>약속 모임</Text>
+              </View>
+              <View style={styles.itemContentView}>
+                <Text style={styles.itemContent}> {schedule?.group?.name}</Text>
+                <TouchableOpacity style={styles.itemMemberButton} onPress={openMemberModal}>
+                  <View style={styles.itemMemberButtonContent}>
+                    <Text style={{ marginRight: 10 }}>눌러서참석자보기</Text>
+                    <FontAwesomeIcon icon={faUser} color={'gray'} size={12} />
+                    <Text style={{ marginLeft: 3 }}>{schedule?.members?.length}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.itemContentView}>
-              <Text style={styles.itemContent}> {schedule?.group?.name}</Text>
-              <TouchableOpacity style={styles.itemMemberButton} onPress={openMemberModal}>
-                <View style={styles.itemMemberButtonContent}>
-                  <Text style={{ marginRight: 10 }}>눌러서참석자보기</Text>
-                  <FontAwesomeIcon icon={faUser} color={'gray'} size={12} />
-                  <Text style={{ marginLeft: 3 }}>{schedule?.members?.length}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
 
-          <View style={styles.itemView}>
-            <View style={styles.itemTitleView}>
-              <Text style={styles.itemTitle}>약속 이름</Text>
+            <View style={styles.itemView}>
+              <View style={styles.itemTitleView}>
+                <Text style={styles.itemTitle}>약속 이름</Text>
+              </View>
+              <View style={styles.itemContentView}>
+                <Text style={styles.itemContent}> {schedule.name}</Text>
+              </View>
             </View>
-            <View style={styles.itemContentView}>
-              <Text style={styles.itemContent}> {schedule.name}</Text>
-            </View>
-          </View>
 
-          <View style={styles.itemView}>
-            <View style={styles.itemTitleView}>
-              <Text style={styles.itemTitle}>만남 장소</Text>
+            <View style={styles.itemView}>
+              <View style={styles.itemTitleView}>
+                <Text style={styles.itemTitle}>만남 장소</Text>
+              </View>
+              <View style={styles.itemContentView}>
+                <Text style={styles.itemContent}> {schedule?.meetLocation?.name}</Text>
+                <Text style={styles.itemSubContent}> {schedule?.meetLocation?.address}</Text>
+              </View>
             </View>
-            <View style={styles.itemContentView}>
-              <Text style={styles.itemContent}> {schedule?.meetLocation?.name}</Text>
-              <Text style={styles.itemSubContent}> {schedule?.meetLocation?.address}</Text>
-            </View>
-          </View>
 
-          <View style={styles.itemView}>
-            <View style={styles.itemTitleView}>
-              <Text style={styles.itemTitle}>약속 장소</Text>
+            <View style={styles.itemView}>
+              <View style={styles.itemTitleView}>
+                <Text style={styles.itemTitle}>약속 장소</Text>
+              </View>
+              <View>{renderAmuseLoactions(schedule?.amuseLocations)}</View>
             </View>
-            <View>{renderAmuseLoactions(schedule?.amuseLocations)}</View>
-          </View>
 
-          <View style={styles.itemView}>{renderKeywords(schedule?.keywords)}</View>
-        </RoundView>
+            <View style={styles.itemView}>{renderKeywords(schedule?.keywords)}</View>
+          </RoundView>
+
+          <FlatButton text="지도로 장소들 확인하기" backgroundColor={theme.color.bright.yellow} />
+          <FlatButton text="약속에 참석하기" backgroundColor={theme.color.bright.blue} />
+        </View>
       ) : (
         <LoadingModal visible={isLoading} />
       )}
@@ -145,6 +151,16 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  centeredView: {
+    backgroundColor: theme.color.background,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     alignItems: 'center',
     padding: 20,
   },
