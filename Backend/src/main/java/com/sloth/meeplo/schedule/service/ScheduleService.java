@@ -53,9 +53,4 @@ public interface ScheduleService {
     List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization);
     List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization);
 
-    List<ScheduleMember> getScheduleMemberByMember(Member member);
-
-    List<ScheduleMember> getScheduleMemberBySchedule(Schedule schedule);
-
-
 }
