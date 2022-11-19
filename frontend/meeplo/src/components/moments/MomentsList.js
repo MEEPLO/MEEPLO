@@ -54,9 +54,9 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
     dispatch(getMomentsList(params));
   }, [isMine]);
 
-  const openDetailModel = () => {
+  const openDetailModel = id => {
     setMomentModal(true);
-    setMomentDetailId(momentData.id);
+    setMomentDetailId(id);
   };
 
   return (
@@ -72,7 +72,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                   height: viewHeight[moment.type],
                   display: index <= (currentPage + 1) * 6 - 1 ? 'flex' : 'none',
                 }}>
-                <Pressable style={{ width: '80%', position: 'relative' }} onPress={openDetailModel}>
+                <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
                   <AutoHeightImage
                     source={{ uri: moment.photo }}
                     width={imgWidth}
@@ -108,7 +108,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                   height: viewHeight[moment.type],
                   display: index <= (currentPage + 1) * 6 - 1 ? 'flex' : 'none',
                 }}>
-                <Pressable style={{ width: '80%', position: 'relative' }} onPress={openDetailModel}>
+                <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
                   <AutoHeightImage
                     source={{ uri: moment.photo }}
                     width={imgWidth}
