@@ -36,6 +36,8 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   const webviewRef = React.useRef();
   const [pictureUrl, setPictureUrl] = React.useState();
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isChanged, setIsChanged] = React.useState(false);
+  const [isNext, setIsNext] = React.useState(false);
 
   // load webview
   const html = mergeAndUpload(state.type);
@@ -77,11 +79,13 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
         text2: "'다음'을 눌러주세요.",
       });
       setPictureUrl(data.Location);
+      setIsNext(true);
     });
   };
 
   const onMessage = event => {
-    uploadToS3(event.nativeEvent.data);
+    console.log(event.nativeEvent.data);
+    event.nativeEvent.data === 'input changed' ? setIsChanged(true) : uploadToS3(event.nativeEvent.data);
   };
 
   const onPressNext = () => {
@@ -104,11 +108,17 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <>
       <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
+        <Text style={{ color: '#000', fontWeight: '800', marginBottom: 20, lineHeight: 25 }}>
+          사진 선택<Text style={{ color: theme.color.alert }}>*</Text>
+          {'\n'}
+          갤러리에서 사진을 꾹 눌러 사진 {state.type === 2 ? state.type + 2 : state.type + 1}개를 선택해주세요.{' '}
+        </Text>
+
         <View
           style={{
             marginHorizontal: 20,
             width: viewWidth,
-            height: windowHeight - 300,
+            height: windowHeight - 350,
             position: 'relative',
           }}>
           <Pressable
@@ -125,20 +135,24 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
             }}>
             <Text style={{ lineHeight: 49, textAlign: 'center', fontSize: 20, fontWeight: '800' }}>갤러리</Text>
           </Pressable>
-          <Pressable
-            style={{
-              width: viewWidth,
-              height: 55,
-              borderRadius: 15,
-              overflow: 'hidden',
-              borderColor: theme.color.border,
-              borderWidth: 2,
-              backgroundColor: theme.color.bright.red,
-              position: 'absolute',
-              bottom: 20,
-            }}>
-            <Text style={{ lineHeight: 51, textAlign: 'center', fontSize: 15, fontWeight: '800' }}>사진 확정하기</Text>
-          </Pressable>
+          {isChanged ? (
+            <Pressable
+              style={{
+                width: viewWidth,
+                height: 55,
+                borderRadius: 15,
+                overflow: 'hidden',
+                borderColor: theme.color.border,
+                borderWidth: 2,
+                backgroundColor: theme.color.bright.red,
+                position: 'absolute',
+                bottom: 20,
+              }}>
+              <Text style={{ lineHeight: 51, textAlign: 'center', fontSize: 15, fontWeight: '800' }}>
+                사진 확정하기
+              </Text>
+            </Pressable>
+          ) : null}
           <WebView
             ref={webviewRef}
             source={{ html: html }}
@@ -147,17 +161,19 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
           />
         </View>
       </View>
-      <View
-        style={{
-          width: '100%',
-          position: 'absolute',
-          bottom: 0,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-        <StepButton text="< 이전" active={true} onPress={toPrev} />
-        <StepButton text="다음 >" active={true} onPress={onPressNext} />
-      </View>
+      {isNext ? (
+        <View
+          style={{
+            width: '100%',
+            position: 'absolute',
+            bottom: 0,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <StepButton text="< 이전" active={true} onPress={toPrev} />
+          <StepButton text="다음 >" active={true} onPress={onPressNext} />
+        </View>
+      ) : null}
 
       <LoadingModal visible={isLoading} />
     </>

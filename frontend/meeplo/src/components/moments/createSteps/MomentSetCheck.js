@@ -42,7 +42,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
             style={{
               borderWidth: 1,
               borderColor: '#ddd',
-              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.1 - 40,
+              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.3 - 40,
             }}
           />
         </View>

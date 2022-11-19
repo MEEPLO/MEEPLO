@@ -52,7 +52,9 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    SplashScreen.show(this);
+    // SplashScreen.show(this);
+    SplashScreen.show(this, R.id.lottie); // here
+    SplashScreen.setAnimationFinished(true);
     super.onCreate(savedInstanceState);
     // super.onCreate(null);
   }

@@ -112,6 +112,9 @@ const mergeAndUpload = type => {
           mergePics(event, index)
         }
       }
+      window.ReactNativeWebView.postMessage(
+        "input changed"
+      )
     });
     
     const openGallary = () => {
@@ -248,6 +251,9 @@ const mergeAndUpload = type => {
           mergePics(event, index)
         }
       }
+      window.ReactNativeWebView.postMessage(
+        "input changed"
+      )
     });
     
     const openGallary = () => {
@@ -364,6 +370,9 @@ const mergeAndUpload = type => {
           mergePics(event, index)
         }
       }
+      window.ReactNativeWebView.postMessage(
+        "input changed"
+      )
     });
     
     const openGallary = () => {
