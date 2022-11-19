@@ -22,14 +22,12 @@ export const createSchedule = createAsyncThunk('schedule/createSchedule', async 
 // ex) yearMonth === '2022-11'
 export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthly', async yearMonth => {
   try {
-    console.log('yearmonth', yearMonth);
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}/list`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
     return response.data;
   } catch (err) {
     return isRejectedWithValue(err.response.data);
@@ -39,7 +37,6 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
 // ex) yearMonth === '2022-11'
 export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesDatesMonthly', async yearMonth => {
   try {
-    console.log('yearmonth', yearMonth);
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}`, {
       headers: {
@@ -109,7 +106,71 @@ export const getNoMomentsSchedule = createAsyncThunk('schedule/getNoMomentsSched
     });
     return response?.data.schedules;
   } catch (err) {
-    console.error('ERROR in getUpcomingSchedule!', err);
+    console.error('ERROR in getNoMomentsSchedule!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const getScheduleDetail = createAsyncThunk('schedule/getScheduleDetail', async scheduleId => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/${scheduleId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data;
+  } catch (err) {
+    console.error('ERROR in getScheduleDetail!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const editSchedule = createAsyncThunk('schedule/editGroup', async ({ form, scheduleId, Alert, navigation }) => {
+  console.log(form);
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate
+      .put(
+        `/schedule`,
+        { ...form },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
+      .then(() => {
+        Alert.alert(`약속을 수정했습니다.`, '', [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.reset({
+                index: 1,
+                routes: [{ name: 'Home' }, { name: 'Detail', params: { scheduleId } }],
+              });
+            },
+          },
+        ]);
+      });
+    console.log('schedule EDITED!');
+  } catch (err) {
+    console.error('ERROR in editSchedule!', err);
+    return isRejectedWithValue(err.response?.data);
+  }
+});
+
+export const getScheduleMomentsFeed = createAsyncThunk('schedule/getScheduleMomentsFeed', async ({ scheduleId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/schedule/${scheduleId}/moment`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response?.data.moments;
+  } catch (err) {
+    console.error('ERROR in getScheduleMomentsFeed', err);
     return isRejectedWithValue(err.response?.data);
   }
 });
@@ -119,10 +180,12 @@ const scheduleSlice = createSlice({
   initialState: {
     value: '초기약속',
     isLoading: false,
+    schedule: {},
     schedules: [],
     scheduleDates: [],
     upComing: [],
     noMoments: [],
+    moments: [],
   },
   reducers: {},
   extraReducers: {
@@ -159,6 +222,20 @@ const scheduleSlice = createSlice({
     },
     [getNoMomentsSchedule.fulfilled]: (state, { payload }) => {
       state.noMoments = payload.slice(0, 3);
+    },
+    [getScheduleDetail.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getScheduleDetail.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.schedule = payload;
+    },
+    [getScheduleMomentsFeed.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getScheduleMomentsFeed.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.moments = payload;
     },
   },
 });

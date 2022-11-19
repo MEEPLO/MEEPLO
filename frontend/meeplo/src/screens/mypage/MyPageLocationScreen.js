@@ -1,11 +1,9 @@
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import MyPageLocationItem from '../../components/mypage/MyPageLocationItem';
-import MyPageLocationSearch from '../../components/mypage/MyPageLocationSearch';
-import { theme } from '../../assets/constant/DesignTheme';
 
 const MyPageLocationScreen = ({ navigation }) => {
   const startLocations = useSelector(state => state.user.info.startLocations);

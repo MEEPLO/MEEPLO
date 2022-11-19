@@ -15,13 +15,15 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import AWS from 'aws-sdk';
 import { decode } from 'base64-arraybuffer';
 import fs from 'react-native-fs';
+import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import { theme } from '../assets/constant/DesignTheme';
 import StepTextInput from '../components/common/StepTextInput';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { editGroup, getGroupDetail } from '../redux/groupSlice';
-import { useFocusEffect } from '@react-navigation/native';
 import LoadingModal from '../components/common/LoadingModal';
+import { TOAST_MESSAGE } from '../assets/constant/string';
 
 const { width } = Dimensions.get('window');
 
@@ -29,13 +31,46 @@ const GroupEditScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const groupDetail = useSelector(state => state.group.details);
   const [groupPhotoFile, setGroupPhotoFile] = useState(null);
-  const [groupName, setGroupName] = useState(groupDetail.name);
-  const [groupPhoto, setGroupPhoto] = useState(groupDetail.photo);
-  const [groupInitialPhoto, setGroupInitialPhoto] = useState(groupDetail.photo);
-  const [groupDescription, setGroupDescription] = useState(groupDetail.description);
+  const [groupName, setGroupName] = useState(groupDetail?.name);
+  const [groupPhoto, setGroupPhoto] = useState(groupDetail?.photo);
+  const [groupDescription, setGroupDescription] = useState(groupDetail?.description);
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
   const [isProfilePictureEdit, setIsprofilePrictureEdit] = useState(false);
+  const groupInitialPhoto = groupDetail?.photo;
   const isLoading = useSelector(state => state.group.isLoading);
+
+  const validateInput = () => {
+    if (!groupName || groupName.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.GROUP_NO_NAME,
+      });
+      return false;
+    } else if (!groupPhoto || groupPhoto.length === 0) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
+        text2: TOAST_MESSAGE.GROUP_NO_PHOTO,
+      });
+      return false;
+    } else if (groupName.length > 20) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.INPUT_ERROR,
+        text2: TOAST_MESSAGE.GROUP_NAME_LENGTH_EXCESS,
+      });
+      return false;
+    } else if (groupDescription.length > 200) {
+      Toast.show({
+        type: 'error',
+        text1: TOAST_MESSAGE.INPUT_ERROR,
+        text2: TOAST_MESSAGE.GROUP_DESCRIPTION_LENGTH_EXCESS,
+      });
+      return false;
+    }
+    return true;
+  };
 
   const addImage = async () => {
     const result = await launchImageLibrary();
@@ -97,15 +132,17 @@ const GroupEditScreen = ({ route, navigation }) => {
   };
 
   const onPressEdit = () => {
-    if (groupPhoto === groupInitialPhoto) {
-      const form = {
-        name: groupName,
-        photo: groupPhoto,
-        description: groupDescription,
-      };
-      dispatch(editGroup({ form, groupId: groupDetail.id, Alert, navigation }));
-    } else {
-      uploadToS3(groupPhotoFile);
+    if (validateInput()) {
+      if (groupPhoto === groupInitialPhoto) {
+        const form = {
+          name: groupName,
+          photo: groupPhoto,
+          description: groupDescription,
+        };
+        dispatch(editGroup({ form, groupId: groupDetail.id, Alert, navigation }));
+      } else {
+        uploadToS3(groupPhotoFile);
+      }
     }
   };
 

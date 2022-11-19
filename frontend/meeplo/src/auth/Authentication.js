@@ -24,7 +24,7 @@ async function userLogin(kakaoAccessToken) {
  * kakao에서 토큰을 받아오는 함수
  * @returns message: 카카오에서 받아오기 성공했는지
  */
-export const logInWithKakao = async ({ Alert, navigation }) => {
+export const logInWithKakao = async ({ Alert }) => {
   try {
     const kakaoToken = await login();
     const { accessToken } = kakaoToken;

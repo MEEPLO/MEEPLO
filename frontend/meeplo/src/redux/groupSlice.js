@@ -222,13 +222,14 @@ export const getGroupMembers = createAsyncThunk('group/getGroupMembers', async (
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
     return response?.data.members;
   } catch (err) {
     return isRejectedWithValue(err.response?.data);
   }
 });
 
-export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Alert, navigation }) => {
+export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Alert, navigation, Toast }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     await axiosPrivate
@@ -243,7 +244,7 @@ export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Aler
       )
       .then(res => {
         console.log(res.data);
-        Alert.alert(`그룹에 참여했습니다!`, '', [
+        Alert.alert(`${res.data.members.groupName} 그룹에 참여했습니다!`, '', [
           {
             text: '확인',
             onPress: () => {
@@ -257,6 +258,19 @@ export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Aler
       });
     console.log('you are JOINED!');
   } catch (err) {
+    if (err.response.status === 404) {
+      Toast.show({
+        type: 'error',
+        text1: '존재하지 않는 그룹입니다.',
+        text2: '그룹 코드를 확인해주세요.',
+      });
+    } else if (err.response.status === 422) {
+      Toast.show({
+        type: 'error',
+        text1: '이미 가입한 그룹입니다.',
+        text2: '그룹 코드를 확인해주세요.',
+      });
+    }
     console.error('ERROR in joinGroup!', err);
     // return isRejectedWithValue(err.response?.data);
   }
