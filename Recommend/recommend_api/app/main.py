@@ -1,14 +1,10 @@
 from fastapi import FastAPI, Depends
 
-# from fastapi import HTTPException, responses, Query
-from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
-import dto, middlepoint, recommend, model, database, schema
+import dto, middlepoint, recommend, crud
 
 app = FastAPI()
-
-model.Base.metadata.create_all(bind=database.engine)
 
 origins = [
     "*"
@@ -22,25 +18,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 @app.post("/meeplo/recommendation/v1/center")
 def get_center_weight(coordinates: dto.CoordinateList):
     return middlepoint.calc_center_weight(coordinates.coordinates)
 
 @app.post("/meeplo/recommendation/v1/amuse")
 async def get_keywords(
-    tags: dto.TagList, 
-    db: Session = Depends(get_db)
+    tags: dto.TagList
 ):
 
     json = {
-        "tags": recommend.recommend_keywords(tags.tags)
+        "tags": crud.getKeywordsFromDB(recommend.recommend_keywords(tags.tags))
     }
 
     return json
