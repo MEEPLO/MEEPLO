@@ -1,11 +1,8 @@
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
-import { MEEPLO_SERVER_BASE_URL } from '@env';
 import { axiosPrivate } from '../auth/axiosInstance';
 
 export const getMiddlePoint = createAsyncThunk('recommendation/getMiddlePoint', async form => {
-  console.log(form);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axiosPrivate.post(`/recommendation/location/middle`, form, {

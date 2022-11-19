@@ -11,6 +11,7 @@ import { groupListSlice, groupDetailSlice } from './groupSlice';
 import { userSlice } from './userSlice';
 import { tabBarSlice } from './navigationSlice';
 import { recommendationSlice } from './recommendationSlice';
+import { locationSlice } from './locationSlice';
 
 // TODO: import redux-persist
 
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   user: userSlice.reducer,
   tabBar: tabBarSlice.reducer,
   recommendation: recommendationSlice.reducer,
+  location: locationSlice.reducer,
 });
 
 export const store = configureStore({
