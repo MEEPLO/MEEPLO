@@ -3,6 +3,7 @@ package com.sloth.meeplo.schedule.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
+import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.moment.entity.Moment;
@@ -31,6 +32,7 @@ public class ScheduleResponse {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
         private String name;
+        private Long leaderId;
         private ScheduleDetailGroupInfo group;
         private List<String> keywords;
         private List<ScheduleDetailMemberInfo> members;
@@ -41,6 +43,12 @@ public class ScheduleResponse {
         ScheduleDetailInfo(Schedule schedule){
             this.date = schedule.getDate();
             this.name = schedule.getName();
+            this.leaderId = schedule.getScheduleMembers().stream()
+                    .filter(sm->sm.getRole().equals(Role.LEADER))
+                    .findFirst()
+                    .orElseThrow(()->new MeeploException(ScheduleErrorCode.NOT_EXIST_SCHEDULE_LEADER))
+                    .getMember()
+                    .getId();
             // TODO: 2022-11-18 확인필요
             this.keywords = schedule.getScheduleKeywords().stream()
                     .distinct()
@@ -91,7 +99,7 @@ public class ScheduleResponse {
 
         @Builder
         ScheduleDetailMemberInfo(ScheduleMember scheduleMember){
-            this.id = scheduleMember.getId();
+            this.id = scheduleMember.getMember().getId();
             this.nickname = scheduleMember.getMember().getUsername();
             this.photo = scheduleMember.getMember().getProfilePhoto();
             this.status = scheduleMember.getStatus();
