@@ -14,4 +14,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByGroup(Group group);
 
     List<Schedule> findByGroupAndDateBetween(Group group, LocalDateTime start, LocalDateTime end);
+
+
 }

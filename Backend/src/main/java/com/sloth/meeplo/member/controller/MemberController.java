@@ -84,4 +84,11 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @GetMapping("/member/defaultlocation/{id}")
+    public ResponseEntity<Void> updateMemberDefaultLocation(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long id){
+        memberService.updateMemberDefaultLocation(authorization, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
