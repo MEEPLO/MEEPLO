@@ -77,16 +77,24 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(k->ScheduleKeyword.builder().keyword(k).schedule(newSchedule).build())
                 .collect(Collectors.toList()));
 
-        scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
+        scheduleMemberRepository.save(ScheduleMember.builder()
+                .schedule(newSchedule)
+                .member(member)
+                .memberLocation(memberService.findMemberLocationByMember(member))
+                .role(Role.LEADER)
+                .build());
+
         scheduleMemberRepository.saveAll(
                 scheduleCreateInput.getMembers().stream()
                         .map(ScheduleRequest.ScheduleInputMember::getId)
                         .filter(id-> !id.equals(member.getId()))
-                        .map(id -> ScheduleMember.builder()
+                        .map(id -> {
+                            Member curMember = memberService.getMemberById(id);
+                            return ScheduleMember.builder()
                                 .schedule(newSchedule)
-                                .member(memberRepository.findById(id)
-                                        .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER)))
-                                .role(Role.MEMBER).build())
+                                .member(curMember)
+                                .memberLocation(memberService.findMemberLocationByMember(curMember))
+                                .role(Role.MEMBER).build();})
                         .collect(Collectors.toList())
         );
 
@@ -117,7 +125,12 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .build()
         );
 
-        scheduleMemberRepository.save(ScheduleMember.builder().schedule(newSchedule).member(member).role(Role.LEADER).build());
+        scheduleMemberRepository.save(ScheduleMember.builder()
+                .schedule(newSchedule)
+                .member(member)
+                .memberLocation(memberService.findMemberLocationByMember(member))
+                .role(Role.LEADER)
+                .build());
 
         scheduleLocationRepository
                 .save(ScheduleLocation
@@ -167,11 +180,15 @@ public class ScheduleServiceImpl implements ScheduleService{
                 scheduleUpdateInput.getMembers().stream()
                         .filter(i -> schedule.getScheduleMembers().stream()
                                 .noneMatch(o->o.getMember().getId().equals(i.getId())))
-                        .map(i -> ScheduleMember.builder()
-                                .schedule(schedule)
-                                .member(memberService.getMemberById(i.getId()))
-                                .role(Role.MEMBER)
-                                .build())
+                        .map(i -> {
+                            Member curMember = memberService.getMemberById(i.getId());
+                            return ScheduleMember.builder()
+                                    .schedule(schedule)
+                                    .member(curMember)
+                                    .memberLocation(memberService.findMemberLocationByMember(curMember))
+                                    .role(Role.MEMBER)
+                                    .build();
+                        })
                         .collect(Collectors.toList())
         );
 
@@ -204,7 +221,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Member member = memberService.getMemberByAuthorization(authorization);
         Schedule schedule = getScheduleByScheduleId(scheduleId);
 
-        groupService.checkMemberInGroup(member, schedule.getGroup());
+        checkMemberInSchedule(schedule, member);
 
         return ScheduleResponse.ScheduleDetailInfo.builder().schedule(schedule).build();
     }
@@ -224,8 +241,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public List<ScheduleResponse.ScheduleListInfo> getScheduleList(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        return scheduleMemberRepository.findByMember(member).stream()
-                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED))
+        return scheduleMemberRepository.findByMemberAndStatus(member, ScheduleMemberStatus.JOINED).stream()
                 .map(sm -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(sm.getSchedule())
                         .build())
@@ -242,10 +258,9 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .toFormatter();
         LocalDate localDate = LocalDate.parse(yearMonth, formatter);
         LocalDateTime targetYearMonth = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        return groupMemberRepository.findByMember(member).stream()
-                .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
-                .flatMap(gm-> scheduleRepository
-                        .findByGroupAndDateBetween(gm.getGroup(),targetYearMonth,targetYearMonth.plusMonths(1)).stream())
+        return scheduleMemberRepository.findByMemberAndStatus(member, ScheduleMemberStatus.JOINED).stream()
+                .map(ScheduleMember::getSchedule)
+                .filter(s->s.getDate().isBefore(targetYearMonth.plusMonths(1)) && s.getDate().isAfter(targetYearMonth))
                 .map(s->s.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .distinct()
                 .collect(Collectors.toList());
@@ -261,10 +276,11 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .toFormatter();
         LocalDate localDate = LocalDate.parse(yearMonth, formatter);
         LocalDateTime targetYearMonth = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        return groupMemberRepository.findByMember(member).stream()
-                .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
-                .flatMap(gm-> scheduleRepository
-                        .findByGroupAndDateBetween(gm.getGroup(),targetYearMonth, targetYearMonth.plusMonths(1)).stream())
+
+
+        return  scheduleMemberRepository.findByMemberAndStatus(member, ScheduleMemberStatus.JOINED).stream()
+                .map(ScheduleMember::getSchedule)
+                .filter(s->s.getDate().isBefore(targetYearMonth.plusMonths(1)) && s.getDate().isAfter(targetYearMonth))
                 .map(s -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(s)
                         .build())
@@ -277,10 +293,9 @@ public class ScheduleServiceImpl implements ScheduleService{
         Member member = memberService.getMemberByAuthorization(authorization);
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
-        return groupMemberRepository.findByMember(member).stream()
-                .filter(gm-> gm.getStatus().equals(GroupMemberStatus.ACTIVATED))
-                .flatMap(gm-> scheduleRepository
-                        .findByGroupAndDateBetween(gm.getGroup(),targetDate, targetDate.plusDays(1)).stream())
+        return scheduleMemberRepository.findByMemberAndStatus(member, ScheduleMemberStatus.JOINED).stream()
+                .map(ScheduleMember::getSchedule)
+                .filter(s->s.getDate().isBefore(targetDate.plusMonths(1)) && s.getDate().isAfter(targetDate))
                 .map(s -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(s)
                         .build())
@@ -335,9 +350,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUpcoming(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        return scheduleMemberRepository.findByMember(member).stream()
-                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
-                        && sm.getSchedule().getDate().isAfter(LocalDateTime.now()))
+        return scheduleMemberRepository.findByMemberAndStatus(member, ScheduleMemberStatus.JOINED).stream()
+                .filter(sm-> sm.getSchedule().getDate().isAfter(LocalDateTime.now()))
                 .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(sm.getSchedule())
                         .build()
@@ -351,9 +365,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional(readOnly = true)
     public List<ScheduleResponse.ScheduleListInfo> getScheduleByUnwritten(String authorization) {
         Member member = memberService.getMemberByAuthorization(authorization);
-        return scheduleMemberRepository.findByMember(member).stream()
-                .filter(sm-> sm.getStatus().equals(ScheduleMemberStatus.JOINED)
-                        && sm.getSchedule().getDate().isBefore(LocalDateTime.now())
+        return scheduleMemberRepository.findByMemberAndStatus(member, ScheduleMemberStatus.JOINED).stream()
+                .filter(sm-> sm.getSchedule().getDate().isBefore(LocalDateTime.now())
                         && sm.getSchedule().getScheduleLocations().stream().mapToLong(sl->sl.getMoments().size()).sum()==0)
                 .map(sm-> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(sm.getSchedule())

@@ -13,6 +13,7 @@ public enum ScheduleErrorCode implements ErrorCode{
     NOT_EXIST_SCHEDULE_MEMBER(HttpStatus.NOT_FOUND, "해당 멤버가 약속에 존재하지 않습니다."),
     NOT_EXIST_SCHEDULE(HttpStatus.NOT_FOUND, "존재하지 않는 약속입니다."),
     NOT_EXIST_SCHEDULE_LOCATION(HttpStatus.NOT_FOUND, "존재하지 않는 약속장소입니다."),
+    NOT_EXIST_SCHEDULE_LEADER(HttpStatus.NOT_FOUND, "약속에 리더가 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
