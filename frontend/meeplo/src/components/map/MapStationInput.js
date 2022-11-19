@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
+  Button,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
@@ -16,6 +17,7 @@ import Geolocation from 'react-native-geolocation-service';
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
 import { getMiddlePoint } from '../../redux/recommendationSlice';
+import { getStationList } from '../../redux/locationSlice';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
@@ -47,16 +49,22 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   const selectedLocationInfoPositionAnim = useRef(new Animated.ValueXY()).current;
   const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
   const recommendedStations = useSelector(state => state?.recommendation?.recommendedStations);
+  const isSearchStationLoading = useSelector(state => state?.location?.isLoading);
+  const searchedStations = useSelector(state => state?.locations?.stations);
 
   useEffect(() => {
     if (Array.isArray(recommendedStations)) {
       postMessage(MESSAGE_TYPE.UPDATE_RECOMMENDED_STATIONS, recommendedStations);
-      // recommendedStations[0].requiredTimes.map(time => {
-      //   time.coordinates.map(cor => console.log(cor));
-      // });
-      // console.log(recommendedStations[0].requiredTimes.map(time => time.coordinates.length));
+      openSelectedStationInfo();
     }
   }, [recommendedStations]);
+
+  useEffect(() => {
+    if (Array.isArray(searchedStations)) {
+      console.log(searchedStations);
+      openSelectedStationInfo();
+    }
+  }, [searchedStations]);
 
   useEffect(() => {
     requestPermissions();
@@ -143,11 +151,38 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
     dispatch(getMiddlePoint(mock));
   };
 
+  const onPressSearchStation = () => {
+    dispatch(getStationList(searchValue));
+  };
+
+  const renderSelectedStationInfoView = station => {
+    // if (!station) return null;
+
+    return (
+      <View>
+        <Text>여러분들의 중간 지점은...</Text>
+        <Text>삼각지역</Text>
+        <Text>평균 이동 시간 34분</Text>
+
+        <TouchableOpacity>
+          <Text>만남 장소로 지정</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Text>여기서 놀 곳 추천 받기</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   const renderMapInterface = () => {
     return (
       <View style={styles.mapInterfaceView} pointerEvents="box-none">
         <View style={styles.mapSearchInputView}>
           <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
+          <TouchableOpacity style={styles.mapSearchButton} onPress={onPressSearchStation}>
+            <Text>역 검색</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
@@ -167,6 +202,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
           <TouchableOpacity style={styles.selectedStationInfoCloseButton} onPress={() => closeSelectedStationInfo()}>
             <Text>X</Text>
           </TouchableOpacity>
+          {renderSelectedStationInfoView()}
         </Animated.View>
       </View>
     );
@@ -190,7 +226,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
         {!isLoading && renderMapInterface()}
       </ModalCover>
 
-      <LoadingModal visible={isLoading || isRecommendationLoading} />
+      <LoadingModal visible={isLoading || isRecommendationLoading || isSearchStationLoading} />
     </View>
   );
 };
@@ -219,17 +255,28 @@ const styles = StyleSheet.create({
   },
   mapSearchInputView: {
     width: screen.width,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   mapSearchInput: {
     width: searchInputWidth,
     height: 40,
-    margin: 12,
     borderWidth: 1,
     borderColor: theme.color.border,
     borderRadius: theme.radius.input,
     padding: 10,
     backgroundColor: 'white',
+  },
+  mapSearchButton: {
+    backgroundColor: theme.color.bright.red,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+
+    borderWidth: theme.border.thin,
+    borderColor: theme.color.border,
+    borderRadius: theme.radius.base,
   },
   selectedStationInfoView: {
     position: 'absolute',
