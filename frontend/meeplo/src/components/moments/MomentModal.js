@@ -49,12 +49,10 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
 
   const momentLikeHandler = () => {
     if (momentDetail.reaction.liked) {
-      console.log('isliked off');
       dispatch(deleteMomentReaction({ momentDetailId })).then(() => {
         dispatch(getMomentDetail({ momentDetailId }));
       });
     } else {
-      console.log('isliked on');
       dispatch(updateMomentReaction({ momentDetailId })).then(() => {
         dispatch(getMomentDetail({ momentDetailId }));
       });
