@@ -18,6 +18,11 @@ const images = {
     defaultImage: { uri: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png' },
   },
   faDoor: require('./faDoor.png'),
+  add: {
+    group: require('./addgroup.png'),
+    schedule: require('./addsche.png'),
+    moment: require('./addmoment.png'),
+  },
 };
 
 export default images;

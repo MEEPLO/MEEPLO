@@ -71,15 +71,15 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
     const actions = [
       {
         type: 'UPDATE_LOCATIONID',
-        payload: selectedLocation,
+        payload: selectedLocation ? selectedLocation : null,
       },
       {
         type: 'UPDATE_SCHEDULENAME',
-        payload: scheduleNameIndex[selectedSchedule].name,
+        payload: selectedSchedule ? scheduleNameIndex[selectedSchedule].name : null,
       },
       {
         type: 'UPDATE_PLACENAME',
-        payload: locationNameIndex[selectedLocation],
+        payload: selectedLocation ? locationNameIndex[selectedLocation] : null,
       },
     ];
     !!selectedSchedule
@@ -100,25 +100,10 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
     };
 
     if (!scheduleDate) {
-      // Toast.show({
-      //   type: 'error',
-      //   text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-      //   text2: TOAST_MESSAGE.SCHEDULE_NO_DATE,
-      // });
       Alert.alert('약속 일시가 필요해요!');
     } else if (!scheduleName) {
-      // Toast.show({
-      //   type: 'error',
-      //   text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-      //   text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
-      // });
       Alert.alert('약속의 이름을 적어주세요!');
     } else if (!schedulePlace) {
-      // Toast.show({
-      //   type: 'error',
-      //   text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-      //   text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
-      // });
       Alert.alert('약속 장소를 정해주세요!');
     } else {
       setIsLoading(true);
