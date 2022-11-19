@@ -7,6 +7,7 @@ import Images from '../assets/image/index';
 import { hideTabBar, showTabBar } from '../redux/navigationSlice';
 import { useFocusEffect } from '@react-navigation/native';
 import { getUserInfo } from '../redux/userSlice';
+import { theme } from '../assets/constant/DesignTheme';
 
 const LoginView = styled.View`
   flex: 1;

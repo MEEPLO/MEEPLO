@@ -29,6 +29,7 @@ const theme = {
   font: {
     family: '',
     color: '#000000',
+    subColor: '#686868',
   },
   radius: {
     base: 20,

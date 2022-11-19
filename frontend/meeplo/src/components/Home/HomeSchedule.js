@@ -1,10 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { View, SafeAreaView, Animated, FlatList, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { View, SafeAreaView, Animated, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 import ScheduleButton from '../common/ScheduleButton';
-import { theme } from '../../assets/constant/DesignTheme';
 
 const { width } = Dimensions.get('screen');
-const imageWidth = Dimensions.get('window').width - 40;
 
 const Indicator = ({ scrollX, data }) => {
   return (
@@ -46,8 +44,11 @@ const HomeSchedule = ({ data, navigation }) => {
   const slideRef = useRef(null);
 
   const onPressCreateSchedule = () => {
-    // TODO: hrookim navigate to create screen
     navigation.navigate('ScheduleStack', { screen: 'Create' });
+  };
+
+  const onPressSchedule = ({ scheduleId }) => {
+    navigation.navigate('ScheduleStack', { screen: 'Detail', params: { scheduleId } });
   };
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
@@ -62,7 +63,7 @@ const HomeSchedule = ({ data, navigation }) => {
     <TouchableOpacity
       activeOpacity={0.6}
       onPress={() => {
-        // TODO: hrookim navigate to Schedule-DETAIL page
+        onPressSchedule({ scheduleId: item.id });
       }}>
       <ScheduleButton
         isData={true}
