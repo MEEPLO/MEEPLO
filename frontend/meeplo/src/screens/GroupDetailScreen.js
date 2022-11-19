@@ -1,15 +1,12 @@
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Dimensions } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Tabs } from 'react-native-collapsible-tab-view';
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-// import { faMapLocationDot } from '@fortawesome/free-solid-svg-icons/faMapLocationDot';
 import { renderTabBar, renderScheduleLabel, renderMomentsLabel } from '../components/Group/GroupDetailTabBar';
 import GroupDetailHeader from '../components/Group/GroupDetailHeader';
 import GroupDetailScheduleItem from '../components/Group/GroupDetailScheduleItem';
 import GroupDetailMomentsItem from '../components/Group/GroupDetailMomentsItem';
 import { getGroupDetail, getGroupMomentsFeed } from '../redux/groupSlice';
-import { theme } from '../assets/constant/DesignTheme';
 import MomentModal from '../components/moments/MomentModal';
 
 const { width } = Dimensions.get('window');
@@ -25,7 +22,6 @@ const GroupDetailScreen = ({ route, navigation }) => {
   const colorList = ['purple', 'red', 'navy', 'yellow', 'green', 'orange', 'blue'];
 
   const onPressMoment = ({ momentId }) => {
-    // TODO: hrookim moment modal 연결하기!!!!!
     console.log(momentId);
     setModalVisible(true);
     setMomentId(momentId);
@@ -37,8 +33,7 @@ const GroupDetailScreen = ({ route, navigation }) => {
 
   const renderItem = useCallback(({ index, item }) => {
     const onPressGroupDetail = () => {
-      // TODO: hrookim navigate 연결하기!!!!!
-      // navigation.navigate('ScheduleStack', { screen: 'ScheduleDetail', params: { scheduleId: item.id } });
+      navigation.navigate('ScheduleStack', { screen: 'Detail', params: { scheduleId: item.id } });
     };
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={onPressGroupDetail}>
@@ -48,7 +43,6 @@ const GroupDetailScreen = ({ route, navigation }) => {
           memberCount={item.memberCount}
           location={item.location}
           color={colorList[item.id % 7]}
-          isLast={groupDetail?.schedules?.length === index + 1 ? true : false}
         />
       </TouchableOpacity>
     );
@@ -67,6 +61,7 @@ const GroupDetailScreen = ({ route, navigation }) => {
           renderItem={renderItem}
           keyExtractor={item => 'groupSchedule-' + item.id}
         />
+        <View style={{ height: 55 }}></View>
       </Tabs.Tab>
       <Tabs.Tab name="momentsLabel" label={renderMomentsLabel}>
         <Tabs.ScrollView>
@@ -84,7 +79,7 @@ const GroupDetailScreen = ({ route, navigation }) => {
                     id={item.id}
                     photo={item.photo}
                     width={width / 3 - 2}
-                    color={colorList[(item.id % 4) + 3]}
+                    color={colorList[(item.id % 5) + 2]}
                   />
                 </TouchableOpacity>
               </View>
@@ -99,6 +94,7 @@ const GroupDetailScreen = ({ route, navigation }) => {
             )}
           </View>
         </Tabs.ScrollView>
+        <View style={{ height: 55 }}></View>
       </Tabs.Tab>
     </Tabs.Container>
   );

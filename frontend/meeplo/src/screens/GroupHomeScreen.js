@@ -1,8 +1,18 @@
-import { View, Text, ScrollView, TouchableOpacity, Modal, Dimensions, TextInput, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  Dimensions,
+  TextInput,
+  Alert,
+  ToastAndroid,
+} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-regular-svg-icons/faSquarePlus';
 import { faPaste } from '@fortawesome/free-regular-svg-icons/faPaste';
@@ -10,7 +20,7 @@ import GroupListItem from '../components/Group/GroupListItem';
 import { theme } from '../assets/constant/DesignTheme';
 import { getGroupList, joinGroup } from '../redux/groupSlice';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const GroupHomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,6 +28,14 @@ const GroupHomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const groupList = useSelector(state => state.groupList);
   const colorList = ['red', 'orange', 'yellow', 'green', 'blue', 'navy', 'purple'];
+
+  const validateInput = () => {
+    if (!groupCode || groupCode.length === 0) {
+      ToastAndroid.show('그룹 코드를 입력해주세요!', ToastAndroid.LONG);
+      return false;
+    }
+    return true;
+  };
 
   const openModal = () => setModalVisible(true);
   const closeModal = () => {
@@ -31,9 +49,15 @@ const GroupHomeScreen = ({ navigation }) => {
 
   const onPressJoinGroup = () => {
     const form = { enterCode: groupCode };
-    dispatch(joinGroup({ form, Alert, navigation })).then(() => {
-      closeModal();
-    });
+    if (validateInput()) {
+      dispatch(joinGroup({ form, Alert, navigation, Toast })).then(() => {
+        closeModal();
+      });
+    }
+  };
+
+  const onPressCreateGroup = () => {
+    navigation.navigate('GroupCreate');
   };
 
   const fetchCopiedText = async () => {
@@ -46,6 +70,7 @@ const GroupHomeScreen = ({ navigation }) => {
   }, []);
   return (
     <ScrollView>
+      {/* joinGroup Modal */}
       <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={closeModal}>
         <View
           style={{
@@ -141,31 +166,52 @@ const GroupHomeScreen = ({ navigation }) => {
             flexDirection: 'row',
             alignItems: 'baseline',
           }}>
-          <Text style={{ fontSize: 24, fontWeight: '900', fontColor: theme.font.color }}>그룹 리스트</Text>
+          <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>내 그룹 모아보기</Text>
         </View>
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={openModal}>
           <Text style={{ marginRight: 5 }}>다른 그룹 참여</Text>
           <FontAwesomeIcon icon={faSquarePlus} size={14} color="gray" />
         </TouchableOpacity>
       </View>
-      {groupList?.map((item, i) => (
-        <View style={{ marginVertical: 4 }} key={`groupList-${i}`}>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-              onPressGroup(item.id);
-            }}>
-            <GroupListItem
-              name={item.name}
-              photo={item.photo}
-              memberCount={item.memberCount}
-              leaderName={item.leaderName}
-              lastSchedule={item.lastSchedule}
-              color={colorList[i % 7]}
-            />
-          </TouchableOpacity>
-        </View>
-      ))}
+      {groupList?.length === 0 ? (
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={onPressCreateGroup}
+          style={{
+            margin: 20,
+            borderWidth: 2,
+            borderColor: theme.color.disabled,
+            height: 120,
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{ fontSize: 16, marginVertical: 5 }}>아직 소속된 그룹이 없네요!</Text>
+          {/* <Text style={{ fontSize: 16, marginVertical: 5 }}>다른 그룹에 참여하거나,</Text> */}
+          <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>새로운 그룹을 만들어 보세요.</Text>
+        </TouchableOpacity>
+      ) : (
+        <>
+          {groupList?.map((item, i) => (
+            <View style={{ marginVertical: 4 }} key={`groupList-${i}`}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  onPressGroup(item.id);
+                }}>
+                <GroupListItem
+                  name={item.name}
+                  photo={item.photo}
+                  memberCount={item.memberCount}
+                  leaderName={item.leaderName}
+                  lastSchedule={item.lastSchedule}
+                  color={colorList[i % 7]}
+                />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </>
+      )}
       <View style={{ height: 90 }} />
     </ScrollView>
   );

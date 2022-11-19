@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
   const { width } = Dimensions.get('window');
 
   const onPressLogin = () => {
-    logInWithKakao({ Alert, navigation }).then(() => {
+    logInWithKakao({ Alert }).then(() => {
       dispatch(getUserInfo());
     });
   };
