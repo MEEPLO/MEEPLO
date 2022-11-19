@@ -30,7 +30,9 @@ const TOAST_MESSAGE = {
   GROUP_DESCRIPTION_LENGTH_EXCESS: '그룹 설명은 최대 200자까지 입력 가능합니다.',
 };
 
-const COMMON_MESSAGE = {};
+const COMMON_MESSAGE = {
+  NO_SHCEDULE_EXISTS: '아무 약속이 없습니다.',
+};
 
 const ALERT_MESSAGE = {
   SCHEDULE_ASK_CANCEL_CREATE_TEXT1: '약속 생성을 취소하시겠습니까?',
