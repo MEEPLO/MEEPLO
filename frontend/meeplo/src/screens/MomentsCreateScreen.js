@@ -106,6 +106,7 @@ const MomentsCreateScreen = ({ navigation }) => {
   const setStepClamp = newStep => {
     setStep(helper.number.clamp(newStep, 0, STEP_COUNT - 1));
   };
+
   const toNext = actions => {
     if (Array.isArray(actions)) {
       actions.forEach(action => stepDispatch(action));

@@ -5,8 +5,6 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
-import AWS from 'aws-sdk';
-import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 
 const MomentsCol = styled.View`
   height: ${({ height }) => height}px;
@@ -27,33 +25,6 @@ const MomentPic = ({ momentData, direction, setMomentModal, setMomentDetailId })
   const setDetailModel = () => {
     setMomentModal(true);
     setMomentDetailId(momentData.id);
-  };
-
-  const downloadMoment = () => {
-    AWS.config.update({
-      region: MEEPLO_APP_BUCKET_REGION,
-      credentials: new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: MEEPLO_APP_IDENTITY_POOL_ID,
-      }),
-    });
-
-    var s3 = new AWS.S3({
-      apiVersion: '2006-03-01',
-      params: { Bucket: MEEPLO_APP_ALBUM_BUCKET_NAME },
-    });
-
-    const fileName = momentData.photo.split('/')[-1];
-
-    var downloadParams = {
-      Key: fileName,
-    };
-
-    s3.upload(downloadParams, function (err, data) {
-      if (err) {
-        return alert(err.stack);
-      }
-      console.log(data);
-    });
   };
 
   return (

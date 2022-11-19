@@ -34,13 +34,13 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
 
   React.useEffect(() => {
     dispatch(getMomentDetail({ momentDetailId }));
-    console.log('momentDetailId changed', momentDetail);
   }, [momentDetailId]);
 
   const linkToCommentCreate = React.useCallback(() => {
     setMomentModal(false);
+    setImageFront(true);
     navigation.navigate('MomentsStack', { screen: 'MomentsCommentCreate', params: { momentId: momentDetailId } });
-  }, []);
+  }, [momentDetailId]);
 
   const closeModal = () => {
     setMomentModal(false);
@@ -49,12 +49,10 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
 
   const momentLikeHandler = () => {
     if (momentDetail.reaction.liked) {
-      console.log('isliked off');
       dispatch(deleteMomentReaction({ momentDetailId })).then(() => {
         dispatch(getMomentDetail({ momentDetailId }));
       });
     } else {
-      console.log('isliked on');
       dispatch(updateMomentReaction({ momentDetailId })).then(() => {
         dispatch(getMomentDetail({ momentDetailId }));
       });
