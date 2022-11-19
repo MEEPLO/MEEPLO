@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Map, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk';
 import styled from '@emotion/styled';
+
 import { createMessage, parseMessage, MESSAGE_TYPE } from '../helper/message';
+import { theme } from '../helper/theme';
 
 const NearLocationOverlay = styled.div`
   background-color: #ffed8c;
@@ -17,13 +19,12 @@ const NearLocationOverlay = styled.div`
 `;
 
 const KakaoMap = () => {
-  const [test, setTest] = useState('마커마커마커');
+  const [test, setTest] = useState('test');
   const [nearLocations, setNearLocations] = useState([]);
-  const [state, setState] = useState({
-    center: { lat: 37.50119278, lng: 127.03975728 },
-    level: 3,
-    isPanto: false,
-  });
+  const [mapHeight, setMapHeight] = useState('880px');
+  const [center, setCenter] = useState({ lat: 37.50119278, lng: 127.03975728 });
+  const [level, setLevel] = useState(3);
+  const [recommendedStations, setRecommendedStations] = useState([]);
 
   useEffect(() => {
     const isAndroid = () => {
@@ -32,8 +33,8 @@ const KakaoMap = () => {
 
     postMessage(
       createMessage(MESSAGE_TYPE.INIT_MAP, {
-        center: state.center,
-        level: state.level,
+        center: center,
+        level: level,
       }),
     );
 
@@ -55,10 +56,19 @@ const KakaoMap = () => {
   };
 
   const processMessage = data => {
-    setTest(data.messageType);
-    switch (data.messageType) {
+    const { messageType, messageBody } = data;
+    switch (messageType) {
+      case MESSAGE_TYPE.INIT_MAP_HEIGHT:
+        setMapHeight(`${messageBody}px`);
+        break;
       case MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS:
-        setNearLocations(data.messageBody);
+        setNearLocations(messageBody);
+        break;
+      case MESSAGE_TYPE.UPDATE_WEBVIEW_CENTER:
+        setCenter(messageBody);
+        break;
+      case MESSAGE_TYPE.UPDATE_RECOMMENDED_STATIONS:
+        setRecommendedStations(messageBody);
         break;
     }
   };
@@ -70,7 +80,7 @@ const KakaoMap = () => {
     };
 
     postMessage(
-      createMessage(MESSAGE_TYPE.UPDATE_CENTER, {
+      createMessage(MESSAGE_TYPE.UPDATE_APP_CENTER, {
         center: clickedPosition,
       }),
     );
@@ -91,13 +101,40 @@ const KakaoMap = () => {
 
   const onDragEnd = map => {
     postMessage(
-      createMessage(MESSAGE_TYPE.UPDATE_CENTER, {
+      createMessage(MESSAGE_TYPE.UPDATE_APP_CENTER, {
         center: {
           lat: map.getCenter().getLat(),
           lng: map.getCenter().getLng(),
         },
       }),
     );
+  };
+
+  const getRandomColor = () => {
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    switch (getRandomInt(1, 8)) {
+      case 1:
+        return theme.color.bright.red;
+      case 2:
+        return theme.color.bright.orange;
+      case 3:
+        return theme.color.bright.yellow;
+      case 4:
+        return theme.color.bright.green;
+      case 5:
+        return theme.color.bright.blue;
+      case 6:
+        return theme.color.bright.navy;
+      case 7:
+        return theme.color.bright.purple;
+      case 8:
+        return theme.color.bright.gray;
+    }
   };
 
   const renderNearLocationsMarker = nearLocations => {
@@ -126,20 +163,53 @@ const KakaoMap = () => {
     return null;
   };
 
+  const renderRecommendedStationMarker = stations => {
+    if (Array.isArray(stations)) {
+      return stations.map(station => <MapMarker position={{ lat: station.lat, lng: station.lng }} />);
+    }
+    return null;
+  };
+  const renderRecommendedStationStartMarker = stations => {
+    if (Array.isArray(stations) && stations[0] && Array.isArray(stations[0].requiredTimes)) {
+      return stations[0].requiredTimes.map(time => {
+        return <MapMarker position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }} />;
+      });
+    }
+
+    return null;
+  };
+  const renderRecommendedStationPath = stations => {
+    if (Array.isArray(stations) && stations[0] && Array.isArray(stations[0].requiredTimes)) {
+      return stations[0].requiredTimes.map(time => {
+        return (
+          <Polyline
+            path={time.coordinates}
+            strokeWeight={10}
+            strokeColor={getRandomColor()}
+            strokeOpacity={1}
+            strokeStyle={'solid'}
+          />
+        );
+      });
+    }
+    return null;
+  };
+
   return (
     <>
       <Map
-        center={state.center}
-        level={state.level}
-        isPanto={state.isPanto}
-        style={{ width: '100%', height: '800px' }}
+        center={center}
+        level={level}
+        isPanto={false}
+        style={{ width: '100%', height: mapHeight }}
         onClick={onClickHandler}
         onZoomChanged={onZoomChangedHandler}
         onDragEnd={onDragEnd}>
-        <MapMarker position={state.center} title={test}>
-          <div style={{ color: '#000' }}>{test}</div>
-        </MapMarker>
+        <MapMarker position={center}>{/* <div style={{ color: '#000' }}>{test}</div> */}</MapMarker>
         {renderNearLocationsMarker(nearLocations)}
+        {renderRecommendedStationMarker(recommendedStations)}
+        {renderRecommendedStationStartMarker(recommendedStations)}
+        {renderRecommendedStationPath(recommendedStations)}
       </Map>
     </>
   );
