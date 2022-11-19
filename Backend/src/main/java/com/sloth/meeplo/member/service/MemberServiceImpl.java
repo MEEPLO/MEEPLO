@@ -142,22 +142,47 @@ public class MemberServiceImpl implements MemberService {
 
         MemberRequest.ConvertedCoordinate convertedCoordinate = externalAPIRequest.getKakaoCoordinateInfo(address);
 
-        memberLocationRepository.save(MemberLocation.builder()
+        MemberLocation memberLocation = MemberLocation.builder()
                 .memberLocationAddInfo(memberLocationAddInfo)
                 .member(member)
                 .convertedCoordinate(convertedCoordinate)
-                .build()
-        );
+                .build();
+
+        if(!memberLocationRepository.existsByMember(member))
+            memberLocation.updateDefaultLocation(true);
+
+        memberLocationRepository.save(memberLocation);
     }
 
     @Override
     @Transactional
     public void deleteMemberStartLocation(String authorization, Long id) {
         Member member = getMemberByAuthorization(authorization);
-        if(memberLocationRepository.findById(id)
-                .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION))
-                .getMember().equals(member)){
+        MemberLocation memberLocation = memberLocationRepository.findById(id)
+                .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION));
+        if(memberLocation.getDefaultLocation()) throw new MeeploException(MemberErrorCode.CANT_DELETE_DEFAULT_LOCATION);
+        if(memberLocation.getMember().equals(member)){
             memberLocationRepository.deleteById(id);
         }
     }
+
+    @Override
+    public void updateMemberDefaultLocation(String authorization, Long id) {
+        Member member = getMemberByAuthorization(authorization);
+        memberLocationRepository.findByMember(member).stream()
+                .filter(MemberLocation::getDefaultLocation)
+                .forEach(ml->ml.updateDefaultLocation(false));
+
+        memberLocationRepository.findById(id)
+                .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION))
+                .updateDefaultLocation(true);
+    }
+
+    @Override
+    public MemberLocation findMemberLocationByMember(Member member){
+        return memberLocationRepository.findOneByMemberAndDefaultLocation(member,true)
+                .orElseThrow(()->new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION));
+    }
+
+
 }

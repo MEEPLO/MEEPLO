@@ -4,6 +4,7 @@ import com.sloth.meeplo.common.GeoDataEntity;
 import com.sloth.meeplo.group.dto.response.GroupResponse;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.global.type.Role;
+import com.sloth.meeplo.member.entity.MemberLocation;
 import com.sloth.meeplo.schedule.type.ScheduleMemberStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,11 +42,14 @@ public class ScheduleMember extends GeoDataEntity {
     }
 
     @Builder
-    ScheduleMember(Schedule schedule, Member member, Role role){
+    ScheduleMember(Schedule schedule, Member member, Role role, MemberLocation memberLocation){
         this.status = ScheduleMemberStatus.JOINED;
         this.role = role;
         this.schedule = schedule;
         this.member = member;
+        this.address = memberLocation.getAddress();
+        this.lat = memberLocation.getLat();
+        this.lng = memberLocation.getLng();
     }
 
     @Override
