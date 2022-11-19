@@ -3,9 +3,11 @@ import { View, Text, Dimensions, Pressable, ImageBackground } from 'react-native
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMomentsList } from '../../redux/momentsSlice';
+import AutoHeightImage from 'react-native-auto-height-image';
 import { theme } from '../../assets/constant/DesignTheme';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import images from '../../assets/image';
-import MomentPic from './MomentPic';
 import MomentModal from './MomentModal';
 
 const MomentsListView = styled.View`
@@ -17,18 +19,27 @@ const MomentsListHalf = styled.View`
 `;
 
 const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+var imgWidth = windowWidth * 0.5 - 30;
 
-const MomentsList = ({ navigation, isMine }) => {
+const MomentsList = ({ navigation, isMine, currentPage }) => {
   const [momentModal, setMomentModal] = React.useState(false);
   const [momentDetailId, setMomentDetailId] = React.useState();
-  const [currentPage, setCurrentPage] = React.useState(0);
 
   const dispatch = useDispatch();
   const momentsList = useSelector(state => state.momentsList);
 
+  const viewHeight = {
+    0: imgWidth * 1.17,
+    1: imgWidth * 0.8,
+    2: imgWidth * 3.61,
+  };
+
+  console.log(currentPage);
+
   const params = {
     page: 0,
-    size: 15,
+    size: 1000,
     leftSize: momentsList.leftSize,
     rightSize: momentsList.rightSize,
     group: null,
@@ -43,32 +54,87 @@ const MomentsList = ({ navigation, isMine }) => {
     dispatch(getMomentsList(params));
   }, [isMine]);
 
-  const leftPics = momentsList.momentsLeft?.map(moment => (
-    <MomentPic
-      setMomentModal={setMomentModal}
-      setMomentDetailId={setMomentDetailId}
-      key={moment.id}
-      momentData={moment}
-      direction="left"
-    />
-  ));
-
-  const rightPics = momentsList.momentsRight?.map(moment => (
-    <MomentPic
-      setMomentModal={setMomentModal}
-      setMomentDetailId={setMomentDetailId}
-      key={moment.id}
-      momentData={moment}
-      direction="right"
-    />
-  ));
+  const openDetailModel = id => {
+    setMomentModal(true);
+    setMomentDetailId(id);
+  };
 
   return (
     <>
       {momentsList.momentsLeft.length !== 0 ? (
         <MomentsListView>
-          <MomentsListHalf>{leftPics}</MomentsListHalf>
-          <MomentsListHalf>{rightPics}</MomentsListHalf>
+          <MomentsListHalf>
+            {momentsList.momentsLeft?.map((moment, index) => (
+              <View
+                style={{
+                  paddingLeft: 20,
+                  marginBottom: 25,
+                  height: viewHeight[moment.type],
+                  display: index <= (currentPage + 1) * 6 - 1 ? 'flex' : 'none',
+                }}>
+                <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
+                  <AutoHeightImage
+                    source={{ uri: moment.photo }}
+                    width={imgWidth}
+                    style={{
+                      borderRadius: 5,
+                      borderWidth: moment.type === 2 ? 0 : 2,
+                      borderColor: theme.color.disabled,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      position: 'absolute',
+                      right: -10,
+                      fontSize: 14,
+                      top: moment.type === 1 ? 3 : null,
+                      bottom: moment.type === 1 ? null : 10,
+                      color: moment.type === 2 ? '#fff' : '#000',
+                    }}>
+                    <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
+                    {`  `}
+                    {moment.reactionCount}
+                  </Text>
+                </Pressable>
+              </View>
+            ))}
+          </MomentsListHalf>
+          <MomentsListHalf>
+            {momentsList.momentsRight?.map((moment, index) => (
+              <View
+                style={{
+                  paddingLeft: 20,
+                  marginBottom: 25,
+                  height: viewHeight[moment.type],
+                  display: index <= (currentPage + 1) * 6 - 1 ? 'flex' : 'none',
+                }}>
+                <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
+                  <AutoHeightImage
+                    source={{ uri: moment.photo }}
+                    width={imgWidth}
+                    style={{
+                      borderRadius: 5,
+                      borderWidth: moment.type === 2 ? 0 : 2,
+                      borderColor: theme.color.disabled,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      position: 'absolute',
+                      right: -10,
+                      fontSize: 14,
+                      top: moment.type === 1 ? 3 : null,
+                      bottom: moment.type === 1 ? null : 10,
+                      color: moment.type === 2 ? '#fff' : '#000',
+                    }}>
+                    <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
+                    {`  `}
+                    {moment.reactionCount}
+                  </Text>
+                </Pressable>
+              </View>
+            ))}
+          </MomentsListHalf>
         </MomentsListView>
       ) : (
         <View

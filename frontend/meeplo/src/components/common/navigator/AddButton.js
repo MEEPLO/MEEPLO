@@ -104,7 +104,8 @@ const AddButton = () => {
                 backgroundColor: theme.color.pale.red,
               },
             ]}>
-            <FontAwesomeIcon icon={faUserPlus} size={30} />
+            {/* <FontAwesomeIcon icon={faUserPlus} size={30} /> */}
+            <Image source={Images.add.group} style={{ width: 27, height: 21 }} />
           </Animated.View>
         </TouchableWithoutFeedback>
         {/* Create-Schedule Button */}
@@ -127,7 +128,8 @@ const AddButton = () => {
                 backgroundColor: theme.color.pale.yellow,
               },
             ]}>
-            <FontAwesomeIcon icon={faMapLocationDot} size={30} />
+            {/* <FontAwesomeIcon icon={faMapLocationDot} size={30} /> */}
+            <Image source={Images.add.schedule} style={{ marginLeft: 5, width: 27, height: 23 }} />
           </Animated.View>
         </TouchableWithoutFeedback>
         {/* Create-Moments Button */}
@@ -156,7 +158,8 @@ const AddButton = () => {
                 backgroundColor: theme.color.pale.blue,
               },
             ]}>
-            <FontAwesomeIcon icon={faImages} size={30} />
+            {/* <FontAwesomeIcon icon={faImages} size={30} /> */}
+            <Image source={Images.add.moment} style={{ marginLeft: 5, width: 30, height: 20 }} />
           </Animated.View>
         </TouchableWithoutFeedback>
         {/* Add Button */}
