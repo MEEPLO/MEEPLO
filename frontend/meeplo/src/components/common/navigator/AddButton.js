@@ -53,6 +53,31 @@ const AddButton = () => {
   return (
     <View style={styles.container}>
       <View style={styles.box}>
+        {/* Background circle */}
+        <Animated.View
+          style={[
+            styles.backCircle,
+            opacity,
+            {
+              transform: [
+                {
+                  scaleX: animation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 4.5],
+                  }),
+                },
+                {
+                  scaleY: animation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 4.5],
+                  }),
+                },
+              ],
+            },
+            {
+              backgroundColor: 'white',
+            },
+          ]}></Animated.View>
         {/* Create-Group Button */}
         <TouchableWithoutFeedback onPress={onPressCreateGroup}>
           <Animated.View
@@ -93,7 +118,7 @@ const AddButton = () => {
                   {
                     translateY: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [0, -80],
+                      outputRange: [0, -77],
                     }),
                   },
                 ],
@@ -201,6 +226,24 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1.5,
     borderColor: theme.color.border,
+  },
+  backCircle: {
+    position: 'absolute',
+    top: -38,
+    left: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 50,
+    height: 25,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    zIndex: -99,
+    borderTopColor: '#E8E8E8',
+    borderLeftColor: '#E8E8E8',
+    borderRightColor: '#E8E8E8',
+    borderTopWidth: 0.12,
+    borderLeftWidth: 0.12,
+    borderRightWidth: 0.12,
   },
 });
 
