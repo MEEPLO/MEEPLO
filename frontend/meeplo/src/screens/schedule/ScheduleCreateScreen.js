@@ -13,6 +13,7 @@ import ScheduleCreateInfoScreen from './create/ScheduleCreateInfoScreen';
 import ScheduleCreateLocationScreen from './create/ScheduleCreateLocationScreen';
 import ScheduleCreateMemberScreen from './create/ScheduleCreateMemberScreen';
 import ScheduleCreateCheckScreen from './create/ScheduleCreateCheckScreen';
+import { theme } from '../../assets/constant/DesignTheme';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
   screenStyle: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.color.background,
   },
   stepIndicatorStyle: {
     alignItems: 'center',

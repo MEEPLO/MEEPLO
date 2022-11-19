@@ -114,10 +114,9 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
       <GroupDetailHeader data={groupDetail} navigation={navigation} groupId={groupId} isInfo={true} />
       <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 105 }}>
         {/* Descriptions */}
-        <View style={{ margin: 20 }}>
+        <View style={[groupDetail.description ? { marginVertical: 20 } : { height: 10 }]}>
           <Text>{groupDetail.description}</Text>
         </View>
-
         {/* Inviting button */}
         {isLeader && (
           <TouchableOpacity activeOpacity={0.6} onPress={onPressGroupcode}>
@@ -174,40 +173,34 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
           <View
             style={{
               flex: memberCount,
-              flexDirection: 'row',
               marginHorizontal: 20,
-              alignItems: 'center',
+              justifyContent: 'space-evenly',
             }}>
-            <View style={{ flex: 3, justifyContent: 'space-evenly', height: width * 0.2 }}>
-              {groupDetail?.members?.map((item, i) => (
-                <View
-                  key={'groupMember' + i}
-                  style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 15 }}>
-                  <Image
-                    source={{ uri: item.photo }}
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 10,
-                      borderWidth: 1,
-                      borderColor: theme.color.border,
-                    }}
-                  />
-                  <Text style={{ margin: 10 }}>{item.nickname}</Text>
-                  {item.nickname === groupDetail.leader && <FontAwesomeIcon icon={faCrown} size={14} />}
-                  {isLeader && item.nickname !== groupDetail.leader && (
-                    <TouchableOpacity
-                      activeOpacity={0.6}
-                      onPress={() => {
-                        onPressKick({ memberName: item.nickname, memberId: item.id });
-                      }}>
-                      <Image source={Images.faDoor} style={{ width: 14, height: 14 }} />
-                    </TouchableOpacity>
-                  )}
-                </View>
-              ))}
-            </View>
-            <View style={{ flex: 1, justifyContent: 'space-evenly', height: width * 0.2 }}></View>
+            {groupDetail?.members?.map((item, i) => (
+              <View key={'groupMember' + i} style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                <Image
+                  source={{ uri: item.photo }}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: theme.color.border,
+                  }}
+                />
+                <Text style={{ marginHorizontal: 10 }}>{item.nickname}</Text>
+                {item.nickname === groupDetail.leader && <FontAwesomeIcon icon={faCrown} size={14} />}
+                {isLeader && item.nickname !== groupDetail.leader && (
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => {
+                      onPressKick({ memberName: item.nickname, memberId: item.id });
+                    }}>
+                    <Image source={Images.faDoor} style={{ width: 14, height: 14 }} />
+                  </TouchableOpacity>
+                )}
+              </View>
+            ))}
           </View>
         </View>
 

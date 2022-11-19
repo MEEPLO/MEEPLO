@@ -9,6 +9,7 @@ import { theme } from './src/assets/constant/DesignTheme';
 import LottieSplashScreen from 'react-native-lottie-splash-screen';
 import Toast from 'react-native-toast-message';
 import { navigationRef } from './src/components/common/navigator/RootNavigator';
+import { toastConfig } from './src/components/common/ToastCustom';
 
 import { CalendarProvider } from 'react-native-calendars';
 
@@ -40,7 +41,7 @@ const App = () => {
           </Provider>
         </CalendarProvider>
       </NavigationContainer>
-      <Toast />
+      <Toast config={toastConfig} />
     </>
   );
 };

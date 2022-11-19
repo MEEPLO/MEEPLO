@@ -29,7 +29,7 @@ const HomeGroupItem = ({ name, photo, memberCount, leaderName, lastSchedule }) =
       <ImageBackground source={{ uri: photo }} style={{ height: width }} resizeMode="cover">
         <View
           style={{
-            backgroundColor: 'rgba(255,255,255,0.73)',
+            backgroundColor: 'rgba(255,255,255,0.83)',
             height,
             top: width - height,
             justifyContent: 'center',
