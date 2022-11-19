@@ -183,7 +183,7 @@ const KakaoMap = () => {
       return stations.map(station => (
         <MapMarker
           position={{ lat: station.lat, lng: station.lng }}
-          image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.RED)}
+          image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.GREEN)}
         />
       ));
     }
@@ -193,10 +193,37 @@ const KakaoMap = () => {
     if (Array.isArray(stations) && stations[0] && Array.isArray(stations[0].requiredTimes)) {
       return stations[0].requiredTimes.map(time => {
         return (
-          <MapMarker
-            position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }}
-            image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.RED)}
-          />
+          <div>
+            <MapMarker
+              position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }}
+              image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.PURPLE)}
+            />
+            <CustomOverlayMap position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }} yAnchor={4}>
+              <div
+                style={{
+                  backgroundColor: '#5A5A5A',
+                  color: 'white',
+                  fontSize: 10,
+                  padding: 5,
+                  borderRadius: 10,
+                }}>
+                {time.groupMemberName}
+              </div>
+            </CustomOverlayMap>
+
+            <CustomOverlayMap position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }} yAnchor={3}>
+              <div
+                style={{
+                  backgroundColor: '#5A5A5A',
+                  color: 'white',
+                  fontSize: 10,
+                  padding: 5,
+                  borderRadius: 10,
+                }}>
+                {`${time.time}분 소요`}
+              </div>
+            </CustomOverlayMap>
+          </div>
         );
       });
     }
@@ -210,7 +237,7 @@ const KakaoMap = () => {
           <Polyline
             path={time.coordinates}
             strokeWeight={10}
-            strokeColor={getRandomColor()}
+            strokeColor={theme.color.bright.red}
             strokeOpacity={1}
             strokeStyle={'solid'}
           />
