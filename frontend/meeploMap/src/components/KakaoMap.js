@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Map, MapMarker, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk';
 import styled from '@emotion/styled';
 
 import { createMessage, parseMessage, MESSAGE_TYPE } from '../helper/message';
 import { theme } from '../helper/theme';
+import { MARKER_TYPE, MARKER_COLOR, getMarker } from '../helper/marker';
 
 const NearLocationOverlay = styled.div`
   background-color: #ffed8c;
@@ -25,6 +26,26 @@ const KakaoMap = () => {
   const [center, setCenter] = useState({ lat: 37.50119278, lng: 127.03975728 });
   const [level, setLevel] = useState(3);
   const [recommendedStations, setRecommendedStations] = useState([]);
+
+  const mapRef = useRef();
+  const bounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    if (Array.isArray(recommendedStations) && Array.isArray(recommendedStations[0]?.requiredTimes)) {
+      recommendedStations[0].requiredTimes.forEach(time => {
+        bounds.extend(new kakao.maps.LatLng(time.startLocation.lat, time.startLocation.lng));
+        setTest(time.startLocation.lng);
+      });
+    }
+
+    return bounds;
+  }, [recommendedStations]);
+
+  useEffect(() => {
+    if (bounds && mapRef.current) {
+      mapRef.current.setBounds(bounds);
+    }
+  }, [bounds]);
 
   useEffect(() => {
     const isAndroid = () => {
@@ -85,10 +106,7 @@ const KakaoMap = () => {
       }),
     );
 
-    setState({
-      center: clickedPosition,
-      isPanto: true,
-    });
+    setCenter(clickedPosition);
   };
 
   const onZoomChangedHandler = target => {
@@ -150,10 +168,7 @@ const KakaoMap = () => {
             clickable={true}
             onClick={() => {
               postMessage(createMessage(MESSAGE_TYPE.SELECT_NEAR_LOCATION, location));
-              setState({
-                center: { lat: location.lat, lng: location.lng },
-                isPanto: true,
-              });
+              setCenter({ lat: location.lat, lng: location.lng });
             }}
           />
         </>
@@ -165,14 +180,24 @@ const KakaoMap = () => {
 
   const renderRecommendedStationMarker = stations => {
     if (Array.isArray(stations)) {
-      return stations.map(station => <MapMarker position={{ lat: station.lat, lng: station.lng }} />);
+      return stations.map(station => (
+        <MapMarker
+          position={{ lat: station.lat, lng: station.lng }}
+          image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.RED)}
+        />
+      ));
     }
     return null;
   };
   const renderRecommendedStationStartMarker = stations => {
     if (Array.isArray(stations) && stations[0] && Array.isArray(stations[0].requiredTimes)) {
       return stations[0].requiredTimes.map(time => {
-        return <MapMarker position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }} />;
+        return (
+          <MapMarker
+            position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }}
+            image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.RED)}
+          />
+        );
       });
     }
 
@@ -200,12 +225,15 @@ const KakaoMap = () => {
       <Map
         center={center}
         level={level}
-        isPanto={false}
+        isPanto={true}
         style={{ width: '100%', height: mapHeight }}
         onClick={onClickHandler}
         onZoomChanged={onZoomChangedHandler}
-        onDragEnd={onDragEnd}>
-        <MapMarker position={center}>{/* <div style={{ color: '#000' }}>{test}</div> */}</MapMarker>
+        onDragEnd={onDragEnd}
+        ref={mapRef}>
+        <MapMarker position={center} image={getMarker(MARKER_TYPE.NONE, MARKER_COLOR.RED)}>
+          {/* <div style={{ color: '#000' }}>{test}</div> */}
+        </MapMarker>
         {renderNearLocationsMarker(nearLocations)}
         {renderRecommendedStationMarker(recommendedStations)}
         {renderRecommendedStationStartMarker(recommendedStations)}
