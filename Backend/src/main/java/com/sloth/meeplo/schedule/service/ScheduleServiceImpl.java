@@ -221,7 +221,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         Member member = memberService.getMemberByAuthorization(authorization);
         Schedule schedule = getScheduleByScheduleId(scheduleId);
 
-        checkMemberInSchedule(schedule, member);
+        groupService.checkMemberInGroup(member,schedule.getGroup());
 
         return ScheduleResponse.ScheduleDetailInfo.builder().schedule(schedule).build();
     }
@@ -245,6 +245,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(sm -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(sm.getSchedule())
                         .build())
+                .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
                 .collect(Collectors.toList());
     }
 
