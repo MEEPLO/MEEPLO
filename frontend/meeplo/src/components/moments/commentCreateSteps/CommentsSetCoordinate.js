@@ -9,6 +9,8 @@ import StepButton from '../../stepper/StepButton';
 const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => {
   const momentDetail = useSelector(state => state.momentDetail);
 
+  console.log('in coordinate', momentDetail);
+
   const [tilt, setTilt] = React.useState(0);
   // 실제 좌표 데이터 보낼 때에는 조정 필요
   const [delX, setDelX] = React.useState(0);
