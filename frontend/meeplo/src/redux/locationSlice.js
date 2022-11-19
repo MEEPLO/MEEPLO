@@ -6,11 +6,14 @@ import { MEEPLO_SERVER_BASE_URL } from '@env';
 export const getNearLocations = createAsyncThunk('location/getNearLocations', async ({ lat, lng, radius }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/location?lat=${lat}&lng=${lng}&radius=${radius}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosPrivate.get(
+      `${MEEPLO_SERVER_BASE_URL}/location?lat=${lat}&lng=${lng}&radius=${radius}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
 
     console.log(response.data);
 

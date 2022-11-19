@@ -6,6 +6,7 @@ import { TOAST_MESSAGE } from '../../../assets/constant/string';
 
 import StepButton from '../../../components/stepper/StepButton';
 import MapLocationInput from '../../../components/map/MapLocationInput';
+import MapStationInput from '../../../components/map/MapStationInput';
 
 const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const [meet, setMeet] = useState();
@@ -64,7 +65,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <MapLocationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} />
+        <MapStationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} state={state} />
       </View>
       <View style={styles.inputViewStyle}>
         <MapLocationInput type="약속 장소" required value={amuse} onValueChange={onSelectAmuseLocation} />
