@@ -1,14 +1,378 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 
-const ScheduleDetailScreen = () => {
+import { theme } from '../../assets/constant/DesignTheme';
+import { getScheduleDetail } from '../../redux/scheduleSlice';
+
+import ModalCover from '../../components/common/ModalCover';
+import LoadingModal from '../../components/common/LoadingModal';
+
+const { width, height } = Dimensions.get('screen');
+const memberModalContentWidth = width * 0.5;
+const memberItemWidth = width * 0.45;
+
+const day = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+const today = new Date();
+
+const ScheduleDetailScreen = ({ route, navigation }) => {
+  const dispatch = useDispatch();
+
+  const schedule = useSelector(state => state?.schedule?.schedule);
+  const isLoading = useSelector(state => state?.schedule?.isLoading);
+  const user = useSelector(state => state.user.info);
+
+  const scheduleId = route?.params?.scheduleId;
+
+  const [showMemberModal, setShowMemberModal] = useState(false);
+
+  const rawDate = new Date(schedule.date);
+  const scheduleDate = {
+    year: rawDate.getFullYear(),
+    month: rawDate.getMonth() + 1,
+    date: rawDate.getDate(),
+    day: day[rawDate.getDay()],
+  };
+  const isDone = today - rawDate > 0 ? true : false;
+  // TODO: hrookim change!!!
+  // const isLeader = user.id === schedule.leaderMemberId;
+  const isLeader = true;
+
+  const onPressEdit = () => {
+    navigation.navigate('Edit', { scheduleId });
+  };
+
+  const onPressMoments = () => {
+    navigation.navigate('Feed', { scheduleId });
+  };
+
+  useEffect(() => {
+    dispatch(getScheduleDetail(scheduleId));
+  }, []);
+
+  useEffect(() => {}, [schedule]);
+
+  const openMemberModal = () => setShowMemberModal(true);
+  const closeMemberModal = () => setShowMemberModal(false);
+
+  const renderAmuseLoactions = amuseLocations => {
+    return amuseLocations?.map(amuse => (
+      <View key={amuse.id} style={styles.itemContentView}>
+        <Text style={styles.itemContent}> {amuse?.name}</Text>
+        <Text style={styles.itemSubContent}> {amuse?.address}</Text>
+      </View>
+    ));
+  };
+
+  const renderKeywords = keywords => {
+    return <Text>{keywords?.map(keyword => `#${keyword}`).join('  ')}</Text>;
+  };
+
+  // const a = {
+  //   amuseLocations: [
+  //     { address: '서울특별시 강남구 선릉로64길 9', id: 4, lat: 37.49797648, lng: 127.0530475, name: '생활맥주' },
+  //   ],
+  //   date: '2022-11-08 18:52',
+  //   group: { id: 1, name: '청춘은 바로 지금부터,,~' },
+  //   keywords: ['닭갈비'],
+  //   meetLocation: {
+  //     address: '서울특별시 강남구 테헤란로37길 13-6',
+  //     id: 254385,
+  //     lat: 37.50309857,
+  //     lng: 127.0401572,
+  //     name: '만타',
+  //   },
+  //   members: [
+  //     {
+  //       id: 7,
+  //       nickname: '한나',
+  //       photo: 'http://k.kakaocdn.net/dn/JELNL/btreCCTvBCo/naMc0iTZK6u2hq56ullvdk/img_640x640.jpg',
+  //       status: 'JOINED',
+  //     },
+  //     {
+  //       id: 8,
+  //       nickname: '한나',
+  //       photo: 'http://k.kakaocdn.net/dn/JELNL/btreCCTvBCo/naMc0iTZK6u2hq56ullvdk/img_640x640.jpg',
+  //       status: 'JOINED',
+  //     },
+  //     {
+  //       id: 9,
+  //       nickname: '김혜림',
+  //       photo: 'http://k.kakaocdn.net/dn/8v2nW/btrN66KPJ0G/kUvxNi2zoea8K4y3mzfMc0/img_640x640.jpg',
+  //       status: 'JOINED',
+  //     },
+  //   ],
+  //   name: '우리 당장 만나',
+  // };
+
+  const renderMemberList = members => {
+    return members?.map(member => {
+      return (
+        <View style={styles.memberListItem(member?.status)} key={member.id}>
+          <Image
+            source={{ uri: member?.photo }}
+            style={{
+              width: 25,
+              height: 25,
+              borderRadius: 20,
+              borderWidth: theme.border.thin,
+              borderColor: theme.color.border,
+            }}
+            resizeMode="center"
+          />
+          <Text style={{ fontSize: 16 }}>{member?.nickname}</Text>
+        </View>
+      );
+    });
+  };
+
   return (
-    <View>
-      <Text>ScheduleDetailScreen</Text>
+    <View style={styles.screenStyle}>
+      {!isLoading ? (
+        <ScrollView>
+          <View style={{ height: 420, marginVertical: 20 }}>
+            {/* title */}
+            <View style={styles.detailTitleContainer}>
+              <Text style={{ color: 'black', fontWeight: '900', fontSize: 22, marginHorizontal: 10 }}>
+                {`${scheduleDate.year}년 ${scheduleDate.month}월 ${scheduleDate.date}일  ${scheduleDate.day}`}
+              </Text>
+            </View>
+            {/* content */}
+            <View style={styles.detailItemsContainer}>
+              <View style={styles.itemView}>
+                <View style={styles.itemTitleView}>
+                  <Text style={styles.itemTitle}>약속 그룹</Text>
+                </View>
+                <View style={styles.itemContentView}>
+                  <Text style={styles.itemContent}> {schedule?.group?.name}</Text>
+                  <TouchableOpacity style={styles.itemMemberButton} onPress={openMemberModal}>
+                    <View style={styles.itemMemberButtonContent}>
+                      <Text style={{ marginRight: 10 }}>눌러서 참석자보기</Text>
+                      <FontAwesomeIcon icon={faUser} color={'gray'} size={10} />
+                      <Text style={{ marginLeft: 3 }}>{schedule?.members?.length}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View style={styles.itemView}>
+                <View>
+                  <Text style={styles.itemTitle}>약속 이름</Text>
+                </View>
+                <View style={styles.itemContentView}>
+                  <Text style={styles.itemContent}> {schedule.name}</Text>
+                </View>
+              </View>
+
+              <View style={styles.itemView}>
+                <View>
+                  <Text style={styles.itemTitle}>만남 장소</Text>
+                </View>
+                <View style={styles.itemContentView}>
+                  <Text style={styles.itemContent}> {schedule?.meetLocation?.name}</Text>
+                  <Text style={styles.itemSubContent}> {schedule?.meetLocation?.address}</Text>
+                </View>
+              </View>
+
+              <View style={styles.itemView}>
+                <View>
+                  <Text style={styles.itemTitle}>약속 장소</Text>
+                </View>
+                <View>{renderAmuseLoactions(schedule?.amuseLocations)}</View>
+              </View>
+
+              <View style={styles.keywords}>{renderKeywords(schedule?.keywords)}</View>
+
+              {isLeader && (
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <TouchableOpacity
+                    onPress={onPressEdit}
+                    activeOpacity={0.6}
+                    style={[styles.buttonUD, { backgroundColor: theme.color.bright.navy }]}>
+                    <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>수정</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity activeOpacity={0.6} style={styles.buttonUD}>
+                    <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>삭제</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          </View>
+
+          {isDone ? (
+            <View>
+              <TouchableOpacity
+                onPress={onPressMoments}
+                style={[
+                  styles.buttonContainer,
+                  {
+                    backgroundColor: theme.color.pale.orange,
+                  },
+                ]}>
+                <Text style={styles.buttonTitle}>추억 보기</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.buttonContainer,
+                  {
+                    backgroundColor: theme.color.pale.yellow,
+                  },
+                ]}>
+                <Text style={styles.buttonTitle}>추억 남기기</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={[
+                styles.buttonContainer,
+                {
+                  backgroundColor: theme.color.bright.yellow,
+                },
+              ]}>
+              <Text style={styles.buttonTitle}>지도로 장소 확인하기</Text>
+            </TouchableOpacity>
+          )}
+        </ScrollView>
+      ) : (
+        <LoadingModal visible={isLoading} />
+      )}
+
+      <ModalCover visible={showMemberModal} backgroundColor={theme.color.dim} onRequestClose={closeMemberModal}>
+        <View style={styles.memberModalView}>
+          <View style={styles.memberModalContentView}>{renderMemberList(schedule?.members)}</View>
+        </View>
+      </ModalCover>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  screenStyle: {
+    flex: 1,
+    marginHorizontal: 20,
+  },
+  buttonTitle: {
+    fontWeight: '900',
+    fontSize: height * 0.025,
+    color: 'black',
+  },
+  buttonContainer: {
+    marginVertical: 5,
+    borderRadius: 15,
+    borderColor: theme.color.border,
+    borderWidth: 2,
+    height: 55,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  detailTitleContainer: {
+    justifyContent: 'center',
+    height: 55,
+    backgroundColor: theme.color.bright.green,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderWidth: 2,
+    borderColor: theme.color.border,
+  },
+  detailItemsContainer: {
+    height: 365,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderWidth: 2,
+    borderTopWidth: 0,
+    borderColor: theme.color.border,
+    padding: 10,
+    paddingTop: 20,
+  },
+  keywords: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  buttonUD: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 35,
+    width: width * 0.2,
+    borderColor: theme.color.border,
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: theme.color.pale.red,
+    marginLeft: 6,
+  },
+
+  itemView: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+  },
+  itemTitle: {
+    fontSize: 14,
+  },
+  itemContentView: {
+    alignItems: 'flex-end',
+  },
+  itemContent: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: theme.font.color,
+  },
+  itemSubContent: {
+    fontSize: 12,
+  },
+  itemMemberButton: {
+    borderColor: theme.color.border,
+    borderWidth: theme.border.thin,
+    borderRadius: theme.radius.base,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    marginTop: 10,
+  },
+  itemMemberButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  memberModalView: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  memberModalContentView: {
+    backgroundColor: theme.color.background,
+    width: memberModalContentWidth,
+
+    padding: 10,
+
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+
+    borderColor: theme.color.border,
+    borderWidth: theme.border.thin,
+    borderRadius: theme.radius.base,
+  },
+  memberListItem: status => {
+    return {
+      backgroundColor: status === 'JOINED' ? theme.color.bright.purple : theme.color.background,
+
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
+      width: memberItemWidth,
+
+      paddingVertical: 5,
+      margin: 5,
+
+      borderColor: theme.color.border,
+      borderWidth: theme.border.thin,
+      borderRadius: theme.radius.input,
+    };
+  },
+});
 
 export default ScheduleDetailScreen;
