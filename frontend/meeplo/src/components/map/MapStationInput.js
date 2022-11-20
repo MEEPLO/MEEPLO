@@ -225,7 +225,9 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
         {stationData.avgTime ? (
           <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
             <Text>평균 이동 시간</Text>
-            <Text style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>{station.avgTime}분</Text>
+            <Text style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>
+              {parseInt(station.avgTime / 60)}분
+            </Text>
           </View>
         ) : null}
 
@@ -404,29 +406,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-const mock = {
-  groupId: 2,
-  startLocations: [
-    {
-      // 성북구
-      lat: 37.57861162637185,
-      lng: 127.02046242004731,
-      memberId: 1,
-    },
-    {
-      // 사당역 근처
-      lat: 37.4776116339714,
-      lng: 126.97987605430608,
-      memberId: 2,
-    },
-    {
-      // 은평구
-      lat: 37.620041424670816,
-      lng: 126.91752724597757,
-      memberId: 4,
-    },
-  ],
-};
 
 export default MapStationInput;
