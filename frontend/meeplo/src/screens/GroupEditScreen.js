@@ -168,7 +168,7 @@ const GroupEditScreen = ({ route, navigation }) => {
           />
         </View>
         <View style={{ margin: 20 }}>
-          <Text style={{ color: theme.font.color, fontWeight: '800' }}>
+          <Text style={{ color: theme.font.color, fontWeight: 'bold' }}>
             대표 사진 <Text style={{ color: theme.color.alert }}>*</Text>
           </Text>
           <View style={{ alignItems: 'center', marginTop: 10 }}>
@@ -213,7 +213,7 @@ const GroupEditScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View style={{ marginHorizontal: 20 }}>
-          <Text style={{ color: theme.font.color, fontWeight: '800', marginVertical: 20 }}>그룹 설명</Text>
+          <Text style={{ color: theme.font.color, fontWeight: 'bold', marginVertical: 20 }}>그룹 설명</Text>
           <TextInput
             multiline={true}
             numberOfLines={6}
@@ -234,7 +234,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         }}
         activeOpacity={0.6}
         onPress={onPressEdit}>
-        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>수정하기</Text>
+        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: 'bold' }}>수정하기</Text>
       </TouchableOpacity>
       <LoadingModal visible={isLoading || isProfilePictureEdit} />
     </SafeAreaView>

@@ -179,7 +179,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
               uri: location?.photo,
             }}
           />
-          <Text style={{ fontSize: 20, fontWeight: '800' }}>{location?.name}</Text>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'gray' }}>{location?.name}</Text>
         </View>
         <Text>{location?.address}</Text>
         <Text>{location?.category}</Text>
@@ -197,7 +197,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
             onValueChange(location);
             closeModal();
           }}>
-          <Text style={{ fontSize: 24, fontWeight: '800' }}>선택</Text>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>선택</Text>
         </TouchableOpacity>
       </View>
     );
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
     marginBottom: 40,
   },
   dateInputView: {

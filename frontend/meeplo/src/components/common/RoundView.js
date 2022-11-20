@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
     right: 50,
   },
   closeButtonTextStyle: {
-    fontWeight: '800',
+    fontWeight: 'bold',
     fontSize: 18,
   },
   title: {
-    fontWeight: '800',
+    fontWeight: 'bold',
   },
 });
 
