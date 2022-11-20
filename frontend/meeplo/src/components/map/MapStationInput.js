@@ -228,7 +228,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
           <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
             <Text>평균 이동 시간</Text>
             <Text style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>
-              {parseInt(station.avgTime / 60)}분
+              {parseInt(station.avgTime / 45)}분
             </Text>
           </View>
         ) : null}
