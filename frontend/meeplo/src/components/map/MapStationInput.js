@@ -23,6 +23,7 @@ import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
 import LoadingModal from '../common/LoadingModal';
 import FlatButton from '../common/FlatButton';
+import { TOAST_MESSAGE } from '../../assets/constant/string';
 
 const screen = Dimensions.get('screen');
 const searchInputWidth = screen.width * 0.7;
@@ -48,11 +49,12 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   const [selectedStation, setSelectedStation] = useState({});
 
   const webViewRef = useRef();
+  const userInfo = useSelector(state => state.user.info);
   const selectedLocationInfoPositionAnim = useRef(new Animated.ValueXY()).current;
   const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
   const recommendedStations = useSelector(state => state?.recommendation?.recommendedStations);
   const isSearchStationLoading = useSelector(state => state?.location?.isLoading);
-  const searchedStations = useSelector(state => state?.locations?.stations);
+  const searchedStations = useSelector(state => state?.location?.stations);
 
   useEffect(() => {
     if (Array.isArray(recommendedStations) && recommendedStations.length > 0) {
@@ -63,13 +65,14 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   }, [recommendedStations]);
 
   useEffect(() => {
-    if (Array.isArray(searchedStations)) {
-      openSelectedStationInfo();
+    if (Array.isArray(searchedStations) && searchedStations.length > 0) {
+      postMessage(MESSAGE_TYPE.UPDATE_SEARCHED_STATIONS, searchedStations);
     }
   }, [searchedStations]);
 
   useEffect(() => {
     requestPermissions();
+    setSelectedStation({});
   }, []);
 
   useEffect(() => {
@@ -146,29 +149,63 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
     const messageType = message.messageType;
     const body = message.messageBody;
     switch (messageType) {
-      case MESSAGE_TYPE.SELECT_STATION:
+      case MESSAGE_TYPE.SELECT_RECOMMENDED_STATION:
         setSelectedStation(body);
         openSelectedStationInfo();
         break;
+      case MESSAGE_TYPE.SELECT_SEARCHED_STATION:
+        setSelectedStation(body);
+        openSelectedStationInfo();
       default:
         break;
     }
   };
 
   const onPressRecommendation = () => {
-    dispatch(getMiddlePoint(mock));
+    const userStartLocation = userInfo?.startLocations.find(location => location.defaultLocation === true);
+    const data = {
+      groupId: state?.group?.id,
+      startLocations: [
+        {
+          lat: userStartLocation.lat,
+          lng: userStartLocation.lng,
+          memberId: userInfo.id,
+        },
+      ],
+    };
+
+    state?.members?.forEach(member => {
+      data.startLocations.push({
+        lat: member?.lat,
+        lng: member?.lng,
+        memberId: member?.id,
+      });
+    });
+
+    dispatch(getMiddlePoint(data));
   };
 
   const onPressSearchStation = () => {
+    setSelectedStation({});
     dispatch(getStationList(searchValue));
   };
 
   const renderSelectedStationInfoView = station => {
     if (!station) return null;
 
+    const stationData = {};
+    if (station.avgTime) {
+      stationData.id = station.stationId;
+      stationData.name = station.name;
+      stationData.avgTime = station.avgTime;
+    } else {
+      stationData.id = station.id;
+      stationData.name = station.name;
+    }
+
     return (
       <View style={styles.bottomInterfaceView}>
-        <Text style={{}}>여러분들의 중간 지점은...</Text>
+        <Text style={{}}>{stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}</Text>
         <Text
           style={{
             margin: 10,
@@ -182,18 +219,21 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
             borderColor: theme.color.border,
             borderRadius: theme.radius.base,
           }}>
-          {selectedStation?.name}역
+          {stationData.name}역
         </Text>
-        <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
-          <Text>평균 이동 시간</Text>
-          <Text style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>{station?.avgTime}분</Text>
-        </View>
+
+        {stationData.avgTime ? (
+          <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
+            <Text>평균 이동 시간</Text>
+            <Text style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>{station.avgTime}분</Text>
+          </View>
+        ) : null}
 
         <FlatButton
           text="만남 장소로 지정"
           backgroundColor={theme.color.bright.purple}
           onPress={() => {
-            onValueChange(recommendedStations[0]);
+            onValueChange(stationData);
             closeModal();
           }}
         />
@@ -234,7 +274,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
           <TouchableOpacity style={styles.selectedStationInfoCloseButton} onPress={() => closeSelectedStationInfo()}>
             <Text>X</Text>
           </TouchableOpacity>
-          {renderSelectedStationInfoView(recommendedStations[0])}
+          {renderSelectedStationInfoView(selectedStation)}
         </Animated.View>
       </View>
     );
@@ -247,7 +287,9 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
       </Text>
 
       <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>{value?.name}</Text>
+        <Text style={{ color: theme.font.color }}>
+          {value?.name} {value?.name?.length > 0 ? '역' : null}
+        </Text>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 
