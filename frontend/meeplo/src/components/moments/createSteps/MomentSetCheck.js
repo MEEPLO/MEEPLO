@@ -27,7 +27,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
         </View>
         <View style={{ height: 50 }}>
           <Text style={{ lineHeight: 50, fontSize: 15, color: 'gray' }}>
-            약속:
+            약속:gi
             <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 17, color: 'gray' }}>
               {' '}
               {state.scheduleName} / {state.placeName}
@@ -42,7 +42,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
             style={{
               borderWidth: 1,
               borderColor: '#ddd',
-              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.3 - 40,
+              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.1 - 40,
             }}
           />
         </View>
