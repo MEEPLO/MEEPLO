@@ -27,7 +27,9 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   };
 
   const validateInput = () => {
-    if (!meet || !(meet.id || meet.stationId)) {
+    console.log('meet', meet);
+    console.log('amuse', amuse);
+    if (!meet || !meet.id) {
       Toast.show({
         type: 'error',
         text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
