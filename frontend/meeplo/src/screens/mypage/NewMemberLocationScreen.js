@@ -10,8 +10,9 @@ import { theme } from '../../assets/constant/DesignTheme';
 import { createStartLocation, getUserInfo } from '../../redux/userSlice';
 import LoadingModal from '../../components/common/LoadingModal';
 import { TOAST_MESSAGE } from '../../assets/constant/string';
+import { useEffect } from 'react';
 
-const MyPageLocationEditScreen = ({ route, navigation }) => {
+const NewMemberLocationScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const [form, setForm] = useState({
     name: '',
@@ -20,6 +21,7 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [inputBorderColor, setInputBorderColor] = useState(theme.color.disabled);
   const isEditLoading = useSelector(state => state.user.isEditLoading);
+  const user = useSelector(state => state.user.info);
 
   const validateInput = () => {
     if (!form.name || form.name.length === 0) {
@@ -66,19 +68,36 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
   const onPressAdd = () => {
     if (validateInput()) {
       dispatch(createStartLocation({ form })).then(() => {
-        dispatch(getUserInfo());
+        dispatch(getUserInfo()).then(() => {
+          Toast.show({
+            type: 'success',
+            text1: 'MEEPLO에 오신 것을 환영합니다.',
+            text2: '모든 설정이 완료되었습니다:)',
+          });
+        });
         navigation.reset({
-          index: 1,
-          routes: [{ name: 'Home' }, { name: 'MyPage' }],
+          index: 0,
+          routes: [{ name: 'Home' }],
         });
       });
     }
   };
 
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
+
   return (
     <>
       <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>출발지 추가</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 30 }}>출발지 추가</Text>
+
+        <View style={{ marginTop: 10, marginBottom: 20 }}>
+          <Text style={{ color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{user?.nickname}님 안녕하세요!</Text>
+          <Text style={{ color: 'gray', marginTop: 20 }}>
+            MEEPLO 앱 사용을 위해 기본 출발지 한 곳을 필수로 등록해주세요.
+          </Text>
+        </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ height: 36, justifyContent: 'center', marginRight: 10 }}>
             <FontAwesomeIcon icon={faPen} color={'gray'} size={17} />
@@ -150,5 +169,4 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
     </>
   );
 };
-
-export default MyPageLocationEditScreen;
+export default NewMemberLocationScreen;

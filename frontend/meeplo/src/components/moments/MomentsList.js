@@ -148,7 +148,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
             style={{
               color: theme.font.color,
               fontSize: 18,
-              fontWeight: '800',
+              fontWeight: 'bold',
               lineHeight: 30,
               textAlign: 'center',
             }}>{`아직 남긴 추억이 없어요!\n\n약속을 잡고\n추억을 남겨보세요.`}</Text>
@@ -169,7 +169,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
               <Text
                 style={{
                   textAlign: 'center',
-                  fontWeight: '800',
+                  fontWeight: 'bold',
                   fontSize: 19,
                   color: theme.font.color,
                   lineHeight: 59,

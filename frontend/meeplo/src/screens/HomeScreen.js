@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>예정된 약속</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>예정된 약속</Text>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreSchedule}
@@ -61,7 +61,7 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>내가 참여하는 그룹</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>내가 참여하는 그룹</Text>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreGroup}
@@ -78,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
             flexDirection: 'row',
             alignItems: 'baseline',
           }}>
-          <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>추억 남기기</Text>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>추억 남기기</Text>
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={onPressMoreMoment}
@@ -91,17 +91,17 @@ const HomeScreen = ({ navigation }) => {
         <Text style={{ color: theme.color.dim }}>아직 추억을 기록하지 않은 약속에 추억을 남겨보아요~</Text>
       </View>
       <HomeMoments data={noMomentsScheduleList} navigation={navigation} />
-      <View
+      {/* <View
         style={{
           margin: 20,
           marginTop: 30,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>어디서 놀지 모르겠다면</Text>
-        <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}> 추천 받아 보세요</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>어디서 놀지 모르겠다면</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}> 추천 받아 보세요</Text>
       </View>
-      <HomePlaceRecommendation />
+      <HomePlaceRecommendation /> */}
       <View style={{ height: 90 }} />
     </ScrollView>
   );

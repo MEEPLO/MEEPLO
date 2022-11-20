@@ -24,7 +24,7 @@ const GroupDetailHeader = ({ data, navigation, groupId, isInfo }) => {
           onPress={onPressDetail}
           style={{ flexDirection: 'row', alignItems: 'center' }}
           activeOpacity={0.6}>
-          <Text style={{ color: 'black', fontSize: 20, fontWeight: '900' }}>{data.name}</Text>
+          <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{data.name}</Text>
           {!isInfo && <FontAwesomeIcon icon={faChevronRight} size={16} color="black" />}
         </TouchableOpacity>
       </View>

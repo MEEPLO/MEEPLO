@@ -194,7 +194,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
                     left: comment.location.xpoint * 0.8,
                   }}
                   key={idx}>
-                  <Text style={{ fontSize: 12 }}>{comment.comment}</Text>
+                  <Text style={{ fontSize: 12, color: 'gray' }}>{comment.comment}</Text>
                 </View>
               ))}
             </Animated.View>

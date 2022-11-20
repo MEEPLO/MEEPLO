@@ -40,7 +40,7 @@ const GroupDetailScheduleItem = ({ name, date, memberCount, location, color }) =
           backgroundColor: theme.color.pale[color],
           justifyContent: 'center',
         }}>
-        <Text style={{ marginHorizontal: 20, fontWeight: '900', fontSize: 19, color: 'black' }}>
+        <Text style={{ marginHorizontal: 20, fontWeight: 'bold', fontSize: 19, color: 'black' }}>
           {`${scheduleDate.year}년 ${scheduleDate.month}월 ${scheduleDate.day}일  ${scheduleDate.hour}:${scheduleDate.minute}`}
         </Text>
       </View>
@@ -53,21 +53,21 @@ const GroupDetailScheduleItem = ({ name, date, memberCount, location, color }) =
         }}>
         <View style={{ flex: 7, justifyContent: 'space-evenly', height: '100%' }}>
           <View>
-            <Text style={{ fontSize: 14 }}>
+            <Text style={{ fontSize: 14, color: 'gray' }}>
               {`약속 이름  `}
-              <Text style={{ fontWeight: '900', color: 'black' }}>{name}</Text>
+              <Text style={{ fontWeight: 'bold', color: 'black' }}>{name}</Text>
             </Text>
           </View>
           <View>
             <Text style={{ fontSize: 14 }}>
               {`만남 장소  `}
-              <Text style={{ fontWeight: '900', color: 'black' }}>{location.meetName}</Text>
+              <Text style={{ fontWeight: 'bold', color: 'black' }}>{location.meetName}</Text>
             </Text>
           </View>
           <View>
             <Text style={{ fontSize: 14 }}>
               {`약속 장소  `}
-              <Text style={{ fontWeight: '900', color: 'black' }}>{location.amuseName}</Text>
+              <Text style={{ fontWeight: 'bold', color: 'black' }}>{location.amuseName}</Text>
             </Text>
           </View>
         </View>
@@ -75,7 +75,7 @@ const GroupDetailScheduleItem = ({ name, date, memberCount, location, color }) =
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faUser} size={14} />
-              <Text style={{ fontSize: 14, marginLeft: 5, fontWeight: '900', color: 'black' }}>{memberCount}</Text>
+              <Text style={{ fontSize: 14, marginLeft: 5, fontWeight: 'bold', color: 'black' }}>{memberCount}</Text>
             </View>
           </View>
         </View>

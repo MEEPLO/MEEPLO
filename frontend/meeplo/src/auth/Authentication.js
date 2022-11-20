@@ -15,6 +15,7 @@ async function userLogin(kakaoAccessToken) {
     console.log('백에서 받아온 데이터: ', tokens.data);
     await AsyncStorage.setItem('@accessToken', tokens.data.accessToken);
     await AsyncStorage.setItem('@refreshToken', tokens.data.refreshToken);
+    return tokens;
   } catch (err) {
     console.error('ERROR in userLogin: ', err.response.data);
   }
@@ -24,12 +25,19 @@ async function userLogin(kakaoAccessToken) {
  * kakao에서 토큰을 받아오는 함수
  * @returns message: 카카오에서 받아오기 성공했는지
  */
-export const logInWithKakao = async ({ Alert }) => {
+export const logInWithKakao = async ({ Alert, navigation }) => {
   try {
     const kakaoToken = await login();
     const { accessToken } = kakaoToken;
-    userLogin(accessToken).then(() => {
-      RNRestart.Restart();
+    userLogin(accessToken).then(res => {
+      // console.log(res.data);
+      if (res.data.newMember) {
+        navigation.reset({
+          routes: [{ name: 'NewMemberLocation' }],
+        });
+      } else {
+        RNRestart.Restart();
+      }
     });
   } catch (err) {
     Alert.alert('로그인에 실패하였습니다.');
