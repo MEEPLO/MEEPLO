@@ -206,10 +206,10 @@ npm run android
 
 ```shell
 # 배포 버전 APK
-**./gradlew app:assembleRelease**
+./gradlew app:assembleRelease
 
 # 개발 버전 APK
-**./gradlew app:assembleDebug**
+./gradlew app:assembleDebug
 ```
 
 ### AAB 추출
@@ -218,10 +218,10 @@ npm run android
 
 ```shell
 # 배포 버전 APK
- **./gradlew assembleRelease**
+ ./gradlew assembleRelease
 
 # 개발 버전 APK
-**./gradlew assembleDebug**
+./gradlew assembleDebug
 ```
 
 </details>
