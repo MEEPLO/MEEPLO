@@ -22,14 +22,22 @@ public class MemberLocation extends GeoDataEntity {
     @Column(length = 10)
     private String name;
 
+    private Boolean defaultLocation;
+
     @ManyToOne
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
+
+
+    public void updateDefaultLocation(Boolean defaultLocation) {
+        this.defaultLocation = defaultLocation;
+    }
 
     @Builder
     public MemberLocation(MemberRequest.MemberLocationAddInfo memberLocationAddInfo, Member member, MemberRequest.ConvertedCoordinate convertedCoordinate){
         this.member = member;
         this.name = memberLocationAddInfo.getName();
+        this.defaultLocation = false;
         this.address= memberLocationAddInfo.getAddress();
         this.lat = convertedCoordinate.getLat();
         this.lng = convertedCoordinate.getLng();
