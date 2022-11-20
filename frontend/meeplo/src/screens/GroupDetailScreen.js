@@ -20,7 +20,7 @@ const GroupDetailScreen = ({ route, navigation }) => {
   const groupDetail = useSelector(state => state.group.details);
   const groupMomentsFeed = useSelector(state => state.group.moments);
 
-  const colorList = ['purple', 'yellow', 'red', 'green', 'orange', 'blue', 'navy'];
+  const colorList = ['purple', 'yellow', 'red', 'green', 'orange', 'blue'];
 
   const onPressMoment = ({ momentId }) => {
     setModalVisible(true);
