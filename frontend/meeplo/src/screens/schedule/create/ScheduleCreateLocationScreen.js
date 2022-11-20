@@ -27,8 +27,6 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   };
 
   const validateInput = () => {
-    console.log('meet', meet);
-    console.log('amuse', amuse);
     if (!meet || !meet.id) {
       Toast.show({
         type: 'error',
