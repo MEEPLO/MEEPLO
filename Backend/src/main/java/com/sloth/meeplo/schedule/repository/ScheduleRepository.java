@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     Optional<Schedule> findFirstByGroupOrderByIdDesc(Group group);
-    Optional<Schedule> findFirstByGroupAndDateBeforeOrderByIdDesc(Group group, LocalDateTime date);
+    Optional<Schedule> findFirstByGroupAndDateBeforeOrderByDateDesc(Group group, LocalDateTime date);
 
     List<Schedule> findByGroup(Group group);
 
