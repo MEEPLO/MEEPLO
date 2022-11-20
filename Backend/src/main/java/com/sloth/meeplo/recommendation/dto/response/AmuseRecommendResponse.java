@@ -3,6 +3,7 @@ package com.sloth.meeplo.recommendation.dto.response;
 import com.sloth.meeplo.global.type.DefaultValue;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.location.entity.LocationPhoto;
+import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -25,7 +26,7 @@ public class AmuseRecommendResponse {
 
     @ToString
     @Getter
-    public static class AmuseSummary {
+    public static class AmuseSummary extends Coordinate {
         private Long id;
         private String name;
         private String address;
@@ -34,6 +35,8 @@ public class AmuseRecommendResponse {
 
         @Builder
         AmuseSummary(Location location) {
+            super(location.getLat(), location.getLng());
+
             this.id = location.getId();
             this.name = location.getName();
             this.address = location.getAddress();
