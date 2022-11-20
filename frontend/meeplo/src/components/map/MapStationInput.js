@@ -76,12 +76,10 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   }, []);
 
   useEffect(() => {
-    if (webViewRef && webViewRef.current) {
-      postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
-    }
+    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
   }, [webViewRef.current]);
 
-  const getCurrentPosition = () => {
+  const setCurrentPosition = () => {
     setIsLoading(true);
     Geolocation.getCurrentPosition(
       position => {
@@ -103,7 +101,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
 
   const openModal = () => {
     setShowModal(true);
-    getCurrentPosition();
+    setCurrentPosition();
   };
   const closeModal = () => setShowModal(false);
   const openSelectedStationInfo = () => {
@@ -198,9 +196,13 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
       stationData.id = station.stationId;
       stationData.name = station.name;
       stationData.avgTime = station.avgTime;
+      stationData.lat = station.lat;
+      stationData.lng = station.lng;
     } else {
       stationData.id = station.id;
       stationData.name = station.name;
+      stationData.lat = station.lat;
+      stationData.lng = station.lng;
     }
 
     return (
@@ -236,6 +238,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
           backgroundColor={theme.color.bright.purple}
           onPress={() => {
             onValueChange(stationData);
+            closeSelectedStationInfo();
             closeModal();
           }}
         />

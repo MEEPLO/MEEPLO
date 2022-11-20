@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNearLocations } from '../../redux/locationSlice';
+import Geolocation from 'react-native-geolocation-service';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
+import { getAmuseRecommendation } from '../../redux/recommendationSlice';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
-import { getAmuseRecommendation } from '../../redux/recommendationSlice';
+import LoadingModal from '../common/LoadingModal';
 
 const screen = Dimensions.get('screen');
 const selectedLocationInfoViewWidth = screen.width * 0.95;
@@ -16,12 +18,13 @@ const selectedLocationInfoViewHeight = screen.height * 0.5;
 const selectedLocationInfoViewUpY = screen.height * 0.5;
 const selectedLocationInfoViewDownY = screen.height * 1;
 
-const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
+const MapLocationInput = ({ type, required, value, onValueChange, state, meet }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
   const [mapCenter, setMapCenter] = useState({});
   const [mapZoomLevel, setMapZoomLevel] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedLocation, setSelectedLocation] = useState();
   const [showSelectedLocationInfoView, setShowSelectedLocationInfoView] = useState();
@@ -29,6 +32,20 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
   const webViewRef = useRef();
   const selectedLocationInfoViewPositionAnim = useRef(new Animated.ValueXY()).current;
   const recommendedAmuses = useSelector(state => state?.recommendation?.recommendedAmuses);
+
+  useEffect(() => {
+    if (meet && meet.id) {
+      const currentPosition = {
+        lat: meet.lat,
+        lng: meet.lng,
+      };
+      setMapCenter(currentPosition);
+      postMessage(MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER, currentPosition);
+    } else {
+      setCurrentPosition();
+    }
+    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
+  }, [webViewRef.current]);
 
   useEffect(() => {
     if (Array.isArray(recommendedAmuses)) {
@@ -52,7 +69,29 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
     }
   }, [showSelectedLocationInfoView, selectedLocationInfoViewUp, selectedLocationInfoViewDown]);
 
-  const openModal = () => setShowModal(true);
+  const setCurrentPosition = () => {
+    setIsLoading(true);
+    Geolocation.getCurrentPosition(
+      position => {
+        const currentPosition = {
+          lat: position?.coords?.latitude,
+          lng: position?.coords?.longitude,
+        };
+        setMapCenter(currentPosition);
+        postMessage(MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER, currentPosition);
+        setIsLoading(false);
+      },
+      error => {
+        setIsLoading(false);
+        console.log(error.code, error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000, fastestInterval: 100 },
+    );
+  };
+
+  const openModal = () => {
+    setShowModal(true);
+  };
   const closeModal = () => setShowModal(false);
   const openSelectedLocationInfoView = () => {
     setShowSelectedLocationInfoView(true);
@@ -114,6 +153,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
   };
 
   const onSearchNear = () => {
+    setIsLoading(true);
     dispatch(
       getNearLocations({
         lat: mapCenter?.lat,
@@ -125,6 +165,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
       .then(payload => {
         const locations = payload.locations;
         postMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, locations);
+        setIsLoading(false);
       })
       .catch(err => {
         console.log(err);
@@ -252,6 +293,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
           </Animated.View>
         </View>
       </ModalCover>
+      <LoadingModal visible={isLoading} />
     </View>
   );
 };
