@@ -27,7 +27,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   };
 
   const validateInput = () => {
-    if (!meet || !(meet.id || meet.stationId)) {
+    if (!meet || !meet.id) {
       Toast.show({
         type: 'error',
         text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
@@ -68,7 +68,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
         <MapStationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} state={state} />
       </View>
       <View style={styles.inputViewStyle}>
-        <MapLocationInput type="약속 장소" required value={amuse} onValueChange={onSelectAmuseLocation} />
+        <MapLocationInput type="약속 장소" required value={amuse} onValueChange={onSelectAmuseLocation} state={state} />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="< 이전" active={false} onPress={toPrev} />

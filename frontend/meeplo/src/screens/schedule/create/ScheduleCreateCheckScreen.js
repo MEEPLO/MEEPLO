@@ -13,7 +13,6 @@ import { theme } from '../../../assets/constant/DesignTheme';
 const screen = Dimensions.get('screen');
 
 const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
-  console.log(state);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
@@ -81,7 +80,7 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>모임</Text>
         </View>
-        <Text style={styles.itemText}> {state?.meet?.name} </Text>
+        <Text style={styles.itemText}> {state?.group?.name} </Text>
       </View>
 
       <View style={styles.itemView}>
@@ -95,7 +94,7 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>만남 장소</Text>
         </View>
-        <Text style={styles.itemText}> {state?.meet?.name}</Text>
+        <Text style={styles.itemText}> {state?.meet?.name}역</Text>
       </View>
 
       <View style={styles.itemView}>
