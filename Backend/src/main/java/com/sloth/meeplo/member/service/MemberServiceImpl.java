@@ -176,7 +176,7 @@ public class MemberServiceImpl implements MemberService {
 
         MemberLocation memberLocation = memberLocationRepository.findById(id)
                 .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION));
-        
+
         if(!memberLocation.getMember().getId().equals(member.getId()))
             throw new MeeploException(MemberErrorCode.OTHER_MEMBER_LOCATION);
 
