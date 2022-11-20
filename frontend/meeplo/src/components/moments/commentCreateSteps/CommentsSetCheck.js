@@ -14,9 +14,9 @@ const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
       <View style={{ height: 90 }}>
-        <Text style={{ lineHeight: 50, fontWeight: '800', fontSize: 18 }}>입력 사항 체크</Text>
+        <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 18, color: 'gray' }}>입력 사항 체크</Text>
         <Text style={{ fontSize: 14, color: theme.font.color }}>
-          <Text style={{ color: theme.color.alert, fontWeight: '900' }}>! </Text> 생성된 추억은 다시 지울 수 없어요.
+          <Text style={{ color: theme.color.alert, fontWeight: 'bold' }}>! </Text> 생성된 추억은 다시 지울 수 없어요.
         </Text>
       </View>
       <View style={{ marginHorizontal: 20 }}>
@@ -32,7 +32,7 @@ const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
           />
         </View>
         <View style={{ height: 90 }}>
-          <Text style={{ lineHeight: 90, fontSize: 15 }}>댓글 내용: </Text>
+          <Text style={{ lineHeight: 90, fontSize: 15, color: 'gray' }}>댓글 내용: </Text>
           <Text style={{ fontSize: 17, color: theme.font.color }}>{state.comment}</Text>
         </View>
       </View>

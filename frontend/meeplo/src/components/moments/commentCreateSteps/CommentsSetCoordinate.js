@@ -64,7 +64,7 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
                   left: comment.location.xpoint * 0.6,
                 }}
                 key={idx}>
-                <Text style={{ fontSize: 10 }}>{comment.comment}</Text>
+                <Text style={{ fontSize: 10, color: 'gray' }}>{comment.comment}</Text>
               </View>
             ))}
             <Text

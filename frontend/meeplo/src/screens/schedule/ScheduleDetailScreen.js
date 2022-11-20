@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, ScrollView, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 
 import { theme } from '../../assets/constant/DesignTheme';
-import { getScheduleDetail } from '../../redux/scheduleSlice';
+import { getScheduleDetail, deleteSchedule } from '../../redux/scheduleSlice';
 
 import ModalCover from '../../components/common/ModalCover';
 import LoadingModal from '../../components/common/LoadingModal';
@@ -36,9 +36,29 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
     day: day[rawDate.getDay()],
   };
   const isDone = today - rawDate > 0 ? true : false;
-  // TODO: hrookim change!!!
-  // const isLeader = user.id === schedule.leaderMemberId;
-  const isLeader = true;
+  const isLeader = user.id === schedule.leaderId;
+
+  const onPressDelete = () => {
+    Alert.alert(
+      '약속 삭제',
+      `${schedule.name}을 삭제하시겠습니까?`,
+      [
+        {
+          text: '취소',
+        },
+        {
+          text: '삭제',
+          onPress: () => {
+            dispatch(deleteSchedule({ scheduleId }));
+          },
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+    dispatch(deleteSchedule({ scheduleId }));
+  };
 
   const onPressEdit = () => {
     navigation.navigate('Edit', { scheduleId });
@@ -70,43 +90,6 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
     return <Text>{keywords?.map(keyword => `#${keyword}`).join('  ')}</Text>;
   };
 
-  // const a = {
-  //   amuseLocations: [
-  //     { address: '서울특별시 강남구 선릉로64길 9', id: 4, lat: 37.49797648, lng: 127.0530475, name: '생활맥주' },
-  //   ],
-  //   date: '2022-11-08 18:52',
-  //   group: { id: 1, name: '청춘은 바로 지금부터,,~' },
-  //   keywords: ['닭갈비'],
-  //   meetLocation: {
-  //     address: '서울특별시 강남구 테헤란로37길 13-6',
-  //     id: 254385,
-  //     lat: 37.50309857,
-  //     lng: 127.0401572,
-  //     name: '만타',
-  //   },
-  //   members: [
-  //     {
-  //       id: 7,
-  //       nickname: '한나',
-  //       photo: 'http://k.kakaocdn.net/dn/JELNL/btreCCTvBCo/naMc0iTZK6u2hq56ullvdk/img_640x640.jpg',
-  //       status: 'JOINED',
-  //     },
-  //     {
-  //       id: 8,
-  //       nickname: '한나',
-  //       photo: 'http://k.kakaocdn.net/dn/JELNL/btreCCTvBCo/naMc0iTZK6u2hq56ullvdk/img_640x640.jpg',
-  //       status: 'JOINED',
-  //     },
-  //     {
-  //       id: 9,
-  //       nickname: '김혜림',
-  //       photo: 'http://k.kakaocdn.net/dn/8v2nW/btrN66KPJ0G/kUvxNi2zoea8K4y3mzfMc0/img_640x640.jpg',
-  //       status: 'JOINED',
-  //     },
-  //   ],
-  //   name: '우리 당장 만나',
-  // };
-
   const renderMemberList = members => {
     return members?.map(member => {
       return (
@@ -122,7 +105,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
             }}
             resizeMode="center"
           />
-          <Text style={{ fontSize: 16 }}>{member?.nickname}</Text>
+          <Text style={{ fontSize: 16, color: 'gray' }}>{member?.nickname}</Text>
         </View>
       );
     });
@@ -132,10 +115,10 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
     <View style={styles.screenStyle}>
       {!isLoading ? (
         <ScrollView>
-          <View style={{ height: 420, marginVertical: 20 }}>
+          <View style={{ height: 440, marginVertical: 20 }}>
             {/* title */}
             <View style={styles.detailTitleContainer}>
-              <Text style={{ color: 'black', fontWeight: '900', fontSize: 22, marginHorizontal: 10 }}>
+              <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 22, marginHorizontal: 10 }}>
                 {`${scheduleDate.year}년 ${scheduleDate.month}월 ${scheduleDate.date}일  ${scheduleDate.day}`}
               </Text>
             </View>
@@ -149,9 +132,9 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                   <Text style={styles.itemContent}> {schedule?.group?.name}</Text>
                   <TouchableOpacity style={styles.itemMemberButton} onPress={openMemberModal}>
                     <View style={styles.itemMemberButtonContent}>
-                      <Text style={{ marginRight: 10 }}>눌러서 참석자보기</Text>
+                      <Text style={{ marginRight: 10, color: 'gray' }}>눌러서 참석자보기</Text>
                       <FontAwesomeIcon icon={faUser} color={'gray'} size={10} />
-                      <Text style={{ marginLeft: 3 }}>{schedule?.members?.length}</Text>
+                      <Text style={{ marginLeft: 3, color: 'gray' }}>{schedule?.members?.length}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -186,15 +169,15 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
               <View style={styles.keywords}>{renderKeywords(schedule?.keywords)}</View>
 
               {isLeader && (
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                   <TouchableOpacity
                     onPress={onPressEdit}
                     activeOpacity={0.6}
                     style={[styles.buttonUD, { backgroundColor: theme.color.bright.navy }]}>
-                    <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>수정</Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>수정</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.6} style={styles.buttonUD}>
-                    <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>삭제</Text>
+                  <TouchableOpacity activeOpacity={0.6} style={styles.buttonUD} onPress={onPressDelete}>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>삭제</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -213,7 +196,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                 ]}>
                 <Text style={styles.buttonTitle}>추억 보기</Text>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={[
                   styles.buttonContainer,
                   {
@@ -221,7 +204,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                   },
                 ]}>
                 <Text style={styles.buttonTitle}>추억 남기기</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           ) : (
             <TouchableOpacity
@@ -254,8 +237,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   buttonTitle: {
-    fontWeight: '900',
-    fontSize: height * 0.025,
+    fontWeight: 'bold',
+    fontSize: 20,
     color: 'black',
   },
   buttonContainer: {
@@ -277,7 +260,7 @@ const styles = StyleSheet.create({
     borderColor: theme.color.border,
   },
   detailItemsContainer: {
-    height: 365,
+    height: 385,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
     borderWidth: 2,
@@ -303,13 +286,14 @@ const styles = StyleSheet.create({
   },
 
   itemView: {
+    height: 70,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    marginBottom: 30,
   },
   itemTitle: {
     fontSize: 14,
+    color: 'gray',
   },
   itemContentView: {
     alignItems: 'flex-end',

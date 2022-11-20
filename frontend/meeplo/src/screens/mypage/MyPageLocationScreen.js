@@ -10,7 +10,7 @@ const MyPageLocationScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: '900', color: 'black', marginVertical: 25 }}>등록된 출발지</Text>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>등록된 출발지</Text>
       <View
         style={{
           width: '100%',

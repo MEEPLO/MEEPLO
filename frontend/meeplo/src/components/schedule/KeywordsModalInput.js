@@ -20,6 +20,7 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
 
   useEffect(() => {
     setSelected([...value]);
+    setSelectBuffer([...value]);
   }, [value]);
 
   const openModal = () => setShowModal(true);
@@ -121,7 +122,7 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
               justifyContent: 'center',
             }}
             onPress={onAddKeywords}>
-            <Text style={{ color: theme.color.border, fontSize: 14, fontWeight: '800' }}>+</Text>
+            <Text style={{ color: theme.color.border, fontSize: 14, fontWeight: 'bold' }}>+</Text>
           </TouchableOpacity>
         </View>
 
@@ -146,7 +147,7 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
 const styles = StyleSheet.create({
   titleStyle: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
   },
   invalidTextView: {
     marginBottom: 30,

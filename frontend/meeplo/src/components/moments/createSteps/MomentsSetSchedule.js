@@ -126,7 +126,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
             top: 400,
           }}>
           <Pressable onPress={() => setScheduleModal(true)}>
-            <Text style={{ textAlign: 'center', fontSize: 16, color: theme.color.bright.red, fontWeight: '800' }}>
+            <Text style={{ textAlign: 'center', fontSize: 16, color: theme.color.bright.red, fontWeight: 'bold' }}>
               아직 약속을 만들지 않았다면? {' >'}
             </Text>
           </Pressable>
@@ -187,7 +187,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
                   fontSize: 20,
                   textAlign: 'center',
                   lineHeight: 56,
-                  fontWeight: '800',
+                  fontWeight: 'bold',
                 }}>
                 생성하기
               </Text>
@@ -208,7 +208,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
                   fontSize: 17,
                   textAlign: 'center',
                   lineHeight: 59,
-                  fontWeight: '800',
+                  fontWeight: 'bold',
                 }}>
                 뒤로 가기
               </Text>

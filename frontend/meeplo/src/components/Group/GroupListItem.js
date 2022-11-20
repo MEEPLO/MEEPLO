@@ -43,7 +43,7 @@ const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, col
           backgroundColor: theme.color.pale[color],
           justifyContent: 'center',
         }}>
-        <Text style={{ marginHorizontal: 20, fontWeight: '900', fontSize: 19, color: 'black' }}>{name}</Text>
+        <Text style={{ marginHorizontal: 20, fontWeight: 'bold', fontSize: 19, color: 'black' }}>{name}</Text>
       </View>
       <View
         style={{
@@ -70,16 +70,16 @@ const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, col
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faCrown} size={14} />
-              <Text style={{ fontSize: 14, marginLeft: 5 }}>{leaderName}</Text>
+              <Text style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{leaderName}</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faUser} size={14} />
-              <Text style={{ fontSize: 14, marginLeft: 5 }}>{memberCount}</Text>
+              <Text style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{memberCount}</Text>
             </View>
           </View>
           {lastScheduleDate && (
             <View>
-              <Text style={{ fontSize: 14 }}>최근모임: {lastScheduleDate}</Text>
+              <Text style={{ fontSize: 14, color: 'gray' }}>최근모임: {lastScheduleDate}</Text>
             </View>
           )}
         </View>

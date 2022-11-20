@@ -9,7 +9,7 @@ const MyPageLocationSearch = ({ isVisible, setIsVisible, handleOnChange }) => {
     <>
       <Modal visible={isVisible}>
         <View>
-          <Text style={{ color: 'black', fontWeight: '900', fontSize: 24, textAlign: 'center', marginVertical: 10 }}>
+          <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 24, textAlign: 'center', marginVertical: 10 }}>
             주소 검색
           </Text>
           <TouchableOpacity

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, ActivityIndicator, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
+import { useNavigation } from '@react-navigation/native';
 
 import { createSchedule } from '../../../redux/scheduleSlice';
 import StepButton from '../../../components/stepper/StepButton';
@@ -13,6 +14,7 @@ const screen = Dimensions.get('screen');
 
 const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
 
   const openLoadingModal = () => setLoading(true);
@@ -34,7 +36,7 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
     };
 
     openLoadingModal();
-    dispatch(createSchedule(reqObject))
+    dispatch(createSchedule({ schedule: reqObject, navigation }))
       .unwrap()
       .then(payload => {
         setTimeout(() => {
@@ -50,7 +52,7 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={{ alignItems: 'center', marginBottom: 50 }}>
-        <Text style={{ fontSize: 24, fontWeight: '800' }}>약속을 만드시겠어요?</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>약속을 만드시겠어요?</Text>
       </View>
 
       <View style={styles.itemView}>
@@ -78,21 +80,21 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>모임</Text>
         </View>
-        <Text style={styles.itemText}> {state?.meet?.name} </Text>
+        <Text style={styles.itemText}> {state?.group?.name} </Text>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>멤버</Text>
         </View>
-        <Text style={styles.itemText}> {state?.members?.join(', ')} </Text>
+        <Text style={styles.itemText}> {state?.members?.map(member => member.nickname).join(', ')} </Text>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>만남 장소</Text>
         </View>
-        <Text style={styles.itemText}> {state?.meet?.name}</Text>
+        <Text style={styles.itemText}> {state?.meet?.name}역</Text>
       </View>
 
       <View style={styles.itemView}>
