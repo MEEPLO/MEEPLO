@@ -11,7 +11,7 @@ const SelectDropdown = props => {
 
   return (
     <View>
-      <Text style={{ color: '#000', fontWeight: '800', marginBottom: 20 }}>
+      <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
         {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
       </Text>
       <View style={{ position: 'relative' }}>

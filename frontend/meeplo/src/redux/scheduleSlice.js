@@ -3,17 +3,48 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
 import { axiosPrivate } from '../auth/axiosInstance';
+import Toast from 'react-native-toast-message';
 
-export const createSchedule = createAsyncThunk('schedule/createSchedule', async schedule => {
+export const createSchedule = createAsyncThunk('schedule/createSchedule', async ({ schedule, navigation }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(`${MEEPLO_SERVER_BASE_URL}/schedule`, schedule, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axiosPrivate
+      .post(`/schedule`, schedule, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(res => {
+        // TODO: hrookim 이것은 과연 될것인가...
+        navigation.jumpTo('GroupStack'); // 되지만 소용없음
+        navigation.jumpTo('ScheduleStack'); // 이렇게까지 해야함
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }, { name: 'Detail', params: { scheduleId: res.data.scheduleId } }],
+        });
+      });
 
     return response.data;
+  } catch (err) {
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const deleteSchedule = createAsyncThunk('schedule/deleteSchedule', async ({ scheduleId }) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    await axiosPrivate
+      .delete(`/schedule/${scheduleId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(() => {
+        Toast.show({
+          type: 'success',
+          text1: '약속을 삭제하였습니다.',
+        });
+      });
   } catch (err) {
     return isRejectedWithValue(err.response.data);
   }
@@ -23,7 +54,7 @@ export const createSchedule = createAsyncThunk('schedule/createSchedule', async 
 export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthly', async yearMonth => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}/list`, {
+    const response = await axiosPrivate.get(`/schedule/monthly/${yearMonth}/list`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -38,7 +69,7 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
 export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesDatesMonthly', async yearMonth => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}`, {
+    const response = await axiosPrivate.get(`/schedule/monthly/${yearMonth}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -54,7 +85,7 @@ export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesD
 export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesDaily', async date => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/daily/${date}`, {
+    const response = await axiosPrivate.get(`/schedule/daily/${date}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -69,7 +100,7 @@ export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesDaily', 
 export const getSchedules = createAsyncThunk('schedule/getSchedules', async ({ yearMonth }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule`, {
+    const response = await axiosPrivate.get(`/schedule`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -127,7 +158,7 @@ export const getScheduleDetail = createAsyncThunk('schedule/getScheduleDetail', 
 });
 
 export const editSchedule = createAsyncThunk('schedule/editGroup', async ({ form, scheduleId, Alert, navigation }) => {
-  console.log(form);
+  // console.log(form);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axiosPrivate

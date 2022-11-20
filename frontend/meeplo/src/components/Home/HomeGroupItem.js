@@ -10,7 +10,7 @@ const HomeGroupItem = ({ name, photo, memberCount, leaderName, lastSchedule }) =
   const height = width * 0.33;
 
   useEffect(() => {
-    if (lastSchedule !== '1111-11-11 11:11:11') {
+    if (lastSchedule !== '1111-11-11 11:11') {
       const date = moment(new Date(lastSchedule)).format('YY.MM.DD');
       setLastScheduleDate(date);
     }
@@ -34,8 +34,8 @@ const HomeGroupItem = ({ name, photo, memberCount, leaderName, lastSchedule }) =
             top: width - height,
             justifyContent: 'center',
           }}>
-          <Text style={{ fontWeight: '900', marginHorizontal: 5, fontSize: 15 }}>{name}</Text>
-          <Text style={{ marginHorizontal: 5, fontSize: 12 }}>
+          <Text style={{ fontWeight: 'bold', marginHorizontal: 5, fontSize: 15, color: 'gray' }}>{name}</Text>
+          <Text style={{ marginHorizontal: 5, fontSize: 12, color: 'gray' }}>
             {memberCount}명 {lastScheduleDate && ` |  마지막 약속: ${lastScheduleDate}`}
           </Text>
         </View>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, TextInput, Image } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { getNearLocations } from '../../redux/locationSlice';
 
 import { theme } from '../../assets/constant/DesignTheme';
@@ -8,30 +8,33 @@ import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message'
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
-import MapSearchResultList from './MapSearchResultList';
+import { getAmuseRecommendation } from '../../redux/recommendationSlice';
 
 const screen = Dimensions.get('screen');
-const searchInputWidth = screen.width * 0.7;
-const selectedNearLocationViewWidth = screen.width * 0.95;
-const selectedNearLocationViewHeight = screen.height * 0.5;
-const selectedNearLocationViewUpY = screen.height * 0.5;
-const selectedNearLocationViewDownY = screen.height * 1;
+const selectedLocationInfoViewWidth = screen.width * 0.95;
+const selectedLocationInfoViewHeight = screen.height * 0.5;
+const selectedLocationInfoViewUpY = screen.height * 0.5;
+const selectedLocationInfoViewDownY = screen.height * 1;
 
-const MapLocationInput = ({ type, required, value, onValueChange }) => {
+const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
-  const [showSearchResultList, setShowSearchResultList] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
   const [mapCenter, setMapCenter] = useState();
   const [mapZoomLevel, setMapZoomLevel] = useState();
 
-  const [nearLocations, setNearLocations] = useState();
-  const [selectedNearLocation, setSelectedNearLocation] = useState();
-  const [showSelectedNearLocationInfo, setShowSelectedNearLocationView] = useState();
+  const [selectedLocation, setSelectedLocation] = useState();
+  const [showSelectedLocationInfoView, setShowSelectedLocationInfoView] = useState();
 
   const webViewRef = useRef();
-  const selectedNearLocationViewPositionAnim = useRef(new Animated.ValueXY()).current;
+  const selectedLocationInfoViewPositionAnim = useRef(new Animated.ValueXY()).current;
+  const recommendedAmuses = useSelector(state => state?.recommendation?.recommendedAmuses);
+
+  useEffect(() => {
+    if (Array.isArray(recommendedAmuses)) {
+      postMessage(MESSAGE_TYPE.UPDATE_RECOMMENDED_AMUSES, recommendedAmuses);
+    }
+  }, [recommendedAmuses]);
 
   useEffect(() => {
     if (mapZoomLevel <= 5) {
@@ -42,33 +45,33 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
   }, [mapZoomLevel]);
 
   useEffect(() => {
-    if (webViewRef && webViewRef.current && webViewRef.current.postMessage) {
-      webViewRef.current.postMessage(searchValue);
-    }
-  }, [searchValue]);
-
-  useEffect(() => {
-    if (showSelectedNearLocationInfo) {
-      selectedNearLocationViewUp();
+    if (showSelectedLocationInfoView) {
+      selectedLocationInfoViewUp();
     } else {
-      selectedNearLocationViewDown();
+      selectedLocationInfoViewDown();
     }
-  }, [showSelectedNearLocationInfo, selectedNearLocationViewUp, selectedNearLocationViewDown]);
+  }, [showSelectedLocationInfoView, selectedLocationInfoViewUp, selectedLocationInfoViewDown]);
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
-  const openSelectedNearLocationView = () => {
-    setShowSelectedNearLocationView(true);
+  const openSelectedLocationInfoView = () => {
+    setShowSelectedLocationInfoView(true);
   };
-  const closeSelectedNearLocationView = () => {
-    setShowSelectedNearLocationView(false);
-  };
-
-  const onMessageHandler = data => {
-    processMapMessage(parseMessage(data.nativeEvent.data));
+  const closeSelectedLocationInfoView = () => {
+    setShowSelectedLocationInfoView(false);
   };
 
-  const processMapMessage = message => {
+  const onMessage = data => {
+    processMessage(parseMessage(data.nativeEvent.data));
+  };
+
+  const postMessage = (messageType, messageBody) => {
+    if (webViewRef && webViewRef.current) {
+      webViewRef.current.postMessage(createMessage(messageType, messageBody));
+    }
+  };
+
+  const processMessage = message => {
     const messageType = message.messageType;
     const body = message.messageBody;
     switch (messageType) {
@@ -76,16 +79,19 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
         setMapCenter(body.center);
         setMapZoomLevel(body.level);
         break;
-      case MESSAGE_TYPE.UPDATE_CENTER:
+      case MESSAGE_TYPE.UPDATE_APP_CENTER:
         setMapCenter(body.center);
         break;
       case MESSAGE_TYPE.UPDATE_ZOOM_LEVEL:
         setMapZoomLevel(body.level);
         break;
       case MESSAGE_TYPE.SELECT_NEAR_LOCATION:
-        console.log(body);
-        setSelectedNearLocation(body);
-        openSelectedNearLocationView();
+        setSelectedLocation(body);
+        openSelectedLocationInfoView();
+        break;
+      case MESSAGE_TYPE.SEELCT_RECOMMENDED_AMUSE:
+        setSelectedLocation(body);
+        openSelectedLocationInfoView();
         break;
     }
   };
@@ -118,31 +124,43 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
       .unwrap()
       .then(payload => {
         const locations = payload.locations;
-        setNearLocations(locations);
-        webViewRef.current.postMessage(createMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, locations));
-        setShowSearchResultList(true);
+        postMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, locations);
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  const selectedNearLocationViewUp = useCallback(() => {
-    Animated.spring(selectedNearLocationViewPositionAnim, {
-      toValue: { x: 0, y: selectedNearLocationViewUpY },
+  const onPressRecommendation = () => {
+    const form = {
+      startLocation: {
+        lat: mapCenter.lat,
+        lng: mapCenter.lng,
+      },
+      keywords: state?.keywords?.map(keyword => {
+        return { content: keyword };
+      }),
+    };
+
+    dispatch(getAmuseRecommendation(form));
+  };
+
+  const selectedLocationInfoViewUp = useCallback(() => {
+    Animated.spring(selectedLocationInfoViewPositionAnim, {
+      toValue: { x: 0, y: selectedLocationInfoViewUpY },
       useNativeDriver: true,
     }).start();
-  }, [selectedNearLocationViewPositionAnim]);
+  }, [selectedLocationInfoViewPositionAnim]);
 
-  const selectedNearLocationViewDown = useCallback(() => {
-    Animated.spring(selectedNearLocationViewPositionAnim, {
-      toValue: { x: 0, y: selectedNearLocationViewDownY },
+  const selectedLocationInfoViewDown = useCallback(() => {
+    Animated.spring(selectedLocationInfoViewPositionAnim, {
+      toValue: { x: 0, y: selectedLocationInfoViewDownY },
       useNativeDriver: true,
     }).start();
-  }, [selectedNearLocationViewPositionAnim]);
+  }, [selectedLocationInfoViewPositionAnim]);
 
-  const renderSelectedNearLocationInfoView = selectedNearLocation => {
-    if (!selectedNearLocation || !selectedNearLocation.name) {
+  const renderSelectedLocationInfoView = location => {
+    if (!location || !location.name) {
       return null;
     }
 
@@ -158,13 +176,13 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
               borderColor: theme.color.border,
             }}
             source={{
-              uri: selectedNearLocation?.photo,
+              uri: location?.photo,
             }}
           />
-          <Text style={{ fontSize: 20, fontWeight: '800' }}>{selectedNearLocation?.name}</Text>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'gray' }}>{location?.name}</Text>
         </View>
-        <Text>{selectedNearLocation?.address}</Text>
-        <Text>{selectedNearLocation?.category}</Text>
+        <Text>{location?.address}</Text>
+        <Text>{location?.category}</Text>
 
         <TouchableOpacity
           style={{
@@ -176,10 +194,10 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
             borderColor: theme.color.border,
           }}
           onPress={() => {
-            onValueChange(selectedNearLocation);
+            onValueChange(location);
             closeModal();
           }}>
-          <Text style={{ fontSize: 24, fontWeight: '800' }}>선택</Text>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>선택</Text>
         </TouchableOpacity>
       </View>
     );
@@ -198,39 +216,39 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} onMessageHandler={onMessageHandler} />
+          <MapView ref={webViewRef} onMessageHandler={onMessage} />
         </View>
 
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
-          {/* <View style={styles.mapSaerchInputView}>
-            <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
-          </View> */}
-
           {showSearchCurrentMapButton ? (
             <TouchableOpacity style={styles.mapSearchNearButton} onPress={onSearchNear}>
               <Text style={styles.mapSearchNearText}>현 지도에서 검색</Text>
             </TouchableOpacity>
           ) : null}
 
-          {/* {showSearchResultList ? <MapSearchResultList items={searchResult} /> : null} */}
+          {state?.keywords?.length > 0 ? (
+            <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
+              <Text style={styles.recommendationButtonText}>놀 곳 추천 받기</Text>
+            </TouchableOpacity>
+          ) : null}
 
           <Animated.View
             style={[
-              styles.selectedNearLocationView,
+              styles.selectedLocationInfoView,
               {
                 transform: [
-                  { translateX: selectedNearLocationViewPositionAnim.x },
-                  { translateY: selectedNearLocationViewPositionAnim.y },
+                  { translateX: selectedLocationInfoViewPositionAnim.x },
+                  { translateY: selectedLocationInfoViewPositionAnim.y },
                 ],
               },
             ]}>
             <TouchableOpacity
-              style={styles.selectedNearLocationCloseButton}
-              onPress={() => closeSelectedNearLocationView()}>
+              style={styles.selectedLocationInfoViewButton}
+              onPress={() => closeSelectedLocationInfoView()}>
               <Text>X</Text>
             </TouchableOpacity>
 
-            {renderSelectedNearLocationInfoView(selectedNearLocation)}
+            {renderSelectedLocationInfoView(selectedLocation)}
           </Animated.View>
         </View>
       </ModalCover>
@@ -244,7 +262,7 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
     marginBottom: 40,
   },
   dateInputView: {
@@ -260,20 +278,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  mapSaerchInputView: {
-    width: screen.width,
-    alignItems: 'center',
-  },
-  mapSearchInput: {
-    width: searchInputWidth,
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    borderColor: theme.color.border,
-    borderRadius: theme.radius.input,
-    padding: 10,
-    backgroundColor: 'white',
-  },
   mapSearchNearButton: {
     backgroundColor: theme.color.bright.red,
     paddingVertical: 5,
@@ -286,10 +290,10 @@ const styles = StyleSheet.create({
   mapSearchNearText: {
     color: 'white',
   },
-  selectedNearLocationView: {
+  selectedLocationInfoView: {
     position: 'absolute',
-    width: selectedNearLocationViewWidth,
-    height: selectedNearLocationViewHeight,
+    width: selectedLocationInfoViewWidth,
+    height: selectedLocationInfoViewHeight,
     padding: 20,
     backgroundColor: theme.color.background,
 
@@ -299,7 +303,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.color.border,
   },
-  selectedNearLocationCloseButton: {
+  selectedLocationInfoViewButton: {
     height: 40,
     width: 40,
     backgroundColor: theme.color.bright.purple,
@@ -310,6 +314,26 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.base,
     borderWidth: 2,
     borderColor: theme.color.border,
+  },
+  recommendationButton: {
+    position: 'absolute',
+    bottom: 120,
+
+    width: screen.width * 0.8,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    backgroundColor: theme.color.pale.yellow,
+
+    borderWidth: theme.border.thick,
+    borderColor: theme.color.border,
+    borderRadius: theme.radius.base,
+  },
+  recommendationButtonText: {
+    color: theme.font.color,
+    fontSize: 16,
+    fontWeight: '800',
   },
 });
 

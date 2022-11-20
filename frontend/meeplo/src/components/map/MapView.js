@@ -15,17 +15,17 @@ const MapView = forwardRef(({ onMessageHandler }, ref) => {
       ref={ref}
       onMessage={onMessageHandler}
       onLoadStart={() => {
-        console.log('Webview load start');
+        // console.log('Webview load start');
       }}
       onLoadProgress={({ nativeEvent }) => {
-        console.log(`Webview loading ${nativeEvent?.progress}`);
+        // console.log(`Webview loading ${nativeEvent?.progress}`);
       }}
       onLoad={() => {
-        console.log('Webview load has finished');
+        // console.log('Webview load has finished');
         setLoaded(true);
       }}
       onLoadEnd={() => {
-        console.log('WebView load has ended');
+        // console.log('WebView load has ended');
       }}
     />
   );

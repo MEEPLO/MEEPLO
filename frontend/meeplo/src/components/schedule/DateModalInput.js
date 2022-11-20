@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 import { Calendar, CalendarContext } from 'react-native-calendars';
@@ -26,9 +26,12 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
     closeModal();
   };
 
+  useEffect(() => {
+    setSelectedDate({ [date.dateString]: { selected: true, selectedColor: theme.color.bright.orange } });
+  }, [date]);
+
   const onDayPress = date => {
     setDate(date);
-    setSelectedDate({ [date.dateString]: { selected: true, selectedColor: theme.color.bright.orange } });
   };
 
   return (
@@ -70,7 +73,7 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
 const styles = StyleSheet.create({
   titleStyle: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
     marginBottom: 40,
   },
   requiredStyle: {
