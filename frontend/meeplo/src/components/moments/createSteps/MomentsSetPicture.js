@@ -108,7 +108,7 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <>
       <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
-        <Text style={{ color: '#000', fontWeight: '800', marginBottom: 20, lineHeight: 25 }}>
+        <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20, lineHeight: 25 }}>
           사진 선택<Text style={{ color: theme.color.alert }}>*</Text>
           {'\n'}
           갤러리에서 사진을 꾹 눌러 사진 {state.type === 2 ? state.type + 2 : state.type + 1}개를 선택해주세요.{' '}
@@ -133,7 +133,9 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
               position: 'absolute',
               bottom: 85,
             }}>
-            <Text style={{ lineHeight: 49, textAlign: 'center', fontSize: 20, fontWeight: '800' }}>갤러리</Text>
+            <Text style={{ lineHeight: 49, textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: 'gray' }}>
+              갤러리
+            </Text>
           </Pressable>
           {isChanged ? (
             <Pressable
@@ -148,7 +150,7 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
                 position: 'absolute',
                 bottom: 20,
               }}>
-              <Text style={{ lineHeight: 51, textAlign: 'center', fontSize: 15, fontWeight: '800' }}>
+              <Text style={{ lineHeight: 51, textAlign: 'center', fontSize: 15, fontWeight: 'bold', color: 'gray' }}>
                 사진 확정하기
               </Text>
             </Pressable>

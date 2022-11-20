@@ -28,14 +28,9 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
   };
 
   const onPressMoment = ({ momentId }) => {
-    // TODO: hrookim moment modal 연결하기!!!!!
-    console.log(momentId);
     setModalVisible(true);
     setMomentId(momentId);
   };
-
-  // TODO: hrookim change to moment.type
-  const type = 0;
 
   console.log(moments);
   const renderMoment = moments => {
@@ -47,7 +42,7 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
         onPress={() => {
           onPressMoment({ momentId: moment.id });
         }}>
-        {type === 2 ? (
+        {moment.type === 2 ? (
           <AutoHeightImage
             source={{ uri: moment.photo }}
             width={width * 0.5}
@@ -73,8 +68,8 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
           style={{
             position: 'absolute',
             right: 10,
-            top: type === 1 ? 10 : null,
-            bottom: type === 1 ? null : 10,
+            top: moment.type === 1 ? 10 : null,
+            bottom: moment.type === 1 ? null : 10,
             flexDirection: 'row',
             alignItems: 'center',
           }}>
@@ -83,7 +78,7 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
             style={{
               fontSize: 14,
               marginLeft: 5,
-              color: type === 2 ? '#fff' : '#000',
+              color: moment.type === 2 ? '#fff' : '#000',
             }}>
             {moment.reactionCount}
           </Text>
@@ -102,13 +97,30 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
     <View style={{ flex: 1 }}>
       <ScrollView style={{ marginHorizontal: 20 }}>
         <View>
-          <Text style={{ fontSize: 24, fontWeight: '900', color: 'black', marginVertical: 15 }}>{schedule.name}</Text>
-          <Text style={{ marginBottom: 15 }}>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 15 }}>{schedule.name}</Text>
+          <Text style={{ marginBottom: 15, color: 'gray' }}>
             {' '}
             {`${scheduleDate.year}년 ${scheduleDate.month}월 ${scheduleDate.date}일  ${scheduleDate.day}`}
           </Text>
         </View>
-        <View style={{ alignItems: 'center' }}>{renderMoment(moments)}</View>
+        {moments?.length === 0 ? (
+          <View
+            style={{
+              margin: 20,
+              borderWidth: 2,
+              // borderColor: theme.color.disabled,
+              borderColor: 'white',
+              height: 120,
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 남겨진 추억이 없네요!</Text>
+            <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>함께 찍은 사진을 남겨 보세요.</Text>
+          </View>
+        ) : (
+          <View style={{ alignItems: 'center' }}>{renderMoment(moments)}</View>
+        )}
       </ScrollView>
       {momentId > 0 && (
         <MomentModal

@@ -221,7 +221,7 @@ const MyPageScreen = ({ navigation }) => {
               />
             </View>
           ) : (
-            <Text style={{ fontSize: 30, fontWeight: '900', color: 'black', marginVertical: 15 }}>{userNickname}</Text>
+            <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'black', marginVertical: 15 }}>{userNickname}</Text>
           )}
           {isEditing ? (
             <View style={{ flexDirection: 'row' }}>
@@ -239,7 +239,7 @@ const MyPageScreen = ({ navigation }) => {
                   backgroundColor: theme.color.disabled,
                   marginHorizontal: 5,
                 }}>
-                <Text style={{ fontSize: 20, fontWeight: '900', color: 'black' }}>취소</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>취소</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={onPressEdit}
@@ -255,7 +255,7 @@ const MyPageScreen = ({ navigation }) => {
                   backgroundColor: theme.color.pale.orange,
                   marginHorizontal: 5,
                 }}>
-                <Text style={{ fontSize: 20, fontWeight: '900', color: 'black' }}>수정</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>수정</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -274,13 +274,13 @@ const MyPageScreen = ({ navigation }) => {
                 borderRadius: 10,
                 backgroundColor: theme.color.pale.green,
               }}>
-              <Text style={{ fontSize: 20, fontWeight: '900', color: 'black' }}>프로필 수정</Text>
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>프로필 수정</Text>
             </TouchableOpacity>
           )}
         </View>
         <View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 24, fontWeight: '900', color: 'black', marginVertical: 25 }}>등록된 출발지</Text>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>등록된 출발지</Text>
             {user.startLocations.length !== 0 && (
               <TouchableOpacity
                 activeOpacity={0.6}
@@ -304,15 +304,15 @@ const MyPageScreen = ({ navigation }) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text style={{ fontSize: 16 }}>아직 등록된 출발지가 없네요!</Text>
+                <Text style={{ fontSize: 16, color: 'gray' }}>아직 등록된 출발지가 없네요!</Text>
                 <Text style={{ fontSize: 20, color: 'gray' }}>출발지를 등록해보세요</Text>
               </TouchableOpacity>
             )}
             {user.startLocations.map((item, index) => {
               return (
                 <View key={'startLocation' + index} style={{ marginVertical: 10 }}>
-                  <Text style={{ fontSize: 20, fontWeight: '700', color: 'black' }}>{item.name}</Text>
-                  <Text style={{ fontSize: 16, fontWeight: '400' }}>{item.address}</Text>
+                  <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>{item.name}</Text>
+                  <Text style={{ fontSize: 16, fontWeight: '400', color: 'gray' }}>{item.address}</Text>
                 </View>
               );
             })}

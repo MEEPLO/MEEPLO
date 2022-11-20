@@ -243,7 +243,7 @@ export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Aler
         },
       )
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         Alert.alert(`${res.data.members.groupName} 그룹에 참여했습니다!`, '', [
           {
             text: '확인',

@@ -80,7 +80,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <View style={{ margin: 20 }}>
-          <Text style={{ color: theme.font.color, fontWeight: '800', marginVertical: 20 }}>
+          <Text style={{ color: theme.font.color, fontWeight: 'bold', marginVertical: 20 }}>
             그룹<Text style={{ color: theme.color.alert }}> *</Text>
           </Text>
           <Text style={{ color: 'black' }}>{schedule?.group?.name}</Text>
@@ -128,7 +128,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
         }}
         activeOpacity={0.6}
         onPress={onPressEdit}>
-        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: '900' }}>수정하기</Text>
+        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: 'bold' }}>수정하기</Text>
       </TouchableOpacity>
       <LoadingModal visible={isLoading} />
     </SafeAreaView>
