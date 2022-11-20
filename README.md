@@ -83,25 +83,29 @@
 
     ![홈 화면.png](./README/figma_home.png)
 
-  - 모임flow
+  - 모임 flow
 
     ![그룹 flow.png](./README/figma_group.png)
 
-  - 약속flow
+  - 약속 flow
 
     ![약속 flow.png](./README/figma_schedule.png)
 
-  - 추천flow
+  - 추천 flow
 
     ![추천 flow.png](./README/figma_recommendation.png)
+
+  - 추억 flow
+
+    ![추억 flow.png](./README/figma_moment.png)
 
   - 마이페이지 flow
 
     ![마이페이지 flow.png](./README/figma_mypage.png)
 
-  - 추억 flow
+## Porting Manual
 
-    ![추억 flow.png](./README/figma_moment.png)
+- [Porting Manual.md](./exec/Porting_Manual.md)
 
 # 4. 기술 스택 및 배포 환경
 
