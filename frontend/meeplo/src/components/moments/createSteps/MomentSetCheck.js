@@ -27,7 +27,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
         </View>
         <View style={{ height: 50 }}>
           <Text style={{ lineHeight: 50, fontSize: 15, color: 'gray' }}>
-            약속:gi
+            약속
             <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 17, color: 'gray' }}>
               {' '}
               {state.scheduleName} / {state.placeName}
