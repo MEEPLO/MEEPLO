@@ -43,4 +43,14 @@ public class MemberLocation extends GeoDataEntity {
         this.lng = convertedCoordinate.getLng();
 
     }
+
+    @Builder(builderClassName = "emptyMemberLocation", builderMethodName = "emptyMemberLocation")
+    public MemberLocation(Boolean empty){
+        this.name = "빈 값";
+        this.defaultLocation = false;
+        this.address= "빈 값";
+        this.lat = 0.0;
+        this.lng = 0.0;
+
+    }
 }
