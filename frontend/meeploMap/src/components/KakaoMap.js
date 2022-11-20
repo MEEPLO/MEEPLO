@@ -260,7 +260,7 @@ const KakaoMap = () => {
                   padding: 5,
                   borderRadius: 10,
                 }}>
-                {`${parseInt(time.time / 60)}분 소요`}
+                {`${parseInt(time.time / 45)}분 소요`}
               </div>
             </CustomOverlayMap>
           </div>
