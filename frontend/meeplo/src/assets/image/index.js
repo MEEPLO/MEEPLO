@@ -23,6 +23,10 @@ const images = {
     schedule: require('./addsche.png'),
     moment: require('./addmoment.png'),
   },
+  login: {
+    background: require('./login_background.png'),
+    intro: require('./login.png'),
+  },
 };
 
 export default images;
