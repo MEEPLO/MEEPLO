@@ -105,7 +105,7 @@ const GroupHomeScreen = ({ navigation }) => {
             </View>
             {/* 내용물 */}
             <View style={{ flex: 3, marginHorizontal: 20, alignItems: 'center', justifyContent: 'space-around' }}>
-              <Text style={{ fontSize: 18 }}>공유받은 그룹 코드를 입력해주세요!</Text>
+              <Text style={{ fontSize: 18, color: 'gray' }}>공유받은 그룹 코드를 입력해주세요!</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TextInput
                   onChangeText={setGroupCode}
@@ -137,7 +137,7 @@ const GroupHomeScreen = ({ navigation }) => {
                   borderRadius: 10,
                   backgroundColor: theme.color.disabled,
                 }}>
-                <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>취소</Text>
+                <Text style={{ fontSize: width * 0.05, fontWeight: 'bold', color: 'black' }}>취소</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={onPressJoinGroup}
@@ -152,7 +152,7 @@ const GroupHomeScreen = ({ navigation }) => {
                   borderRadius: 10,
                   backgroundColor: theme.color.bright.green,
                 }}>
-                <Text style={{ fontSize: width * 0.05, fontWeight: '900', color: 'black' }}>참여하기</Text>
+                <Text style={{ fontSize: width * 0.05, fontWeight: 'bold', color: 'black' }}>참여하기</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -166,10 +166,10 @@ const GroupHomeScreen = ({ navigation }) => {
             flexDirection: 'row',
             alignItems: 'baseline',
           }}>
-          <Text style={{ fontSize: 24, fontWeight: '900', color: 'black' }}>내 그룹 모아보기</Text>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>내 그룹 모아보기</Text>
         </View>
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={openModal}>
-          <Text style={{ marginRight: 5 }}>다른 그룹 참여</Text>
+          <Text style={{ marginRight: 5, color: 'gray' }}>다른 그룹 참여</Text>
           <FontAwesomeIcon icon={faSquarePlus} size={14} color="gray" />
         </TouchableOpacity>
       </View>
@@ -186,7 +186,7 @@ const GroupHomeScreen = ({ navigation }) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{ fontSize: 16, marginVertical: 5 }}>아직 소속된 그룹이 없네요!</Text>
+          <Text style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 소속된 그룹이 없네요!</Text>
           {/* <Text style={{ fontSize: 16, marginVertical: 5 }}>다른 그룹에 참여하거나,</Text> */}
           <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>새로운 그룹을 만들어 보세요.</Text>
         </TouchableOpacity>

@@ -22,7 +22,7 @@ const StepTextInput = props => {
 
   return (
     <View>
-      <Text style={{ color: theme.font.color, fontWeight: '800' }}>
+      <Text style={{ color: theme.font.color, fontWeight: 'bold' }}>
         {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
       </Text>
       <TextInput

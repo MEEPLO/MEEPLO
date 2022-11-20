@@ -1,7 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
-import { MEEPLO_SERVER_BASE_URL } from '@env';
 import Images from '../assets/image/index';
 import { axiosPrivate } from '../auth/axiosInstance';
 
@@ -102,6 +101,28 @@ export const deleteStartLocation = createAsyncThunk('user/deleteStartLocation', 
     return isRejectedWithValue(err.response?.data);
   }
 });
+
+export const changeDefaultLocation = createAsyncThunk(
+  'user/changeDefaultLocation',
+  async ({ locationId, Alert, locationName }) => {
+    try {
+      const accessToken = await AsyncStorage.getItem('@accessToken');
+      await axiosPrivate
+        .get(`/member/defaultlocation/${locationId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(() => {
+          Alert.alert(`기본 출발지를 ${locationName}(으)로 설정했습니다.`);
+        });
+      // return response.data;
+    } catch (err) {
+      console.error('ERROR in changeDefaultLocation!', err.response.data);
+      return isRejectedWithValue(err.response.data);
+    }
+  },
+);
 
 const userSlice = createSlice({
   name: 'user',

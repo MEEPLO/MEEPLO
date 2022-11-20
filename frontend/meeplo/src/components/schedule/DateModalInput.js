@@ -73,7 +73,7 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
 const styles = StyleSheet.create({
   titleStyle: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
     marginBottom: 40,
   },
   requiredStyle: {

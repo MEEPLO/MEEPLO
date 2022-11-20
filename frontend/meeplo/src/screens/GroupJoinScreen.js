@@ -6,7 +6,7 @@ const GroupJoinScreen = ({ route, navigation }) => {
   console.log(route.test, route.groupId);
   return (
     <View>
-      <Text style={{ fontSize: 30 }}>GroupJoinScreen</Text>
+      <Text style={{ fontSize: 30, color: 'gray' }}>GroupJoinScreen</Text>
     </View>
   );
 };
