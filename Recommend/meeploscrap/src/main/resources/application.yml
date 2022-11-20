@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: server
+
+server:
+  port: 8088
