@@ -50,7 +50,7 @@ axiosPrivate.interceptors.response.use(
               type: 'loginToast',
               text1: '🔒 로그인이 필요합니다!',
             });
-            console.log('새로운 로그인 필요');
+            // console.log('새로운 로그인 필요');
             AsyncStorage.clear();
             navigate('HomeStack', { screen: 'Login' });
           });

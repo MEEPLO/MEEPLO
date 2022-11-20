@@ -84,7 +84,7 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   };
 
   const onMessage = event => {
-    console.log(event.nativeEvent.data);
+    // console.log(event.nativeEvent.data);
     event.nativeEvent.data === 'input changed' ? setIsChanged(true) : uploadToS3(event.nativeEvent.data);
   };
 

@@ -8,7 +8,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   const windowWidth = Dimensions.get('window').width - 40;
   const windowHeight = Dimensions.get('window').height;
 
-  console.log(state);
+  // console.log(state);
 
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
