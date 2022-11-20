@@ -134,6 +134,7 @@ public class GroupServiceImpl implements GroupService{
                         .map(x-> GroupResponse.GroupDetailSchedule.builder()
                                 .schedule(x)
                                 .build())
+                        .sorted(((o1, o2) -> o2.getDate().compareTo(o1.getDate())))
                         .collect(Collectors.toList()))
                 .build();
 
