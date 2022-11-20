@@ -70,9 +70,9 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
       dispatch(createStartLocation({ form })).then(() => {
         dispatch(getUserInfo()).then(() => {
           Toast.show({
-            type: 'success',
-            text1: 'MEEPLO에 오신 것을 환영합니다.',
-            text2: '모든 설정이 완료되었습니다:)',
+            type: 'welcomeToast',
+            text1: 'MEEPLO에 오신 것을 환영합니다:)',
+            text2: '모든 설정이 완료되었습니다.',
           });
         });
         navigation.reset({
