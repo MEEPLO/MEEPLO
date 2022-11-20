@@ -5,7 +5,7 @@ import { theme } from '../../assets/constant/DesignTheme';
 import { deleteStartLocation, getUserInfo, changeDefaultLocation } from '../../redux/userSlice';
 
 const MyPageLocationItem = ({ item, navigation }) => {
-  console.log(item);
+  // console.log(item);
   const dispatch = useDispatch();
 
   const onPressDefault = () => {

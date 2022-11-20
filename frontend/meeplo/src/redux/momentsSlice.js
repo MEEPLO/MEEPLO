@@ -12,7 +12,7 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async p
       },
       params: params,
     });
-    console.log('getMomentsList res', response.data);
+    // console.log('getMomentsList res', response.data);
     return response.data;
   } catch (err) {
     console.error('getMomentsList: ', err.response.data);
@@ -59,7 +59,7 @@ export const updateMomentReaction = createAsyncThunk('moments/updateMomentReacti
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('updateMomentReaction success: ', response.data);
+    // console.log('updateMomentReaction success: ', response.data);
     return response.data;
   } catch (err) {
     console.error('updateMomentReaction: ', err.response.data);
@@ -75,7 +75,7 @@ export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReacti
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('deleteMomentReaction success: ', response.data);
+    // console.log('deleteMomentReaction success: ', response.data);
     return response.data;
   } catch (err) {
     console.error('deleteMomentReaction: ', err.response.data);
@@ -99,7 +99,7 @@ export const getGroupSchedules = createAsyncThunk('schedule/getGroupSchedule', a
 });
 
 export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSchedule', async ({ scheduleInfo }) => {
-  console.log('scheduleInfo', scheduleInfo);
+  // console.log('scheduleInfo', scheduleInfo);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axiosPrivate.post(`/schedule/temp`, scheduleInfo, {
@@ -107,7 +107,7 @@ export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSched
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('createSimpleSchedule success:', response.data);
+    // console.log('createSimpleSchedule success:', response.data);
     return response.data;
   } catch (err) {
     console.error('createSimpleSchedule: ', err.response.data);
@@ -176,7 +176,7 @@ export const getComments = createAsyncThunk('moment/getComments', async ({ momen
 });
 
 export const createComment = createAsyncThunk('moment/createComment', async ({ commentInfo, navigation, Alert }) => {
-  console.log('navigation', navigation);
+  // console.log('navigation', navigation);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axiosPrivate
@@ -200,7 +200,7 @@ export const createComment = createAsyncThunk('moment/createComment', async ({ c
           },
         ]);
       });
-    console.log('comment created: ', response.data);
+    // console.log('comment created: ', response.data);
     return response.data;
   } catch (err) {
     console.error('createComment: ', err.response.data);
