@@ -96,7 +96,7 @@ public class GroupServiceImpl implements GroupService{
 
             int count = groupMemberRepository.countByGroupAndStatus(groupMember.getGroup(),GroupMemberStatus.ACTIVATED);
             String leaderName = getGroupLeader(groupMember.getGroup()).getMember().getUsername();
-            LocalDateTime lastSchedule = scheduleRepository.findFirstByGroupAndDateAfterOrderByIdDesc(groupMember.getGroup(),LocalDateTime.now())
+            LocalDateTime lastSchedule = scheduleRepository.findFirstByGroupAndDateBeforeOrderByIdDesc(groupMember.getGroup(),LocalDateTime.now())
                     .orElse(Schedule.EmptyBuilder()
                             .date(LocalDateTime.of(date,time))
                             .build())
