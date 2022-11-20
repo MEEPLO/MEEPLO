@@ -1,11 +1,15 @@
 package com.sloth.meeplo.group.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.location.exception.code.LocationErrorCode;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.member.entity.MemberLocation;
+import com.sloth.meeplo.member.exception.code.MemberErrorCode;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.schedule.dto.response.ScheduleResponse;
 import com.sloth.meeplo.schedule.entity.Schedule;
@@ -74,12 +78,23 @@ public class GroupResponse {
         private Long id;
         private String nickname;
         private String photo;
+        private String locationName;
+        private String locationAddress;
+        private Double lat;
+        private Double lng;
 
         @Builder
         GroupDetailMember(GroupMember groupMember){
             this.id = groupMember.getMember().getId();
             this.nickname = groupMember.getMember().getUsername();
             this.photo = groupMember.getMember().getProfilePhoto();
+            MemberLocation memberLocation = groupMember.getMember().getMemberLocations().stream()
+                    .filter(MemberLocation::getDefaultLocation)
+                    .findFirst().orElseThrow(()->new MeeploException(MemberErrorCode.NO_DEFAULT_LOCATION));
+            this.locationName = memberLocation.getName();
+            this.locationAddress = memberLocation.getAddress();
+            this.lat = memberLocation.getLat();
+            this.lng = memberLocation.getLng();
         }
     }
 
