@@ -83,25 +83,29 @@
 
     ![홈 화면.png](./README/figma_home.png)
 
-  - 모임flow
+  - 모임 flow
 
     ![그룹 flow.png](./README/figma_group.png)
 
-  - 약속flow
+  - 약속 flow
 
     ![약속 flow.png](./README/figma_schedule.png)
 
-  - 추천flow
+  - 추천 flow
 
     ![추천 flow.png](./README/figma_recommendation.png)
+
+  - 추억 flow
+
+    ![추억 flow.png](./README/figma_moment.png)
 
   - 마이페이지 flow
 
     ![마이페이지 flow.png](./README/figma_mypage.png)
 
-  - 추억 flow
+## Porting Manual
 
-    ![추억 flow.png](./README/figma_moment.png)
+- [Porting Manual.md](./exec/Porting_Manual.md)
 
 # 4. 기술 스택 및 배포 환경
 
@@ -207,15 +211,16 @@
 
    1. 전처리 : Tokenizer(형태소 분석기) 중 Okt를 이용하여 맞춤법을 맞춰준 후, 토큰화, 불용어 제거를 거친다.
    2. Word2Vec
+
       1. 비슷한 위치에서 등장하는 단어들은 비슷한 의미를 가진다는 가설 이용
       2. 학습된 데이터의 단어를 tokenization한 후, 불용어를 제거하고 각 단어를 벡터화한다.
       3. 단어 간 거리를 기준으로 유사도를 계산하기 때문에 비슷한 의미를 갖는 단어 유사도가 FastText에 비해 신뢰도가 있다.
 
-   ![Untitled](./README/w2v_1.png)
+      ![Untitled](./README/w2v_1.png)
 
-   ![w2v_visualized.gif](./README/w2v_visualized.gif)
+      ![w2v_visualized.gif](./README/w2v_visualized.gif)
 
-   ![Untitled](./README/w2v_2.png)
+      ![Untitled](./README/w2v_2.png)
 
    3. FastText
 
@@ -223,7 +228,7 @@
       2. 학습된 데이터의 단어들을 tokenization한 후, 해당 단어의 자음, 모음을 분리하여 자, 모음이 비슷한 단어를 추천해준다.
       3. 자, 모음이 비슷한 단어를 추천하기 때문에 Word2Vec보다 유사도 기준을 높게 잡아야 원하는 값을 얻을 수 있다.
 
-         ![ft_visualized.gif](./README/ft_visualized.gif)
+      ![ft_visualized.gif](./README/ft_visualized.gif)
 
 2. 사용자로부터 받은 키워드와 해당 키워드를 토대로 Word2Vec, FastText 모델을 사용하여 얻은 유사도가 높은 단어를 얻는다.
 3. 2번에서 얻은 단어들을 SELECT Query(Like)문을 통해 DB에 존재하는 단어로 바꿔주어 Business Logic에서 바로 사용할 수 있도록 정제한다.
