@@ -3,6 +3,7 @@ package com.sloth.meeplo.schedule.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.global.exception.MeeploException;
 import com.sloth.meeplo.global.exception.code.CommonErrorCode;
+import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.moment.entity.Moment;
@@ -20,6 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ScheduleResponse {
@@ -30,6 +32,7 @@ public class ScheduleResponse {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime date;
         private String name;
+        private Long leaderId;
         private ScheduleDetailGroupInfo group;
         private List<String> keywords;
         private List<ScheduleDetailMemberInfo> members;
@@ -40,7 +43,16 @@ public class ScheduleResponse {
         ScheduleDetailInfo(Schedule schedule){
             this.date = schedule.getDate();
             this.name = schedule.getName();
-            this.keywords = schedule.getScheduleKeywords().stream().map(ScheduleKeyword::getKeyword).collect(Collectors.toList());
+            this.leaderId = schedule.getScheduleMembers().stream()
+                    .filter(sm->sm.getRole().equals(Role.LEADER))
+                    .findFirst()
+                    .orElseThrow(()->new MeeploException(ScheduleErrorCode.NOT_EXIST_SCHEDULE_LEADER))
+                    .getMember()
+                    .getId();
+            // TODO: 2022-11-18 확인필요
+            this.keywords = schedule.getScheduleKeywords().stream()
+                    .distinct()
+                    .map(ScheduleKeyword::getKeyword).collect(Collectors.toList());
             this.group = ScheduleDetailGroupInfo.builder()
                     .group(schedule.getGroup())
                     .build();
@@ -48,6 +60,7 @@ public class ScheduleResponse {
                     .map(sm -> ScheduleDetailMemberInfo.builder()
                             .scheduleMember(sm)
                             .build())
+                    .distinct()
                     .collect(Collectors.toList());
             this.meetLocation = ScheduleDetailMeetLocationInfo.builder()
                     .location(schedule.getLocation())
@@ -56,6 +69,7 @@ public class ScheduleResponse {
                     .map(sl -> ScheduleDetailAmuseLocationInfo.builder()
                             .scheduleLocation(sl)
                             .build())
+                    .distinct()
                     .collect(Collectors.toList());
 
         }
@@ -85,13 +99,23 @@ public class ScheduleResponse {
 
         @Builder
         ScheduleDetailMemberInfo(ScheduleMember scheduleMember){
-            this.id = scheduleMember.getId();
-            this.nickname = scheduleMember.getMember().getGroupMembers().stream()
-                    .filter(gm -> gm.getMember().getId().equals(scheduleMember.getMember().getId()))
-                    .findFirst().orElseThrow(()-> new MeeploException(ScheduleErrorCode.NOT_EXIST_SCHEDULE_MEMBER))
-                    .getNickname();
+            this.id = scheduleMember.getMember().getId();
+            this.nickname = scheduleMember.getMember().getUsername();
             this.photo = scheduleMember.getMember().getProfilePhoto();
             this.status = scheduleMember.getStatus();
+        }
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof ScheduleDetailMemberInfo))
+                return false;
+            ScheduleDetailMemberInfo sdmi = ((ScheduleDetailMemberInfo)x);
+
+            return Objects.equals(this.id, sdmi.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
     }
 
@@ -133,6 +157,20 @@ public class ScheduleResponse {
             this.lat = scheduleLocation.getLocation().getLat();
             this.lng = scheduleLocation.getLocation().getLng();
         }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof ScheduleDetailAmuseLocationInfo))
+                return false;
+            ScheduleDetailAmuseLocationInfo sdali = ((ScheduleDetailAmuseLocationInfo)x);
+
+            return Objects.equals(this.id, sdali.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
+        }
     }
 
     @Getter
@@ -148,13 +186,28 @@ public class ScheduleResponse {
         private Boolean momentRecorded;
         private ScheduleListLocationInfo location;
 
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof ScheduleListInfo))
+                return false;
+            ScheduleListInfo sli = ((ScheduleListInfo)x);
+
+            return Objects.equals(this.id, sli.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
+        }
+
         @Builder
         ScheduleListInfo(Schedule schedule){
             this.id = schedule.getId();
             this.name = schedule.getName();
             this.date = schedule.getDate();
             this.groupName = schedule.getGroup().getName();
-            this.memberCount = schedule.getScheduleMembers().stream()
+            // TODO: 2022-11-18 dis 확인필요 
+            this.memberCount = schedule.getScheduleMembers().stream().distinct()
                     .filter(sm -> sm.getStatus().equals(ScheduleMemberStatus.JOINED))
                     .count();
             this.momentRecorded = schedule.getScheduleLocations().stream()
@@ -198,6 +251,20 @@ public class ScheduleResponse {
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
             this.date = moment.getScheduleLocation().getSchedule().getDate();
+        }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof JoinedScheduleMoment))
+                return false;
+            JoinedScheduleMoment jsm = ((JoinedScheduleMoment)x);
+
+            return Objects.equals(this.id, jsm.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
     }
 

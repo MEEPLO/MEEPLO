@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,19 +31,19 @@ public class Location extends GeoDataEntity {
 
 
     @OneToMany(mappedBy = "location")
-    private List<LocationPhoto> locationPhotos;
+    private Set<LocationPhoto> locationPhotos;
 
     @OneToMany(mappedBy = "location")
-    private List<LocationTime> locationTimes;
+    private Set<LocationTime> locationTimes;
 
     @OneToMany(mappedBy = "location")
-    private List<LocationKeyword> locationKeywords;
+    private Set<LocationKeyword> locationKeywords;
 
     @OneToMany(mappedBy = "location")
-    private List<LocationContent> locationContents;
+    private Set<LocationContent> locationContents;
 
     @OneToMany(mappedBy = "location")
-    private List<Schedule> schedules;
+    private Set<Schedule> schedules;
 
     @OneToOne(mappedBy = "location")
     private LocationInfo locationInfo;

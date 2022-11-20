@@ -42,7 +42,6 @@ public class GroupServiceImpl implements GroupService{
 
     private final MemberService memberService;
 
-    private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
 
     private final Integer GROUP_MEMBER_LIMIT = 10;
@@ -96,7 +95,7 @@ public class GroupServiceImpl implements GroupService{
         for (GroupMember groupMember :  groupMemberList) {
 
             int count = groupMemberRepository.countByGroupAndStatus(groupMember.getGroup(),GroupMemberStatus.ACTIVATED);
-            String leaderName = getGroupLeader(groupMember.getGroup()).getNickname();
+            String leaderName = getGroupLeader(groupMember.getGroup()).getMember().getUsername();
             LocalDateTime lastSchedule = scheduleRepository.findFirstByGroupOrderByIdDesc(groupMember.getGroup())
                     .orElse(Schedule.EmptyBuilder()
                             .date(LocalDateTime.of(date,time))
@@ -192,7 +191,7 @@ public class GroupServiceImpl implements GroupService{
         Member target = memberRepository.findById(targetId)
                 .orElseThrow(() -> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER));
 
-        GroupMember groupMember =  getActivatedGroupMemberByGroupAndMember(group,member);
+        GroupMember groupMember =  getActivatedGroupMemberByGroupAndMember(group,target);
 
         groupMember.unactivateMember();
         groupMemberRepository.save(groupMember);
@@ -219,7 +218,9 @@ public class GroupServiceImpl implements GroupService{
         return group.getSchedules().stream()
                 .flatMap(s->s.getScheduleLocations().stream())
                 .flatMap(sl->sl.getMoments().stream())
-                .map(m-> GroupResponse.FeedMoment.builder().moment(m).build()).collect(Collectors.toList());
+                .map(m-> GroupResponse.FeedMoment.builder().moment(m).build())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -232,13 +233,14 @@ public class GroupServiceImpl implements GroupService{
         return group.getSchedules().stream()
                 .flatMap(s->s.getScheduleLocations().stream())
                 .flatMap(sl->sl.getMoments().stream())
-                .map(m-> GroupResponse.MapMoment.builder().moment(m).build()).collect(Collectors.toList());
+                .map(m-> GroupResponse.MapMoment.builder().moment(m).build())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override
     public GroupMember getGroupMemberByGroupAndMemberId(Group group, Long memberId) {
-        return groupMemberRepository.findByGroupAndMember(group, memberService.getMemberById(memberId))
-                .filter(gm -> GroupMemberStatus.ACTIVATED.equals(gm.getStatus()))
+        return groupMemberRepository.findByGroupAndMemberAndStatus(group, memberService.getMemberById(memberId), GroupMemberStatus.ACTIVATED)
                 .orElseThrow(() -> new MeeploException(GroupErrorCode.NOT_EXIST_GROUP_MEMBER));
     }
 
@@ -250,10 +252,13 @@ public class GroupServiceImpl implements GroupService{
         checkMemberInGroup(member, group);
 
         return group.getSchedules().stream()
-                .filter(s-> s.getScheduleMembers().stream().map(ScheduleMember::getMember).anyMatch(m->m.getId().equals(member.getId())))
+                .filter(s-> s.getScheduleMembers().stream()
+                        .map(ScheduleMember::getMember)
+                        .anyMatch(m->m.getId().equals(member.getId())))
                 .map(s-> GroupResponse.GroupSchedule.builder()
                         .schedule(s)
                         .build())
+                .distinct()
                 .collect(Collectors.toList());
 
     }
