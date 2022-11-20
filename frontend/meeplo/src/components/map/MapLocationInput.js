@@ -20,7 +20,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
-  const [mapCenter, setMapCenter] = useState();
+  const [mapCenter, setMapCenter] = useState({});
   const [mapZoomLevel, setMapZoomLevel] = useState();
 
   const [selectedLocation, setSelectedLocation] = useState();
@@ -116,8 +116,8 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
   const onSearchNear = () => {
     dispatch(
       getNearLocations({
-        lat: mapCenter.lat,
-        lng: mapCenter.lng,
+        lat: mapCenter?.lat,
+        lng: mapCenter?.lng,
         radius: getRadiusKM(mapZoomLevel),
       }),
     )
@@ -134,8 +134,8 @@ const MapLocationInput = ({ type, required, value, onValueChange, state }) => {
   const onPressRecommendation = () => {
     const form = {
       startLocation: {
-        lat: mapCenter.lat,
-        lng: mapCenter.lng,
+        lat: mapCenter?.lat,
+        lng: mapCenter?.lng,
       },
       keywords: state?.keywords?.map(keyword => {
         return { content: keyword };
