@@ -7,7 +7,7 @@ import { axiosPrivate } from '../auth/axiosInstance';
 export const createSchedule = createAsyncThunk('schedule/createSchedule', async schedule => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.post(`${MEEPLO_SERVER_BASE_URL}/schedule`, schedule, {
+    const response = await axiosPrivate.post(`/schedule`, schedule, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -23,7 +23,7 @@ export const createSchedule = createAsyncThunk('schedule/createSchedule', async 
 export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthly', async yearMonth => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}/list`, {
+    const response = await axiosPrivate.get(`/schedule/monthly/${yearMonth}/list`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -38,7 +38,7 @@ export const getSchedulesMonthly = createAsyncThunk('schedule/getSchedulesMonthl
 export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesDatesMonthly', async yearMonth => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/monthly/${yearMonth}`, {
+    const response = await axiosPrivate.get(`/schedule/monthly/${yearMonth}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -54,7 +54,7 @@ export const getSchedulesDatesMonthly = createAsyncThunk('schedule/getSchedulesD
 export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesDaily', async date => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule/daily/${date}`, {
+    const response = await axiosPrivate.get(`/schedule/daily/${date}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -69,7 +69,7 @@ export const getSchedulesDaily = createAsyncThunk('schedule/getSchedulesDaily', 
 export const getSchedules = createAsyncThunk('schedule/getSchedules', async ({ yearMonth }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/schedule`, {
+    const response = await axiosPrivate.get(`/schedule`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
