@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MomentResponse {
@@ -19,12 +20,28 @@ public class MomentResponse {
         private Long id;
         private String photo;
         private Long reactionCount;
+        private Integer type;
 
         @Builder
         MomentSimpleList(Moment moment){
             this.id = moment.getId();
             this.photo = moment.getMomentPhoto();
             this.reactionCount = (long) moment.getMomentReactions().size();
+            this.type = moment.getType().ordinal();
+        }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof MomentSimpleList))
+                return false;
+            MomentSimpleList m = ((MomentSimpleList)x);
+
+            return Objects.equals(this.id, m.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
     }
     @Getter
@@ -37,13 +54,13 @@ public class MomentResponse {
         private Boolean commentCreated;
 
         @Builder
-        MomentDetail(Moment moment, Member member, Boolean commentCreated){
+        MomentDetail(Moment moment, Member member, List<MomentComment> comments, Boolean commentCreated){
             this.moment = MomentDetailInfo.builder().moment(moment).build();
             this.reaction =MomentDetailReaction.builder()
                     .member(member)
                     .moment(moment)
                     .build();
-            this.comments = moment.getMomentComments().stream()
+            this.comments = comments.stream()
                     .map(mc -> MomentDetailComment.builder()
                             .momentComment(mc)
                             .build())
