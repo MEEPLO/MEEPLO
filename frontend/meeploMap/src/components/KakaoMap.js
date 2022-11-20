@@ -20,32 +20,51 @@ const NearLocationOverlay = styled.div`
 `;
 
 const KakaoMap = () => {
-  const [test, setTest] = useState('test');
-  const [nearLocations, setNearLocations] = useState([]);
   const [mapHeight, setMapHeight] = useState('880px');
   const [center, setCenter] = useState({ lat: 37.50119278, lng: 127.03975728 });
   const [level, setLevel] = useState(3);
+
+  const [nearLocations, setNearLocations] = useState([]);
+  const [searchedStations, setSearchedStations] = useState([]);
   const [recommendedStations, setRecommendedStations] = useState([]);
+  const [recommendedAmuses, setRecommendedAmuses] = useState([]);
 
   const mapRef = useRef();
-  const bounds = useMemo(() => {
+  const recommendedBounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
 
     if (Array.isArray(recommendedStations) && Array.isArray(recommendedStations[0]?.requiredTimes)) {
       recommendedStations[0].requiredTimes.forEach(time => {
         bounds.extend(new kakao.maps.LatLng(time.startLocation.lat, time.startLocation.lng));
-        setTest(time.startLocation.lng);
       });
     }
 
     return bounds;
   }, [recommendedStations]);
 
-  useEffect(() => {
-    if (bounds && mapRef.current) {
-      mapRef.current.setBounds(bounds);
+  const searchedBounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    if (Array.isArray(searchedStations)) {
+      searchedStations.forEach(station => {
+        bounds.extend(new kakao.maps.LatLng(station.lat, station.lng));
+      });
     }
-  }, [bounds]);
+
+    return bounds;
+  }, [searchedStations]);
+
+  useEffect(() => {
+    if (recommendedBounds && mapRef.current) {
+      mapRef.current.setBounds(recommendedBounds);
+    }
+  }, [recommendedBounds]);
+
+  useEffect(() => {
+    if (searchedBounds && mapRef.current) {
+      mapRef.current.setBounds(searchedBounds);
+    }
+  }, [searchedBounds]);
 
   useEffect(() => {
     const isAndroid = () => {
@@ -90,6 +109,12 @@ const KakaoMap = () => {
         break;
       case MESSAGE_TYPE.UPDATE_RECOMMENDED_STATIONS:
         setRecommendedStations(messageBody);
+        break;
+      case MESSAGE_TYPE.UPDATE_SEARCHED_STATIONS:
+        setSearchedStations(messageBody);
+        break;
+      case MESSAGE_TYPE.UPDATE_RECOMMENDED_AMUSES:
+        setRecommendedAmuses(messageBody);
         break;
     }
   };
@@ -186,7 +211,7 @@ const KakaoMap = () => {
           position={{ lat: station.lat, lng: station.lng }}
           image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.GREEN)}
           onClick={() => {
-            postMessage(createMessage(MESSAGE_TYPE.SELECT_STATION, station));
+            postMessage(createMessage(MESSAGE_TYPE.SELECT_SEARCHED_STATION, station));
           }}
         />
       ));
@@ -251,6 +276,61 @@ const KakaoMap = () => {
     return null;
   };
 
+  const renderSearchedStationMaker = stations => {
+    if (Array.isArray(stations)) {
+      return stations.map(station => {
+        return (
+          <div>
+            <MapMarker
+              position={{ lat: station.lat, lng: station.lng }}
+              image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.BLUE)}
+              onClick={() => postMessage(createMessage(MESSAGE_TYPE.SELECT_SEARCHED_STATION, station))}
+            />
+            <CustomOverlayMap position={{ lat: station.lat, lng: station.lng }} yAnchor={3}>
+              <div
+                style={{
+                  backgroundColor: '#5A5A5A',
+                  color: 'white',
+                  fontSize: 10,
+                  padding: 5,
+                  borderRadius: 5,
+                }}>
+                {station.name}역
+              </div>
+            </CustomOverlayMap>
+          </div>
+        );
+      });
+    }
+    return null;
+  };
+
+  const renderRecommendedAmuses = amuses => {
+    if (Array.isArray(amuses)) {
+      return amuses.map(amuse => {
+        return (
+          <>
+            <CustomOverlayMap position={{ lat: amuse.lat, lng: amuse.lng }} yAnchor={-0.2}>
+              <NearLocationOverlay>{amuse.name}</NearLocationOverlay>
+            </CustomOverlayMap>
+            <MapMarker
+              key={amuse.id}
+              position={{ lat: amuse.lat, lng: amuse.lng }}
+              image={getMarker(MARKER_TYPE.STORE, MARKER_COLOR.ORANGE)}
+              clickable={true}
+              onClick={() => {
+                postMessage(createMessage(MESSAGE_TYPE.SELECT_RECOMMENDED_AMUSE, amuse));
+                setCenter({ lat: amuse.lat, lng: amuse.lng });
+              }}
+            />
+          </>
+        );
+      });
+    }
+
+    return null;
+  };
+
   return (
     <>
       <Map
@@ -266,6 +346,8 @@ const KakaoMap = () => {
         {renderRecommendedStationMarker(recommendedStations)}
         {renderRecommendedStationStartMarker(recommendedStations)}
         {renderRecommendedStationPath(recommendedStations)}
+        {renderRecommendedAmuses(recommendedAmuses)}
+        {renderSearchedStationMaker(searchedStations)}
 
         <MapMarker position={center} image={getMarker(MARKER_TYPE.HERE, MARKER_COLOR.RED)}>
           {/* <div style={{ color: '#000' }}>{test}</div> */}
