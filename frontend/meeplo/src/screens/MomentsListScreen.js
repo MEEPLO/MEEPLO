@@ -26,12 +26,12 @@ const MomentsListScreen = props => {
         }
       }}>
       <View style={{ height: '100%' }}>
-        <View>
+        <View style={{ margin: 20 }}>
           <Text style={styles.screenTitle}>내 추억 모아보기</Text>
         </View>
         <View style={{ marginBottom: 20, paddingRight: 20 }}>
           <View style={{ flexDirection: 'row', height: 30 }}>
-            <Text style={{ flex: 6, lineHeight: 30, textAlign: 'right' }}>내가 작성한 추억만 보기</Text>
+            <Text style={{ flex: 6, lineHeight: 30, textAlign: 'right', color: 'gray' }}>내가 작성한 추억만 보기</Text>
             <CheckBox disabled={false} value={isMine} onValueChange={setOnlyMine} />
           </View>
         </View>
@@ -44,12 +44,9 @@ const MomentsListScreen = props => {
 
 const styles = StyleSheet.create({
   screenTitle: {
-    paddingLeft: 20,
-    height: 100,
-    color: '#000',
-    fontSize: 23,
-    fontWeight: '800',
-    lineHeight: 100,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
   },
   filteringMine: {},
 });

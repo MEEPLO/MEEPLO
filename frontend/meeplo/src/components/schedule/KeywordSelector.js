@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   keywordClassificationText: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
   },
   keywordBadgeView: {
     flexDirection: 'row',

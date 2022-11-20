@@ -9,7 +9,7 @@ const StepDateInput = props => {
 
   return (
     <>
-      <Text style={{ color: theme.font.color, fontWeight: '800' }}>
+      <Text style={{ color: theme.font.color, fontWeight: 'bold' }}>
         {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
       </Text>
       <View
@@ -19,7 +19,7 @@ const StepDateInput = props => {
           borderBottomColor: theme.color.disabled,
           borderBottomWidth: 1,
         }}>
-        <Text style={{ lineHeight: 70, marginLeft: 10 }} onPress={() => setOpenModal(true)}>
+        <Text style={{ lineHeight: 70, marginLeft: 10, color: 'gray' }} onPress={() => setOpenModal(true)}>
           {date ? date.toLocaleDateString('ko-KR') : null}
         </Text>
       </View>

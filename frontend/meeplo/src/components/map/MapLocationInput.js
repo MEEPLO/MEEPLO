@@ -161,7 +161,7 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
               uri: selectedNearLocation?.photo,
             }}
           />
-          <Text style={{ fontSize: 20, fontWeight: '800' }}>{selectedNearLocation?.name}</Text>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'gray' }}>{selectedNearLocation?.name}</Text>
         </View>
         <Text>{selectedNearLocation?.address}</Text>
         <Text>{selectedNearLocation?.category}</Text>
@@ -179,7 +179,7 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
             onValueChange(selectedNearLocation);
             closeModal();
           }}>
-          <Text style={{ fontSize: 24, fontWeight: '800' }}>선택</Text>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>선택</Text>
         </TouchableOpacity>
       </View>
     );
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
     marginBottom: 40,
   },
   dateInputView: {

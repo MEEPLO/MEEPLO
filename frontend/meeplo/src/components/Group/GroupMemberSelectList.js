@@ -24,7 +24,7 @@ const GroupMemberSelectList = ({ type, members, selectedMembers, user, required,
   };
   return (
     <View style={styles.memberListViewStyle}>
-      <Text style={{ color: '#000', fontWeight: '800', marginBottom: 20 }}>
+      <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
         {type} {required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
       </Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
