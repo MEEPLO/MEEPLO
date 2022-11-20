@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
   const { width } = Dimensions.get('window');
 
   const onPressLogin = () => {
-    logInWithKakao({ Alert }).then(() => {
+    logInWithKakao({ Alert, navigation }).then(() => {
       dispatch(getUserInfo());
     });
   };
@@ -41,24 +41,17 @@ const LoginScreen = ({ navigation }) => {
   return (
     <LoginView>
       <Image source={Images.meeploLogo} style={{ width: width * 0.6, height: width * 0.6 }} resizeMode="contain" />
-      <Text style={{ fontSize: 50, fontWeight: 'bold' }}>미플로</Text>
+      <Text style={{ fontSize: 50, fontWeight: 'bold', color: 'gray' }}>미플로</Text>
 
-      <Text>우리... 어디서 만나?</Text>
+      <Text style={{ color: 'gray' }}>우리... 어디서 만나?</Text>
 
-      <Text>중간장소를 찾고</Text>
-      <Text>약속 장소를 추천받아</Text>
-      <Text>함께한 기록을 남겨보아요</Text>
+      <Text style={{ color: 'gray' }}>중간장소를 찾고</Text>
+      <Text style={{ color: 'gray' }}>약속 장소를 추천받아</Text>
+      <Text style={{ color: 'gray' }}>함께한 기록을 남겨보아요</Text>
 
       <TouchableOpacity style={{ top: 15, alignItems: 'center' }} onPress={onPressLogin}>
         <Image style={{ width: 300 }} resizeMode="contain" source={Images.kakaoLogin} />
       </TouchableOpacity>
-      <Button title="로그아웃" onPress={onPressLogout} />
-      <Button
-        title="홈으로 가기"
-        onPress={() => {
-          navigation.replace('Home');
-        }}
-      />
     </LoginView>
   );
 };

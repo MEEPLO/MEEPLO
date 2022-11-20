@@ -7,6 +7,7 @@ import { ToolBarLeft, ToolBarRight, ToolBarTitle } from '../components/common/na
 import MyPageScreen from './mypage/MyPageScreen';
 import MyPageLocationScreen from './mypage/MyPageLocationScreen';
 import MyPageLocationEditScreen from './mypage/MyPageLocationEditScreen';
+import NewMemberLocationScreen from './mypage/NewMemberLocationScreen';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -72,6 +73,13 @@ const HomeStackScreen = () => {
           },
           headerRight: () => <ToolBarRight userPhoto={user.profilePhoto} />,
           headerTitle: () => <ToolBarTitle />,
+        }}
+      />
+      <HomeStack.Screen
+        name="NewMemberLocation"
+        component={NewMemberLocationScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </HomeStack.Navigator>

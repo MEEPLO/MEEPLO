@@ -19,7 +19,7 @@ const styles = active =>
     },
     textStyle: {
       color: active ? '#FF886D' : '#BABABA',
-      fontWeight: '800',
+      fontWeight: 'bold',
     },
   });
 

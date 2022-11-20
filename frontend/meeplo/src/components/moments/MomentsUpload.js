@@ -83,7 +83,9 @@ const MpomentsUpload = ({ setPictureUrl, frameType }) => {
           position: 'absolute',
           bottom: 65,
         }}>
-        <Text style={{ lineHeight: 53, textAlign: 'center', fontSize: 20, fontWeight: '800' }}>갤러리</Text>
+        <Text style={{ lineHeight: 53, textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: 'gray' }}>
+          갤러리
+        </Text>
       </Pressable>
       <Pressable
         style={{
@@ -94,7 +96,9 @@ const MpomentsUpload = ({ setPictureUrl, frameType }) => {
           position: 'absolute',
           bottom: 20,
         }}>
-        <Text style={{ lineHeight: 33, textAlign: 'center', fontSize: 15, fontWeight: '800' }}>사진 선택 초기화</Text>
+        <Text style={{ lineHeight: 33, textAlign: 'center', fontSize: 15, fontWeight: 'bold', color: 'gray' }}>
+          사진 선택 초기화
+        </Text>
       </Pressable>
       <WebView
         ref={webviewRef}

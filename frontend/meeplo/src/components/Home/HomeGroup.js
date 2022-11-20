@@ -51,8 +51,8 @@ const HomeGroup = ({ data, navigation }) => {
             marginRight: 20,
           }}>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16 }}>새로운 그룹을</Text>
-            <Text style={{ fontSize: 16 }}>만들어보세요</Text>
+            <Text style={{ fontSize: 16, color: 'gray' }}>새로운 그룹을</Text>
+            <Text style={{ fontSize: 16, color: 'gray' }}>만들어보세요</Text>
           </View>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <View

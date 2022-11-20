@@ -34,7 +34,7 @@ const MomentsSetFrame = ({ toNext, toPrev, onFinish, visible }) => {
 
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
-      <Text style={{ marginBottom: 10, color: theme.font.color, fontWeight: '800' }}>프레임 선택</Text>
+      <Text style={{ marginBottom: 10, color: theme.font.color, fontWeight: 'bold' }}>프레임 선택</Text>
       <View style={{ marginLeft: 20 }}>
         <Pressable
           style={{
