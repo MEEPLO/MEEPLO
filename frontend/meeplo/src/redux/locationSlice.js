@@ -1,7 +1,5 @@
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice, isRejectedWithValue } from '@reduxjs/toolkit';
-import { MEEPLO_SERVER_BASE_URL } from '@env';
 import { axiosPrivate } from '../auth/axiosInstance';
 
 export const getNearLocations = createAsyncThunk('location/getNearLocations', async ({ lat, lng, radius }) => {
@@ -13,7 +11,35 @@ export const getNearLocations = createAsyncThunk('location/getNearLocations', as
       },
     });
 
-    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const getStationList = createAsyncThunk('location/getStationList', async searchValue => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/location/station?keyword=${searchValue}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  } catch (err) {
+    return isRejectedWithValue(err.response.data);
+  }
+});
+
+export const getDetailLocation = createAsyncThunk('location/getDetailLocation', async locationId => {
+  try {
+    const accessToken = await AsyncStorage.getItem('@accessToken');
+    const response = await axiosPrivate.get(`/location/${locationId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return response.data;
   } catch (err) {
@@ -23,9 +49,27 @@ export const getNearLocations = createAsyncThunk('location/getNearLocations', as
 
 const locationSlice = createSlice({
   name: 'location',
-  initialState: {},
+  initialState: { isLoading: false, stations: [], station: {} },
   reducers: {},
-  extraReducers: {},
+  extraReducers: {
+    [getStationList.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getStationList.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.stations = payload?.stations;
+    },
+    [getStationList.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+    },
+    [getDetailLocation.pending]: (state, { payload }) => {
+      state.isLoading = true;
+    },
+    [getDetailLocation.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.station = payload;
+    },
+  },
 });
 
 export { locationSlice };

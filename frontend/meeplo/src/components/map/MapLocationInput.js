@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, TextInput, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, Image } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { getNearLocations } from '../../redux/locationSlice';
 
@@ -8,10 +8,8 @@ import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message'
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
-import MapSearchResultList from './MapSearchResultList';
 
 const screen = Dimensions.get('screen');
-const searchInputWidth = screen.width * 0.7;
 const selectedNearLocationViewWidth = screen.width * 0.95;
 const selectedNearLocationViewHeight = screen.height * 0.5;
 const selectedNearLocationViewUpY = screen.height * 0.5;
@@ -21,12 +19,9 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
-  const [showSearchResultList, setShowSearchResultList] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
   const [mapCenter, setMapCenter] = useState();
   const [mapZoomLevel, setMapZoomLevel] = useState();
 
-  const [nearLocations, setNearLocations] = useState();
   const [selectedNearLocation, setSelectedNearLocation] = useState();
   const [showSelectedNearLocationInfo, setShowSelectedNearLocationView] = useState();
 
@@ -40,12 +35,6 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
       setShowSearchCurrentMapButton(false);
     }
   }, [mapZoomLevel]);
-
-  useEffect(() => {
-    if (webViewRef && webViewRef.current && webViewRef.current.postMessage) {
-      webViewRef.current.postMessage(searchValue);
-    }
-  }, [searchValue]);
 
   useEffect(() => {
     if (showSelectedNearLocationInfo) {
@@ -64,11 +53,15 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
     setShowSelectedNearLocationView(false);
   };
 
-  const onMessageHandler = data => {
-    processMapMessage(parseMessage(data.nativeEvent.data));
+  const onMessage = data => {
+    processMessage(parseMessage(data.nativeEvent.data));
   };
 
-  const processMapMessage = message => {
+  const postMessage = (messageType, messageBody) => {
+    webViewRef.current.postMessage(createMessage(messageType, messageBody));
+  };
+
+  const processMessage = message => {
     const messageType = message.messageType;
     const body = message.messageBody;
     switch (messageType) {
@@ -76,14 +69,13 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
         setMapCenter(body.center);
         setMapZoomLevel(body.level);
         break;
-      case MESSAGE_TYPE.UPDATE_CENTER:
+      case MESSAGE_TYPE.UPDATE_APP_CENTER:
         setMapCenter(body.center);
         break;
       case MESSAGE_TYPE.UPDATE_ZOOM_LEVEL:
         setMapZoomLevel(body.level);
         break;
       case MESSAGE_TYPE.SELECT_NEAR_LOCATION:
-        console.log(body);
         setSelectedNearLocation(body);
         openSelectedNearLocationView();
         break;
@@ -118,9 +110,7 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
       .unwrap()
       .then(payload => {
         const locations = payload.locations;
-        setNearLocations(locations);
-        webViewRef.current.postMessage(createMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, locations));
-        setShowSearchResultList(true);
+        postMessage(MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS, locations);
       })
       .catch(err => {
         console.log(err);
@@ -198,21 +188,15 @@ const MapLocationInput = ({ type, required, value, onValueChange }) => {
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} onMessageHandler={onMessageHandler} />
+          <MapView ref={webViewRef} onMessageHandler={onMessage} />
         </View>
 
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
-          {/* <View style={styles.mapSaerchInputView}>
-            <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
-          </View> */}
-
           {showSearchCurrentMapButton ? (
             <TouchableOpacity style={styles.mapSearchNearButton} onPress={onSearchNear}>
               <Text style={styles.mapSearchNearText}>현 지도에서 검색</Text>
             </TouchableOpacity>
           ) : null}
-
-          {/* {showSearchResultList ? <MapSearchResultList items={searchResult} /> : null} */}
 
           <Animated.View
             style={[
@@ -259,20 +243,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     padding: 20,
-  },
-  mapSaerchInputView: {
-    width: screen.width,
-    alignItems: 'center',
-  },
-  mapSearchInput: {
-    width: searchInputWidth,
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    borderColor: theme.color.border,
-    borderRadius: theme.radius.input,
-    padding: 10,
-    backgroundColor: 'white',
   },
   mapSearchNearButton: {
     backgroundColor: theme.color.bright.red,

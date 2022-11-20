@@ -13,6 +13,7 @@ import { theme } from '../../../assets/constant/DesignTheme';
 const screen = Dimensions.get('screen');
 
 const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
+  console.log(state);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
@@ -87,7 +88,7 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>멤버</Text>
         </View>
-        <Text style={styles.itemText}> {state?.members?.join(', ')} </Text>
+        <Text style={styles.itemText}> {state?.members?.map(member => member.nickname).join(', ')} </Text>
       </View>
 
       <View style={styles.itemView}>
