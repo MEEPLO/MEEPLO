@@ -5,7 +5,6 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { ThemeProvider } from 'styled-components';
 import NavigationBar from './src/components/common/navigator/NavigationBar';
 import { theme } from './src/assets/constant/DesignTheme';
-// import SplashScreen from 'react-native-splash-screen';
 import LottieSplashScreen from 'react-native-lottie-splash-screen';
 import Toast from 'react-native-toast-message';
 import { navigationRef } from './src/components/common/navigator/RootNavigator';
@@ -25,9 +24,8 @@ const App = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // SplashScreen.hide();
       LottieSplashScreen.hide(); // here
-    }, 800);
+    }, 2000);
   }, []);
 
   return (
