@@ -20,6 +20,7 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
 
   useEffect(() => {
     setSelected([...value]);
+    setSelectBuffer([...value]);
   }, [value]);
 
   const openModal = () => setShowModal(true);
