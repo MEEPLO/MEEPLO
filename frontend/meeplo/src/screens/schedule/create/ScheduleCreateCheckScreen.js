@@ -12,7 +12,6 @@ import { theme } from '../../../assets/constant/DesignTheme';
 const screen = Dimensions.get('screen');
 
 const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
-  console.log(state);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 

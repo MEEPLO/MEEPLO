@@ -23,6 +23,7 @@ import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
 import LoadingModal from '../common/LoadingModal';
 import FlatButton from '../common/FlatButton';
+import { TOAST_MESSAGE } from '../../assets/constant/string';
 
 const screen = Dimensions.get('screen');
 const searchInputWidth = screen.width * 0.7;
@@ -64,13 +65,14 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   }, [recommendedStations]);
 
   useEffect(() => {
-    if (Array.isArray(searchedStations)) {
+    if (Array.isArray(searchedStations) && searchedStations.length > 0) {
       postMessage(MESSAGE_TYPE.UPDATE_SEARCHED_STATIONS, searchedStations);
     }
   }, [searchedStations]);
 
   useEffect(() => {
     requestPermissions();
+    setSelectedStation({});
   }, []);
 
   useEffect(() => {
@@ -151,7 +153,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
         setSelectedStation(body);
         openSelectedStationInfo();
         break;
-      case MESSAGE_TYPE.SELECT_STATION:
+      case MESSAGE_TYPE.SELECT_SEARCHED_STATION:
         setSelectedStation(body);
         openSelectedStationInfo();
       default:
@@ -160,8 +162,6 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   };
 
   const onPressRecommendation = () => {
-    console.log('onRecommend', state);
-
     const userStartLocation = userInfo?.startLocations.find(location => location.defaultLocation === true);
     const data = {
       groupId: state?.group?.id,
@@ -170,24 +170,6 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
           lat: userStartLocation.lat,
           lng: userStartLocation.lng,
           memberId: userInfo.id,
-        },
-        {
-          // 성북구
-          lat: 37.57861162637185,
-          lng: 127.02046242004731,
-          memberId: 1,
-        },
-        {
-          // 사당역 근처
-          lat: 37.4776116339714,
-          lng: 126.97987605430608,
-          memberId: 2,
-        },
-        {
-          // 은평구
-          lat: 37.620041424670816,
-          lng: 126.91752724597757,
-          memberId: 4,
         },
       ],
     };
@@ -204,6 +186,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   };
 
   const onPressSearchStation = () => {
+    setSelectedStation({});
     dispatch(getStationList(searchValue));
   };
 
@@ -304,7 +287,9 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
       </Text>
 
       <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>{value?.name}역</Text>
+        <Text style={{ color: theme.font.color }}>
+          {value?.name} {value?.name?.length > 0 ? '역' : null}
+        </Text>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 
