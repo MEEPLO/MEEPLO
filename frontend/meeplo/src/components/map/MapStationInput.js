@@ -17,11 +17,12 @@ import Geolocation from 'react-native-geolocation-service';
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
 import { getMiddlePoint } from '../../redux/recommendationSlice';
-import { getStationList } from '../../redux/locationSlice';
+import { getStationList, getDetailLocation } from '../../redux/locationSlice';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
 import LoadingModal from '../common/LoadingModal';
+import FlatButton from '../common/FlatButton';
 
 const screen = Dimensions.get('screen');
 const searchInputWidth = screen.width * 0.7;
@@ -44,6 +45,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   const [mapCenter, setMapCenter] = useState();
   const [mapZoomLevel, setMapZoomLevel] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedStation, setSelectedStation] = useState({});
 
   const webViewRef = useRef();
   const selectedLocationInfoPositionAnim = useRef(new Animated.ValueXY()).current;
@@ -53,15 +55,15 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   const searchedStations = useSelector(state => state?.locations?.stations);
 
   useEffect(() => {
-    if (Array.isArray(recommendedStations)) {
+    if (Array.isArray(recommendedStations) && recommendedStations.length > 0) {
       postMessage(MESSAGE_TYPE.UPDATE_RECOMMENDED_STATIONS, recommendedStations);
+      setSelectedStation(recommendedStations[0]);
       openSelectedStationInfo();
     }
   }, [recommendedStations]);
 
   useEffect(() => {
     if (Array.isArray(searchedStations)) {
-      console.log(searchedStations);
       openSelectedStationInfo();
     }
   }, [searchedStations]);
@@ -135,13 +137,19 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   };
 
   const postMessage = (messageType, messageBody) => {
-    webViewRef.current.postMessage(createMessage(messageType, messageBody));
+    if (webViewRef && webViewRef.current) {
+      webViewRef.current.postMessage(createMessage(messageType, messageBody));
+    }
   };
 
   const processMessage = message => {
     const messageType = message.messageType;
     const body = message.messageBody;
     switch (messageType) {
+      case MESSAGE_TYPE.SELECT_STATION:
+        setSelectedStation(body);
+        openSelectedStationInfo();
+        break;
       default:
         break;
     }
@@ -156,21 +164,45 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   };
 
   const renderSelectedStationInfoView = station => {
-    // if (!station) return null;
+    if (!station) return null;
 
     return (
-      <View>
-        <Text>여러분들의 중간 지점은...</Text>
-        <Text>삼각지역</Text>
-        <Text>평균 이동 시간 34분</Text>
+      <View style={styles.bottomInterfaceView}>
+        <Text style={{}}>여러분들의 중간 지점은...</Text>
+        <Text
+          style={{
+            margin: 10,
+            paddingHorizontal: 10,
+            color: theme.font.color,
+            fontSize: 30,
 
-        <TouchableOpacity>
-          <Text>만남 장소로 지정</Text>
-        </TouchableOpacity>
+            backgroundColor: theme.color.bright.green,
 
-        <TouchableOpacity>
-          <Text>여기서 놀 곳 추천 받기</Text>
-        </TouchableOpacity>
+            borderWidth: theme.border.thick,
+            borderColor: theme.color.border,
+            borderRadius: theme.radius.base,
+          }}>
+          {selectedStation?.name}역
+        </Text>
+        <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
+          <Text>평균 이동 시간</Text>
+          <Text style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>{station?.avgTime}분</Text>
+        </View>
+
+        <FlatButton
+          text="만남 장소로 지정"
+          backgroundColor={theme.color.bright.purple}
+          onPress={() => {
+            onValueChange(recommendedStations[0]);
+            closeModal();
+          }}
+        />
+
+        {/* <FlatButton
+          text="여기서 놀 곳 추천 받기"
+          backgroundColor={theme.color.background}
+          onPress={() => console.log('만남장소지정')}
+        /> */}
       </View>
     );
   };
@@ -202,7 +234,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
           <TouchableOpacity style={styles.selectedStationInfoCloseButton} onPress={() => closeSelectedStationInfo()}>
             <Text>X</Text>
           </TouchableOpacity>
-          {renderSelectedStationInfoView()}
+          {renderSelectedStationInfoView(recommendedStations[0])}
         </Animated.View>
       </View>
     );
@@ -322,6 +354,12 @@ const styles = StyleSheet.create({
     color: theme.font.color,
     fontSize: 16,
     fontWeight: '800',
+  },
+  bottomInterfaceView: {
+    width: selectedStationInfoWidth,
+    height: selectedStationInfoHeight,
+    padding: 20,
+    alignItems: 'center',
   },
 });
 

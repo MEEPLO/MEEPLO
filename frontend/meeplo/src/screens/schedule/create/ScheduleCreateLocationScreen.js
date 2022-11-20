@@ -27,11 +27,11 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   };
 
   const validateInput = () => {
-    if (!meet || !meet.id) {
+    if (!meet || !(meet.id || meet.stationId)) {
       Toast.show({
         type: 'error',
         text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
       });
 
       return false;
@@ -39,7 +39,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
       Toast.show({
         type: 'error',
         text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-        text2: TOAST_MESSAGE.SCHEDULE_NO_NAME,
+        text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
       });
     }
 
