@@ -20,6 +20,7 @@ const NearLocationOverlay = styled.div`
 `;
 
 const KakaoMap = () => {
+  // const [test, setTest] = useState('');
   const [mapHeight, setMapHeight] = useState('880px');
   const [center, setCenter] = useState({ lat: 37.50119278, lng: 127.03975728 });
   const [level, setLevel] = useState(3);
@@ -55,6 +56,10 @@ const KakaoMap = () => {
   }, [searchedStations]);
 
   useEffect(() => {
+    // mapRef.current.relayout();
+  }, [mapRef.current]);
+
+  useEffect(() => {
     if (recommendedBounds && mapRef.current) {
       mapRef.current.setBounds(recommendedBounds);
     }
@@ -65,6 +70,12 @@ const KakaoMap = () => {
       mapRef.current.setBounds(searchedBounds);
     }
   }, [searchedBounds]);
+
+  useEffect(() => {
+    if (mapRef && mapRef.current) {
+      mapRef.current.relayout();
+    }
+  }, [mapHeight]);
 
   useEffect(() => {
     const isAndroid = () => {
@@ -104,7 +115,7 @@ const KakaoMap = () => {
       case MESSAGE_TYPE.UPDATE_NEAR_LOCATIONS:
         setNearLocations(messageBody);
         break;
-      case MESSAGE_TYPE.UPDATE_WEBVIEW_CENTER:
+      case MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER:
         setCenter(messageBody);
         break;
       case MESSAGE_TYPE.UPDATE_RECOMMENDED_STATIONS:
