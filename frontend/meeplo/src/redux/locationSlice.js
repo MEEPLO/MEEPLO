@@ -59,9 +59,6 @@ const locationSlice = createSlice({
       state.isLoading = false;
       state.stations = payload?.stations;
     },
-    [getStationList.rejected]: (state, { payload }) => {
-      state.isLoading = false;
-    },
     [getDetailLocation.pending]: (state, { payload }) => {
       state.isLoading = true;
     },

@@ -28,6 +28,8 @@ const TOAST_MESSAGE = {
   GROUP_NO_PHOTO: '사진을 선택해주세요!',
   GROUP_NAME_LENGTH_EXCESS: '그룹 이름은 최대 20자까지 입력 가능합니다.',
   GROUP_DESCRIPTION_LENGTH_EXCESS: '그룹 설명은 최대 200자까지 입력 가능합니다.',
+
+  NO_SEARCH_RESULT: '검색 결과가 없습니다!',
 };
 
 const COMMON_MESSAGE = {
