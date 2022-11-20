@@ -167,15 +167,18 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void updateMemberDefaultLocation(String authorization, Long id) {
         Member member = getMemberByAuthorization(authorization);
         memberLocationRepository.findByMember(member).stream()
                 .filter(MemberLocation::getDefaultLocation)
-                .forEach(ml->ml.updateDefaultLocation(false));
+                .forEach(ml->{ml.updateDefaultLocation(false); memberLocationRepository.save(ml);});
 
-        memberLocationRepository.findById(id)
-                .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION))
-                .updateDefaultLocation(true);
+        MemberLocation memberLocation = memberLocationRepository.findById(id)
+                .orElseThrow(()-> new MeeploException(MemberErrorCode.NOT_EXIST_MEMBER_LOCATION));
+
+        memberLocation.updateDefaultLocation(true);
+        memberLocationRepository.save(memberLocation);
     }
 
     @Override
