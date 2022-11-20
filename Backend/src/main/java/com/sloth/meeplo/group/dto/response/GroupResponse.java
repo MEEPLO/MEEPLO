@@ -90,7 +90,7 @@ public class GroupResponse {
             this.photo = groupMember.getMember().getProfilePhoto();
             MemberLocation memberLocation = groupMember.getMember().getMemberLocations().stream()
                     .filter(MemberLocation::getDefaultLocation)
-                    .findFirst().orElseThrow(()->new MeeploException(MemberErrorCode.NO_DEFAULT_LOCATION));
+                    .findFirst().orElse(MemberLocation.emptyMemberLocation().empty(true).build());
             this.locationName = memberLocation.getName();
             this.locationAddress = memberLocation.getAddress();
             this.lat = memberLocation.getLat();
