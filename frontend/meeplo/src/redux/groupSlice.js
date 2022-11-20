@@ -217,7 +217,7 @@ export const exitGroupMember = createAsyncThunk(
 export const getGroupMembers = createAsyncThunk('group/getGroupMembers', async ({ groupId }) => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    const response = await axios.get(`${MEEPLO_SERVER_BASE_URL}/group/${groupId}/member`, {
+    const response = await axiosPrivate.get(`/group/${groupId}/member`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
