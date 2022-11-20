@@ -33,12 +33,15 @@
 ## 그룹
 
 - 그룹 생성
+
   ![그룹 생성.gif](./README/group-create.gif)
 
 - 그룹 참가
+
   ![그룹 참가.gif](./README/group-join.gif)
 
 - 그룹 탈퇴
+
   ![그룹 탈퇴.gif](./README/group-exit.gif)
 
 ## 약속
@@ -56,6 +59,7 @@
 ![MEEPLO_ERD.png](./README/MEEPLO_ERD.png)
 
 - ERD Cloud Version
+
   ![Untitled](./README/ERD_cloud.png)
 
 ## API 명세
@@ -63,25 +67,40 @@
 - [API 명세 문서](./README/API_Spec.md)
 
 - 이미지
+
   ![Untitled](./README/api_spec_1.png)
   ![Untitled](./README/api_spec_2.png)
 
 ## Figma
 
 - 전체 이미지
+
   ![전체 figma.png](./README/figma_all.png)
+
 - 개별 이미지
+
   - 홈 화면
+
     ![홈 화면.png](./README/figma_home.png)
+
   - 모임flow
+
     ![그룹 flow.png](./README/figma_group.png)
+
   - 약속flow
+
     ![약속 flow.png](./README/figma_schedule.png)
+
   - 추천flow
+
     ![추천 flow.png](./README/figma_recommendation.png)
+
   - 마이페이지 flow
+
     ![마이페이지 flow.png](./README/figma_mypage.png)
+
   - 추억 flow
+
     ![추억 flow.png](./README/figma_moment.png)
 
 # 4. 기술 스택 및 배포 환경
@@ -214,20 +233,30 @@
 ## JIRA
 
 - 누적흐름도표
+
   ![Untitled](./README/jira_total.png)
+
 - 로드맵
+
   ![jira_roadmap](./README/jira_roadmap.png)
 
 ## Notion
 
 - 메인
+
   ![Untitled](./README/notion_main.png)
   ![Untitled](./README/notion_main_2.png)
+
 - 회의록
+
   ![Untitled](./README/notion_meetings.png)
+
 - MEEPLO 도서관
+
   ![Untitled](./README/notion_library.png)
+
 - Git 브랜치 전략 & 컨벤션
+
   ![Untitled](./README/notion_git.png)
 
 ## Git
