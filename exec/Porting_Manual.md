@@ -1174,9 +1174,9 @@ spec:
 - k8s 외부 : k7a508.p.ssafy.io:31666
 - cluster 내부에서 접근
 
-```bash
-kubectl exec -it $(kubectl get pods -n redis -o NAME) -n redis -- redis-cli
-```
+  ```bash
+  kubectl exec -it $(kubectl get pods -n redis -o NAME) -n redis -- redis-cli
+  ```
 
 </details>
 
@@ -1530,20 +1530,20 @@ kubectl rollout restart deployment backend-server -n default
 
     - 다음 내용을 찾아 변경한다.
 
-          ```yaml
-          - appProtocol: http
-            name: http
-            nodePort: 30080 # 원하는 http 포트로 변경
-            port: 80
-            protocol: TCP
-            targetPort: http
-          - appProtocol: https
-            name: https
-            nodePort: 30443 # 원하는 https 포트로 변경
-            port: 443
-            protocol: TCP
-            targetPort: https
-          ```
+      ```yaml
+      - appProtocol: http
+        name: http
+        nodePort: 30080 # 원하는 http 포트로 변경
+        port: 80
+        protocol: TCP
+        targetPort: http
+      - appProtocol: https
+        name: https
+        nodePort: 30443 # 원하는 https 포트로 변경
+        port: 443
+        protocol: TCP
+        targetPort: https
+      ```
 
       </details>
 

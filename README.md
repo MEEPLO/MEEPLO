@@ -1,5 +1,7 @@
 # 1. 서비스 소개
 
+[<h2>▶ MEEPLO 다운로드 링크](https://drive.google.com/file/d/1HmoUB0zm-o00Jh1k6OyBOtnr2NhLr4Yh/view?usp=share_link)
+
 ## 서비스 개요
 
 ### 프로젝트 진행 기간
