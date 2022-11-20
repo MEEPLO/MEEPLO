@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -33,10 +34,10 @@ public class Group extends BaseTimeEntity {
     private String enterCode;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<GroupMember> groupMembers;
+    private Set<GroupMember> groupMembers;
 
-    @OneToMany(mappedBy = "group")
-    private List<Schedule> schedules;
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private Set<Schedule> schedules;
 
     public void updateGroupId(Long id) {
         this.id = id;

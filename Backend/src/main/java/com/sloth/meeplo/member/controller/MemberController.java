@@ -40,8 +40,9 @@ public class MemberController {
 
     @GetMapping("/auth/refresh")
     public ResponseEntity<MemberResponse.MemberToken> refreshTokens(@ApiIgnore @RequestHeader("Authorization") String authorization, @ApiIgnore @RequestHeader("Refresh") String refresh) {
+        log.info("refresh 토큰 받는 컨트롤러입니다.");
+        log.info(refresh);
         MemberResponse.MemberToken memberToken = memberService.refreshMemberToken(authorization, refresh);
-
         return new ResponseEntity<>(memberToken, HttpStatus.OK);
     }
 
@@ -80,6 +81,13 @@ public class MemberController {
     @DeleteMapping("/member/location/{id}")
     public ResponseEntity<Void> deleteMemberStartLocation(@RequestHeader("Authorization") String authorization, @PathVariable Long id){
         memberService.deleteMemberStartLocation(authorization,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @GetMapping("/member/defaultlocation/{id}")
+    public ResponseEntity<Void> updateMemberDefaultLocation(@ApiIgnore @RequestHeader("Authorization") String authorization, @PathVariable Long id){
+        memberService.updateMemberDefaultLocation(authorization, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

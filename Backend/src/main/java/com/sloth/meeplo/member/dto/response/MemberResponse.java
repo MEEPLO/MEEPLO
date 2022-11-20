@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MemberResponse {
@@ -45,6 +46,7 @@ public class MemberResponse {
                     .map(ml -> MemberDetailStartLocation.builder()
                             .memberLocation(ml)
                             .build())
+                    .distinct()
                     .collect(Collectors.toList());
         }
     }
@@ -54,6 +56,7 @@ public class MemberResponse {
     public static class MemberDetailStartLocation{
         private Long id;
         private String name;
+        private Boolean defaultLocation;
         private Double lat;
         private Double lng;
         private String address;
@@ -62,9 +65,24 @@ public class MemberResponse {
         MemberDetailStartLocation(MemberLocation memberLocation){
             this.id = memberLocation.getId();
             this.name = memberLocation.getName();
+            this.defaultLocation = memberLocation.getDefaultLocation();
             this.lat = memberLocation.getLat();
             this.lng = memberLocation.getLng();
             this.address = memberLocation.getAddress();
+        }
+
+        @Override
+        public boolean equals(Object x) {
+            if(!(x instanceof MemberDetailStartLocation))
+                return false;
+            MemberDetailStartLocation mdsl = ((MemberDetailStartLocation)x);
+
+            return Objects.equals(this.id, mdsl.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id.hashCode();
         }
     }
 
