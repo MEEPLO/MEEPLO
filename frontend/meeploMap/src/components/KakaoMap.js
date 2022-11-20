@@ -165,6 +165,7 @@ const KakaoMap = () => {
           <MapMarker
             key={location.id}
             position={{ lat: location.lat, lng: location.lng }}
+            image={getMarker(MARKER_TYPE.STORE, MARKER_COLOR.NAVY)}
             clickable={true}
             onClick={() => {
               postMessage(createMessage(MESSAGE_TYPE.SELECT_NEAR_LOCATION, location));
@@ -184,6 +185,9 @@ const KakaoMap = () => {
         <MapMarker
           position={{ lat: station.lat, lng: station.lng }}
           image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.GREEN)}
+          onClick={() => {
+            postMessage(createMessage(MESSAGE_TYPE.SELECT_STATION, station));
+          }}
         />
       ));
     }
@@ -205,7 +209,7 @@ const KakaoMap = () => {
                   color: 'white',
                   fontSize: 10,
                   padding: 5,
-                  borderRadius: 10,
+                  borderRadius: 5,
                 }}>
                 {time.groupMemberName}
               </div>
@@ -258,13 +262,14 @@ const KakaoMap = () => {
         onZoomChanged={onZoomChangedHandler}
         onDragEnd={onDragEnd}
         ref={mapRef}>
-        <MapMarker position={center} image={getMarker(MARKER_TYPE.NONE, MARKER_COLOR.RED)}>
-          {/* <div style={{ color: '#000' }}>{test}</div> */}
-        </MapMarker>
         {renderNearLocationsMarker(nearLocations)}
         {renderRecommendedStationMarker(recommendedStations)}
         {renderRecommendedStationStartMarker(recommendedStations)}
         {renderRecommendedStationPath(recommendedStations)}
+
+        <MapMarker position={center} image={getMarker(MARKER_TYPE.HERE, MARKER_COLOR.RED)}>
+          {/* <div style={{ color: '#000' }}>{test}</div> */}
+        </MapMarker>
       </Map>
     </>
   );
