@@ -12,15 +12,19 @@ const memberListMaxHeight = screen.height * 0.5;
 
 const GroupMemberSelectList = ({ type, members, selectedMembers, user, required, onSelect, isView }) => {
   const renderMemberList = members => {
-    return members.map(member => (
-      <GroupMemberSelectListItem
-        key={member.id}
-        member={member}
-        selected={!!selectedMembers.find(mem => mem.id === member.id)}
-        disabled={member.id === user.id}
-        onClick={onSelect}
-      />
-    ));
+    if (Array.isArray(members)) {
+      return members.map(member => (
+        <GroupMemberSelectListItem
+          key={member.id}
+          member={member}
+          selected={!!selectedMembers?.find(mem => mem.id === member.id)}
+          disabled={member.id === user.id}
+          onClick={onSelect}
+        />
+      ));
+    }
+
+    return null;
   };
   return (
     <View style={styles.memberListViewStyle}>
@@ -37,7 +41,7 @@ const GroupMemberSelectList = ({ type, members, selectedMembers, user, required,
             renderItem={item => (
               <GroupMemberSelectListItem
                 member={item.item}
-                selected={!!selectedMembers.find(member => member.id === item.item.id)}
+                selected={!!selectedMembers?.find(member => member.id === item.item.id)}
                 disabled={item.item.id === user.id}
                 onClick={onSelect}
               />
