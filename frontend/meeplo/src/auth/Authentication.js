@@ -6,13 +6,13 @@ import { getProfile, login, logout, unlink } from '@react-native-seoul/kakao-log
 
 async function userLogin(kakaoAccessToken) {
   try {
-    console.log('카카오 액세스 토큰:', kakaoAccessToken);
+    // console.log('카카오 액세스 토큰:', kakaoAccessToken);
     const tokens = await axios.get(`${MEEPLO_SERVER_BASE_URL}/auth/kakao`, {
       headers: {
         Authorization: `Bearer ${kakaoAccessToken}`,
       },
     });
-    console.log('백에서 받아온 데이터: ', tokens.data);
+    // console.log('백에서 받아온 데이터: ', tokens.data);
     await AsyncStorage.setItem('@accessToken', tokens.data.accessToken);
     await AsyncStorage.setItem('@refreshToken', tokens.data.refreshToken);
     return tokens;
@@ -48,7 +48,7 @@ export const logOutWithKakao = async ({ Alert, navigation }) => {
   try {
     const message = await logout();
     AsyncStorage.clear();
-    console.log('signout', message);
+    // console.log('signout', message);
     Alert.alert('로그아웃 되었습니다.', '', [
       {
         text: '확인',

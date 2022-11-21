@@ -184,7 +184,7 @@ export const editSchedule = createAsyncThunk('schedule/editGroup', async ({ form
           },
         ]);
       });
-    console.log('schedule EDITED!');
+    // console.log('schedule EDITED!');
   } catch (err) {
     console.error('ERROR in editSchedule!', err);
     return isRejectedWithValue(err.response?.data);
