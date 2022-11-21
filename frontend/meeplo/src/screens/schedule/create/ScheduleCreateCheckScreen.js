@@ -25,15 +25,19 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
       date: state?.date,
       name: state?.name,
       groupId: state?.group?.id,
-      meetLocationId: state?.meet?.id,
+      meetLocationId: 0,
+      amuses: [],
       keywords: state?.keywords,
       members: state?.members,
-      amuses: [
-        {
-          id: state?.amuse?.id,
-        },
-      ],
     };
+
+    if (state?.meet?.id) {
+      reqObject.meetLocationId = state.meet.id;
+    }
+
+    if (state?.amuse?.id) {
+      reqObject.amuses.push({ id: state.amuse.id });
+    }
 
     openLoadingModal();
     dispatch(createSchedule({ schedule: reqObject, navigation }))
