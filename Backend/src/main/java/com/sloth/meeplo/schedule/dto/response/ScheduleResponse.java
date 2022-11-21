@@ -151,7 +151,7 @@ public class ScheduleResponse {
 
         @Builder
         ScheduleDetailAmuseLocationInfo(ScheduleLocation scheduleLocation){
-            this.id = scheduleLocation.getId();
+            this.id = scheduleLocation.getLocation().getId();
             this.name = scheduleLocation.getLocation().getName();
             this.address = scheduleLocation.getLocation().getAddress();
             this.lat = scheduleLocation.getLocation().getLat();
