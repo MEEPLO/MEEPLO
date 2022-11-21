@@ -32,7 +32,7 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
     setMomentId(momentId);
   };
 
-  console.log(moments);
+  // console.log(moments);
   const renderMoment = moments => {
     return moments.map(moment => (
       <TouchableOpacity

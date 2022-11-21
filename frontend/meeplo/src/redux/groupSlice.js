@@ -71,7 +71,7 @@ export const createGroup = createAsyncThunk('group/createGroup', async ({ form, 
           },
         ]);
       });
-    console.log('group CREATED!');
+    // console.log('group CREATED!');
   } catch (err) {
     console.error('ERROR in createGroup!', err);
     return isRejectedWithValue(err.response?.data);
@@ -108,7 +108,7 @@ export const editGroup = createAsyncThunk('group/editGroup', async ({ form, grou
           },
         ]);
       });
-    console.log('group EDITED!');
+    // console.log('group EDITED!');
     return response?.data;
   } catch (err) {
     console.error('ERROR in editGroup!', err);
@@ -168,7 +168,7 @@ export const exitGroup = createAsyncThunk('group/exitGroup', async ({ groupName,
           },
         ]);
       });
-    console.log('group EXITED!');
+    // console.log('group EXITED!');
     return response?.data;
   } catch (err) {
     console.error('ERROR in exitGroup!', err);
@@ -205,7 +205,7 @@ export const exitGroupMember = createAsyncThunk(
             },
           ]);
         });
-      console.log('group member EXITED');
+      // console.log('group member EXITED');
       return response?.data;
     } catch (err) {
       console.error('ERROR in exitGroupMember', err);
@@ -256,7 +256,7 @@ export const joinGroup = createAsyncThunk('group/joinGroup', async ({ form, Aler
           },
         ]);
       });
-    console.log('you are JOINED!');
+    // console.log('you are JOINED!');
   } catch (err) {
     if (err.response.status === 404) {
       Toast.show({
