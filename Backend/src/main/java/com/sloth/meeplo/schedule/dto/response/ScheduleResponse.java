@@ -95,6 +95,9 @@ public class ScheduleResponse {
         private Long id;
         private String nickname;
         private String photo;
+        private Double lat;
+        private Double lng;
+        private String address;
         private ScheduleMemberStatus status;
 
         @Builder
@@ -103,6 +106,9 @@ public class ScheduleResponse {
             this.nickname = scheduleMember.getMember().getUsername();
             this.photo = scheduleMember.getMember().getProfilePhoto();
             this.status = scheduleMember.getStatus();
+            this.address = scheduleMember.getAddress();
+            this.lat = scheduleMember.getLat();
+            this.lng = scheduleMember.getLng();
         }
         @Override
         public boolean equals(Object x) {
