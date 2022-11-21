@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { theme } from '../../assets/constant/DesignTheme';
 import { deleteStartLocation, getUserInfo, changeDefaultLocation } from '../../redux/userSlice';
+// import FontText from '../common/FontText';
 
 const MyPageLocationItem = ({ item, navigation }) => {
   console.log(item);
@@ -66,18 +67,18 @@ const MyPageLocationItem = ({ item, navigation }) => {
       }}>
       <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>{item.name}</Text>
       <Text style={{ marginTop: 5, fontSize: 16, fontWeight: '400', color: 'gray' }}>{item.address}</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
-        {!item.defaultLocation ? (
+      {!item.defaultLocation ? (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, height: 20 }}>
           <TouchableOpacity onPress={onPressDefault} style={{ marginHorizontal: 5 }}>
             <Text style={{ fontSize: 16, fontWeight: '400', color: 'black' }}>기본 출발지로 설정</Text>
           </TouchableOpacity>
-        ) : (
-          <View />
-        )}
-        <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={onPressDelete}>
-          <Text style={{ fontSize: 16, fontWeight: '400', color: theme.color.alert }}>삭제</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={onPressDelete}>
+            <Text style={{ fontSize: 16, fontWeight: '400', color: theme.color.alert }}>삭제</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={{ height: 25 }} />
+      )}
     </View>
   );
 };
