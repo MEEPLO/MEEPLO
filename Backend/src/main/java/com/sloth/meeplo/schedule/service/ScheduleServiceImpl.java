@@ -159,7 +159,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         scheduleKeywordRepository.deleteAllBySchedule(schedule);
         scheduleKeywordRepository.saveAll(scheduleUpdateInput.getKeywords().stream()
-                .map(k->ScheduleKeyword.builder().keyword(k).build())
+                .map(k->ScheduleKeyword.builder().keyword(k).schedule(schedule).build())
                 .collect(Collectors.toList()));
 
 
