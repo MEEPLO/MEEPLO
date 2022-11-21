@@ -9,8 +9,8 @@ import MapLocationInput from '../../../components/map/MapLocationInput';
 import MapStationInput from '../../../components/map/MapStationInput';
 
 const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
-  const [meet, setMeet] = useState();
-  const [amuse, setAmuse] = useState();
+  const [meet, setMeet] = useState({});
+  const [amuse, setAmuse] = useState([]);
 
   useEffect(() => {
     // TODO : set meet
@@ -27,22 +27,6 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   };
 
   const validateInput = () => {
-    if (!meet || !meet.id) {
-      Toast.show({
-        type: 'error',
-        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-        text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
-      });
-
-      return false;
-    } else if (!amuse || !amuse.id) {
-      Toast.show({
-        type: 'error',
-        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-        text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
-      });
-    }
-
     return true;
   };
   const onPressNext = () => {
@@ -65,12 +49,11 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <MapStationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} state={state} />
+        <MapStationInput type="만날 장소" value={meet} onValueChange={onSelectMeetLocation} state={state} />
       </View>
       <View style={styles.inputViewStyle}>
         <MapLocationInput
           type="약속 장소"
-          required
           value={amuse}
           onValueChange={onSelectAmuseLocation}
           state={state}
