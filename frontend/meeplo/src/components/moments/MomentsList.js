@@ -35,7 +35,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
     2: imgWidth * 3.61,
   };
 
-  console.log(currentPage);
+  // console.log(currentPage);
 
   const params = {
     page: 0,

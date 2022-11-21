@@ -3,7 +3,6 @@ import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 const screen = Dimensions.get('screen');
-console.log(screen);
 
 const MapView = forwardRef(({ onMessageHandler }, ref) => {
   const [loaded, setLoaded] = useState(false);
