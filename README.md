@@ -1,6 +1,6 @@
 # 1. 서비스 소개
 
-[<h2>▶ MEEPLO 다운로드 링크](https://drive.google.com/file/d/1HmoUB0zm-o00Jh1k6OyBOtnr2NhLr4Yh/view?usp=share_link)
+<a href="https://drive.google.com/file/d/1HmoUB0zm-o00Jh1k6OyBOtnr2NhLr4Yh/view?usp=share_link"><h2>▶ MEEPLO 다운로드 링크</a>
 
 ## 서비스 개요
 
