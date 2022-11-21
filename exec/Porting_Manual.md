@@ -1271,6 +1271,12 @@ spec:
   selector:
     matchLabels:
       app: backend-server
+  minReadySeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -1292,6 +1298,11 @@ spec:
         - name: backend-server
           image: meeplo/backend:latest
           imagePullPolicy: Always
+	  resources:
+	    requests:
+	      cpu: "300m"
+	    limits:
+	      cpu: "1000m"
           ports:
             - containerPort: 8080
 ```
@@ -1338,7 +1349,7 @@ spec:
           value: 50
           periodSeconds: 30
     scaleUp:
-      stabilizationWindowSeconds: 0
+      stabilizationWindowSeconds: 120
       policies:
         - type: Percent
           value: 100
