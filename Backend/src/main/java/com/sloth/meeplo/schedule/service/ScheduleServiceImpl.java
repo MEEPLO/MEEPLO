@@ -285,6 +285,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .map(s -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(s)
                         .build())
+                .sorted((Comparator.comparing(ScheduleResponse.ScheduleListInfo::getDate)))
                 .collect(Collectors.toList());
     }
 
