@@ -297,7 +297,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         LocalDateTime targetDate = LocalDateTime.of(localDate,LocalDateTime.MIN.toLocalTime());
         return scheduleMemberRepository.findByMemberAndStatus(member, ScheduleMemberStatus.JOINED).stream()
                 .map(ScheduleMember::getSchedule)
-                .filter(s->s.getDate().isBefore(targetDate.plusMonths(1)) && s.getDate().isAfter(targetDate))
+                .filter(s->s.getDate().isBefore(targetDate.plusDays(1)) && s.getDate().isAfter(targetDate))
                 .map(s -> ScheduleResponse.ScheduleListInfo.builder()
                         .schedule(s)
                         .build())
