@@ -29,7 +29,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
   const [scheduleDate, setScheduleDate] = useState(schedule?.date);
   const [scheduleKeywords, setScheduleKeywords] = useState(schedule?.keywords);
   const [scheduleMeetLocation, setScheduleMeetLocation] = useState(schedule?.meetLocation);
-  const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState(schedule?.amuseLocation?.[0]);
+  const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState(schedule?.amuseLocations?.[0]);
   const [selectedMembers, setSelectedMembers] = useState(schedule?.members);
   const userInfo = useSelector(state => state.user.info);
 
@@ -105,7 +105,13 @@ const ScheduleEditScreen = ({ route, navigation }) => {
           <MapLocationInput type="만날 장소" value={scheduleMeetLocation} onValueChange={setScheduleMeetLocation} />
         </View>
         <View style={{ margin: 20 }}>
-          <MapLocationInput type="약속 장소" value={scheduleAmuseLocation} onValueChange={setScheduleAmuseLocation} />
+          <MapLocationInput
+            type="약속 장소"
+            value={scheduleAmuseLocation}
+            onValueChange={setScheduleAmuseLocation}
+            meet={scheduleMeetLocation}
+            keywords={scheduleKeywords}
+          />
         </View>
         <View style={{ margin: 20 }}>
           <GroupMemberSelectList
