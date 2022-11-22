@@ -20,7 +20,7 @@ const FontText = ({ style, children, bold }) => {
   }, [style]);
 
   const getFamily = bold => {
-    if (bold) return 'NanumSquareRoundB';
+    if (bold) return 'NanumSquareRoundEB';
     return 'NanumSquareRoundR';
   };
   return <Text style={{ fontFamily: getFamily(bold || isBold), ...fontStyle }}>{children}</Text>;
