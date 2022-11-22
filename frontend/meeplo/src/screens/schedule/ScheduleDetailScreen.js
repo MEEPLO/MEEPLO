@@ -78,12 +78,16 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
   const closeMemberModal = () => setShowMemberModal(false);
 
   const renderAmuseLoactions = amuseLocations => {
-    return amuseLocations?.map(amuse => (
-      <View key={amuse.id} style={styles.itemContentView}>
-        <Text style={styles.itemContent}> {amuse?.name}</Text>
-        <Text style={styles.itemSubContent}> {amuse?.address}</Text>
-      </View>
-    ));
+    if (Array.isArray(amuseLocations) && amuseLocations.length > 0) {
+      return amuseLocations?.map(amuse => (
+        <View key={amuse.id} style={styles.itemContentView}>
+          <Text style={styles.itemContent}> {amuse?.name}</Text>
+          <Text style={styles.itemSubContent}> {amuse?.address}</Text>
+        </View>
+      ));
+    } else {
+      return <Text style={styles.itemContent}>미정</Text>;
+    }
   };
 
   const renderKeywords = keywords => {
