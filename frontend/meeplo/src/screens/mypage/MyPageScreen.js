@@ -8,6 +8,7 @@ import fs from 'react-native-fs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import Toast from 'react-native-toast-message';
 import { theme } from '../../assets/constant/DesignTheme';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
@@ -314,9 +315,13 @@ const MyPageScreen = ({ navigation }) => {
               </TouchableOpacity>
             )}
             {user.startLocations.map((item, index) => {
+              console.log(item);
               return (
-                <View key={'startLocation' + index} style={{ marginVertical: 10 }}>
-                  <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>{item.name}</FontText>
+                <View key={'startLocation' + index} style={{ marginVertical: 15 }}>
+                  <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black', marginBottom: 6 }}>
+                    {item.name}
+                    {item?.defaultLocation && <FontAwesomeIcon icon={faCheck} size={14} color="red" />}
+                  </FontText>
                   <FontText style={{ fontSize: 16, fontWeight: '400', color: 'gray' }}>{item.address}</FontText>
                 </View>
               );
