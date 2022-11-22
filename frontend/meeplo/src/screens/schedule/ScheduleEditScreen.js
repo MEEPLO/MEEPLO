@@ -26,23 +26,13 @@ const ScheduleEditScreen = ({ route, navigation }) => {
     return state.group.members;
   });
 
-  const [scheduleName, setScheduleName] = useState();
-  const [scheduleDate, setScheduleDate] = useState();
-  const [scheduleKeywords, setScheduleKeywords] = useState();
-  const [scheduleMeetLocation, setScheduleMeetLocation] = useState(0);
-  const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState();
-  const [selectedMembers, setSelectedMembers] = useState();
-
-  useEffect(() => {
-    if (schedule) {
-      setScheduleName(schedule?.name);
-      setScheduleDate(schedule?.date);
-      setScheduleKeywords(schedule?.keywords);
-      setScheduleMeetLocation(schedule?.meetLocation ? schedule.meetLocation : 0);
-      setScheduleAmuseLocation(schedule?.amuseLocations?.[0]);
-      setSelectedMembers(schedule?.members);
-    }
-  }, [schedule]);
+  const [scheduleName, setScheduleName] = useState(schedule?.name);
+  const [scheduleDate, setScheduleDate] = useState(schedule?.date);
+  const [scheduleKeywords, setScheduleKeywords] = useState(schedule?.keywords);
+  const [scheduleMeetLocation, setScheduleMeetLocation] = useState(schedule?.meetLocation);
+  const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState(schedule?.amuseLocations?.[0]);
+  const [selectedMembers, setSelectedMembers] = useState(schedule?.members);
+  const userInfo = useSelector(state => state.user.info);
 
   const scheduleId = route?.params?.scheduleId;
   const isLoading = false;
@@ -123,8 +113,8 @@ const ScheduleEditScreen = ({ route, navigation }) => {
             type="약속 장소"
             value={scheduleAmuseLocation}
             onValueChange={setScheduleAmuseLocation}
-            state={schedule}
             meet={scheduleMeetLocation}
+            keywords={scheduleKeywords}
           />
         </View>
         <View style={{ margin: 20 }}>
