@@ -1,0 +1,27 @@
+{
+  "config": {
+    "target": "http://meeplo.co.kr/meeplo/api/v1",
+    "phases": [
+      {
+        "duration": 60,
+        "arrivalRate": 30
+      }
+    ],
+    "defaults": {
+      "headers": {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjY4OTMyNjU3LCJleHAiOjE2Njg5Mzk4NTd9.2psCX9sH6snUji7DtucDVX_74EXPfBjYju7pwTjQFs0"
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "flow": [
+        {
+          "get": {
+            "url": "/group"
+          }
+        }
+      ]
+    }
+  ]
+}

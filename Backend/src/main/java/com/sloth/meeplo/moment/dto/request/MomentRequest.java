@@ -35,6 +35,8 @@ public class MomentRequest {
     public static class CreateMomentCommentInfo{
         @NotBlank
         private String comment;
+        @NotBlank
+        private String font;
         @NotNull
         private MomentRequest.MomentCommentLocation location;
 
