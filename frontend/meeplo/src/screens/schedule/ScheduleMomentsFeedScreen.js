@@ -33,58 +33,71 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
     setMomentId(momentId);
   };
 
-  console.log(moments);
+  // console.log(moments);
   const renderMoment = moments => {
     return moments.map(moment => (
-      <TouchableOpacity
-        activeOpacity={0.6}
-        key={moment.id}
-        style={{ marginVertical: 10 }}
-        onPress={() => {
-          onPressMoment({ momentId: moment.id });
-        }}>
-        {moment.type === 2 ? (
-          <AutoHeightImage
-            source={{ uri: moment.photo }}
-            width={width * 0.5}
-            style={{
-              borderColor: theme.color.disabled,
-              borderWidth: 1,
-              borderRadius: 10,
-            }}
-            resizeMode="contain"
-          />
-        ) : (
-          <AutoHeightImage
-            source={{ uri: moment.photo }}
-            width={width * 0.8}
-            style={{
-              borderColor: theme.color.disabled,
-              borderWidth: 1,
-              borderRadius: 10,
-            }}
-          />
-        )}
+      <View style={{ marginBottom: 40, alignItems: 'center' }}>
+        {/* Photo 부분 */}
+        <View style={{ width: width * 0.8, alignItems: 'center' }}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            key={moment.id}
+            style={{ marginVertical: 10 }}
+            onPress={() => {
+              onPressMoment({ momentId: moment.id });
+            }}>
+            {moment.type === 2 ? (
+              <AutoHeightImage
+                source={{ uri: moment.photo }}
+                width={width * 0.5}
+                style={{
+                  borderColor: theme.color.disabled,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                }}
+                resizeMode="contain"
+              />
+            ) : (
+              <AutoHeightImage
+                source={{ uri: moment.photo }}
+                width={width * 0.8}
+                style={{
+                  borderColor: theme.color.disabled,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                }}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+        {/* 작성정보 부분 */}
         <View
           style={{
-            position: 'absolute',
-            right: 10,
-            top: moment.type === 1 ? 10 : null,
-            bottom: moment.type === 1 ? null : 10,
             flexDirection: 'row',
-            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: width * 0.8,
           }}>
-          <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
-          <FontText
-            style={{
-              fontSize: 14,
-              marginLeft: 5,
-              color: moment.type === 2 ? '#fff' : '#000',
-            }}>
-            {moment.reactionCount}
-          </FontText>
+          <View>
+            {/* TODO: 한나언니 여기에 정보로 바꿔주면 돼!! */}
+            <FontText>
+              2022.10.14, <FontText style={{ fontWeight: 'bold' }}>신민아개짱</FontText> 님이
+            </FontText>
+          </View>
+          <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
+              <FontText
+                style={{
+                  fontSize: 14,
+                  marginLeft: 5,
+                  color: 'black',
+                }}>
+                {moment.reactionCount}
+              </FontText>
+            </View>
+          </View>
         </View>
-      </TouchableOpacity>
+      </View>
     ));
   };
 
@@ -96,7 +109,7 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ marginHorizontal: 20 }}>
+      <ScrollView style={{ marginHorizontal: 20 }} showsVerticalScrollIndicator={false}>
         <View>
           <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 15 }}>
             {schedule.name}
@@ -111,7 +124,6 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
             style={{
               margin: 20,
               borderWidth: 2,
-              // borderColor: theme.color.disabled,
               borderColor: 'white',
               height: 120,
               borderRadius: 20,
