@@ -7,7 +7,7 @@ import { axiosPrivate } from '../auth/axiosInstance';
 export const getUserInfo = createAsyncThunk('user/getUserInfo', async () => {
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
-    console.log('백에서 받아온 토큰: ', accessToken);
+    // console.log('백에서 받아온 토큰: ', accessToken);
     const response = await axiosPrivate.get(`/member`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -34,7 +34,7 @@ export const editUserInfo = createAsyncThunk('user/editUserInfo', async ({ form,
         },
       )
       .then(() => {});
-    console.log('userInfo EDITED!');
+    // console.log('userInfo EDITED!');
   } catch (err) {
     console.error('ERROR in editUserInfo!', err);
     return isRejectedWithValue(err.response?.data);
@@ -63,7 +63,7 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async ({ Alert, na
           },
         ]);
       });
-    console.log('user DELETED!');
+    // console.log('user DELETED!');
   } catch (err) {
     console.error('ERROR in deleteUser!', err);
     return isRejectedWithValue(err.response?.data);

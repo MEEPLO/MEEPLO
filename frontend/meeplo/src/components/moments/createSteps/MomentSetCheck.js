@@ -8,7 +8,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   const windowWidth = Dimensions.get('window').width - 40;
   const windowHeight = Dimensions.get('window').height;
 
-  console.log(state);
+  // console.log(state);
 
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
@@ -27,7 +27,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
         </View>
         <View style={{ height: 50 }}>
           <Text style={{ lineHeight: 50, fontSize: 15, color: 'gray' }}>
-            약속:
+            약속
             <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 17, color: 'gray' }}>
               {' '}
               {state.scheduleName} / {state.placeName}
