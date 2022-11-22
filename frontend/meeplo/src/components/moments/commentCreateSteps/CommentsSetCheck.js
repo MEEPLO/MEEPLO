@@ -33,7 +33,9 @@ const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
         </View>
         <View style={{ height: 90 }}>
           <Text style={{ lineHeight: 90, fontSize: 15, color: 'gray' }}>댓글 내용: </Text>
-          <Text style={{ fontSize: 17, color: theme.font.color }}>{state.comment}</Text>
+          <Text style={{ fontSize: state.font === 'gag' ? 18 : 15, color: theme.font.color, fontFamily: state.font }}>
+            {state.comment}
+          </Text>
         </View>
       </View>
       <View

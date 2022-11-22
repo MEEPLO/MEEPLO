@@ -38,11 +38,11 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
           <Text style={{ lineHeight: 45, fontSize: 15, color: 'gray' }}>사진</Text>
           <AutoHeightImage
             source={{ uri: state.photoUrl }}
-            width={state.type === 2 ? windowWidth * 0.2 : windowWidth * 0.8}
+            width={state.type === 2 ? windowWidth * 0.24 : windowWidth * 0.8}
             style={{
               borderWidth: 1,
               borderColor: '#ddd',
-              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.3 - 40,
+              marginLeft: state.type === 2 ? windowWidth * 0.38 - 40 : windowWidth * 0.1 - 40,
             }}
           />
         </View>
