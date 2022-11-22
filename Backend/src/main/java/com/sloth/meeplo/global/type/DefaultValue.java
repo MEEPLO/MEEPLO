@@ -7,8 +7,9 @@ public enum DefaultValue {
 
     AMUSE_REPRESENTATIVE_PHOTO("https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png"),
     STATION_AVERAGE_TIME("-1"),
-
     STATION_SEARCH_RADIUS("2"),
+    STATION_SEARCH_LIMIT("2"),
+
     NO_TOKEN("NO_TOKEN")
     ;
 

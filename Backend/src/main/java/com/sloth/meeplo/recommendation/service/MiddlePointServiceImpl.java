@@ -97,7 +97,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
 
         return locationRepository.findLocationsWithCoordination(centerPoint.getLat(), centerPoint.getLng(),
                 Double.parseDouble(DefaultValue.STATION_SEARCH_RADIUS.getValue()), LocationType.STATION).stream()
-                .limit(3)
+                .limit(Integer.parseInt(DefaultValue.STATION_SEARCH_LIMIT.getValue()))
                 .collect(Collectors.toList());
     }
 }
