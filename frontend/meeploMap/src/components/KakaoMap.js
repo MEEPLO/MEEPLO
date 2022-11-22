@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Map, MapMarker, CustomOverlayMap, Polyline } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, CustomOverlayMap, Polyline, MarkerClusterer } from 'react-kakao-maps-sdk';
 import styled from '@emotion/styled';
 
 import { createMessage, parseMessage, MESSAGE_TYPE } from '../helper/message';
@@ -239,7 +239,7 @@ const KakaoMap = () => {
                 lat: time.startLocation.lat,
                 lng: time.startLocation.lng,
               }}
-              image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.PURPLE)}
+              image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.BLUE)}
             />
             <CustomOverlayMap
               position={{
@@ -287,20 +287,29 @@ const KakaoMap = () => {
     if (Array.isArray(stations) && stations[0] && Array.isArray(stations[0].requiredTimes)) {
       return stations[0].requiredTimes.map(time => {
         return (
-          <Polyline
-            path={time.coordinates}
-            strokeWeight={10}
-            strokeColor={theme.color.bright.red}
-            strokeOpacity={1}
-            strokeStyle={'solid'}
-          />
+          <div>
+            <Polyline
+              path={time.coordinates}
+              strokeWeight={7}
+              strokeColor="#FFFFFF"
+              strokeOpacity={1}
+              strokeStyle={'solid'}
+            />
+            <Polyline
+              path={time.coordinates}
+              strokeWeight={5}
+              strokeColor={theme.color.bright.blue}
+              strokeOpacity={1}
+              strokeStyle={'solid'}
+            />
+          </div>
         );
       });
     }
     return null;
   };
 
-  const renderSearchedStationMaker = stations => {
+  const renderSearchedStationMarker = stations => {
     if (Array.isArray(stations)) {
       return stations.map(station => {
         return (
@@ -319,7 +328,7 @@ const KakaoMap = () => {
                   padding: 5,
                   borderRadius: 5,
                 }}>
-                {station.name}역
+                {station?.name ? `${station.name}역` : ''}
               </div>
             </CustomOverlayMap>
           </div>
@@ -329,7 +338,7 @@ const KakaoMap = () => {
     return null;
   };
 
-  const renderRecommendedAmuses = amuses => {
+  const renderRecommendedAmusesMarker = amuses => {
     if (Array.isArray(amuses)) {
       return amuses.map(amuse => {
         return (
@@ -366,12 +375,65 @@ const KakaoMap = () => {
         onZoomChanged={onZoomChangedHandler}
         onDragEnd={onDragEnd}
         ref={mapRef}>
-        {renderNearLocationsMarker(nearLocations)}
+        <MarkerClusterer
+          averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+          minLevel={3} // 클러스터 할 최소 지도 레벨
+          disableClickZoom={true} // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+          calculator={[10, 30, 50]} // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이
+          styles={[
+            {
+              // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+              width: '30px',
+              height: '30px',
+              background: theme.color.bright.green,
+              opacity: 0.6,
+              borderRadius: '15px',
+              color: theme.font.color,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '31px',
+            },
+            {
+              width: '40px',
+              height: '40px',
+              background: theme.color.bright.orange,
+              opacity: 0.6,
+              borderRadius: '20px',
+              color: theme.font.color,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '41px',
+            },
+            {
+              width: '50px',
+              height: '50px',
+              background: theme.color.bright.red,
+              opacity: 0.6,
+              borderRadius: '25px',
+              color: theme.font.color,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '51px',
+            },
+            {
+              width: '60px',
+              height: '60px',
+              background: theme.color.bright.alert,
+              opacity: 0.6,
+              borderRadius: '30px',
+              color: theme.font.color,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '61px',
+            },
+          ]}>
+          {renderNearLocationsMarker(nearLocations)}
+          {renderRecommendedAmusesMarker(recommendedAmuses)}
+        </MarkerClusterer>
+        {renderSearchedStationMarker(searchedStations)}
         {renderRecommendedStationMarker(recommendedStations)}
         {renderRecommendedStationStartMarker(recommendedStations)}
         {renderRecommendedStationPath(recommendedStations)}
-        {renderRecommendedAmuses(recommendedAmuses)}
-        {renderSearchedStationMaker(searchedStations)}
 
         <MapMarker position={center} image={getMarker(MARKER_TYPE.HERE, MARKER_COLOR.ALERT)}>
           {/* <div style={{ color: '#000' }}>{test}</div> */}
