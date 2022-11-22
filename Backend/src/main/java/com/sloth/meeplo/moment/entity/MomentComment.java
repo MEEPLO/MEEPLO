@@ -25,6 +25,7 @@ public class MomentComment extends BaseTimeEntity {
     private Double x;
     private Double y;
     private Double angle;
+    private String font;
 
     @ManyToOne
     @JoinColumn(name = "moment_id", referencedColumnName = "id")
@@ -40,6 +41,7 @@ public class MomentComment extends BaseTimeEntity {
         this.x = createMomentCommentInfo.getLocation().getXpoint();
         this.y = createMomentCommentInfo.getLocation().getYpoint();
         this.angle = createMomentCommentInfo.getLocation().getAngle();
+        this.font = createMomentCommentInfo.getFont();
         this.moment = moment;
         this.member = member;
     }
