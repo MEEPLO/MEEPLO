@@ -55,19 +55,22 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             {momentDetail.comments?.map((comment, idx) => (
               <View
                 style={{
-                  width: '80%',
+                  width: momentDetail.moment.type === 2 ? '90%' : '50%',
                   transform: [{ rotate: `${comment.location.angle}deg` }],
                   position: 'absolute',
                   top: comment.location.ypoint * 0.85,
-                  left: comment.location.xpoint * 0.6,
+                  left: comment.location.xpoint * 0.7,
                 }}
                 key={idx}>
-                <Text style={{ fontSize: 11, color: 'gray' }}>{comment.comment}</Text>
+                <Text style={{ color: 'gray', fontSize: comment.font === 'gag' ? 18 : 15, fontFamily: comment.font }}>
+                  {comment.comment}
+                </Text>
               </View>
             ))}
             <Text
               style={{
-                fontSize: state.font === 'gag' ? 14 : 12,
+                width: momentDetail.moment.type === 2 ? '90%' : '50%',
+                fontSize: state.font === 'gag' ? 18 : 15,
                 color: theme.font.color,
                 transform: [{ rotate: `${tilt}deg` }],
                 position: 'absolute',
