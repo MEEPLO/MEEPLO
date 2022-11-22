@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,6 +22,8 @@ public class MomentResponse {
         private String photo;
         private Long reactionCount;
         private Integer type;
+        private String writer;
+        private LocalDateTime createdTime;
 
         @Builder
         MomentSimpleList(Moment moment){
@@ -28,6 +31,8 @@ public class MomentResponse {
             this.photo = moment.getMomentPhoto();
             this.reactionCount = (long) moment.getMomentReactions().size();
             this.type = moment.getType().ordinal();
+            this.writer = moment.getMember().getUsername();
+            this.createdTime=moment.getCreatedDate();
         }
 
         @Override
@@ -105,11 +110,13 @@ public class MomentResponse {
     @NoArgsConstructor
     public static class MomentDetailComment{
         private String comment;
+        private String font;
         private MomentCommentLocation location;
 
         @Builder
         MomentDetailComment(MomentComment momentComment){
             this.comment = momentComment.getComment();
+            this.font = momentComment.getFont();
             this.location = MomentCommentLocation.builder().momentComment(momentComment).build();
         }
     }
