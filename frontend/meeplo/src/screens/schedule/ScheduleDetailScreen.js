@@ -184,19 +184,20 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
             </View>
           </View>
 
-          {isDone ? (
-            <View>
-              <TouchableOpacity
-                onPress={onPressMoments}
-                style={[
-                  styles.buttonContainer,
-                  {
-                    backgroundColor: theme.color.pale.orange,
-                  },
-                ]}>
-                <Text style={styles.buttonTitle}>추억 보기</Text>
-              </TouchableOpacity>
-              {/* <TouchableOpacity
+          {
+            isDone && (
+              <View>
+                <TouchableOpacity
+                  onPress={onPressMoments}
+                  style={[
+                    styles.buttonContainer,
+                    {
+                      backgroundColor: theme.color.pale.orange,
+                    },
+                  ]}>
+                  <Text style={styles.buttonTitle}>추억 보기</Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity
                 style={[
                   styles.buttonContainer,
                   {
@@ -205,18 +206,20 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                 ]}>
                 <Text style={styles.buttonTitle}>추억 남기기</Text>
               </TouchableOpacity> */}
-            </View>
-          ) : (
-            <TouchableOpacity
-              style={[
-                styles.buttonContainer,
-                {
-                  backgroundColor: theme.color.bright.yellow,
-                },
-              ]}>
-              <Text style={styles.buttonTitle}>지도로 장소 확인하기</Text>
-            </TouchableOpacity>
-          )}
+              </View>
+            )
+            // : (
+            //   <TouchableOpacity
+            //     style={[
+            //       styles.buttonContainer,
+            //       {
+            //         backgroundColor: theme.color.bright.yellow,
+            //       },
+            //     ]}>
+            //     <Text style={styles.buttonTitle}>지도로 장소 확인하기</Text>
+            //   </TouchableOpacity>
+            // )
+          }
         </ScrollView>
       ) : (
         <LoadingModal visible={isLoading} />
