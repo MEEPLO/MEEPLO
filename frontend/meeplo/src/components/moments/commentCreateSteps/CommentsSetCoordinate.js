@@ -9,8 +9,6 @@ import StepButton from '../../stepper/StepButton';
 const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => {
   const momentDetail = useSelector(state => state.momentDetail);
 
-  console.log('in coordinate', momentDetail);
-
   const [tilt, setTilt] = React.useState(0);
   // 실제 좌표 데이터 보낼 때에는 조정 필요
   const [delX, setDelX] = React.useState(0);
@@ -64,18 +62,18 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
                   left: comment.location.xpoint * 0.6,
                 }}
                 key={idx}>
-                <Text style={{ fontSize: 10, color: 'gray' }}>{comment.comment}</Text>
+                <Text style={{ fontSize: 11, color: 'gray' }}>{comment.comment}</Text>
               </View>
             ))}
             <Text
               style={{
-                width: '80%',
-                fontSize: 11,
+                fontSize: state.font === 'gag' ? 14 : 12,
                 color: theme.font.color,
                 transform: [{ rotate: `${tilt}deg` }],
                 position: 'absolute',
                 top: delY,
                 left: delX,
+                fontFamily: state.font,
               }}>
               {state.comment}
             </Text>
