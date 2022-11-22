@@ -45,7 +45,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
       setCurrentPosition();
     }
     postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
-  }, [webViewRef.current]);
+  }, [meet, webViewRef.current]);
 
   useEffect(() => {
     if (Array.isArray(recommendedAmuses)) {
