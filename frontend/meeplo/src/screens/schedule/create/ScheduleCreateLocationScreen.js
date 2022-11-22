@@ -7,15 +7,17 @@ import { TOAST_MESSAGE } from '../../../assets/constant/string';
 import StepButton from '../../../components/stepper/StepButton';
 import MapLocationInput from '../../../components/map/MapLocationInput';
 import MapStationInput from '../../../components/map/MapStationInput';
+import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput';
 
 const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
+  const [keywords, setKeywords] = useState([]);
   const [meet, setMeet] = useState();
   const [amuse, setAmuse] = useState();
 
   useEffect(() => {
-    // TODO : set meet
     setMeet(state.meet);
     setAmuse(state.amuse);
+    setKeywords(state.keywords);
   }, [state]);
 
   const onSelectMeetLocation = location => {
@@ -24,6 +26,10 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
 
   const onSelectAmuseLocation = location => {
     setAmuse(location);
+  };
+
+  const onConfirmKeywords = confirmedKeywords => {
+    setKeywords(confirmedKeywords);
   };
 
   const validateInput = () => {
@@ -49,6 +55,10 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
     if (validateInput()) {
       const actions = [
         {
+          type: 'UPDATE_KEYWORDS',
+          payload: keywords,
+        },
+        {
           type: 'UPDATE_MEET',
           payload: meet,
         },
@@ -65,6 +75,9 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
+        <KeywordsModalInput type="키워드" value={keywords} onConfirm={onConfirmKeywords} />
+      </View>
+      <View style={styles.inputViewStyle}>
         <MapStationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} state={state} />
       </View>
       <View style={styles.inputViewStyle}>
@@ -73,7 +86,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
           required
           value={amuse}
           onValueChange={onSelectAmuseLocation}
-          state={state}
+          keywords={keywords}
           meet={meet}
         />
       </View>

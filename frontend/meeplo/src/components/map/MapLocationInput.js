@@ -18,7 +18,7 @@ const selectedLocationInfoViewHeight = screen.height * 0.5;
 const selectedLocationInfoViewUpY = screen.height * 0.5;
 const selectedLocationInfoViewDownY = screen.height * 1;
 
-const MapLocationInput = ({ type, required, value, onValueChange, state, meet }) => {
+const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
@@ -32,6 +32,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
   const webViewRef = useRef();
   const selectedLocationInfoViewPositionAnim = useRef(new Animated.ValueXY()).current;
   const recommendedAmuses = useSelector(state => state?.recommendation?.recommendedAmuses);
+  const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
 
   useEffect(() => {
     if (meet && meet.id) {
@@ -178,7 +179,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
         lat: mapCenter?.lat,
         lng: mapCenter?.lng,
       },
-      keywords: state?.keywords?.map(keyword => {
+      keywords: keywords?.map(keyword => {
         return { content: keyword };
       }),
     };
@@ -251,7 +252,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
       </Text>
 
       <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>{value?.name}</Text>
+        <Text style={{ color: theme.font.color }}>{value?.id !== 0 ? value?.name : ''}</Text>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 
@@ -267,7 +268,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
             </TouchableOpacity>
           ) : null}
 
-          {state?.keywords?.length > 0 ? (
+          {keywords?.length > 0 ? (
             <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
               <Text style={styles.recommendationButtonText}>놀 곳 추천 받기</Text>
             </TouchableOpacity>
@@ -293,7 +294,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
           </Animated.View>
         </View>
       </ModalCover>
-      <LoadingModal visible={isLoading} />
+      <LoadingModal visible={isLoading || isRecommendationLoading} />
     </View>
   );
 };
