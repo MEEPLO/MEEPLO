@@ -29,7 +29,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
   const [scheduleName, setScheduleName] = useState();
   const [scheduleDate, setScheduleDate] = useState();
   const [scheduleKeywords, setScheduleKeywords] = useState();
-  const [scheduleMeetLocation, setScheduleMeetLocation] = useState();
+  const [scheduleMeetLocation, setScheduleMeetLocation] = useState(0);
   const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState();
   const [selectedMembers, setSelectedMembers] = useState();
 
@@ -38,7 +38,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
       setScheduleName(schedule?.name);
       setScheduleDate(schedule?.date);
       setScheduleKeywords(schedule?.keywords);
-      setScheduleMeetLocation(schedule?.meetLocation);
+      setScheduleMeetLocation(schedule?.meetLocation ? schedule.meetLocation : 0);
       setScheduleAmuseLocation(schedule?.amuseLocations?.[0]);
       setSelectedMembers(schedule?.members);
     }
