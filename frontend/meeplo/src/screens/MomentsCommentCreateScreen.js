@@ -109,10 +109,10 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
           ypoint: comment.location.ypoint,
           angle: comment.location.angle === undefined ? 0 : comment.location.angle,
         },
+        font: comment.font,
       },
       momentId: momentId,
     };
-    var angle = 0;
 
     dispatch(createComment({ commentInfo: commentInfo, navigation: navigation, Alert: Alert }));
   };
