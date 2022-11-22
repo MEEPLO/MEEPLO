@@ -13,6 +13,7 @@ import LoadingModal from '../../components/common/LoadingModal';
 import { useEffect } from 'react';
 import { editSchedule } from '../../redux/scheduleSlice';
 import { getGroupMembers } from '../../redux/groupSlice';
+import FontText from '../../components/common/FontText';
 
 const { width } = Dimensions.get('window');
 
@@ -80,10 +81,10 @@ const ScheduleEditScreen = ({ route, navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <View style={{ margin: 20 }}>
-          <Text style={{ color: theme.font.color, fontWeight: 'bold', marginVertical: 20 }}>
+          <FontText style={{ color: theme.font.color, fontWeight: 'bold', marginVertical: 20 }}>
             그룹<Text style={{ color: theme.color.alert }}> *</Text>
-          </Text>
-          <Text style={{ color: 'black' }}>{schedule?.group?.name}</Text>
+          </FontText>
+          <FontText style={{ color: 'black' }}>{schedule?.group?.name}</FontText>
         </View>
         <View style={{ margin: 20 }}>
           <DateModalInput type="일시" value={scheduleDate} required onConfirm={onConfirmDate} />
@@ -128,7 +129,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
         }}
         activeOpacity={0.6}
         onPress={onPressEdit}>
-        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: 'bold' }}>수정하기</Text>
+        <FontText style={{ color: theme.color.alert, fontSize: 20, fontWeight: 'bold' }}>수정하기</FontText>
       </TouchableOpacity>
       <LoadingModal visible={isLoading} />
     </SafeAreaView>

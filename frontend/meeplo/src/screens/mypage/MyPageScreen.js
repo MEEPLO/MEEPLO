@@ -15,6 +15,7 @@ import { editUserInfo, getUserInfo } from '../../redux/userSlice';
 import LoadingModal from '../../components/common/LoadingModal';
 import { useIsFocused } from '@react-navigation/native';
 import { TOAST_MESSAGE } from '../../assets/constant/string';
+import FontText from '../../components/common/FontText';
 
 const { width } = Dimensions.get('window');
 
@@ -221,7 +222,9 @@ const MyPageScreen = ({ navigation }) => {
               />
             </View>
           ) : (
-            <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'black', marginVertical: 15 }}>{userNickname}</Text>
+            <FontText style={{ fontSize: 30, fontWeight: 'bold', color: 'black', marginVertical: 15 }}>
+              {userNickname}
+            </FontText>
           )}
           {isEditing ? (
             <View style={{ flexDirection: 'row' }}>
@@ -239,7 +242,7 @@ const MyPageScreen = ({ navigation }) => {
                   backgroundColor: theme.color.disabled,
                   marginHorizontal: 5,
                 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>취소</Text>
+                <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>취소</FontText>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={onPressEdit}
@@ -255,7 +258,7 @@ const MyPageScreen = ({ navigation }) => {
                   backgroundColor: theme.color.pale.orange,
                   marginHorizontal: 5,
                 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>수정</Text>
+                <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>수정</FontText>
               </TouchableOpacity>
             </View>
           ) : (
@@ -274,19 +277,21 @@ const MyPageScreen = ({ navigation }) => {
                 borderRadius: 10,
                 backgroundColor: theme.color.pale.green,
               }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>프로필 수정</Text>
+              <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>프로필 수정</FontText>
             </TouchableOpacity>
           )}
         </View>
         <View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>등록된 출발지</Text>
+            <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>
+              등록된 출발지
+            </FontText>
             {user.startLocations.length !== 0 && (
               <TouchableOpacity
                 activeOpacity={0.6}
                 style={{ flexDirection: 'row', alignItems: 'center' }}
                 onPress={onPressEditLocations}>
-                <Text>수정</Text>
+                <FontText>수정</FontText>
                 <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
               </TouchableOpacity>
             )}
@@ -304,15 +309,15 @@ const MyPageScreen = ({ navigation }) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text style={{ fontSize: 16, color: 'gray' }}>아직 등록된 출발지가 없네요!</Text>
-                <Text style={{ fontSize: 20, color: 'gray' }}>출발지를 등록해보세요</Text>
+                <FontText style={{ fontSize: 16, color: 'gray' }}>아직 등록된 출발지가 없네요!</FontText>
+                <FontText style={{ fontSize: 20, color: 'gray' }}>출발지를 등록해보세요</FontText>
               </TouchableOpacity>
             )}
             {user.startLocations.map((item, index) => {
               return (
                 <View key={'startLocation' + index} style={{ marginVertical: 10 }}>
-                  <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>{item.name}</Text>
-                  <Text style={{ fontSize: 16, fontWeight: '400', color: 'gray' }}>{item.address}</Text>
+                  <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>{item.name}</FontText>
+                  <FontText style={{ fontSize: 16, fontWeight: '400', color: 'gray' }}>{item.address}</FontText>
                 </View>
               );
             })}

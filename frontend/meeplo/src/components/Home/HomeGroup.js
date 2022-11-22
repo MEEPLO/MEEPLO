@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import HomeGroupItem from './HomeGroupItem';
 import { theme } from '../../assets/constant/DesignTheme';
+import FontText from '../common/FontText';
 
 const width = (Dimensions.get('window').width - 40) / 2;
 
@@ -51,8 +52,8 @@ const HomeGroup = ({ data, navigation }) => {
             marginRight: 20,
           }}>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, color: 'gray' }}>새로운 그룹을</Text>
-            <Text style={{ fontSize: 16, color: 'gray' }}>만들어보세요</Text>
+            <FontText style={{ fontSize: 16, color: 'gray' }}>새로운 그룹을</FontText>
+            <FontText style={{ fontSize: 16, color: 'gray' }}>만들어보세요</FontText>
           </View>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <View

@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Dimensions, Image, Alert, Share } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,6 +10,7 @@ import GroupDetailHeader from '../components/Group/GroupDetailHeader';
 import { theme } from '../assets/constant/DesignTheme';
 import Images from '../assets/image/index';
 import { getGroupDetail, deleteGroup, exitGroup, exitGroupMember } from '../redux/groupSlice';
+import FontText from '../components/common/FontText';
 
 const GroupDetailInfoScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -115,7 +116,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
       <View style={{ alignItems: 'center', justifyContent: 'center', marginBottom: 105 }}>
         {/* Descriptions */}
         <View style={[groupDetail.description ? { marginVertical: 20 } : { height: 10 }]}>
-          <Text>{groupDetail.description}</Text>
+          <FontText>{groupDetail.description}</FontText>
         </View>
         {/* Inviting button */}
         {isLeader && (
@@ -132,7 +133,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                 borderRadius: 10,
                 backgroundColor: theme.color.pale.blue,
               }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>그룹 코드 공유하기</Text>
+              <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>그룹 코드 공유하기</FontText>
             </View>
           </TouchableOpacity>
         )}
@@ -164,10 +165,12 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text style={{ marginHorizontal: 20, fontWeight: 'bold', fontSize: 19, color: 'black' }}>멤버</Text>
+            <FontText style={{ marginHorizontal: 20, fontWeight: 'bold', fontSize: 19, color: 'black' }}>멤버</FontText>
             <View style={{ marginHorizontal: 20, flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faUser} size={14} />
-              <Text style={{ fontSize: 14, marginLeft: 5, fontWeight: 'bold', color: 'black' }}>{memberCount}</Text>
+              <FontText style={{ fontSize: 14, marginLeft: 5, fontWeight: 'bold', color: 'black' }}>
+                {memberCount}
+              </FontText>
             </View>
           </View>
           <View
@@ -188,7 +191,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                     borderColor: theme.color.border,
                   }}
                 />
-                <Text style={{ marginHorizontal: 10, color: 'gray' }}>{item.nickname}</Text>
+                <FontText style={{ marginHorizontal: 10, color: 'gray' }}>{item.nickname}</FontText>
                 {item.nickname === groupDetail.leader && <FontAwesomeIcon icon={faCrown} size={14} />}
                 {isLeader && item.nickname !== groupDetail.leader && (
                   <TouchableOpacity
@@ -224,7 +227,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                   borderRadius: 10,
                   backgroundColor: theme.color.pale.red,
                 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>그룹 프로필 편집</Text>
+                <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>그룹 프로필 편집</FontText>
               </View>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.6} onPress={onPressDelete}>
@@ -240,7 +243,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                   borderRadius: 10,
                   backgroundColor: theme.color.alert,
                 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>그룹 삭제하기</Text>
+                <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>그룹 삭제하기</FontText>
               </View>
             </TouchableOpacity>
           </View>
@@ -258,7 +261,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                 borderRadius: 10,
                 backgroundColor: theme.color.alert,
               }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>그룹에서 나가기</Text>
+              <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>그룹에서 나가기</FontText>
             </View>
           </TouchableOpacity>
         )}

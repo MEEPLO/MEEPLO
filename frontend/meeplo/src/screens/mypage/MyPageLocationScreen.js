@@ -4,13 +4,16 @@ import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import MyPageLocationItem from '../../components/mypage/MyPageLocationItem';
+import FontText from '../../components/common/FontText';
 
 const MyPageLocationScreen = ({ navigation }) => {
   const startLocations = useSelector(state => state.user.info.startLocations);
 
   return (
     <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>등록된 출발지</Text>
+      <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>
+        등록된 출발지
+      </FontText>
       <View
         style={{
           width: '100%',

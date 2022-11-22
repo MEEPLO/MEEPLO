@@ -16,6 +16,7 @@ import { getMomentDetail, updateMomentReaction, deleteMomentReaction } from '../
 import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 
+import FontText from '../common/FontText';
 import Images from '../../assets/image/index';
 import AnimationLikes from '../common/AnimationLikes';
 import AnimationComment from '../common/AnimationComment';
@@ -194,7 +195,7 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
                     left: comment.location.xpoint * 0.8,
                   }}
                   key={idx}>
-                  <Text style={{ fontSize: 12, color: 'gray' }}>{comment.comment}</Text>
+                  <FontText style={{ fontSize: 12, color: 'gray' }}>{comment.comment}</FontText>
                 </View>
               ))}
             </Animated.View>

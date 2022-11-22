@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import images from '../../assets/image';
 import MomentModal from './MomentModal';
+import FontText from '../common/FontText';
 
 const MomentsListView = styled.View`
   flex-direction: row;
@@ -82,7 +83,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                       borderColor: theme.color.disabled,
                     }}
                   />
-                  <Text
+                  <FontText
                     style={{
                       position: 'absolute',
                       right: -10,
@@ -94,7 +95,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                     <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
                     {`  `}
                     {moment.reactionCount}
-                  </Text>
+                  </FontText>
                 </Pressable>
               </View>
             ))}
@@ -118,7 +119,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                       borderColor: theme.color.disabled,
                     }}
                   />
-                  <Text
+                  <FontText
                     style={{
                       position: 'absolute',
                       right: -10,
@@ -130,7 +131,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                     <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
                     {`  `}
                     {moment.reactionCount}
-                  </Text>
+                  </FontText>
                 </Pressable>
               </View>
             ))}
@@ -144,14 +145,14 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
             display: 'flex',
             justifyContent: 'center',
           }}>
-          <Text
+          <FontText
             style={{
               color: theme.font.color,
               fontSize: 18,
               fontWeight: 'bold',
               lineHeight: 30,
               textAlign: 'center',
-            }}>{`아직 남긴 추억이 없어요!\n\n약속을 잡고\n추억을 남겨보세요.`}</Text>
+            }}>{`아직 남긴 추억이 없어요!\n\n약속을 잡고\n추억을 남겨보세요.`}</FontText>
           <Pressable
             style={{
               marginTop: 40,
@@ -166,7 +167,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
             }}
             onPress={() => linkTo('MomentsCreate')}>
             <ImageBackground style={{ borderRadius: 15 }} source={images.linkToButton.picRed} resizeMode="cover">
-              <Text
+              <FontText
                 style={{
                   textAlign: 'center',
                   fontWeight: 'bold',
@@ -175,7 +176,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                   lineHeight: 59,
                 }}>
                 지금 추억 만들어보기
-              </Text>
+              </FontText>
             </ImageBackground>
           </Pressable>
         </View>
