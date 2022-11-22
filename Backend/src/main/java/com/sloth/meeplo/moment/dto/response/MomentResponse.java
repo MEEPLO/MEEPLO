@@ -1,5 +1,6 @@
 package com.sloth.meeplo.moment.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.moment.entity.MomentComment;
@@ -23,6 +24,7 @@ public class MomentResponse {
         private Long reactionCount;
         private Integer type;
         private String writer;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         private LocalDateTime createdTime;
 
         @Builder
