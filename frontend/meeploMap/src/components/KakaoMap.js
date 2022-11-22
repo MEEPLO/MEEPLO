@@ -235,10 +235,18 @@ const KakaoMap = () => {
         return (
           <div>
             <MapMarker
-              position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }}
+              position={{
+                lat: time.startLocation.lat,
+                lng: time.startLocation.lng,
+              }}
               image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.PURPLE)}
             />
-            <CustomOverlayMap position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }} yAnchor={4}>
+            <CustomOverlayMap
+              position={{
+                lat: time.startLocation.lat,
+                lng: time.startLocation.lng,
+              }}
+              yAnchor={4}>
               <div
                 style={{
                   backgroundColor: '#5A5A5A',
@@ -251,7 +259,12 @@ const KakaoMap = () => {
               </div>
             </CustomOverlayMap>
 
-            <CustomOverlayMap position={{ lat: time.startLocation.lat, lng: time.startLocation.lng }} yAnchor={3}>
+            <CustomOverlayMap
+              position={{
+                lat: time.startLocation.lat,
+                lng: time.startLocation.lng,
+              }}
+              yAnchor={3}>
               <div
                 style={{
                   backgroundColor: '#5A5A5A',
@@ -360,7 +373,7 @@ const KakaoMap = () => {
         {renderRecommendedAmuses(recommendedAmuses)}
         {renderSearchedStationMaker(searchedStations)}
 
-        <MapMarker position={center} image={getMarker(MARKER_TYPE.HERE, MARKER_COLOR.RED)}>
+        <MapMarker position={center} image={getMarker(MARKER_TYPE.HERE, MARKER_COLOR.ALERT)}>
           {/* <div style={{ color: '#000' }}>{test}</div> */}
         </MapMarker>
       </Map>
