@@ -32,7 +32,6 @@ const ScheduleEditScreen = ({ route, navigation }) => {
   const [scheduleMeetLocation, setScheduleMeetLocation] = useState(schedule?.meetLocation);
   const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState(schedule?.amuseLocations?.[0]);
   const [selectedMembers, setSelectedMembers] = useState(schedule?.members);
-  const userInfo = useSelector(state => state.user.info);
 
   const scheduleId = route?.params?.scheduleId;
   const isLoading = false;
