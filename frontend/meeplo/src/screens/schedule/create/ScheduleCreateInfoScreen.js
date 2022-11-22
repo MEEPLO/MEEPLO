@@ -8,19 +8,16 @@ import { TOAST_MESSAGE } from '../../../assets/constant/string';
 import StepButton from '../../../components/stepper/StepButton';
 import StepTextInput from '../../../components/common/StepTextInput';
 import DateModalInput from '../../../components/schedule/DateModalInput';
-import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput';
 
 const screen = Dimensions.get('screen');
 
 const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const [date, setDate] = useState();
   const [name, setName] = useState();
-  const [keywords, setKeywords] = useState([]);
 
   useEffect(() => {
     setDate(state.date);
     setName(state.name);
-    setKeywords(state.keywords);
   }, [state]);
 
   const validateInput = () => {
@@ -56,10 +53,6 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
           type: 'UPDATE_NAME',
           payload: name,
         },
-        {
-          type: 'UPDATE_KEYWORDS',
-          payload: keywords,
-        },
       ];
 
       toNext(actions);
@@ -70,10 +63,6 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
     setDate(confirmedDate);
   };
 
-  const onConfirmKeywords = confirmedKeywords => {
-    setKeywords(confirmedKeywords);
-  };
-
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
@@ -81,9 +70,6 @@ const ScheduleCreateInfoScreen = ({ state, toNext, toPrev, onFinish, visible }) 
       </View>
       <View style={styles.inputViewStyle}>
         <StepTextInput type="약속 이름" multiline={false} value={name} onValueChange={setName} required />
-      </View>
-      <View style={styles.inputViewStyle}>
-        <KeywordsModalInput type="키워드" value={keywords} onConfirm={onConfirmKeywords} />
       </View>
       <View style={styles.navigateViewStyle}>
         <StepButton text="" />
