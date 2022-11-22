@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 import SelectList from 'react-native-dropdown-select-list';
+import FontText from './FontText';
 
 const SelectDropdown = props => {
   // const [selected, setSelected] = React.useState('');
@@ -11,9 +12,9 @@ const SelectDropdown = props => {
 
   return (
     <View>
-      <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
-        {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
-      </Text>
+      <FontText style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
+        {props.type} {props.required ? <FontText style={{ color: theme.color.alert }}>*</FontText> : null}
+      </FontText>
       <View style={{ position: 'relative' }}>
         <SelectList
           placeholder={placeholder}

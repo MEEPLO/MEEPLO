@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
+import FontText from '../common/FontText';
 
 import { theme } from '../../assets/constant/DesignTheme';
 
@@ -24,9 +25,9 @@ const GroupMemberSelectList = ({ type, members, selectedMembers, user, required,
   };
   return (
     <View style={styles.memberListViewStyle}>
-      <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
-        {type} {required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
-      </Text>
+      <FontText style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
+        {type} {required ? <FontText style={{ color: theme.color.alert }}>*</FontText> : null}
+      </FontText>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         {isView ? (
           <View>{renderMemberList(members)}</View>

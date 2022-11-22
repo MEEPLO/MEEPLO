@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import FontText from '../common/FontText';
 
 const StepButton = ({ text, onPress, active }) => {
   return (
     <TouchableOpacity style={styles(active).buttonStyle} activeOpacity={0.8} onPress={onPress}>
-      <Text style={styles(active).textStyle}>{text}</Text>
+      <FontText style={styles(active).textStyle}>{text}</FontText>
     </TouchableOpacity>
   );
 };

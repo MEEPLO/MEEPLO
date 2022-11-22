@@ -19,6 +19,7 @@ import { faPaste } from '@fortawesome/free-regular-svg-icons/faPaste';
 import GroupListItem from '../components/Group/GroupListItem';
 import { theme } from '../assets/constant/DesignTheme';
 import { getGroupList, joinGroup } from '../redux/groupSlice';
+import FontText from '../components/common/FontText';
 
 const { width } = Dimensions.get('window');
 
@@ -101,11 +102,13 @@ const GroupHomeScreen = ({ navigation }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{ fontSize: width * 0.06, fontWeight: 'bold', color: 'black' }}>다른 그룹 참여하기</Text>
+              <FontText style={{ fontSize: width * 0.06, fontWeight: 'bold', color: 'black' }}>
+                다른 그룹 참여하기
+              </FontText>
             </View>
             {/* 내용물 */}
             <View style={{ flex: 3, marginHorizontal: 20, alignItems: 'center', justifyContent: 'space-around' }}>
-              <Text style={{ fontSize: 18, color: 'gray' }}>공유받은 그룹 코드를 입력해주세요!</Text>
+              <FontText style={{ fontSize: 18, color: 'gray' }}>공유받은 그룹 코드를 입력해주세요!</FontText>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TextInput
                   onChangeText={setGroupCode}
@@ -137,7 +140,7 @@ const GroupHomeScreen = ({ navigation }) => {
                   borderRadius: 10,
                   backgroundColor: theme.color.disabled,
                 }}>
-                <Text style={{ fontSize: width * 0.05, fontWeight: 'bold', color: 'black' }}>취소</Text>
+                <FontText style={{ fontSize: width * 0.05, fontWeight: 'bold', color: 'black' }}>취소</FontText>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={onPressJoinGroup}
@@ -152,7 +155,7 @@ const GroupHomeScreen = ({ navigation }) => {
                   borderRadius: 10,
                   backgroundColor: theme.color.bright.green,
                 }}>
-                <Text style={{ fontSize: width * 0.05, fontWeight: 'bold', color: 'black' }}>참여하기</Text>
+                <FontText style={{ fontSize: width * 0.05, fontWeight: 'bold', color: 'black' }}>참여하기</FontText>
               </TouchableOpacity>
             </View>
           </View>
@@ -166,10 +169,10 @@ const GroupHomeScreen = ({ navigation }) => {
             flexDirection: 'row',
             alignItems: 'baseline',
           }}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>내 그룹 모아보기</Text>
+          <FontText style={{ fontSize: 24, color: 'black' }}>내 그룹 모아보기</FontText>
         </View>
         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={openModal}>
-          <Text style={{ marginRight: 5, color: 'gray' }}>다른 그룹 참여</Text>
+          <FontText style={{ marginRight: 5, color: 'gray' }}>다른 그룹 참여</FontText>
           <FontAwesomeIcon icon={faSquarePlus} size={14} color="gray" />
         </TouchableOpacity>
       </View>
@@ -186,9 +189,8 @@ const GroupHomeScreen = ({ navigation }) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 소속된 그룹이 없네요!</Text>
-          {/* <Text style={{ fontSize: 16, marginVertical: 5 }}>다른 그룹에 참여하거나,</Text> */}
-          <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>새로운 그룹을 만들어 보세요.</Text>
+          <FontText style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 소속된 그룹이 없네요!</FontText>
+          <FontText style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>새로운 그룹을 만들어 보세요.</FontText>
         </TouchableOpacity>
       ) : (
         <>

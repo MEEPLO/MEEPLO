@@ -5,6 +5,7 @@ import { Slider } from '@miblanchard/react-native-slider';
 import { theme } from '../../../assets/constant/DesignTheme';
 import images from '../../../assets/image';
 import StepButton from '../../stepper/StepButton';
+import FontText from '../../common/FontText';
 
 const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => {
   const momentDetail = useSelector(state => state.momentDetail);
@@ -64,10 +65,10 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
                   left: comment.location.xpoint * 0.6,
                 }}
                 key={idx}>
-                <Text style={{ fontSize: 10, color: 'gray' }}>{comment.comment}</Text>
+                <FontText style={{ fontSize: 10, color: 'gray' }}>{comment.comment}</FontText>
               </View>
             ))}
-            <Text
+            <FontText
               style={{
                 width: '80%',
                 fontSize: 11,
@@ -78,7 +79,7 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
                 left: delX,
               }}>
               {state.comment}
-            </Text>
+            </FontText>
           </ImageBackground>
         </TouchableOpacity>
         <View style={{ marginHorizontal: 40, width: windowWidth - 80, height: 150, position: 'absolute', bottom: 0 }}>

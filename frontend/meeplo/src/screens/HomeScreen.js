@@ -11,6 +11,7 @@ import { getGroupList } from '../redux/groupSlice';
 import { getUserInfo } from '../redux/userSlice';
 import { getUpcomingSchedule, getNoMomentsSchedule } from '../redux/scheduleSlice';
 import { theme } from '../assets/constant/DesignTheme';
+import FontText from '../components/common/FontText';
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -44,12 +45,12 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>예정된 약속</Text>
+        <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundB', color: 'black' }}>예정된 약속</FontText>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreSchedule}
           style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text>더보기</Text>
+          <FontText>더보기</FontText>
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
@@ -61,12 +62,14 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>내가 참여하는 그룹</Text>
+        <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundB', color: 'black' }}>
+          내가 참여하는 그룹
+        </FontText>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreGroup}
           style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text>더보기</Text>
+          <FontText>더보기</FontText>
           <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
         </TouchableOpacity>
       </View>
@@ -78,17 +81,17 @@ const HomeScreen = ({ navigation }) => {
             flexDirection: 'row',
             alignItems: 'baseline',
           }}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>추억 남기기</Text>
+          <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundB', color: 'black' }}>추억 남기기</FontText>
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={onPressMoreMoment}
             style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text>더보기</Text>
+            <FontText>더보기</FontText>
             <FontAwesomeIcon icon={faChevronRight} size={10} color="black" />
           </TouchableOpacity>
         </View>
 
-        <Text style={{ color: theme.color.dim }}>아직 추억을 기록하지 않은 약속에 추억을 남겨보아요~</Text>
+        <FontText style={{ color: theme.color.dim }}>아직 추억을 기록하지 않은 약속에 추억을 남겨보아요~</FontText>
       </View>
       <HomeMoments data={noMomentsScheduleList} navigation={navigation} />
       {/* <View
@@ -98,8 +101,8 @@ const HomeScreen = ({ navigation }) => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>어디서 놀지 모르겠다면</Text>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}> 추천 받아 보세요</Text>
+        <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>어디서 놀지 모르겠다면</FontText>
+        <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}> 추천 받아 보세요</FontText>
       </View>
       <HomePlaceRecommendation /> */}
       <View style={{ height: 90 }} />

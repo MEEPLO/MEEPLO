@@ -7,6 +7,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
 import { getScheduleMomentsFeed } from '../../redux/scheduleSlice';
 import { theme } from '../../assets/constant/DesignTheme';
 import MomentModal from '../../components/moments/MomentModal';
+import FontText from '../../components/common/FontText';
 
 const day = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 const today = new Date();
@@ -74,14 +75,14 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
             alignItems: 'center',
           }}>
           <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
-          <Text
+          <FontText
             style={{
               fontSize: 14,
               marginLeft: 5,
               color: moment.type === 2 ? '#fff' : '#000',
             }}>
             {moment.reactionCount}
-          </Text>
+          </FontText>
         </View>
       </TouchableOpacity>
     ));
@@ -97,11 +98,13 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
     <View style={{ flex: 1 }}>
       <ScrollView style={{ marginHorizontal: 20 }}>
         <View>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 15 }}>{schedule.name}</Text>
-          <Text style={{ marginBottom: 15, color: 'gray' }}>
+          <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 15 }}>
+            {schedule.name}
+          </FontText>
+          <FontText style={{ marginBottom: 15, color: 'gray' }}>
             {' '}
             {`${scheduleDate.year}년 ${scheduleDate.month}월 ${scheduleDate.date}일  ${scheduleDate.day}`}
-          </Text>
+          </FontText>
         </View>
         {moments?.length === 0 ? (
           <View
@@ -115,8 +118,10 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 남겨진 추억이 없네요!</Text>
-            <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>함께 찍은 사진을 남겨 보세요.</Text>
+            <FontText style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 남겨진 추억이 없네요!</FontText>
+            <FontText style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>
+              함께 찍은 사진을 남겨 보세요.
+            </FontText>
           </View>
         ) : (
           <View style={{ alignItems: 'center' }}>{renderMoment(moments)}</View>

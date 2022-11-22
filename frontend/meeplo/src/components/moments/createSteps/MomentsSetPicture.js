@@ -11,6 +11,7 @@ import { theme } from '../../../assets/constant/DesignTheme';
 import mergeAndUpload from '../mergeAndUpload';
 import StepButton from '../../stepper/StepButton';
 import LoadingModal from '../../common/LoadingModal';
+import FontText from '../../common/FontText';
 
 const windowHeight = Dimensions.get('window').height;
 const viewWidth = Dimensions.get('window').width - 120;
@@ -108,11 +109,11 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <>
       <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
-        <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20, lineHeight: 25 }}>
-          사진 선택<Text style={{ color: theme.color.alert }}>*</Text>
+        <FontText style={{ color: '#000', fontWeight: 'bold', marginBottom: 20, lineHeight: 25 }}>
+          사진 선택<FontText style={{ color: theme.color.alert }}>*</FontText>
           {'\n'}
           갤러리에서 사진을 꾹 눌러 사진 {state.type === 2 ? state.type + 2 : state.type + 1}개를 선택해주세요.{' '}
-        </Text>
+        </FontText>
 
         <View
           style={{
@@ -133,9 +134,9 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
               position: 'absolute',
               bottom: 85,
             }}>
-            <Text style={{ lineHeight: 49, textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: 'gray' }}>
+            <FontText style={{ lineHeight: 49, textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: 'gray' }}>
               갤러리
-            </Text>
+            </FontText>
           </Pressable>
           {isChanged ? (
             <Pressable
@@ -150,9 +151,10 @@ const MomentsSetPicture = ({ toNext, toPrev, onFinish, visible, state }) => {
                 position: 'absolute',
                 bottom: 20,
               }}>
-              <Text style={{ lineHeight: 51, textAlign: 'center', fontSize: 15, fontWeight: 'bold', color: 'gray' }}>
+              <FontText
+                style={{ lineHeight: 51, textAlign: 'center', fontSize: 15, fontWeight: 'bold', color: 'gray' }}>
                 사진 확정하기
-              </Text>
+              </FontText>
             </Pressable>
           ) : null}
           <WebView
