@@ -33,22 +33,6 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   };
 
   const validateInput = () => {
-    if (!meet || !meet.id) {
-      Toast.show({
-        type: 'error',
-        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-        text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
-      });
-
-      return false;
-    } else if (!amuse || !amuse.id) {
-      Toast.show({
-        type: 'error',
-        text1: TOAST_MESSAGE.REQUIRED_FIELD_ERROR,
-        text2: TOAST_MESSAGE.SCHEDULE_NO_PLACE,
-      });
-    }
-
     return true;
   };
   const onPressNext = () => {
@@ -83,7 +67,6 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
       <View style={styles.inputViewStyle}>
         <MapLocationInput
           type="약속 장소"
-          required
           value={amuse}
           onValueChange={onSelectAmuseLocation}
           keywords={keywords}

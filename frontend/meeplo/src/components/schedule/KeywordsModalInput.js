@@ -19,8 +19,10 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
   const [invalidText, setInvalidText] = useState('');
 
   useEffect(() => {
-    setSelected([...value]);
-    setSelectBuffer([...value]);
+    if (Array.isArray(value)) {
+      setSelected([...value]);
+      setSelectBuffer([...value]);
+    }
   }, [value]);
 
   const openModal = () => setShowModal(true);

@@ -15,7 +15,7 @@ import LoadingModal from '../common/LoadingModal';
 const screen = Dimensions.get('screen');
 const selectedLocationInfoViewWidth = screen.width * 0.95;
 const selectedLocationInfoViewHeight = screen.height * 0.5;
-const selectedLocationInfoViewUpY = screen.height * 0.5;
+const selectedLocationInfoViewUpY = screen.height * 0.6;
 const selectedLocationInfoViewDownY = screen.height * 1;
 
 const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
@@ -46,7 +46,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
       setCurrentPosition();
     }
     postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
-  }, [webViewRef.current]);
+  }, [meet, webViewRef.current]);
 
   useEffect(() => {
     if (Array.isArray(recommendedAmuses)) {
@@ -207,8 +207,17 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
     }
 
     return (
-      <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          width: selectedLocationInfoViewWidth,
+          paddingHorizontal: screen.width * 0.1,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
           <Image
             style={{
               width: 100,
