@@ -25,15 +25,19 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
       date: state?.date,
       name: state?.name,
       groupId: state?.group?.id,
-      meetLocationId: state?.meet?.id,
+      meetLocationId: 0,
+      amuses: [],
       keywords: state?.keywords,
       members: state?.members,
-      amuses: [
-        {
-          id: state?.amuse?.id,
-        },
-      ],
     };
+
+    if (state?.meet?.id) {
+      reqObject.meetLocationId = state.meet.id;
+    }
+
+    if (state?.amuse?.id) {
+      reqObject.amuses.push({ id: state.amuse.id });
+    }
 
     openLoadingModal();
     dispatch(createSchedule({ schedule: reqObject, navigation }))
@@ -94,14 +98,14 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>만남 장소</Text>
         </View>
-        <Text style={styles.itemText}> {state?.meet?.name}역</Text>
+        <Text style={styles.itemText}> {state?.meet?.name ? `${state.meet.name}역` : '미정'}</Text>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
           <Text style={styles.itemTitle}>약속 장소</Text>
         </View>
-        <Text style={styles.itemText}> {state?.amuse?.name}</Text>
+        <Text style={styles.itemText}> {state?.amuse?.name ? state.amuse.name : '미정'}</Text>
       </View>
 
       <View style={styles.navigateViewStyle}>
