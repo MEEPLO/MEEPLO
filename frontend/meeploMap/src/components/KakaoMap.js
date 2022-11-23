@@ -164,33 +164,6 @@ const KakaoMap = () => {
     );
   };
 
-  const getRandomColor = () => {
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min;
-    }
-
-    switch (getRandomInt(1, 8)) {
-      case 1:
-        return theme.color.bright.red;
-      case 2:
-        return theme.color.bright.orange;
-      case 3:
-        return theme.color.bright.yellow;
-      case 4:
-        return theme.color.bright.green;
-      case 5:
-        return theme.color.bright.blue;
-      case 6:
-        return theme.color.bright.navy;
-      case 7:
-        return theme.color.bright.purple;
-      case 8:
-        return theme.color.bright.gray;
-    }
-  };
-
   const renderNearLocationsMarker = nearLocations => {
     if (Array.isArray(nearLocations)) {
       return nearLocations.map(location => (
