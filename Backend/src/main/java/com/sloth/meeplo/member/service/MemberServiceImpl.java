@@ -122,22 +122,21 @@ public class MemberServiceImpl implements MemberService {
         Member member = getMemberByAuthorization(authorization);
 
         List<MemberLocation> memberLocations = memberLocationRepository.findByMember(member);
-        List<MemberLocation> response = new ArrayList<>();
-        response.add(memberLocationRepository.findByMemberAndDefaultLocation(member,true)
+        List<MemberLocation> sortedLocations = new ArrayList<>();
+        sortedLocations.add(memberLocationRepository.findByMemberAndDefaultLocation(member,true)
                 .orElseThrow(()-> new MeeploException(MemberErrorCode.NO_DEFAULT_LOCATION)));
 
         memberLocations.stream()
                 .filter(ml->!ml.getDefaultLocation())
                 .sorted(Comparator.comparing(MemberLocation::getId))
-                .forEach(response::add);
+                .forEach(sortedLocations::add);
 
-        return response.stream()
-                .map(ml -> MemberResponse.MemberDetailStartLocation
-                        .builder()
-                        .memberLocation(ml)
-                        .build()
-                )
-                .collect(Collectors.toList());
+        List<MemberResponse.MemberDetailStartLocation> response = new ArrayList<>();
+        for (MemberLocation ml: sortedLocations) {
+            response.add(MemberResponse.MemberDetailStartLocation.builder().memberLocation(ml).build());
+        }
+
+        return response;
     }
 
     public Member getMemberByAuthorization(String authorization){
