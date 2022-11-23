@@ -12,7 +12,6 @@ export const getMomentsList = createAsyncThunk('moments/getMomentsList', async p
       },
       params: params,
     });
-    console.log('getMomentsList res', response.data);
     return response.data;
   } catch (err) {
     console.error('getMomentsList: ', err.response.data);
@@ -59,7 +58,6 @@ export const updateMomentReaction = createAsyncThunk('moments/updateMomentReacti
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('updateMomentReaction success: ', response.data);
     return response.data;
   } catch (err) {
     console.error('updateMomentReaction: ', err.response.data);
@@ -75,7 +73,6 @@ export const deleteMomentReaction = createAsyncThunk('moments/deleteMomentReacti
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('deleteMomentReaction success: ', response.data);
     return response.data;
   } catch (err) {
     console.error('deleteMomentReaction: ', err.response.data);
@@ -99,7 +96,6 @@ export const getGroupSchedules = createAsyncThunk('schedule/getGroupSchedule', a
 });
 
 export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSchedule', async ({ scheduleInfo }) => {
-  console.log('scheduleInfo', scheduleInfo);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axiosPrivate.post(`/schedule/temp`, scheduleInfo, {
@@ -107,7 +103,6 @@ export const createSimpleSchedule = createAsyncThunk('schedule/createSimpleSched
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log('createSimpleSchedule success:', response.data);
     return response.data;
   } catch (err) {
     console.error('createSimpleSchedule: ', err.response.data);
@@ -129,12 +124,8 @@ export const createMoment = createAsyncThunk('moment/createMoment', async ({ mom
           {
             text: '확인',
             onPress: () => {
-              // navigation.reset({ routes: [{ name: 'MomentsList' }] }); // 안됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              // navigation.push('MomentsList'); // 됨
-              // navigation.goBack(); // 됨
-              navigation.jumpTo('GroupStack'); // 되지만 소용없음
-              navigation.jumpTo('MomentsStack'); // 이렇게까지 해야함
-              // navigation.navigate('MomentsStack', { screen: 'MomentsList' }); // 됨
+              navigation.jumpTo('GroupStack');
+              navigation.jumpTo('MomentsStack');
             },
           },
         ]);
@@ -176,7 +167,6 @@ export const getComments = createAsyncThunk('moment/getComments', async ({ momen
 });
 
 export const createComment = createAsyncThunk('moment/createComment', async ({ commentInfo, navigation, Alert }) => {
-  console.log('navigation', navigation);
   try {
     const accessToken = await AsyncStorage.getItem('@accessToken');
     const response = await axiosPrivate
@@ -200,7 +190,6 @@ export const createComment = createAsyncThunk('moment/createComment', async ({ c
           },
         ]);
       });
-    console.log('comment created: ', response.data);
     return response.data;
   } catch (err) {
     console.error('createComment: ', err.response.data);
@@ -251,6 +240,7 @@ const momentsCalendarSlice = createSlice({
 const momentDetailSlice = createSlice({
   name: 'momentDetail',
   initialState: {
+    commentCreated: false,
     moment: {
       id: -1,
       photoUrl: 'https://meeplo-bucket.s3.ap-northeast-2.amazonaws.com/defaultImage.png',

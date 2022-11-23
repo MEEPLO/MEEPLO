@@ -6,7 +6,7 @@ import { deleteStartLocation, getUserInfo, changeDefaultLocation } from '../../r
 import FontText from '../common/FontText';
 
 const MyPageLocationItem = ({ item, navigation }) => {
-  console.log(item);
+  // console.log(item);
   const dispatch = useDispatch();
 
   const onPressDefault = () => {

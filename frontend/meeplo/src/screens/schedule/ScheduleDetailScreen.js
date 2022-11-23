@@ -78,12 +78,16 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
   const closeMemberModal = () => setShowMemberModal(false);
 
   const renderAmuseLoactions = amuseLocations => {
-    return amuseLocations?.map(amuse => (
-      <View key={amuse.id} style={styles.itemContentView}>
-        <FontText style={styles.itemContent}> {amuse?.name}</FontText>
-        <FontText style={styles.itemSubContent}> {amuse?.address}</FontText>
-      </View>
-    ));
+    if (Array.isArray(amuseLocations) && amuseLocations.length > 0) {
+      return amuseLocations?.map(amuse => (
+        <View key={amuse.id} style={styles.itemContentView}>
+          <Text style={styles.itemContent}> {amuse?.name}</Text>
+          <Text style={styles.itemSubContent}> {amuse?.address}</Text>
+        </View>
+      ));
+    } else {
+      return <Text style={styles.itemContent}>미정</Text>;
+    }
   };
 
   const renderKeywords = keywords => {
@@ -154,8 +158,10 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                   <FontText style={styles.itemTitle}>만남 장소</FontText>
                 </View>
                 <View style={styles.itemContentView}>
-                  <FontText style={styles.itemContent}> {schedule?.meetLocation?.name}</FontText>
-                  <FontText style={styles.itemSubContent}> {schedule?.meetLocation?.address}</FontText>
+                  <Text style={styles.itemContent}>
+                    {schedule?.meetLocation?.id !== 0 ? schedule?.meetLocation?.name : ''}
+                  </Text>
+                  <Text style={styles.itemSubContent}> {schedule?.meetLocation?.address}</Text>
                 </View>
               </View>
 
