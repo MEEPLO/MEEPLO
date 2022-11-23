@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons/faLocationDot';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation';
 import Toast from 'react-native-toast-message';
 import MyPageLocationSearch from '../../components/mypage/MyPageLocationSearch';
 import { theme } from '../../assets/constant/DesignTheme';
@@ -109,8 +110,19 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
           <FontText style={{ color: 'gray', fontSize: 20, fontWeight: 'bold' }}>
             {user?.nickname}님 안녕하세요!
           </FontText>
-          <FontText style={{ color: 'gray', marginTop: 20 }}>
+          <FontText style={{ color: 'gray', marginVertical: 20 }}>
             MEEPLO 앱 사용을 위해 기본 출발지 한 곳을 필수로 등록해주세요.
+          </FontText>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+            <Text style={{ fontFamily: 'NanumSquareRoundR', color: 'gray' }}>알림 </Text>
+            <FontAwesomeIcon icon={faCircleExclamation} size={14} color="gray" />
+          </View>
+          <FontText style={{ color: 'gray' }}>
+            현재 미플로의 중간지점 추천 기능은 수도권 지하철역을 기준으로 서비스 제공되고 있습니다.
+          </FontText>
+          <FontText style={{ color: 'gray', marginVertical: 10 }}>
+            서울, 경기, 인천을 제외한 다른 도시는 조금만 기다려주세요!
           </FontText>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -134,7 +146,7 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
               fontSize: 20,
               marginVertical: 15,
               padding: 0,
-              color: 'gray',
+              color: 'black',
             }}
           />
         </View>

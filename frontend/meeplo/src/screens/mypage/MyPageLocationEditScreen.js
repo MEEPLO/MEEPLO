@@ -83,13 +83,14 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
         <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 25 }}>
           출발지 추가
         </FontText>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+          <Text style={{ fontFamily: 'NanumSquareRoundR', color: 'gray' }}>알림 </Text>
           <FontAwesomeIcon icon={faCircleExclamation} size={14} color="gray" />
-          <FontText style={{ color: 'gray' }}>
-            현재 미플로의 중간지점 추천 기능은 수도권 지하철역을 중심으로 서비스가 제공되고 있습니다.
-          </FontText>
         </View>
-        <FontText style={{ color: 'gray', marginVertical: 20 }}>
+        <FontText style={{ color: 'gray' }}>
+          현재 미플로의 중간지점 추천 기능은 수도권 지하철역을 기준으로 서비스 제공되고 있습니다.
+        </FontText>
+        <FontText style={{ color: 'gray', marginVertical: 10 }}>
           서울, 경기, 인천을 제외한 다른 도시는 조금만 기다려주세요!
         </FontText>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
