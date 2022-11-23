@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -129,15 +130,20 @@ public class MemberServiceImpl implements MemberService {
     private List<MemberResponse.MemberDetailStartLocation> getMemberStartLocationsByMember(Member member){
         List<MemberLocation> memberLocations = memberLocationRepository.findByMember(member);
         List<MemberLocation> sortedLocations = new ArrayList<>();
-        sortedLocations.add(memberLocationRepository.findByMemberAndDefaultLocation(member,true)
-                .orElseThrow(()-> new MeeploException(MemberErrorCode.NO_DEFAULT_LOCATION)));
+        List<MemberResponse.MemberDetailStartLocation> response = new ArrayList<>();
+
+        Optional<MemberLocation> defaultLocation = memberLocationRepository.findByMemberAndDefaultLocation(member,true);
+        if(defaultLocation.isEmpty())
+            return response;
+
+        sortedLocations.add(defaultLocation.get());
 
         memberLocations.stream()
                 .filter(ml->!ml.getDefaultLocation())
                 .sorted(Comparator.comparing(MemberLocation::getId))
                 .forEach(sortedLocations::add);
 
-        List<MemberResponse.MemberDetailStartLocation> response = new ArrayList<>();
+
         for (MemberLocation ml: sortedLocations) {
             response.add(MemberResponse.MemberDetailStartLocation.builder().memberLocation(ml).build());
         }
