@@ -6,7 +6,9 @@ import { TOAST_MESSAGE } from '../../../assets/constant/string';
 import StepTextInput from '../../common/StepTextInput';
 import SelectDropdown from '../../common/SelectDropdown';
 import StepButton from '../../stepper/StepButton';
+import FontText from '../../common/FontText';
 
+const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const fonts = [
@@ -44,15 +46,21 @@ const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <>
       <View style={{ position: 'relative', height: windowHeight - 200, marginHorizontal: 20 }}>
-        <View style={{ position: 'absolute', top: 260 }}>
-          <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>댓글 확인</Text>
+        <View style={{ marginBottom: 20 }}>
+          <StepTextInput value={value} onValueChange={onValueChange} type="댓글" maxLength={50} required={true} />
+        </View>
+        <View style={{ marginBottom: 20 }}>
+          <FontText style={{ color: '#000', fontWeight: 'bold', marginBottom: 15 }}>댓글 확인</FontText>
           <Text style={{ fontFamily: font, fontSize: font === 'gag' ? 26 : 22 }}>{value}</Text>
         </View>
-        <View>
-          <View style={{ marginBottom: 20 }}>
-            <StepTextInput value={value} onValueChange={onValueChange} type="댓글" maxLength={50} required={true} />
-          </View>
-          <SelectDropdown setSelected={setFont} type="폰트" data={fonts} required={true} />
+        <View style={{ width: windowWidth - 80, position: 'absolute', top: 200 }}>
+          <SelectDropdown
+            setSelected={setFont}
+            type="폰트"
+            data={fonts}
+            required={true}
+            default={{ value: '고딕 아니고 고딩', key: 'gag' }}
+          />
         </View>
       </View>
       <View
