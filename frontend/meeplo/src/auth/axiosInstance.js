@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MEEPLO_SERVER_BASE_URL } from '@env';
-import { navigate } from '../components/common/navigator/RootNavigator';
+import { navigationReset } from '../components/common/navigator/RootNavigator';
 import Toast from 'react-native-toast-message';
 
 export const axiosPrivate = axios.create({
@@ -52,7 +52,7 @@ axiosPrivate.interceptors.response.use(
             });
             // console.log('새로운 로그인 필요');
             AsyncStorage.clear();
-            navigate('HomeStack', { screen: 'Login' });
+            navigationReset('Login');
           });
       }
       const retryOriginalRequest = new Promise(resolve => {

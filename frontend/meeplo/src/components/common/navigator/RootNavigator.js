@@ -10,3 +10,12 @@ export const navigate = (name, params) => {
     navigationRef.navigate(name, params);
   }
 };
+
+export const navigationReset = screenName => {
+  if (navigationRef.isReady()) {
+    navigationRef.reset({
+      index: 0,
+      routes: [{ name: screenName }],
+    });
+  }
+};
