@@ -20,7 +20,6 @@ const selectedLocationInfoViewUpY = screen.height * 0.6;
 const selectedLocationInfoViewDownY = screen.height * 1;
 
 const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
-  console.log('value', value);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
