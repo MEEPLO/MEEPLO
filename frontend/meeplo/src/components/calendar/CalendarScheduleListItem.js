@@ -23,6 +23,7 @@ const colorList = ['purple', 'yellow', 'red', 'green', 'orange', 'blue', 'navy']
 const CalendarScheduleListItem = ({ item, onItemPress }) => {
   return (
     <TouchableOpacity
+      activeOpacity={0.6}
       onPress={() => {
         onItemPress(item.id);
       }}>
