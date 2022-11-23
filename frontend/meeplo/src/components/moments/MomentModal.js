@@ -122,8 +122,8 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
     });
   };
 
-  const imgWidth = [windowWidth * 0.8, windowWidth * 0.85, windowWidth * 0.5];
-  const viewHeight = [windowWidth * 0.8 * 1.17, windowWidth * 0.85 * 0.8, windowWidth * 0.4 * 3.65];
+  const imgWidth = [windowWidth * 0.8, windowWidth * 0.85, windowWidth * 0.6];
+  const viewHeight = [windowWidth * 0.8 * 1.17, windowWidth * 0.85 * 0.8, windowWidth * 0.55 * 3.61 - 40];
 
   return momentDetail.moment ? (
     <Modal visible={momentModal} animationType={'fade'} transparent={true} onRequestClose={() => setMomentModal(false)}>
@@ -187,14 +187,16 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
               {momentDetail.comments?.map((comment, idx) => (
                 <View
                   style={{
-                    width: '80%',
+                    width: momentDetail.moment.type === 2 ? '90%' : '55%',
                     transform: [{ rotate: `${comment.location.angle}deg` }],
                     position: 'absolute',
                     top: comment.location.ypoint * 0.8,
                     left: comment.location.xpoint * 0.8,
                   }}
                   key={idx}>
-                  <Text style={{ fontSize: 12, color: 'gray' }}>{comment.comment}</Text>
+                  <Text style={{ fontSize: comment.font === 'gag' ? 19 : 15, color: 'gray', fontFamily: comment.font }}>
+                    {comment.comment}
+                  </Text>
                 </View>
               ))}
             </Animated.View>
