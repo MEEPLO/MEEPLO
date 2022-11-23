@@ -212,9 +212,9 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
         <FontText
           style={{
             margin: 10,
-            paddingHorizontal: 10,
+            paddingHorizontal: 24,
             color: theme.font.color,
-            fontSize: 30,
+            fontSize: 24,
 
             backgroundColor: theme.color.bright.green,
 
