@@ -1,16 +1,16 @@
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, Dimensions, Alert } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { theme } from '../../assets/constant/DesignTheme';
 import StepTextInput from '../../components/common/StepTextInput';
 import DateModalInput from '../../components/schedule/DateModalInput';
 import KeywordsModalInput from '../../components/schedule/KeywordsModalInput';
 import MapLocationInput from '../../components/map/MapLocationInput';
+import MapStationInput from '../../components/map/MapStationInput';
 import GroupMemberSelectList from '../../components/Group/GroupMemberSelectList';
 import { hideTabBar, showTabBar } from '../../redux/navigationSlice';
 import { useFocusEffect } from '@react-navigation/native';
 import LoadingModal from '../../components/common/LoadingModal';
-import { useEffect } from 'react';
 import { editSchedule } from '../../redux/scheduleSlice';
 import { getGroupMembers } from '../../redux/groupSlice';
 import FontText from '../../components/common/FontText';
@@ -21,6 +21,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const schedule = useSelector(state => state?.schedule?.schedule);
+  const userInfo = useSelector(state => state.user.info);
   const groupMemberList = useSelector(state => {
     if (!state || !state.group || !Array.isArray(state.group.members)) return [];
     return state.group.members;
@@ -30,9 +31,8 @@ const ScheduleEditScreen = ({ route, navigation }) => {
   const [scheduleDate, setScheduleDate] = useState(schedule?.date);
   const [scheduleKeywords, setScheduleKeywords] = useState(schedule?.keywords);
   const [scheduleMeetLocation, setScheduleMeetLocation] = useState(schedule?.meetLocation);
-  const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState(schedule?.amuseLocation?.[0]);
+  const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState(schedule?.amuseLocations?.[0]);
   const [selectedMembers, setSelectedMembers] = useState(schedule?.members);
-  const userInfo = useSelector(state => state.user.info);
 
   const scheduleId = route?.params?.scheduleId;
   const isLoading = false;
@@ -57,9 +57,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
       groupId: schedule.group.id,
       keywords: scheduleKeywords,
       meetLocationId: scheduleMeetLocation.id,
-      members: selectedMembers.map(mem => {
-        return { id: mem.id };
-      }),
+      members: selectedMembers,
       amuses: scheduleAmuseLocation ? [{ id: scheduleAmuseLocation?.id }] : [],
     };
     dispatch(editSchedule({ form, scheduleId, Alert, navigation }));
@@ -103,10 +101,21 @@ const ScheduleEditScreen = ({ route, navigation }) => {
           <KeywordsModalInput type="키워드" value={scheduleKeywords} onConfirm={setScheduleKeywords} />
         </View>
         <View style={{ margin: 20 }}>
-          <MapLocationInput type="만남 장소" value={scheduleMeetLocation} onValueChange={setScheduleMeetLocation} />
+          <MapStationInput
+            type="만날 장소"
+            value={scheduleMeetLocation}
+            onValueChange={setScheduleMeetLocation}
+            state={schedule}
+          />
         </View>
         <View style={{ margin: 20 }}>
-          <MapLocationInput type="약속 장소" value={scheduleAmuseLocation} onValueChange={setScheduleAmuseLocation} />
+          <MapLocationInput
+            type="약속 장소"
+            value={scheduleAmuseLocation}
+            onValueChange={setScheduleAmuseLocation}
+            meet={scheduleMeetLocation}
+            keywords={scheduleKeywords}
+          />
         </View>
         <View style={{ margin: 20 }}>
           <GroupMemberSelectList

@@ -19,6 +19,11 @@ const reducer = (state, action) => {
         ...state,
         comment: action.payload,
       };
+    case 'UPDATE_FONT':
+      return {
+        ...state,
+        font: action.payload,
+      };
     case 'UPDATE_LOCATION':
       return {
         ...state,
@@ -31,6 +36,7 @@ const reducer = (state, action) => {
 
 const initialComment = {
   comment: '',
+  font: '',
   location: {
     xpoint: 0,
     ypoint: 0,
@@ -103,10 +109,10 @@ const MomentsCommentCreateScreen = ({ navigation, route }) => {
           ypoint: comment.location.ypoint,
           angle: comment.location.angle === undefined ? 0 : comment.location.angle,
         },
+        font: comment.font,
       },
       momentId: momentId,
     };
-    var angle = 0;
 
     dispatch(createComment({ commentInfo: commentInfo, navigation: navigation, Alert: Alert }));
   };

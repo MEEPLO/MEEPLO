@@ -30,7 +30,7 @@ const screen = Dimensions.get('screen');
 const searchInputWidth = screen.width * 0.7;
 const selectedStationInfoWidth = screen.width * 0.95;
 const selectedStationInfoHeight = screen.height * 0.5;
-const selectedStationInfoUpY = screen.height * 0.5;
+const selectedStationInfoUpY = screen.height * 0.6;
 const selectedStationInfoDownY = screen.height * 1;
 
 const requestPermissions = async () => {

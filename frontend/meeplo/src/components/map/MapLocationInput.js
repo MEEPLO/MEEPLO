@@ -16,10 +16,10 @@ import LoadingModal from '../common/LoadingModal';
 const screen = Dimensions.get('screen');
 const selectedLocationInfoViewWidth = screen.width * 0.95;
 const selectedLocationInfoViewHeight = screen.height * 0.5;
-const selectedLocationInfoViewUpY = screen.height * 0.5;
+const selectedLocationInfoViewUpY = screen.height * 0.6;
 const selectedLocationInfoViewDownY = screen.height * 1;
 
-const MapLocationInput = ({ type, required, value, onValueChange, state, meet }) => {
+const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
@@ -33,6 +33,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
   const webViewRef = useRef();
   const selectedLocationInfoViewPositionAnim = useRef(new Animated.ValueXY()).current;
   const recommendedAmuses = useSelector(state => state?.recommendation?.recommendedAmuses);
+  const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
 
   useEffect(() => {
     if (meet && meet.id) {
@@ -46,7 +47,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
       setCurrentPosition();
     }
     postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
-  }, [webViewRef.current]);
+  }, [meet, webViewRef.current]);
 
   useEffect(() => {
     if (Array.isArray(recommendedAmuses)) {
@@ -179,7 +180,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
         lat: mapCenter?.lat,
         lng: mapCenter?.lng,
       },
-      keywords: state?.keywords?.map(keyword => {
+      keywords: keywords?.map(keyword => {
         return { content: keyword };
       }),
     };
@@ -207,8 +208,17 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
     }
 
     return (
-      <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          width: selectedLocationInfoViewWidth,
+          paddingHorizontal: screen.width * 0.1,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
           <Image
             style={{
               width: 100,
@@ -294,7 +304,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
           </Animated.View>
         </View>
       </ModalCover>
-      <LoadingModal visible={isLoading} />
+      <LoadingModal visible={isLoading || isRecommendationLoading} />
     </View>
   );
 };

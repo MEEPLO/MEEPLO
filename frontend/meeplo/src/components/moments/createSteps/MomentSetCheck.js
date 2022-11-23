@@ -9,7 +9,7 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   const windowWidth = Dimensions.get('window').width - 40;
   const windowHeight = Dimensions.get('window').height;
 
-  console.log(state);
+  // console.log(state);
 
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
@@ -43,11 +43,11 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
           <FontText style={{ lineHeight: 45, fontSize: 15, color: 'gray' }}>사진</FontText>
           <AutoHeightImage
             source={{ uri: state.photoUrl }}
-            width={state.type === 2 ? windowWidth * 0.2 : windowWidth * 0.8}
+            width={state.type === 2 ? windowWidth * 0.24 : windowWidth * 0.8}
             style={{
               borderWidth: 1,
               borderColor: '#ddd',
-              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.1 - 40,
+              marginLeft: state.type === 2 ? windowWidth * 0.38 - 40 : windowWidth * 0.1 - 40,
             }}
           />
         </View>

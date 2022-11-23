@@ -22,7 +22,7 @@ const MomentsListScreen = props => {
     <ScrollView
       onScroll={({ nativeEvent }) => {
         if (isCloseToBottom(nativeEvent)) {
-          console.log('bottom!');
+          // console.log('bottom!');
           setCurrentPage(currentPage + 1);
         }
       }}>

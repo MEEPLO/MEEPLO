@@ -36,7 +36,7 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
     2: imgWidth * 3.61,
   };
 
-  console.log(currentPage);
+  // console.log(currentPage);
 
   const params = {
     page: 0,
@@ -72,7 +72,8 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                   marginBottom: 25,
                   height: viewHeight[moment.type],
                   display: index <= (currentPage + 1) * 6 - 1 ? 'flex' : 'none',
-                }}>
+                }}
+                key={index}>
                 <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
                   <AutoHeightImage
                     source={{ uri: moment.photo }}
@@ -108,7 +109,8 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                   marginBottom: 25,
                   height: viewHeight[moment.type],
                   display: index <= (currentPage + 1) * 6 - 1 ? 'flex' : 'none',
-                }}>
+                }}
+                key={index}>
                 <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
                   <AutoHeightImage
                     source={{ uri: moment.photo }}
