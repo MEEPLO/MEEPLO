@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -118,8 +120,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberResponse.MemberDetailStartLocation> getMemberStartLocations(String authorization) {
         Member member = getMemberByAuthorization(authorization);
-        return memberLocationRepository
-                .findByMember(member).stream()
+
+        List<MemberLocation> memberLocations = memberLocationRepository.findByMember(member);
+        List<MemberLocation> response = new ArrayList<>();
+        response.add(memberLocationRepository.findByMemberAndDefaultLocation(member,true)
+                .orElseThrow(()-> new MeeploException(MemberErrorCode.NO_DEFAULT_LOCATION)));
+
+        memberLocations.stream()
+                .filter(ml->!ml.getDefaultLocation())
+                .sorted(Comparator.comparing(MemberLocation::getId))
+                .forEach(response::add);
+
+        return response.stream()
                 .map(ml -> MemberResponse.MemberDetailStartLocation
                         .builder()
                         .memberLocation(ml)
