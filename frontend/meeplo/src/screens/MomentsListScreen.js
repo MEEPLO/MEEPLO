@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import MomentsList from '../components/moments/MomentsList';
+import FontText from '../components/common/FontText';
 
 const MomentsListScreen = props => {
   const [isMine, setIsMine] = React.useState(false);
@@ -27,11 +28,13 @@ const MomentsListScreen = props => {
       }}>
       <View style={{ height: '100%' }}>
         <View style={{ margin: 20 }}>
-          <Text style={styles.screenTitle}>내 추억 모아보기</Text>
+          <FontText style={styles.screenTitle}>내 추억 모아보기</FontText>
         </View>
         <View style={{ marginBottom: 20, paddingRight: 20 }}>
           <View style={{ flexDirection: 'row', height: 30 }}>
-            <Text style={{ flex: 6, lineHeight: 30, textAlign: 'right', color: 'gray' }}>내가 작성한 추억만 보기</Text>
+            <FontText style={{ flex: 6, lineHeight: 30, textAlign: 'right', color: 'gray' }}>
+              내가 작성한 추억만 보기
+            </FontText>
             <CheckBox disabled={false} value={isMine} onValueChange={setOnlyMine} />
           </View>
         </View>

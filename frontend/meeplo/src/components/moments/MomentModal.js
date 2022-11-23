@@ -16,6 +16,7 @@ import { getMomentDetail, updateMomentReaction, deleteMomentReaction } from '../
 import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 
+import FontText from '../common/FontText';
 import Images from '../../assets/image/index';
 import AnimationLikes from '../common/AnimationLikes';
 import AnimationComment from '../common/AnimationComment';

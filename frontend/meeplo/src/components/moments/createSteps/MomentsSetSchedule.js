@@ -12,6 +12,7 @@ import StepTextInput from '../../common/StepTextInput';
 import DateModalInput from '../../schedule/DateModalInput';
 import LoadingModal from '../../common/LoadingModal';
 import MapLocationInput from '../../map/MapLocationInput';
+import FontText from '../../common/FontText';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -126,9 +127,9 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
             top: 400,
           }}>
           <Pressable onPress={() => setScheduleModal(true)}>
-            <Text style={{ textAlign: 'center', fontSize: 16, color: theme.color.bright.red, fontWeight: 'bold' }}>
+            <FontText style={{ textAlign: 'center', fontSize: 16, color: theme.color.bright.red, fontWeight: 'bold' }}>
               아직 약속을 만들지 않았다면? {' >'}
-            </Text>
+            </FontText>
           </Pressable>
         </View>
         <View style={{ width: '100%', position: 'absolute', top: 150 }}>
@@ -181,7 +182,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
               backgroundColor: theme.color.pale.red,
             }}>
             <Pressable onPress={submitSchedule}>
-              <Text
+              <FontText
                 style={{
                   color: theme.font.color,
                   fontSize: 20,
@@ -190,7 +191,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
                   fontWeight: 'bold',
                 }}>
                 생성하기
-              </Text>
+              </FontText>
             </Pressable>
           </View>
           <View
@@ -202,7 +203,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
               borderRadius: 20,
             }}>
             <Pressable onPress={() => setScheduleModal(false)}>
-              <Text
+              <FontText
                 style={{
                   color: theme.font.color,
                   fontSize: 17,
@@ -211,7 +212,7 @@ const MomentsSetSchedule = ({ toNext, toPrev, onFinish, visible, state }) => {
                   fontWeight: 'bold',
                 }}>
                 뒤로 가기
-              </Text>
+              </FontText>
             </Pressable>
           </View>
         </View>

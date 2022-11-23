@@ -17,6 +17,7 @@ import AddButton from './AddButton';
 import { getUserInfo } from '../../../redux/userSlice';
 import { setOpened } from '../../../redux/navigationSlice';
 import LoginScreen from '../../../screens/LoginScreen';
+import FontText from '../FontText';
 
 const Tab = createBottomTabNavigator();
 
@@ -64,7 +65,7 @@ const NavigationBar = () => {
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faHouseChimney} color={color} size={size} />
-              <Text style={{ color }}>홈</Text>
+              <FontText style={{ color }}>홈</FontText>
             </View>
           ),
         }}
@@ -77,7 +78,7 @@ const NavigationBar = () => {
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faUsers} color={color} size={size} />
-              <Text style={{ color }}>그룹</Text>
+              <FontText style={{ color }}>그룹</FontText>
             </View>
           ),
         }}
@@ -106,7 +107,7 @@ const NavigationBar = () => {
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faCalendarDays} color={color} size={size} />
-              <Text style={{ color }}>약속</Text>
+              <FontText style={{ color }}>약속</FontText>
             </View>
           ),
         }}
@@ -126,7 +127,7 @@ const NavigationBar = () => {
           tabBarIcon: ({ color, size }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 5 }}>
               <FontAwesomeIcon icon={faCameraRetro} color={color} size={size} />
-              <Text style={{ color }}>추억</Text>
+              <FontText style={{ color }}>추억</FontText>
             </View>
           ),
         }}

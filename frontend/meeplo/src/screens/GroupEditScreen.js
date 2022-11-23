@@ -24,6 +24,7 @@ import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDEN
 import { editGroup, getGroupDetail } from '../redux/groupSlice';
 import LoadingModal from '../components/common/LoadingModal';
 import { TOAST_MESSAGE } from '../assets/constant/string';
+import FontText from '../components/common/FontText';
 
 const { width } = Dimensions.get('window');
 
@@ -157,7 +158,7 @@ const GroupEditScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        <View style={{ margin: 20 }}>
+        <View style={{ margin: 20, marginTop: 50 }}>
           <StepTextInput
             type="그룹명"
             maxLength={20}
@@ -168,9 +169,9 @@ const GroupEditScreen = ({ route, navigation }) => {
           />
         </View>
         <View style={{ margin: 20 }}>
-          <Text style={{ color: theme.font.color, fontWeight: 'bold' }}>
-            대표 사진 <Text style={{ color: theme.color.alert }}>*</Text>
-          </Text>
+          <FontText style={{ color: theme.font.color, fontWeight: 'bold' }}>
+            대표 사진 <FontText style={{ color: theme.color.alert }}>*</FontText>
+          </FontText>
           <View style={{ alignItems: 'center', marginTop: 10 }}>
             <View
               style={{
@@ -208,12 +209,12 @@ const GroupEditScreen = ({ route, navigation }) => {
               }}
               onPress={addImage}
               activeOpacity={0.6}>
-              <Text style={{ color: 'black', alignSelf: 'center', lineHeight: 24 }}>이미지 선택</Text>
+              <FontText style={{ color: 'black', alignSelf: 'center', lineHeight: 24 }}>이미지 선택</FontText>
             </TouchableOpacity>
           </View>
         </View>
         <View style={{ marginHorizontal: 20 }}>
-          <Text style={{ color: theme.font.color, fontWeight: 'bold', marginVertical: 20 }}>그룹 설명</Text>
+          <FontText style={{ color: theme.font.color, fontWeight: 'bold', marginVertical: 20 }}>그룹 설명</FontText>
           <TextInput
             multiline={true}
             numberOfLines={6}
@@ -221,7 +222,7 @@ const GroupEditScreen = ({ route, navigation }) => {
             onFocus={inputOnFocus}
             value={groupDescription}
             onChangeText={setGroupDescription}
-            style={{ borderColor: inputBorderColor, borderWidth: 1 }}
+            style={{ borderColor: inputBorderColor, borderWidth: 1, fontFamily: 'NanumSquareRoundR' }}
           />
         </View>
       </ScrollView>
@@ -234,7 +235,7 @@ const GroupEditScreen = ({ route, navigation }) => {
         }}
         activeOpacity={0.6}
         onPress={onPressEdit}>
-        <Text style={{ color: theme.color.alert, fontSize: 20, fontWeight: 'bold' }}>수정하기</Text>
+        <FontText style={{ color: theme.color.alert, fontSize: 20, fontWeight: 'bold' }}>수정하기</FontText>
       </TouchableOpacity>
       <LoadingModal visible={isLoading || isProfilePictureEdit} />
     </SafeAreaView>

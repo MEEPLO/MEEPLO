@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 import SelectList from 'react-native-dropdown-select-list';
+import FontText from './FontText';
 
 const SelectDropdown = props => {
   // const [selected, setSelected] = React.useState('');
@@ -11,9 +12,9 @@ const SelectDropdown = props => {
 
   return (
     <View>
-      <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
-        {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
-      </Text>
+      <FontText style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
+        {props.type} {props.required ? <FontText style={{ color: theme.color.alert }}>*</FontText> : null}
+      </FontText>
       <View style={{ position: 'relative' }}>
         <SelectList
           placeholder={placeholder}
@@ -23,8 +24,14 @@ const SelectDropdown = props => {
           onSelect={() => {}}
           maxHeight={windowHeight * 0.4}
           boxStyles={{ borderRadius: 0, borderWidth: 0, height: 50 }}
-          dropdownStyles={{ borderTopRightRadius: 0, borderTopLeftRadius: 0, backgroundColor: theme.color.pale.red }}
-          dropdownTextStyles={{ fontSize: 15, fontColor: '#000', lineHeight: 30 }}
+          dropdownStyles={{
+            borderTopRightRadius: 0,
+            borderTopLeftRadius: 0,
+            backgroundColor: theme.color.pale.red,
+            fontFamily: 'NanumSquareRoundR',
+          }}
+          dropdownTextStyles={{ fontSize: 15, fontColor: '#000', lineHeight: 30, fontFamily: 'NanumSquareRoundR' }}
+          inputStyles={{ fontFamily: 'NanumSquareRoundR' }}
         />
         <View
           style={{
