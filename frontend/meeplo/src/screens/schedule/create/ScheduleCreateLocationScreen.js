@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import Toast from 'react-native-toast-message';
-
-import { TOAST_MESSAGE } from '../../../assets/constant/string';
+import { View, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import StepButton from '../../../components/stepper/StepButton';
 import MapLocationInput from '../../../components/map/MapLocationInput';
@@ -11,8 +9,10 @@ import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput'
 
 const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const [keywords, setKeywords] = useState([]);
-  const [meet, setMeet] = useState();
-  const [amuse, setAmuse] = useState();
+  const [meet, setMeet] = useState({});
+  const [amuse, setAmuse] = useState([]);
+
+  const userInfo = useSelector(state => state.user.info);
 
   useEffect(() => {
     setMeet(state.meet);
@@ -62,7 +62,13 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
         <KeywordsModalInput type="키워드" value={keywords} onConfirm={onConfirmKeywords} />
       </View>
       <View style={styles.inputViewStyle}>
-        <MapStationInput type="만남 장소" required value={meet} onValueChange={onSelectMeetLocation} state={state} />
+        <MapStationInput
+          type="만남 장소"
+          value={meet}
+          onValueChange={onSelectMeetLocation}
+          state={state}
+          userInfo={userInfo}
+        />
       </View>
       <View style={styles.inputViewStyle}>
         <MapLocationInput
