@@ -55,7 +55,7 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             {momentDetail.comments?.map((comment, idx) => (
               <View
                 style={{
-                  width: momentDetail.moment.type === 2 ? '90%' : '50%',
+                  width: momentDetail.moment.type === 2 ? '90%' : '40%',
                   transform: [{ rotate: `${comment.location.angle}deg` }],
                   position: 'absolute',
                   top: comment.location.ypoint * 0.85,
@@ -69,7 +69,7 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             ))}
             <Text
               style={{
-                width: momentDetail.moment.type === 2 ? '90%' : '50%',
+                // width: momentDetail.moment.type === 2 ? '90%' : '40%',
                 fontSize: state.font === 'gag' ? 18 : 15,
                 color: theme.font.color,
                 transform: [{ rotate: `${tilt}deg` }],
