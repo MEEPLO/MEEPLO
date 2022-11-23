@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
+import FontText from '../common/FontText';
 
 const screen = Dimensions.get('screen');
 const itemWidth = screen.width * 0.8;
@@ -9,7 +10,7 @@ const GroupMemberSelectListItem = ({ member, selected, disabled, onClick }) => {
   return (
     <TouchableOpacity style={styles.itemButton(selected)} onPress={() => onClick(member)} disabled={disabled}>
       <Image style={styles.profilePhoto} source={{ uri: member.photo }} />
-      <Text style={styles.itemText}>{member.nickname}</Text>
+      <FontText style={styles.itemText}>{member.nickname}</FontText>
     </TouchableOpacity>
   );
 };

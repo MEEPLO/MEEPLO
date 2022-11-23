@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-nati
 import { theme } from '../../assets/constant/DesignTheme';
 import { Calendar, CalendarContext } from 'react-native-calendars';
 import DatePicker from 'react-native-date-picker';
+import FontText from '../common/FontText';
 
 import ModalRound from '../common/ModalRound';
 import config from '../../config';
@@ -36,12 +37,12 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
 
   return (
     <View>
-      <Text style={styles.titleStyle}>
-        {type} {required ? <Text style={styles.requiredStyle}>*</Text> : null}
-      </Text>
+      <FontText style={styles.titleStyle}>
+        {type} {required ? <FontText style={styles.requiredStyle}>*</FontText> : null}
+      </FontText>
 
       <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>{value}</Text>
+        <FontText style={{ color: theme.font.color }}>{value}</FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 
@@ -62,7 +63,7 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
 
         <View style={styles.confirmButtonView}>
           <TouchableOpacity style={styles.confirmButtonStyle} onPress={onPressConfirm}>
-            <Text style={styles.confirmButtonTextStyle}> 확인 </Text>
+            <FontText style={styles.confirmButtonTextStyle}> 확인 </FontText>
           </TouchableOpacity>
         </View>
       </ModalRound>
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   titleStyle: {
     color: theme.font.color,
     fontWeight: 'bold',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   requiredStyle: {
     color: theme.color.alert,

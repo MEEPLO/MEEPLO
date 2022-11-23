@@ -24,6 +24,7 @@ import MapView from './MapView';
 import LoadingModal from '../common/LoadingModal';
 import FlatButton from '../common/FlatButton';
 import { TOAST_MESSAGE } from '../../assets/constant/string';
+import FontText from '../common/FontText';
 
 const screen = Dimensions.get('screen');
 const searchInputWidth = screen.width * 0.7;
@@ -207,8 +208,8 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
 
     return (
       <View style={styles.bottomInterfaceView}>
-        <Text style={{}}>{stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}</Text>
-        <Text
+        <FontText style={{}}>{stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}</FontText>
+        <FontText
           style={{
             margin: 10,
             paddingHorizontal: 10,
@@ -222,14 +223,14 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
             borderRadius: theme.radius.base,
           }}>
           {stationData.name}역
-        </Text>
+        </FontText>
 
         {stationData.avgTime ? (
           <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
-            <Text>평균 이동 시간</Text>
-            <Text style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>
+            <FontText>평균 이동 시간</FontText>
+            <FontText style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>
               {parseInt(station.avgTime / 45)}분
-            </Text>
+            </FontText>
           </View>
         ) : null}
 
@@ -258,12 +259,12 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
         <View style={styles.mapSearchInputView}>
           <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
           <TouchableOpacity style={styles.mapSearchButton} onPress={onPressSearchStation}>
-            <Text>역 검색</Text>
+            <FontText>역 검색</FontText>
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
-          <Text style={styles.recommendationButtonText}>중간 지점 추천 받기</Text>
+          <FontText style={styles.recommendationButtonText}>중간 지점 추천 받기</FontText>
         </TouchableOpacity>
 
         <Animated.View
@@ -277,7 +278,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
             },
           ]}>
           <TouchableOpacity style={styles.selectedStationInfoCloseButton} onPress={() => closeSelectedStationInfo()}>
-            <Text>X</Text>
+            <FontText>X</FontText>
           </TouchableOpacity>
           {renderSelectedStationInfoView(selectedStation)}
         </Animated.View>
@@ -287,14 +288,14 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
 
   return (
     <View>
-      <Text style={styles.titleStyle}>
-        {type} {required ? <Text style={styles.requiredStyle}>*</Text> : null}
-      </Text>
+      <FontText style={styles.titleStyle}>
+        {type} {required ? <FontText style={styles.requiredStyle}>*</FontText> : null}
+      </FontText>
 
       <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>
+        <FontText style={{ color: theme.font.color }}>
           {value?.name} {value?.name?.length > 0 ? '역' : null}
-        </Text>
+        </FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 

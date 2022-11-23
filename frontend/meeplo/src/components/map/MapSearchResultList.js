@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native';
+import FontText from '../common/FontText';
 
 const screen = Dimensions.get('screen');
 
@@ -9,7 +10,7 @@ const MapSearchResultList = ({ items }) => {
       <FlatList
         data={items}
         keyExtractor={(item, index) => item.id}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => <FontText>{item.name}</FontText>}
         showsVerticalScrollIndicator={false}></FlatList>
     </View>
   );
