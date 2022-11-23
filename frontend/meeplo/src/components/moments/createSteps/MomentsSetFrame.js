@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Dimensions, Pressable, Alert } from 'react-native';
 import AutoHeightImage from 'react-native-auto-height-image';
 import Toast from 'react-native-toast-message';
+import FontText from '../../common/FontText';
 
 import { theme } from '../../../assets/constant/DesignTheme';
 import { TOAST_MESSAGE } from '../../../assets/constant/string';
@@ -34,7 +35,7 @@ const MomentsSetFrame = ({ toNext, toPrev, onFinish, visible }) => {
 
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
-      <Text style={{ marginBottom: 10, color: theme.font.color, fontWeight: 'bold' }}>프레임 선택</Text>
+      <FontText style={{ marginBottom: 10, color: theme.font.color, fontWeight: 'bold' }}>프레임 선택</FontText>
       <View style={{ marginLeft: 20 }}>
         <Pressable
           style={{

@@ -6,6 +6,7 @@ import AWS from 'aws-sdk';
 import { MEEPLO_APP_ALBUM_BUCKET_NAME, MEEPLO_APP_BUCKET_REGION, MEEPLO_APP_IDENTITY_POOL_ID } from '@env';
 import { decode } from 'base64-arraybuffer';
 import { theme } from '../../assets/constant/DesignTheme';
+import FontText from '../common/FontText';
 
 const getImageTitle = date => {
   let year = date.getFullYear().toString().substring(2);
@@ -83,9 +84,9 @@ const MpomentsUpload = ({ setPictureUrl, frameType }) => {
           position: 'absolute',
           bottom: 65,
         }}>
-        <Text style={{ lineHeight: 53, textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: 'gray' }}>
+        <FontText style={{ lineHeight: 53, textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: 'gray' }}>
           갤러리
-        </Text>
+        </FontText>
       </Pressable>
       <Pressable
         style={{
@@ -96,9 +97,9 @@ const MpomentsUpload = ({ setPictureUrl, frameType }) => {
           position: 'absolute',
           bottom: 20,
         }}>
-        <Text style={{ lineHeight: 33, textAlign: 'center', fontSize: 15, fontWeight: 'bold', color: 'gray' }}>
+        <FontText style={{ lineHeight: 33, textAlign: 'center', fontSize: 15, fontWeight: 'bold', color: 'gray' }}>
           사진 선택 초기화
-        </Text>
+        </FontText>
       </Pressable>
       <WebView
         ref={webviewRef}
