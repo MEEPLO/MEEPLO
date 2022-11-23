@@ -97,7 +97,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponse.MemberDetail getMemberDetail(String authorization) {
         Member member = getMemberByAuthorization(authorization);
-        return MemberResponse.MemberDetail.builder().member(member).build();
+        return MemberResponse.MemberDetail.builder()
+                .member(member)
+                .memberDetailStartLocations(getMemberStartLocationsByMember(member))
+                .build();
     }
 
     @Override
@@ -120,7 +123,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberResponse.MemberDetailStartLocation> getMemberStartLocations(String authorization) {
         Member member = getMemberByAuthorization(authorization);
+        return getMemberStartLocationsByMember(member);
+    }
 
+    private List<MemberResponse.MemberDetailStartLocation> getMemberStartLocationsByMember(Member member){
         List<MemberLocation> memberLocations = memberLocationRepository.findByMember(member);
         List<MemberLocation> sortedLocations = new ArrayList<>();
         sortedLocations.add(memberLocationRepository.findByMemberAndDefaultLocation(member,true)
