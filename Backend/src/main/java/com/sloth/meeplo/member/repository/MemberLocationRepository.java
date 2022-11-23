@@ -13,6 +13,8 @@ public interface MemberLocationRepository extends JpaRepository<MemberLocation, 
 
     List<MemberLocation> findByMember(Member member);
 
+    Optional<MemberLocation> findByMemberAndDefaultLocation(Member member, Boolean defaultLocation);
+
     Boolean existsByMember(Member member);
 
 
