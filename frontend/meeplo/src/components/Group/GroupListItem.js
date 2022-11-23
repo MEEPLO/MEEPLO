@@ -5,6 +5,7 @@ import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faCrown } from '@fortawesome/free-solid-svg-icons/faCrown';
+import FontText from '../common/FontText';
 
 const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, color }) => {
   const [lastScheduleDate, setLastScheduleDate] = useState('');
@@ -43,7 +44,7 @@ const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, col
           backgroundColor: theme.color.pale[color],
           justifyContent: 'center',
         }}>
-        <Text style={{ marginHorizontal: 20, fontWeight: 'bold', fontSize: 19, color: 'black' }}>{name}</Text>
+        <FontText style={{ marginHorizontal: 20, fontSize: 19, color: 'black' }}>{name}</FontText>
       </View>
       <View
         style={{
@@ -70,16 +71,16 @@ const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, col
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faCrown} size={14} />
-              <Text style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{leaderName}</Text>
+              <FontText style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{leaderName}</FontText>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faUser} size={14} />
-              <Text style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{memberCount}</Text>
+              <FontText style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{memberCount}</FontText>
             </View>
           </View>
           {lastScheduleDate && (
             <View>
-              <Text style={{ fontSize: 14, color: 'gray' }}>최근모임: {lastScheduleDate}</Text>
+              <FontText style={{ fontSize: 14, color: 'gray' }}>최근모임: {lastScheduleDate}</FontText>
             </View>
           )}
         </View>

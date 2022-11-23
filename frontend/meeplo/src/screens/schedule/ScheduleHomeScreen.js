@@ -82,6 +82,7 @@ const ScheduleHomeScreen = ({ navigation }) => {
       <Tabs.Container renderHeader={renderCalendar}>
         <Tabs.Tab name="scheduleList" label={tabLabel}>
           <CalendarScheduleList data={schedules?.schedules} onItemPress={onScheduleItemPress} />
+          <View style={{ height: 70 }} />
         </Tabs.Tab>
       </Tabs.Container>
 

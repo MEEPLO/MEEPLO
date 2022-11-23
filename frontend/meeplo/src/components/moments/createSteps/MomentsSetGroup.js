@@ -3,6 +3,7 @@ import { View, Dimensions, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroupList } from '../../../redux/groupSlice';
 import Toast from 'react-native-toast-message';
+import FontText from '../../common/FontText';
 
 import { TOAST_MESSAGE } from '../../../assets/constant/string';
 import StepButton from '../../stepper/StepButton';

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import FontText from './FontText';
 
 import { theme } from '../../assets/constant/DesignTheme';
 
@@ -10,7 +11,7 @@ const buttonWidth = screen.width * 0.85;
 const FlatButton = ({ onPress, text, backgroundColor }) => {
   return (
     <TouchableOpacity style={styles.buttonView(backgroundColor)} onPress={onPress}>
-      <Text style={styles.buttonText}>{text}</Text>
+      <FontText style={styles.buttonText}>{text}</FontText>
     </TouchableOpacity>
   );
 };

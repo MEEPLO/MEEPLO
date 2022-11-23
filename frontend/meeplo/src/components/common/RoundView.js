@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import FontText from './FontText';
 
 import { theme } from '../../assets/constant/DesignTheme';
 
@@ -13,10 +14,10 @@ const RoundView = ({ children, onRequestClose, hideHeader, hideCloseButton, titl
         <View style={styles.headerView}>
           {hideCloseButton ? null : (
             <TouchableOpacity style={styles.closeButtonStyle} onPress={onRequestClose}>
-              <Text style={styles.closeButtonTextStyle}> X </Text>
+              <FontText style={styles.closeButtonTextStyle}> X </FontText>
             </TouchableOpacity>
           )}
-          <Text style={styles.title}>{title}</Text>
+          <FontText style={styles.title}>{title}</FontText>
         </View>
       )}
       <View style={styles.childrenView}>{children}</View>

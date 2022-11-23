@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 import DatePicker from 'react-native-date-picker';
+import FontText from './FontText';
 
 const StepDateInput = props => {
   const [date, setDate] = React.useState(new Date());
@@ -9,9 +10,9 @@ const StepDateInput = props => {
 
   return (
     <>
-      <Text style={{ color: theme.font.color, fontWeight: 'bold' }}>
-        {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
-      </Text>
+      <FontText style={{ color: theme.font.color, fontWeight: 'bold' }}>
+        {props.type} {props.required ? <FontText style={{ color: theme.color.alert }}>*</FontText> : null}
+      </FontText>
       <View
         style={{
           width: '100%',
@@ -19,9 +20,9 @@ const StepDateInput = props => {
           borderBottomColor: theme.color.disabled,
           borderBottomWidth: 1,
         }}>
-        <Text style={{ lineHeight: 70, marginLeft: 10, color: 'gray' }} onPress={() => setOpenModal(true)}>
+        <FontText style={{ lineHeight: 70, marginLeft: 10, color: 'gray' }} onPress={() => setOpenModal(true)}>
           {date ? date.toLocaleDateString('ko-KR') : null}
-        </Text>
+        </FontText>
       </View>
       <DatePicker
         modal
