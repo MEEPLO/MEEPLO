@@ -20,6 +20,7 @@ const selectedLocationInfoViewUpY = screen.height * 0.6;
 const selectedLocationInfoViewDownY = screen.height * 1;
 
 const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
+  console.log('value', value);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
@@ -262,7 +263,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
       </FontText>
 
       <TouchableOpacity onPress={openModal}>
-        <FontText style={{ color: theme.font.color }}>{value?.name}</FontText>
+        <FontText style={{ color: theme.font.color }}>{value?.name?.length > 0 ? value.name : '미정'}</FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 

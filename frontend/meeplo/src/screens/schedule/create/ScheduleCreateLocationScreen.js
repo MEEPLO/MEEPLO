@@ -9,8 +9,8 @@ import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput'
 
 const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const [keywords, setKeywords] = useState([]);
-  const [meet, setMeet] = useState();
-  const [amuse, setAmuse] = useState();
+  const [meet, setMeet] = useState({});
+  const [amuse, setAmuse] = useState([]);
 
   const userInfo = useSelector(state => state.user.info);
 
@@ -64,7 +64,6 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
       <View style={styles.inputViewStyle}>
         <MapStationInput
           type="만남 장소"
-          required
           value={meet}
           onValueChange={onSelectMeetLocation}
           state={state}

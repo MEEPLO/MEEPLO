@@ -294,7 +294,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
 
       <TouchableOpacity onPress={openModal}>
         <FontText style={{ color: theme.font.color }}>
-          {value?.name} {value?.name?.length > 0 ? '역' : null}
+          {value?.name} {value?.id === 0 ? null : '역'}
         </FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     color: theme.font.color,
-    fontWeight: '800',
+    fontWeight: 'bold',
     marginBottom: 40,
   },
   dateInputView: {
