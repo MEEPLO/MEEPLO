@@ -278,9 +278,9 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             </TouchableOpacity>
           ) : null}
 
-          {state?.keywords?.length > 0 ? (
+          {keywords?.length > 0 ? (
             <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
-              <FontText style={styles.recommendationButtonText}>놀 곳 추천 받기</FontText>
+              <FontText style={styles.recommendationButtonText}>키워드 기반 놀 곳 추천 받기</FontText>
             </TouchableOpacity>
           ) : null}
 
