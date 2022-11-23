@@ -5,6 +5,7 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
+import FontText from '../common/FontText';
 
 const MomentsCol = styled.View`
   height: ${({ height }) => height}px;
@@ -35,7 +36,7 @@ const MomentPic = ({ momentData, direction, setMomentModal, setMomentDetailId })
           width={imgWidth}
           style={{ borderRadius: 5, borderWidth: momentData.type === 2 ? 0 : 2, borderColor: theme.color.disabled }}
         />
-        <Text
+        <FontText
           style={{
             position: 'absolute',
             right: -10,
@@ -47,7 +48,7 @@ const MomentPic = ({ momentData, direction, setMomentModal, setMomentDetailId })
           <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
           {`  `}
           {momentData.reactionCount}
-        </Text>
+        </FontText>
       </Pressable>
     </MomentsCol>
   );

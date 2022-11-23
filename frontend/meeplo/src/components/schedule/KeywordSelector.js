@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import FontText from '../common/FontText';
 
 import { theme } from '../../assets/constant/DesignTheme';
 
@@ -22,7 +23,7 @@ const KeywordSelector = ({ classification, keywords, selected, onPress }) => {
   return (
     <View style={styles.SelectorView}>
       <View style={styles.keywordClassificationView}>
-        <Text style={styles.keywordClassificationText}>{classification}</Text>
+        <FontText style={styles.keywordClassificationText}>{classification}</FontText>
       </View>
       <View style={styles.keywordBadgeView}>{renderKeywordBadges(keywords)}</View>
     </View>

@@ -26,6 +26,7 @@ const HeaderView = styled.View`
 `;
 
 const MonthLabel = styled.Text`
+  font-family: 'NanumSquareRoundR';
   padding: 2px 8px 2px 8px;
   font-weight: 400;
   color: white;

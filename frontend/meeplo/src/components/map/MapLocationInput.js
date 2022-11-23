@@ -7,6 +7,7 @@ import Geolocation from 'react-native-geolocation-service';
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
 import { getAmuseRecommendation } from '../../redux/recommendationSlice';
+import FontText from '../common/FontText';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
@@ -15,10 +16,10 @@ import LoadingModal from '../common/LoadingModal';
 const screen = Dimensions.get('screen');
 const selectedLocationInfoViewWidth = screen.width * 0.95;
 const selectedLocationInfoViewHeight = screen.height * 0.5;
-const selectedLocationInfoViewUpY = screen.height * 0.5;
+const selectedLocationInfoViewUpY = screen.height * 0.6;
 const selectedLocationInfoViewDownY = screen.height * 1;
 
-const MapLocationInput = ({ type, required, value, onValueChange, state, meet }) => {
+const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSearchCurrentMapButton, setShowSearchCurrentMapButton] = useState(true);
@@ -32,6 +33,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
   const webViewRef = useRef();
   const selectedLocationInfoViewPositionAnim = useRef(new Animated.ValueXY()).current;
   const recommendedAmuses = useSelector(state => state?.recommendation?.recommendedAmuses);
+  const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
 
   useEffect(() => {
     if (meet && meet.id) {
@@ -45,7 +47,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
       setCurrentPosition();
     }
     postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
-  }, [webViewRef.current]);
+  }, [meet, webViewRef.current]);
 
   useEffect(() => {
     if (Array.isArray(recommendedAmuses)) {
@@ -178,7 +180,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
         lat: mapCenter?.lat,
         lng: mapCenter?.lng,
       },
-      keywords: state?.keywords?.map(keyword => {
+      keywords: keywords?.map(keyword => {
         return { content: keyword };
       }),
     };
@@ -206,8 +208,17 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
     }
 
     return (
-      <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          width: selectedLocationInfoViewWidth,
+          paddingHorizontal: screen.width * 0.1,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
           <Image
             style={{
               width: 100,
@@ -220,10 +231,10 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
               uri: location?.photo,
             }}
           />
-          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'gray' }}>{location?.name}</Text>
+          <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'gray' }}>{location?.name}</FontText>
         </View>
-        <Text>{location?.address}</Text>
-        <Text>{location?.category}</Text>
+        <FontText>{location?.address}</FontText>
+        <FontText>{location?.category}</FontText>
 
         <TouchableOpacity
           style={{
@@ -238,7 +249,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
             onValueChange(location);
             closeModal();
           }}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>선택</Text>
+          <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>선택</FontText>
         </TouchableOpacity>
       </View>
     );
@@ -246,12 +257,12 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
 
   return (
     <View>
-      <Text style={styles.titleStyle}>
-        {type} {required ? <Text style={styles.requiredStyle}>*</Text> : null}
-      </Text>
+      <FontText style={styles.titleStyle}>
+        {type} {required ? <FontText style={styles.requiredStyle}>*</FontText> : null}
+      </FontText>
 
       <TouchableOpacity onPress={openModal}>
-        <Text style={{ color: theme.font.color }}>{value?.name}</Text>
+        <FontText style={{ color: theme.font.color }}>{value?.name}</FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 
@@ -263,13 +274,13 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
           {showSearchCurrentMapButton ? (
             <TouchableOpacity style={styles.mapSearchNearButton} onPress={onSearchNear}>
-              <Text style={styles.mapSearchNearText}>현 지도에서 검색</Text>
+              <FontText style={styles.mapSearchNearText}>현 지도에서 검색</FontText>
             </TouchableOpacity>
           ) : null}
 
           {state?.keywords?.length > 0 ? (
             <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
-              <Text style={styles.recommendationButtonText}>놀 곳 추천 받기</Text>
+              <FontText style={styles.recommendationButtonText}>놀 곳 추천 받기</FontText>
             </TouchableOpacity>
           ) : null}
 
@@ -286,14 +297,14 @@ const MapLocationInput = ({ type, required, value, onValueChange, state, meet })
             <TouchableOpacity
               style={styles.selectedLocationInfoViewButton}
               onPress={() => closeSelectedLocationInfoView()}>
-              <Text>X</Text>
+              <FontText>X</FontText>
             </TouchableOpacity>
 
             {renderSelectedLocationInfoView(selectedLocation)}
           </Animated.View>
         </View>
       </ModalCover>
-      <LoadingModal visible={isLoading} />
+      <LoadingModal visible={isLoading || isRecommendationLoading} />
     </View>
   );
 };
@@ -305,12 +316,13 @@ const styles = StyleSheet.create({
   titleStyle: {
     color: theme.font.color,
     fontWeight: 'bold',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   dateInputView: {
     width: screen.width * 0.9,
     borderColor: theme.color.disabled,
     borderBottomWidth: 1,
+    paddingBottom: 15,
   },
   backgroundMapView: { width: screen.width, height: screen.height, position: 'absolute' },
   mapInterfaceView: {

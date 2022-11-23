@@ -2,6 +2,7 @@ import { View, Text, Dimensions, ImageBackground } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { theme } from '../../assets/constant/DesignTheme';
+import FontText from '../common/FontText';
 
 const HomeGroupItem = ({ name, photo, memberCount, leaderName, lastSchedule }) => {
   const [lastScheduleDate, setLastScheduleDate] = useState('');
@@ -34,10 +35,10 @@ const HomeGroupItem = ({ name, photo, memberCount, leaderName, lastSchedule }) =
             top: width - height,
             justifyContent: 'center',
           }}>
-          <Text style={{ fontWeight: 'bold', marginHorizontal: 5, fontSize: 15, color: 'gray' }}>{name}</Text>
-          <Text style={{ marginHorizontal: 5, fontSize: 12, color: 'gray' }}>
+          <FontText style={{ fontWeight: 'bold', marginHorizontal: 5, fontSize: 15, color: 'gray' }}>{name}</FontText>
+          <FontText style={{ marginHorizontal: 5, fontSize: 12, color: 'gray' }}>
             {memberCount}명 {lastScheduleDate && ` |  마지막 약속: ${lastScheduleDate}`}
-          </Text>
+          </FontText>
         </View>
       </ImageBackground>
     </View>

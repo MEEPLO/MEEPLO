@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
+import FontText from './FontText';
 
 /**
  * @param value
@@ -22,9 +23,9 @@ const StepTextInput = props => {
 
   return (
     <View>
-      <Text style={{ color: theme.font.color, fontWeight: 'bold' }}>
-        {props.type} {props.required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
-      </Text>
+      <FontText style={{ color: theme.font.color, fontWeight: 'bold' }}>
+        {props.type} {props.required ? <FontText style={{ color: theme.color.alert }}>*</FontText> : null}
+      </FontText>
       <TextInput
         multiline={multiline}
         ref={textInputRef}
@@ -33,7 +34,7 @@ const StepTextInput = props => {
         onFocus={inputOnFocus}
         onChangeText={onValueChange}
         value={value}
-        style={{ borderBottomColor: inputBorderColor, borderBottomWidth: 1 }}
+        style={{ borderBottomColor: inputBorderColor, borderBottomWidth: 1, fontFamily: 'NanumSquareRoundR' }}
       />
     </View>
   );

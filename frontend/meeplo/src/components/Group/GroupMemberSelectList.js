@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
+import FontText from '../common/FontText';
 
 import { theme } from '../../assets/constant/DesignTheme';
 
@@ -12,21 +13,25 @@ const memberListMaxHeight = screen.height * 0.5;
 
 const GroupMemberSelectList = ({ type, members, selectedMembers, user, required, onSelect, isView }) => {
   const renderMemberList = members => {
-    return members.map(member => (
-      <GroupMemberSelectListItem
-        key={member.id}
-        member={member}
-        selected={!!selectedMembers.find(mem => mem.id === member.id)}
-        disabled={member.id === user.id}
-        onClick={onSelect}
-      />
-    ));
+    if (Array.isArray(members)) {
+      return members.map(member => (
+        <GroupMemberSelectListItem
+          key={member.id}
+          member={member}
+          selected={!!selectedMembers?.find(mem => mem.id === member.id)}
+          disabled={member.id === user.id}
+          onClick={onSelect}
+        />
+      ));
+    }
+
+    return null;
   };
   return (
     <View style={styles.memberListViewStyle}>
-      <Text style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
-        {type} {required ? <Text style={{ color: theme.color.alert }}>*</Text> : null}
-      </Text>
+      <FontText style={{ color: '#000', fontWeight: 'bold', marginBottom: 20 }}>
+        {type} {required ? <FontText style={{ color: theme.color.alert }}>*</FontText> : null}
+      </FontText>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         {isView ? (
           <View>{renderMemberList(members)}</View>
@@ -37,7 +42,7 @@ const GroupMemberSelectList = ({ type, members, selectedMembers, user, required,
             renderItem={item => (
               <GroupMemberSelectListItem
                 member={item.item}
-                selected={!!selectedMembers.find(member => member.id === item.item.id)}
+                selected={!!selectedMembers?.find(member => member.id === item.item.id)}
                 disabled={item.item.id === user.id}
                 onClick={onSelect}
               />

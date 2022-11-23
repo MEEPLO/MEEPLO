@@ -3,6 +3,7 @@ import React from 'react';
 import AutoHeightImage from 'react-native-auto-height-image';
 import StepButton from '../../stepper/StepButton';
 import { theme } from '../../../assets/constant/DesignTheme';
+import FontText from '../../common/FontText';
 
 const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   const windowWidth = Dimensions.get('window').width - 40;
@@ -13,36 +14,40 @@ const MomentSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
       <View style={{ height: 90 }}>
-        <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 18, color: 'gray' }}>입력 사항 체크</Text>
-        <Text style={{ fontSize: 14, color: theme.font.color }}>
-          <Text style={{ color: theme.color.alert, fontWeight: 'bold' }}>! </Text> 생성된 추억은 다시 지울 수 없어요.
-        </Text>
+        <FontText style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 18, color: 'gray' }}>입력 사항 체크</FontText>
+        <FontText style={{ fontSize: 14, color: theme.font.color }}>
+          <FontText style={{ color: theme.color.alert, fontWeight: 'bold' }}>! </FontText> 생성된 추억은 다시 지울 수
+          없어요.
+        </FontText>
       </View>
       <View style={{ marginHorizontal: 20 }}>
         <View style={{ height: 50 }}>
-          <Text style={{ lineHeight: 50, fontSize: 15, color: 'gray' }}>
+          <FontText style={{ lineHeight: 50, fontSize: 15, color: 'gray' }}>
             그룹:
-            <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 17, color: 'gray' }}> {state.groupName}</Text>
-          </Text>
+            <FontText style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 17, color: 'gray' }}>
+              {' '}
+              {state.groupName}
+            </FontText>
+          </FontText>
         </View>
         <View style={{ height: 50 }}>
-          <Text style={{ lineHeight: 50, fontSize: 15, color: 'gray' }}>
+          <FontText style={{ lineHeight: 50, fontSize: 15, color: 'gray' }}>
             약속
-            <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 17, color: 'gray' }}>
+            <FontText style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 17, color: 'gray' }}>
               {' '}
               {state.scheduleName} / {state.placeName}
-            </Text>
-          </Text>
+            </FontText>
+          </FontText>
         </View>
         <View>
-          <Text style={{ lineHeight: 45, fontSize: 15, color: 'gray' }}>사진</Text>
+          <FontText style={{ lineHeight: 45, fontSize: 15, color: 'gray' }}>사진</FontText>
           <AutoHeightImage
             source={{ uri: state.photoUrl }}
-            width={state.type === 2 ? windowWidth * 0.2 : windowWidth * 0.8}
+            width={state.type === 2 ? windowWidth * 0.24 : windowWidth * 0.8}
             style={{
               borderWidth: 1,
               borderColor: '#ddd',
-              marginLeft: state.type === 2 ? windowWidth * 0.3 - 40 : windowWidth * 0.1 - 40,
+              marginLeft: state.type === 2 ? windowWidth * 0.38 - 40 : windowWidth * 0.1 - 40,
             }}
           />
         </View>

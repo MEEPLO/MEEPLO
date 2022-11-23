@@ -11,6 +11,7 @@ import { createStartLocation, getUserInfo } from '../../redux/userSlice';
 import LoadingModal from '../../components/common/LoadingModal';
 import { TOAST_MESSAGE } from '../../assets/constant/string';
 import { useEffect } from 'react';
+import FontText from '../../components/common/FontText';
 
 const NewMemberLocationScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -90,13 +91,17 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
   return (
     <>
       <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 30 }}>출발지 추가</Text>
+        <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'black', marginVertical: 30 }}>
+          출발지 추가
+        </FontText>
 
         <View style={{ marginTop: 10, marginBottom: 20 }}>
-          <Text style={{ color: 'gray', fontSize: 20, fontWeight: 'bold' }}>{user?.nickname}님 안녕하세요!</Text>
-          <Text style={{ color: 'gray', marginTop: 20 }}>
+          <FontText style={{ color: 'gray', fontSize: 20, fontWeight: 'bold' }}>
+            {user?.nickname}님 안녕하세요!
+          </FontText>
+          <FontText style={{ color: 'gray', marginTop: 20 }}>
             MEEPLO 앱 사용을 위해 기본 출발지 한 곳을 필수로 등록해주세요.
-          </Text>
+          </FontText>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ height: 36, justifyContent: 'center', marginRight: 10 }}>
@@ -136,13 +141,13 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
               marginVertical: 15,
               padding: 0,
             }}>
-            <Text
+            <FontText
               style={{
                 fontSize: 20,
                 color: form?.address ? 'black' : theme.color.disabled,
               }}>
               {form?.address ? form.address : '건물, 지번 또는 도로명 검색'}
-            </Text>
+            </FontText>
           </TouchableOpacity>
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 30 }}>
@@ -160,7 +165,7 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
               backgroundColor: theme.color.pale.green,
               marginHorizontal: 5,
             }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>추가하기</Text>
+            <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>추가하기</FontText>
           </TouchableOpacity>
         </View>
         <MyPageLocationSearch isVisible={isVisible} setIsVisible={setIsVisible} handleOnChange={handleOnChange} />

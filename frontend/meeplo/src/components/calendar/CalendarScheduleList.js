@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Tabs } from 'react-native-collapsible-tab-view';
+import FontText from '../common/FontText';
 
 import CalendarScheduleListItem from './CalendarScheduleListItem';
 import { COMMON_MESSAGE } from '../../assets/constant/string';
@@ -16,11 +17,12 @@ const CalendarScheduleList = ({ data, onItemPress }) => {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       flex={1}
+      contentContainerStyle={{ paddingBottom: 280 }}
     />
   ) : (
     <Tabs.ScrollView>
       <View style={styles.noDataView}>
-        <Text>{COMMON_MESSAGE.NO_SHCEDULE_EXISTS}</Text>
+        <FontText>{COMMON_MESSAGE.NO_SHCEDULE_EXISTS}</FontText>
       </View>
     </Tabs.ScrollView>
   );
