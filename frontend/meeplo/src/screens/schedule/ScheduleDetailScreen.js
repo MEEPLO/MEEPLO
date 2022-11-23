@@ -159,7 +159,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                 </View>
                 <View style={styles.itemContentView}>
                   <FontText style={styles.itemContent}>
-                    {schedule?.meetLocation?.id !== 0 ? schedule?.meetLocation?.name : ''}
+                    {schedule?.meetLocation?.id !== 0 ? schedule?.meetLocation?.name : '미정'}
                   </FontText>
                   <FontText style={styles.itemSubContent}> {schedule?.meetLocation?.address}</FontText>
                 </View>
