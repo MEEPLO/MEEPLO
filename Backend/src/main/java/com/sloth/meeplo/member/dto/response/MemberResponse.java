@@ -37,17 +37,11 @@ public class MemberResponse {
         private List<MemberDetailStartLocation> startLocations;
 
         @Builder
-        MemberDetail(Member member){
+        MemberDetail(Member member, List<MemberDetailStartLocation> memberDetailStartLocations){
             this.id = member.getId();
             this.nickname = member.getUsername();
             this.profilePhoto = member.getProfilePhoto();
-            this.startLocations = member.getMemberLocations()
-                    .stream()
-                    .map(ml -> MemberDetailStartLocation.builder()
-                            .memberLocation(ml)
-                            .build())
-                    .distinct()
-                    .collect(Collectors.toList());
+            this.startLocations = memberDetailStartLocations;
         }
     }
 
