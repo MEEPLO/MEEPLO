@@ -169,10 +169,11 @@ const GroupHomeScreen = ({ navigation }) => {
             justifyContent: 'space-between',
             flexDirection: 'row',
             alignItems: 'baseline',
+            marginTop: 20,
           }}>
-          <FontText style={{ fontSize: 24, color: 'black' }}>내 그룹 모아보기</FontText>
+          <FontText style={{ fontSize: 24, color: 'black', fontWeight: 'bold' }}>내 그룹 모아보기</FontText>
         </View>
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={openModal}>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }} onPress={openModal}>
           <FontText style={{ marginRight: 5, color: 'gray' }}>다른 그룹 참여</FontText>
           <FontAwesomeIcon icon={faSquarePlus} size={14} color="gray" />
         </TouchableOpacity>

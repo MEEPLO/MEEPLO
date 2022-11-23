@@ -27,10 +27,10 @@ const MomentsListScreen = props => {
         }
       }}>
       <View style={{ height: '100%' }}>
-        <View style={{ margin: 20 }}>
+        <View style={{ marginHorizontal: 20, marginTop: 30, marginBottom: 10 }}>
           <FontText style={styles.screenTitle}>내 추억 모아보기</FontText>
         </View>
-        <View style={{ marginBottom: 20, paddingRight: 20 }}>
+        <View style={{ marginBottom: 30, paddingRight: 20 }}>
           <View style={{ flexDirection: 'row', height: 30 }}>
             <FontText style={{ flex: 6, lineHeight: 30, textAlign: 'right', color: 'gray' }}>
               내가 작성한 추억만 보기
