@@ -35,8 +35,8 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
 
   // console.log(moments);
   const renderMoment = moments => {
-    return moments.map(moment => (
-      <View style={{ marginBottom: 40, alignItems: 'center' }}>
+    return moments.map((moment, index) => (
+      <View style={{ marginBottom: 40, alignItems: 'center' }} key={index}>
         {/* Photo 부분 */}
         <View style={{ width: width * 0.8, alignItems: 'center' }}>
           <TouchableOpacity
@@ -80,7 +80,8 @@ const ScheduleMomentsFeedScreen = ({ route, navigation }) => {
           <View>
             {/* TODO: 한나언니 여기에 정보로 바꿔주면 돼!! */}
             <FontText>
-              2022.10.14, <FontText style={{ fontWeight: 'bold' }}>신민아개짱</FontText> 님이
+              {`${moment.createdTime.slice(0, 4)}.${moment.createdTime.slice(5, 7)}.${moment.createdTime.slice(8, 10)}`}
+              , <FontText style={{ fontWeight: 'bold' }}>{moment.writer}</FontText> 님이
             </FontText>
           </View>
           <View>

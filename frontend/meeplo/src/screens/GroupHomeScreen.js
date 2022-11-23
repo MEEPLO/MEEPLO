@@ -119,6 +119,7 @@ const GroupHomeScreen = ({ navigation }) => {
                     borderBottomWidth: 1,
                     paddingHorizontal: 10,
                     paddingVertical: 3,
+                    fontFamily: 'NanumSquareRoundR',
                   }}
                 />
                 <TouchableOpacity onPress={fetchCopiedText}>

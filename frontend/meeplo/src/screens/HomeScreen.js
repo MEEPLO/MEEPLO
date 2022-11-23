@@ -58,6 +58,7 @@ const HomeScreen = ({ navigation }) => {
       <View
         style={{
           margin: 20,
+          marginTop: 30,
           justifyContent: 'space-between',
           flexDirection: 'row',
           alignItems: 'baseline',
@@ -74,12 +75,13 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <HomeGroup data={groupList?.slice(0, 3)} navigation={navigation} />
-      <View style={{ margin: 20, marginTop: 30 }}>
+      <View style={{ margin: 20, marginTop: 50 }}>
         <View
           style={{
             justifyContent: 'space-between',
             flexDirection: 'row',
             alignItems: 'baseline',
+            marginBottom: 10,
           }}>
           <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundB', color: 'black' }}>추억 남기기</FontText>
           <TouchableOpacity

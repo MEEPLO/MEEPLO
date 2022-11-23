@@ -25,7 +25,7 @@ const MyPageLocationScreen = ({ navigation }) => {
           return <MyPageLocationItem item={item} navigation={navigation} key={item.id} />;
         })}
       {Array.isArray(startLocations) && startLocations.length < 5 && (
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', marginTop: 35 }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('MyPageLocationEdit', { params: { locationId: 0 } });

@@ -34,7 +34,7 @@ const StepTextInput = props => {
         onFocus={inputOnFocus}
         onChangeText={onValueChange}
         value={value}
-        style={{ borderBottomColor: inputBorderColor, borderBottomWidth: 1 }}
+        style={{ borderBottomColor: inputBorderColor, borderBottomWidth: 1, fontFamily: 'NanumSquareRoundR' }}
       />
     </View>
   );
