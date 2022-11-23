@@ -316,14 +316,17 @@ const MyPageScreen = ({ navigation }) => {
               </TouchableOpacity>
             )}
             {user.startLocations.map((item, index) => {
-              console.log(item);
+              // console.log(item);
               return (
-                <View key={'startLocation' + index} style={{ marginVertical: 15 }}>
-                  <FontText style={{ fontSize: 20, color: 'black', marginBottom: 6 }} bold={true}>
-                    {item.name}
-                    {`  `}
-                    {item?.defaultLocation && <FontAwesomeIcon icon={faCheck} size={14} color="red" />}
-                  </FontText>
+                <View key={'startLocation' + index + item.id} style={{ marginVertical: 15 }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <FontText style={{ fontSize: 20, color: 'black', marginBottom: 6 }} bold={true}>
+                      {item.name}
+                    </FontText>
+                    {item?.defaultLocation && (
+                      <FontAwesomeIcon icon={faCheck} size={14} color="red" style={{ marginLeft: 5 }} />
+                    )}
+                  </View>
                   <FontText style={{ fontSize: 16, color: 'gray' }}>{item.address}</FontText>
                 </View>
               );
