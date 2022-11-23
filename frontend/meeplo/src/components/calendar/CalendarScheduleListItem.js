@@ -18,7 +18,7 @@ import ScheduleItem from '../common/ScheduleItem';
 		}
 */
 
-const colorList = ['purple', 'yellow', 'red', 'green', 'orange', 'blue'];
+const colorList = ['purple', 'yellow', 'red', 'green', 'orange', 'blue', 'navy'];
 
 const CalendarScheduleListItem = ({ item, onItemPress }) => {
   return (
