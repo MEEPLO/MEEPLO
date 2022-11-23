@@ -348,6 +348,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.input,
     padding: 10,
     backgroundColor: 'white',
+    color: 'gray',
   },
   mapSearchButton: {
     backgroundColor: theme.color.bright.red,

@@ -1,4 +1,4 @@
-import { View, Text, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
@@ -26,8 +26,14 @@ const MyPageLocationSearch = ({ isVisible, setIsVisible, handleOnChange }) => {
           style={{ flex: 1, width: '100%', zIndex: 999 }}
           jsOptions={{ animation: true, hideMapBtn: true }}
           onSelected={data => {
-            handleOnChange(data.address, 'address');
-            setIsVisible(false);
+            console.log(data.sido);
+            if (data.sido === '서울' || data.sido === '경기' || data.sido === '인천') {
+              handleOnChange(data.address, 'address');
+              setIsVisible(false);
+            } else {
+              Alert.alert('출발지 등록 불가', '현재는 서울, 경기, 인천만 등록 가능합니다.', [{ text: '확인' }]);
+              setIsVisible(false);
+            }
           }}
         />
       </Modal>

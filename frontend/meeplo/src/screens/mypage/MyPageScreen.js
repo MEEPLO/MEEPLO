@@ -220,6 +220,7 @@ const MyPageScreen = ({ navigation }) => {
                   marginVertical: 15,
                   padding: 0,
                   fontFamily: 'NanumSquareRoundR',
+                  color: 'gray',
                 }}
               />
             </View>

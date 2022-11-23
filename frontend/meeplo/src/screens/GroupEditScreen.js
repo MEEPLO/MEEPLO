@@ -222,7 +222,7 @@ const GroupEditScreen = ({ route, navigation }) => {
             onFocus={inputOnFocus}
             value={groupDescription}
             onChangeText={setGroupDescription}
-            style={{ borderColor: inputBorderColor, borderWidth: 1, fontFamily: 'NanumSquareRoundR' }}
+            style={{ borderColor: inputBorderColor, borderWidth: 1, color: 'gray', fontFamily: 'NanumSquareRoundR' }}
           />
         </View>
       </ScrollView>

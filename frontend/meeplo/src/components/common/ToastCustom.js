@@ -8,8 +8,8 @@ export const toastConfig = {
       style={{ backgroundColor: '#FFFBEE', borderColor: theme.color.bright.yellow }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
-        fontSize: 20,
-        fontWeight: '400',
+        fontSize: 16,
+        fontFamily: 'NanumSquareRoundB',
       }}
     />
   ),
@@ -20,13 +20,13 @@ export const toastConfig = {
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
         color: 'black',
-        fontSize: 20,
-        fontWeight: 'normal',
+        fontSize: 16,
+        fontFamily: 'NanumSquareRoundB',
       }}
       text2Style={{
         color: 'gray',
-        fontSize: 14,
-        fontWeight: 'normal',
+        fontSize: 10,
+        fontFamily: 'NanumSquareRoundR',
       }}
     />
   ),

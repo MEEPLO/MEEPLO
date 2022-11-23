@@ -126,6 +126,7 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
             }}
             placeholderTextColor={theme.color.disabled}
             style={{
+              fontFamily: 'NanumSquareRoundR',
               width: '100%',
               height: 36,
               borderBottomColor: inputBorderColor,
@@ -133,6 +134,7 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
               fontSize: 20,
               marginVertical: 15,
               padding: 0,
+              color: 'gray',
             }}
           />
         </View>
@@ -154,7 +156,7 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
             <FontText
               style={{
                 fontSize: 20,
-                color: form?.address ? 'black' : theme.color.disabled,
+                color: form.address ? 'black' : theme.color.disabled,
               }}>
               {form?.address ? form.address : '건물, 지번 또는 도로명 검색'}
             </FontText>

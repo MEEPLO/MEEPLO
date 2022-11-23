@@ -203,7 +203,7 @@ const GroupCreateScreen = ({ navigation }) => {
             onBlur={inputOnBlur}
             onFocus={inputOnFocus}
             onChangeText={setGroupDescription}
-            style={{ borderColor: inputBorderColor, borderWidth: 1 }}
+            style={{ borderColor: inputBorderColor, borderWidth: 1, color: 'gray', fontFamily: 'NanumSquareRoundR' }}
           />
         </View>
       </ScrollView>
