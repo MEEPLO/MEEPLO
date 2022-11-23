@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button, ActivityIndicator, Dimensions } from 'r
 import { useDispatch } from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
 import { useNavigation } from '@react-navigation/native';
+import FontText from '../../../components/common/FontText';
 
 import { createSchedule } from '../../../redux/scheduleSlice';
 import StepButton from '../../../components/stepper/StepButton';
@@ -25,15 +26,19 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
       date: state?.date,
       name: state?.name,
       groupId: state?.group?.id,
-      meetLocationId: state?.meet?.id,
+      meetLocationId: 0,
+      amuses: [],
       keywords: state?.keywords,
       members: state?.members,
-      amuses: [
-        {
-          id: state?.amuse?.id,
-        },
-      ],
     };
+
+    if (state?.meet?.id) {
+      reqObject.meetLocationId = state.meet.id;
+    }
+
+    if (state?.amuse?.id) {
+      reqObject.amuses.push({ id: state.amuse.id });
+    }
 
     openLoadingModal();
     dispatch(createSchedule({ schedule: reqObject, navigation }))
@@ -52,56 +57,56 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={{ alignItems: 'center', marginBottom: 50 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>약속을 만드시겠어요?</Text>
+        <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>약속을 만드시겠어요?</FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
-          <Text style={styles.itemTitle}>일시</Text>
+          <FontText style={styles.itemTitle}>일시</FontText>
         </View>
-        <Text style={styles.itemText}> {state?.date} </Text>
+        <FontText style={styles.itemText}> {state?.date} </FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
-          <Text style={styles.itemTitle}>약속 이름</Text>
+          <FontText style={styles.itemTitle}>약속 이름</FontText>
         </View>
-        <Text style={styles.itemText}> {state?.name}</Text>
+        <FontText style={styles.itemText}> {state?.name}</FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
-          <Text style={styles.itemTitle}>키워드</Text>
+          <FontText style={styles.itemTitle}>키워드</FontText>
         </View>
-        <Text style={styles.itemText}>{state?.keywords?.join(', ')}</Text>
+        <FontText style={styles.itemText}>{state?.keywords?.join(', ')}</FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
-          <Text style={styles.itemTitle}>모임</Text>
+          <FontText style={styles.itemTitle}>모임</FontText>
         </View>
-        <Text style={styles.itemText}> {state?.group?.name} </Text>
+        <FontText style={styles.itemText}> {state?.group?.name} </FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
-          <Text style={styles.itemTitle}>멤버</Text>
+          <FontText style={styles.itemTitle}>멤버</FontText>
         </View>
-        <Text style={styles.itemText}> {state?.members?.map(member => member.nickname).join(', ')} </Text>
+        <FontText style={styles.itemText}> {state?.members?.map(member => member.nickname).join(', ')} </FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
-          <Text style={styles.itemTitle}>만남 장소</Text>
+          <FontText style={styles.itemTitle}>만남 장소</FontText>
         </View>
-        <Text style={styles.itemText}> {state?.meet?.name}역</Text>
+        <FontText style={styles.itemText}> {state?.meet?.name}역</FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
-          <Text style={styles.itemTitle}>약속 장소</Text>
+          <FontText style={styles.itemTitle}>약속 장소</FontText>
         </View>
-        <Text style={styles.itemText}> {state?.amuse?.name}</Text>
+        <FontText style={styles.itemText}> {state?.amuse?.name}</FontText>
       </View>
 
       <View style={styles.navigateViewStyle}>

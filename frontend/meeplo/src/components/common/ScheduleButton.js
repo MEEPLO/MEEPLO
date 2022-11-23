@@ -1,6 +1,7 @@
 import { ImageBackground, Dimensions, View, Text } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 import Images from '../../assets/image/index';
+import FontText from './FontText';
 
 const ScheduleButton = props => {
   const imageWidth = Dimensions.get('window').width - 40;
@@ -28,17 +29,17 @@ const ScheduleButton = props => {
           <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
             <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
               <View style={{ marginBottom: 5 }}>
-                <Text style={{ color: theme.font.color, fontWeight: 'bold', fontSize: 18 }}>
-                  {props.date} <Text> {props.place}</Text>
-                </Text>
+                <FontText style={{ color: theme.font.color, fontWeight: 'bold', fontSize: 18 }}>
+                  {props.date} <FontText> {props.place}</FontText>
+                </FontText>
               </View>
               <View style={{ marginBottom: 5 }}>
-                <Text>{props.title}</Text>
+                <FontText>{props.title}</FontText>
               </View>
               <View>
-                <Text>
-                  {props.group} <Text> | </Text> {props.people}명
-                </Text>
+                <FontText>
+                  {props.group} <FontText> | </FontText> {props.people}명
+                </FontText>
               </View>
             </View>
           </ImageBackground>
@@ -56,7 +57,7 @@ const ScheduleButton = props => {
           <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
             <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
               <View style={{ marginBottom: 5 }}>
-                <Text
+                <FontText
                   style={{
                     color: theme.font.color,
                     fontWeight: 'bold',
@@ -65,7 +66,7 @@ const ScheduleButton = props => {
                     lineHeight: imageWidth * 0.21,
                   }}>
                   {props.empty}
-                </Text>
+                </FontText>
               </View>
             </View>
           </ImageBackground>

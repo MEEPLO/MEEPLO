@@ -9,6 +9,7 @@ import { getScheduleDetail, deleteSchedule } from '../../redux/scheduleSlice';
 
 import ModalCover from '../../components/common/ModalCover';
 import LoadingModal from '../../components/common/LoadingModal';
+import FontText from '../../components/common/FontText';
 
 const { width, height } = Dimensions.get('screen');
 const memberModalContentWidth = width * 0.5;
@@ -57,7 +58,6 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
         cancelable: true,
       },
     );
-    dispatch(deleteSchedule({ scheduleId }));
   };
 
   const onPressEdit = () => {
@@ -78,16 +78,20 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
   const closeMemberModal = () => setShowMemberModal(false);
 
   const renderAmuseLoactions = amuseLocations => {
-    return amuseLocations?.map(amuse => (
-      <View key={amuse.id} style={styles.itemContentView}>
-        <Text style={styles.itemContent}> {amuse?.name}</Text>
-        <Text style={styles.itemSubContent}> {amuse?.address}</Text>
-      </View>
-    ));
+    if (Array.isArray(amuseLocations) && amuseLocations.length > 0) {
+      return amuseLocations?.map(amuse => (
+        <View key={amuse.id} style={styles.itemContentView}>
+          <FontText style={styles.itemContent}> {amuse?.name}</FontText>
+          <FontText style={styles.itemSubContent}> {amuse?.address}</FontText>
+        </View>
+      ));
+    } else {
+      return <FontText style={styles.itemContent}>미정</FontText>;
+    }
   };
 
   const renderKeywords = keywords => {
-    return <Text>{keywords?.map(keyword => `#${keyword}`).join('  ')}</Text>;
+    return <FontText>{keywords?.map(keyword => `#${keyword}`).join('  ')}</FontText>;
   };
 
   const renderMemberList = members => {
@@ -105,7 +109,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
             }}
             resizeMode="center"
           />
-          <Text style={{ fontSize: 16, color: 'gray' }}>{member?.nickname}</Text>
+          <FontText style={{ fontSize: 16, color: 'gray' }}>{member?.nickname}</FontText>
         </View>
       );
     });
@@ -115,26 +119,26 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
     <View style={styles.screenStyle}>
       {!isLoading ? (
         <ScrollView>
-          <View style={{ height: 440, marginVertical: 20 }}>
+          <View style={{ height: 460, marginVertical: 20 }}>
             {/* title */}
             <View style={styles.detailTitleContainer}>
-              <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 22, marginHorizontal: 10 }}>
+              <FontText style={{ color: 'black', fontWeight: 'bold', fontSize: 22, marginHorizontal: 10 }}>
                 {`${scheduleDate.year}년 ${scheduleDate.month}월 ${scheduleDate.date}일  ${scheduleDate.day}`}
-              </Text>
+              </FontText>
             </View>
             {/* content */}
             <View style={styles.detailItemsContainer}>
               <View style={styles.itemView}>
                 <View style={styles.itemTitleView}>
-                  <Text style={styles.itemTitle}>약속 그룹</Text>
+                  <FontText style={styles.itemTitle}>약속 그룹</FontText>
                 </View>
                 <View style={styles.itemContentView}>
-                  <Text style={styles.itemContent}> {schedule?.group?.name}</Text>
+                  <FontText style={styles.itemContent}> {schedule?.group?.name}</FontText>
                   <TouchableOpacity style={styles.itemMemberButton} onPress={openMemberModal}>
                     <View style={styles.itemMemberButtonContent}>
-                      <Text style={{ marginRight: 10, color: 'gray' }}>눌러서 참석자보기</Text>
+                      <FontText style={{ marginRight: 10, color: 'gray' }}>눌러서 참석자보기</FontText>
                       <FontAwesomeIcon icon={faUser} color={'gray'} size={10} />
-                      <Text style={{ marginLeft: 3, color: 'gray' }}>{schedule?.members?.length}</Text>
+                      <FontText style={{ marginLeft: 3, color: 'gray' }}>{schedule?.members?.length}</FontText>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -142,26 +146,28 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
 
               <View style={styles.itemView}>
                 <View>
-                  <Text style={styles.itemTitle}>약속 이름</Text>
+                  <FontText style={styles.itemTitle}>약속 이름</FontText>
                 </View>
                 <View style={styles.itemContentView}>
-                  <Text style={styles.itemContent}> {schedule.name}</Text>
+                  <FontText style={styles.itemContent}> {schedule.name}</FontText>
                 </View>
               </View>
 
               <View style={styles.itemView}>
                 <View>
-                  <Text style={styles.itemTitle}>만남 장소</Text>
+                  <FontText style={styles.itemTitle}>만남 장소</FontText>
                 </View>
                 <View style={styles.itemContentView}>
-                  <Text style={styles.itemContent}> {schedule?.meetLocation?.name}</Text>
-                  <Text style={styles.itemSubContent}> {schedule?.meetLocation?.address}</Text>
+                  <FontText style={styles.itemContent}>
+                    {schedule?.meetLocation?.id !== 0 ? schedule?.meetLocation?.name : ''}
+                  </FontText>
+                  <FontText style={styles.itemSubContent}> {schedule?.meetLocation?.address}</FontText>
                 </View>
               </View>
 
               <View style={styles.itemView}>
                 <View>
-                  <Text style={styles.itemTitle}>약속 장소</Text>
+                  <FontText style={styles.itemTitle}>약속 장소</FontText>
                 </View>
                 <View>{renderAmuseLoactions(schedule?.amuseLocations)}</View>
               </View>
@@ -174,10 +180,10 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                     onPress={onPressEdit}
                     activeOpacity={0.6}
                     style={[styles.buttonUD, { backgroundColor: theme.color.bright.navy }]}>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>수정</Text>
+                    <FontText style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>수정</FontText>
                   </TouchableOpacity>
                   <TouchableOpacity activeOpacity={0.6} style={styles.buttonUD} onPress={onPressDelete}>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>삭제</Text>
+                    <FontText style={{ fontSize: 16, fontWeight: 'bold', color: 'black' }}>삭제</FontText>
                   </TouchableOpacity>
                 </View>
               )}
@@ -195,7 +201,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                       backgroundColor: theme.color.pale.orange,
                     },
                   ]}>
-                  <Text style={styles.buttonTitle}>추억 보기</Text>
+                  <FontText style={styles.buttonTitle}>추억 보기</FontText>
                 </TouchableOpacity>
                 {/* <TouchableOpacity
                 style={[
@@ -204,7 +210,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                     backgroundColor: theme.color.pale.yellow,
                   },
                 ]}>
-                <Text style={styles.buttonTitle}>추억 남기기</Text>
+                <FontText style={styles.buttonTitle}>추억 남기기</FontText>
               </TouchableOpacity> */}
               </View>
             )
@@ -216,7 +222,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
             //         backgroundColor: theme.color.bright.yellow,
             //       },
             //     ]}>
-            //     <Text style={styles.buttonTitle}>지도로 장소 확인하기</Text>
+            //     <FontText style={styles.buttonTitle}>지도로 장소 확인하기</FontText>
             //   </TouchableOpacity>
             // )
           }
@@ -263,7 +269,7 @@ const styles = StyleSheet.create({
     borderColor: theme.color.border,
   },
   detailItemsContainer: {
-    height: 385,
+    height: 420,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
     borderWidth: 2,
@@ -289,20 +295,21 @@ const styles = StyleSheet.create({
   },
 
   itemView: {
+    marginBottom: 5,
     height: 70,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
   itemTitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: 'gray',
   },
   itemContentView: {
     alignItems: 'flex-end',
   },
   itemContent: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: theme.font.color,
   },

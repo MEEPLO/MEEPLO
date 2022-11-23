@@ -5,6 +5,7 @@ import AutoHeightImage from 'react-native-auto-height-image';
 
 import { theme } from '../../../assets/constant/DesignTheme';
 import StepButton from '../../stepper/StepButton';
+import FontText from '../../common/FontText';
 
 const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   const windowWidth = Dimensions.get('window').width - 40;
@@ -14,10 +15,11 @@ const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
   return visible ? (
     <View style={{ height: windowHeight - 200, marginHorizontal: 20 }}>
       <View style={{ height: 90 }}>
-        <Text style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 18, color: 'gray' }}>입력 사항 체크</Text>
-        <Text style={{ fontSize: 14, color: theme.font.color }}>
-          <Text style={{ color: theme.color.alert, fontWeight: 'bold' }}>! </Text> 생성된 추억은 다시 지울 수 없어요.
-        </Text>
+        <FontText style={{ lineHeight: 50, fontWeight: 'bold', fontSize: 18, color: 'gray' }}>입력 사항 체크</FontText>
+        <FontText style={{ fontSize: 14, color: theme.font.color }}>
+          <FontText style={{ color: theme.color.alert, fontWeight: 'bold' }}>! </FontText> 생성된 추억은 다시 지울 수
+          없어요.
+        </FontText>
       </View>
       <View style={{ marginHorizontal: 20 }}>
         <View>
@@ -32,8 +34,8 @@ const CommentsSetCheck = ({ toNext, toPrev, onFinish, visible, state }) => {
           />
         </View>
         <View style={{ height: 90 }}>
-          <Text style={{ lineHeight: 90, fontSize: 15, color: 'gray' }}>댓글 내용: </Text>
-          <Text style={{ fontSize: 17, color: theme.font.color }}>{state.comment}</Text>
+          <FontText style={{ lineHeight: 90, fontSize: 15, color: 'gray' }}>댓글 내용: </FontText>
+          <FontText style={{ fontSize: 17, color: theme.font.color }}>{state.comment}</FontText>
         </View>
       </View>
       <View

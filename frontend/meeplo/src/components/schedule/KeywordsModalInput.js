@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions } from 'react-native';
 import { theme } from '../../assets/constant/DesignTheme';
 import Toast from 'react-native-toast-message';
+import FontText from '../common/FontText';
 
 import StepTextInput from '../common/StepTextInput';
 import ModalRound from '../common/ModalRound';
@@ -19,8 +20,10 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
   const [invalidText, setInvalidText] = useState('');
 
   useEffect(() => {
-    setSelected([...value]);
-    setSelectBuffer([...value]);
+    if (Array.isArray(value)) {
+      setSelected([...value]);
+      setSelectBuffer([...value]);
+    }
   }, [value]);
 
   const openModal = () => setShowModal(true);
@@ -86,7 +89,7 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
 
   return (
     <View>
-      <Text style={styles.titleStyle}>{type}</Text>
+      <FontText style={styles.titleStyle}>{type}</FontText>
 
       <TouchableOpacity
         style={{ marginTop: 10, minHeight: 40, borderBottomWidth: 1, borderColor: theme.color.disabled }}
@@ -96,9 +99,9 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
 
       <ModalRound title="키워드" visible={showModal} onRequestClose={closeModal}>
         <View style={{ alignSelf: 'flex-end' }}>
-          <Text>
+          <FontText>
             {selectBuffer.length} / {config.schedule.MAX_SELECT_KEYWORD_COUNT}
-          </Text>
+          </FontText>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
@@ -122,19 +125,19 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
               justifyContent: 'center',
             }}
             onPress={onAddKeywords}>
-            <Text style={{ color: theme.color.border, fontSize: 14, fontWeight: 'bold' }}>+</Text>
+            <FontText style={{ color: theme.color.border, fontSize: 14, fontWeight: 'bold' }}>+</FontText>
           </TouchableOpacity>
         </View>
 
         <View style={styles.invalidTextView}>
-          <Text style={styles.invalidText}>{invalidText}</Text>
+          <FontText style={styles.invalidText}>{invalidText}</FontText>
         </View>
 
         <View style={styles.keywordBadgeView}>{renderKeywordBadges(selectBuffer, false, onRemoveKeywords)}</View>
 
         <View style={styles.confirmButtonView}>
           <TouchableOpacity style={styles.confirmButtonStyle} onPress={onPressConfirm}>
-            <Text style={styles.confirmButtonTextStyle}> 확인 </Text>
+            <FontText style={styles.confirmButtonTextStyle}> 확인 </FontText>
           </TouchableOpacity>
         </View>
 

@@ -8,7 +8,7 @@ import GroupDetailScheduleItem from '../components/Group/GroupDetailScheduleItem
 import GroupDetailMomentsItem from '../components/Group/GroupDetailMomentsItem';
 import { getGroupDetail, getGroupMomentsFeed } from '../redux/groupSlice';
 import MomentModal from '../components/moments/MomentModal';
-import { theme } from '../assets/constant/DesignTheme';
+import FontText from '../components/common/FontText';
 
 const { width } = Dimensions.get('window');
 
@@ -69,8 +69,10 @@ const GroupDetailScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 약속이 없네요!</Text>
-              <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>새로운 약속을 만들어 보세요.</Text>
+              <FontText style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 약속이 없네요!</FontText>
+              <FontText style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>
+                새로운 약속을 만들어 보세요.
+              </FontText>
             </View>
           </Tabs.ScrollView>
         ) : (
@@ -96,10 +98,10 @@ const GroupDetailScreen = ({ route, navigation }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 남겨진 추억이 없네요!</Text>
-              <Text style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>
+              <FontText style={{ fontSize: 16, marginVertical: 5, color: 'gray' }}>아직 남겨진 추억이 없네요!</FontText>
+              <FontText style={{ fontSize: 20, color: 'gray', marginVertical: 5 }}>
                 새로운 약속을 만들고 추억을 남겨 보세요.
-              </Text>
+              </FontText>
             </View>
           ) : (
             <View style={{ marginBottom: 105, flexDirection: 'row', flexWrap: 'wrap' }}>
