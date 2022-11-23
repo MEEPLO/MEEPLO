@@ -58,7 +58,6 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
         cancelable: true,
       },
     );
-    dispatch(deleteSchedule({ scheduleId }));
   };
 
   const onPressEdit = () => {
@@ -116,7 +115,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
     <View style={styles.screenStyle}>
       {!isLoading ? (
         <ScrollView>
-          <View style={{ height: 440, marginVertical: 20 }}>
+          <View style={{ height: 460, marginVertical: 20 }}>
             {/* title */}
             <View style={styles.detailTitleContainer}>
               <FontText style={{ color: 'black', fontWeight: 'bold', fontSize: 22, marginHorizontal: 10 }}>
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
     borderColor: theme.color.border,
   },
   detailItemsContainer: {
-    height: 385,
+    height: 420,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
     borderWidth: 2,
@@ -290,20 +289,21 @@ const styles = StyleSheet.create({
   },
 
   itemView: {
+    marginBottom: 5,
     height: 70,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
   itemTitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: 'gray',
   },
   itemContentView: {
     alignItems: 'flex-end',
   },
   itemContent: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: theme.font.color,
   },

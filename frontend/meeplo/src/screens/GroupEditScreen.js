@@ -158,7 +158,7 @@ const GroupEditScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        <View style={{ margin: 20 }}>
+        <View style={{ margin: 20, marginTop: 50 }}>
           <StepTextInput
             type="그룹명"
             maxLength={20}
@@ -222,7 +222,7 @@ const GroupEditScreen = ({ route, navigation }) => {
             onFocus={inputOnFocus}
             value={groupDescription}
             onChangeText={setGroupDescription}
-            style={{ borderColor: inputBorderColor, borderWidth: 1 }}
+            style={{ borderColor: inputBorderColor, borderWidth: 1, fontFamily: 'NanumSquareRoundR' }}
           />
         </View>
       </ScrollView>

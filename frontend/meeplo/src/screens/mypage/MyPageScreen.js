@@ -216,9 +216,10 @@ const MyPageScreen = ({ navigation }) => {
                   height: 36,
                   borderBottomColor: inputBorderColor,
                   borderBottomWidth: 1,
-                  fontSize: 25,
+                  fontSize: 23,
                   marginVertical: 15,
                   padding: 0,
+                  fontFamily: 'NanumSquareRoundR',
                 }}
               />
             </View>
@@ -318,11 +319,12 @@ const MyPageScreen = ({ navigation }) => {
               console.log(item);
               return (
                 <View key={'startLocation' + index} style={{ marginVertical: 15 }}>
-                  <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black', marginBottom: 6 }}>
+                  <FontText style={{ fontSize: 20, color: 'black', marginBottom: 6 }} bold={true}>
                     {item.name}
+                    {`  `}
                     {item?.defaultLocation && <FontAwesomeIcon icon={faCheck} size={14} color="red" />}
                   </FontText>
-                  <FontText style={{ fontSize: 16, fontWeight: '400', color: 'gray' }}>{item.address}</FontText>
+                  <FontText style={{ fontSize: 16, color: 'gray' }}>{item.address}</FontText>
                 </View>
               );
             })}

@@ -103,7 +103,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
           <KeywordsModalInput type="키워드" value={scheduleKeywords} onConfirm={setScheduleKeywords} />
         </View>
         <View style={{ margin: 20 }}>
-          <MapLocationInput type="만날 장소" value={scheduleMeetLocation} onValueChange={setScheduleMeetLocation} />
+          <MapLocationInput type="만남 장소" value={scheduleMeetLocation} onValueChange={setScheduleMeetLocation} />
         </View>
         <View style={{ margin: 20 }}>
           <MapLocationInput type="약속 장소" value={scheduleAmuseLocation} onValueChange={setScheduleAmuseLocation} />

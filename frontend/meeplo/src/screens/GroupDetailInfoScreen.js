@@ -125,12 +125,12 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: 35,
+                height: 45,
                 width: width - 150,
                 marginVertical: 15,
                 borderColor: theme.color.border,
                 borderWidth: 2,
-                borderRadius: 10,
+                borderRadius: 15,
                 backgroundColor: theme.color.pale.blue,
               }}>
               <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>그룹 코드 공유하기</FontText>
@@ -145,7 +145,7 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
               marginHorizontal: 20,
               marginVertical: 15,
               width: width - 40,
-              height: 40 * (memberCount + 1),
+              height: 45 * (memberCount + 1),
               borderRadius: 20,
               overflow: 'hidden',
               borderColor: theme.color.border,
@@ -219,12 +219,13 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  height: 35,
+                  height: 45,
                   width: width - 150,
-                  marginVertical: 15,
+                  marginTop: 45,
+                  marginBottom: 20,
                   borderColor: theme.color.border,
                   borderWidth: 2,
-                  borderRadius: 10,
+                  borderRadius: 15,
                   backgroundColor: theme.color.pale.red,
                 }}>
                 <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>그룹 프로필 편집</FontText>
@@ -235,12 +236,11 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  height: 35,
+                  height: 45,
                   width: width - 150,
-                  marginVertical: 15,
                   borderColor: theme.color.border,
                   borderWidth: 2,
-                  borderRadius: 10,
+                  borderRadius: 15,
                   backgroundColor: theme.color.alert,
                 }}>
                 <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>그룹 삭제하기</FontText>
@@ -253,12 +253,12 @@ const GroupDetailInfoScreen = ({ route, navigation }) => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: 35,
+                height: 45,
                 width: width - 150,
                 marginVertical: 15,
                 borderColor: theme.color.border,
                 borderWidth: 2,
-                borderRadius: 10,
+                borderRadius: 15,
                 backgroundColor: theme.color.alert,
               }}>
               <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>그룹에서 나가기</FontText>

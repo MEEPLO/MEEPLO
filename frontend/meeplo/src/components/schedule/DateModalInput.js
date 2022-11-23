@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   titleStyle: {
     color: theme.font.color,
     fontWeight: 'bold',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   requiredStyle: {
     color: theme.color.alert,

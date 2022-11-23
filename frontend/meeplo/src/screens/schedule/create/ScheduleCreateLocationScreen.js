@@ -65,7 +65,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
   return visible ? (
     <View style={styles.screenStyle}>
       <View style={styles.inputViewStyle}>
-        <MapStationInput type="만날 장소" required value={meet} onValueChange={onSelectMeetLocation} state={state} />
+        <MapStationInput type="만남 장소" required value={meet} onValueChange={onSelectMeetLocation} state={state} />
       </View>
       <View style={styles.inputViewStyle}>
         <MapLocationInput
