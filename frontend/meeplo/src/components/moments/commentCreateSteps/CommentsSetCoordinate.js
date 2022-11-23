@@ -9,8 +9,6 @@ import StepButton from '../../stepper/StepButton';
 const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => {
   const momentDetail = useSelector(state => state.momentDetail);
 
-  // console.log('in coordinate', momentDetail);
-
   const [tilt, setTilt] = React.useState(0);
   // 실제 좌표 데이터 보낼 때에는 조정 필요
   const [delX, setDelX] = React.useState(0);
@@ -57,25 +55,28 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             {momentDetail.comments?.map((comment, idx) => (
               <View
                 style={{
-                  width: '80%',
+                  width: momentDetail.moment.type === 2 ? '90%' : '40%',
                   transform: [{ rotate: `${comment.location.angle}deg` }],
                   position: 'absolute',
                   top: comment.location.ypoint * 0.85,
-                  left: comment.location.xpoint * 0.6,
+                  left: comment.location.xpoint * 0.7,
                 }}
                 key={idx}>
-                <Text style={{ fontSize: 10, color: 'gray' }}>{comment.comment}</Text>
+                <Text style={{ color: 'gray', fontSize: comment.font === 'gag' ? 18 : 15, fontFamily: comment.font }}>
+                  {comment.comment}
+                </Text>
               </View>
             ))}
             <Text
               style={{
-                width: '80%',
-                fontSize: 11,
+                // width: momentDetail.moment.type === 2 ? '90%' : '40%',
+                fontSize: state.font === 'gag' ? 18 : 15,
                 color: theme.font.color,
                 transform: [{ rotate: `${tilt}deg` }],
                 position: 'absolute',
                 top: delY,
                 left: delX,
+                fontFamily: state.font,
               }}>
               {state.comment}
             </Text>

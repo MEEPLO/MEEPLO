@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { theme } from '../../assets/constant/DesignTheme';
-
-import ScheduleButton from '../common/ScheduleButton';
+import ScheduleItem from '../common/ScheduleItem';
 
 /*
  API data 형태
@@ -20,32 +18,24 @@ import ScheduleButton from '../common/ScheduleButton';
 		}
 */
 
-const screen = Dimensions.get('screen');
+const colorList = ['purple', 'yellow', 'red', 'green', 'orange', 'blue'];
 
 const CalendarScheduleListItem = ({ item, onItemPress }) => {
   return (
     <TouchableOpacity
-      style={styles.itemView}
       onPress={() => {
         onItemPress(item.id);
       }}>
-      <ScheduleButton
-        isData={true}
-        picture="yellow"
-        title={item?.name}
+      <ScheduleItem
         date={item?.date}
-        place={item?.location?.amuseName}
-        group={item?.groupName}
-        people={item?.memberCount}
+        location={item?.location}
+        name={item?.name}
+        groupName={item?.groupName}
+        memberCount={item?.memberCount}
+        color={colorList[item.id % 7]}
       />
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  itemView: {
-    marginVertical: 10,
-  },
-});
 
 export default CalendarScheduleListItem;

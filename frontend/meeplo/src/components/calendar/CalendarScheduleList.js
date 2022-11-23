@@ -16,6 +16,7 @@ const CalendarScheduleList = ({ data, onItemPress }) => {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       flex={1}
+      contentContainerStyle={{ paddingBottom: 280 }}
     />
   ) : (
     <Tabs.ScrollView>
