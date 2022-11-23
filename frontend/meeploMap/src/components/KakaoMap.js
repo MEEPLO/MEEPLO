@@ -290,17 +290,24 @@ const KakaoMap = () => {
           <div>
             <Polyline
               path={time.coordinates}
-              strokeWeight={7}
-              strokeColor="#FFFFFF"
+              strokeWeight={6}
+              strokeColor="#000000"
               strokeOpacity={1}
               strokeStyle={'solid'}
             />
             <Polyline
               path={time.coordinates}
               strokeWeight={5}
-              strokeColor={theme.color.bright.blue}
+              strokeColor="#2e5bff"
               strokeOpacity={1}
               strokeStyle={'solid'}
+            />
+            <Polyline
+              path={time.coordinates}
+              strokeWeight={1}
+              strokeColor="#FFFFFF"
+              strokeOpacity={1}
+              strokeStyle={'shortdash'}
             />
           </div>
         );
