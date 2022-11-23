@@ -30,7 +30,15 @@ const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    dispatch(getUserInfo());
+    dispatch(getUserInfo()).then(({ payload }) => {
+      console.log(payload);
+      if (Array.isArray(payload.startLocations) || payload.startLocations?.length === 0) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'NewMemberLocation' }],
+        });
+      }
+    });
     dispatch(getGroupList());
     dispatch(getUpcomingSchedule());
     dispatch(getNoMomentsSchedule());

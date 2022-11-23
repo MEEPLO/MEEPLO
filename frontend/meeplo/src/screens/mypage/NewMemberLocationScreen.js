@@ -12,6 +12,8 @@ import LoadingModal from '../../components/common/LoadingModal';
 import { TOAST_MESSAGE } from '../../assets/constant/string';
 import { useEffect } from 'react';
 import FontText from '../../components/common/FontText';
+import { useFocusEffect } from '@react-navigation/native';
+import { hideTabBar, showTabBar } from '../../redux/navigationSlice';
 
 const NewMemberLocationScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -87,6 +89,14 @@ const NewMemberLocationScreen = ({ route, navigation }) => {
   useEffect(() => {
     dispatch(getUserInfo());
   }, []);
+
+  useFocusEffect(() => {
+    dispatch(hideTabBar());
+
+    return () => {
+      dispatch(showTabBar());
+    };
+  });
 
   return (
     <>

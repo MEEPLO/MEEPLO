@@ -69,8 +69,8 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
       dispatch(createStartLocation({ form })).then(() => {
         dispatch(getUserInfo());
         navigation.reset({
-          index: 1,
-          routes: [{ name: 'Home' }, { name: 'MyPage' }],
+          index: 2,
+          routes: [{ name: 'Home' }, { name: 'MyPage' }, { name: 'MyPageLocation' }],
         });
       });
     }
@@ -95,6 +95,7 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
             }}
             placeholderTextColor={theme.color.disabled}
             style={{
+              fontFamily: 'NanumSquareRoundR',
               width: '100%',
               height: 36,
               borderBottomColor: inputBorderColor,
@@ -120,13 +121,14 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
               marginVertical: 15,
               padding: 0,
             }}>
-            <FontText
+            <Text
               style={{
+                fontFamily: 'NanumSquareRoundR',
                 fontSize: 20,
                 color: form?.address ? 'black' : theme.color.disabled,
               }}>
               {form?.address ? form.address : '건물, 지번 또는 도로명 검색'}
-            </FontText>
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 30 }}>
