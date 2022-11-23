@@ -29,12 +29,14 @@ const KakaoMap = () => {
   const [searchedStations, setSearchedStations] = useState([]);
   const [recommendedStations, setRecommendedStations] = useState([]);
   const [recommendedAmuses, setRecommendedAmuses] = useState([]);
+  const [selectedStation, setSelectedStation] = useState({});
 
   const mapRef = useRef();
   const recommendedBounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
 
     if (Array.isArray(recommendedStations) && Array.isArray(recommendedStations[0]?.requiredTimes)) {
+      setSelectedStation(recommendedStations[0]);
       recommendedStations[0].requiredTimes.forEach(time => {
         bounds.extend(new kakao.maps.LatLng(time.startLocation.lat, time.startLocation.lng));
       });
@@ -164,33 +166,6 @@ const KakaoMap = () => {
     );
   };
 
-  const getRandomColor = () => {
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min;
-    }
-
-    switch (getRandomInt(1, 8)) {
-      case 1:
-        return theme.color.bright.red;
-      case 2:
-        return theme.color.bright.orange;
-      case 3:
-        return theme.color.bright.yellow;
-      case 4:
-        return theme.color.bright.green;
-      case 5:
-        return theme.color.bright.blue;
-      case 6:
-        return theme.color.bright.navy;
-      case 7:
-        return theme.color.bright.purple;
-      case 8:
-        return theme.color.bright.gray;
-    }
-  };
-
   const renderNearLocationsMarker = nearLocations => {
     if (Array.isArray(nearLocations)) {
       return nearLocations.map(location => (
@@ -218,13 +193,38 @@ const KakaoMap = () => {
   const renderRecommendedStationMarker = stations => {
     if (Array.isArray(stations)) {
       return stations.map(station => (
-        <MapMarker
-          position={{ lat: station.lat, lng: station.lng }}
-          image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.GREEN)}
-          onClick={() => {
-            postMessage(createMessage(MESSAGE_TYPE.SELECT_SEARCHED_STATION, station));
-          }}
-        />
+        <div>
+          <MapMarker
+            position={{ lat: station.lat, lng: station.lng }}
+            image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.GREEN)}
+            onClick={() => {
+              setCenter({
+                lat: station?.lat,
+                lng: station?.lng,
+              });
+              setSelectedStation(station);
+              postMessage(
+                createMessage(MESSAGE_TYPE.SELECT_SEARCHED_STATION, { ...station, markerType: 'recommended' }),
+              );
+            }}
+          />
+
+          <CustomOverlayMap position={{ lat: station.lat, lng: station.lng }} yAnchor={3}>
+            <div
+              style={{
+                backgroundColor: theme.color.bright.green,
+                color: theme.font.color,
+                fontSize: 10,
+                padding: 5,
+
+                borderWidth: theme.border.thin,
+                borderRadius: theme.radius.base,
+                borderColor: theme.color.border,
+              }}>
+              {station?.name ? `${station.name}역` : ''}
+            </div>
+          </CustomOverlayMap>
+        </div>
       ));
     }
     return null;
@@ -283,9 +283,9 @@ const KakaoMap = () => {
 
     return null;
   };
-  const renderRecommendedStationPath = stations => {
-    if (Array.isArray(stations) && stations[0] && Array.isArray(stations[0].requiredTimes)) {
-      return stations[0].requiredTimes.map(time => {
+  const renderRecommendedStationPath = selectedStation => {
+    if (selectedStation && Array.isArray(selectedStation.requiredTimes)) {
+      return selectedStation.requiredTimes.map(time => {
         return (
           <div>
             <Polyline
@@ -323,13 +323,15 @@ const KakaoMap = () => {
           <div>
             <MapMarker
               position={{ lat: station.lat, lng: station.lng }}
-              image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.BLUE)}
-              onClick={() => postMessage(createMessage(MESSAGE_TYPE.SELECT_SEARCHED_STATION, station))}
+              image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.RED)}
+              onClick={() =>
+                postMessage(createMessage(MESSAGE_TYPE.SELECT_SEARCHED_STATION, { ...station, markerType: 'searched' }))
+              }
             />
             <CustomOverlayMap position={{ lat: station.lat, lng: station.lng }} yAnchor={3}>
               <div
                 style={{
-                  backgroundColor: '#5A5A5A',
+                  backgroundColor: theme.color.bright.red,
                   color: 'white',
                   fontSize: 10,
                   padding: 5,
@@ -440,7 +442,7 @@ const KakaoMap = () => {
         {renderSearchedStationMarker(searchedStations)}
         {renderRecommendedStationMarker(recommendedStations)}
         {renderRecommendedStationStartMarker(recommendedStations)}
-        {renderRecommendedStationPath(recommendedStations)}
+        {renderRecommendedStationPath(selectedStation)}
 
         <MapMarker position={center} image={getMarker(MARKER_TYPE.HERE, MARKER_COLOR.ALERT)}>
           {/* <div style={{ color: '#000' }}>{test}</div> */}
