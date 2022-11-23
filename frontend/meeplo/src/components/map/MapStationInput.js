@@ -17,13 +17,12 @@ import Geolocation from 'react-native-geolocation-service';
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
 import { getMiddlePoint } from '../../redux/recommendationSlice';
-import { getStationList, getDetailLocation } from '../../redux/locationSlice';
+import { getStationList } from '../../redux/locationSlice';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
 import LoadingModal from '../common/LoadingModal';
 import FlatButton from '../common/FlatButton';
-import { TOAST_MESSAGE } from '../../assets/constant/string';
 import FontText from '../common/FontText';
 
 const screen = Dimensions.get('screen');
@@ -39,7 +38,7 @@ const requestPermissions = async () => {
   }
 };
 
-const MapStationInput = ({ type, required, value, onValueChange, state }) => {
+const MapStationInput = ({ type, required, value, onValueChange, state, userInfo }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSelectedStationInfo, setShowSelectedStationInfo] = useState(false);
@@ -50,7 +49,6 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   const [selectedStation, setSelectedStation] = useState({});
 
   const webViewRef = useRef();
-  const userInfo = useSelector(state => state.user.info);
   const selectedLocationInfoPositionAnim = useRef(new Animated.ValueXY()).current;
   const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
   const recommendedStations = useSelector(state => state?.recommendation?.recommendedStations);
@@ -161,17 +159,19 @@ const MapStationInput = ({ type, required, value, onValueChange, state }) => {
   };
 
   const onPressRecommendation = () => {
-    const userStartLocation = userInfo?.startLocations.find(location => location.defaultLocation === true);
     const data = {
       groupId: state?.group?.id,
-      startLocations: [
-        {
-          lat: userStartLocation.lat,
-          lng: userStartLocation.lng,
-          memberId: userInfo.id,
-        },
-      ],
+      startLocations: [],
     };
+
+    const userStartLocation = userInfo?.startLocations?.find(location => location.defaultLocation === true);
+    if (userStartLocation) {
+      data.startLocations.push({
+        lat: userStartLocation.lat,
+        lng: userStartLocation.lng,
+        memberId: userInfo.id,
+      });
+    }
 
     state?.members?.forEach(member => {
       data.startLocations.push({
