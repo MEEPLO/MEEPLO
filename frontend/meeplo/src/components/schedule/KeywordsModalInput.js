@@ -107,7 +107,7 @@ const KeywordsModalInput = ({ type, value, onConfirm }) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
           <View></View>
           <TextInput
-            style={{ borderBottomWidth: 1, width: screen.width * 0.6 }}
+            style={{ borderBottomWidth: 1, width: screen.width * 0.6, color: 'gray' }}
             multiline={false}
             value={input}
             onChangeText={onChangeInput}

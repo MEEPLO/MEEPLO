@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons/faLocationDot';
 import Toast from 'react-native-toast-message';
 import MyPageLocationSearch from '../../components/mypage/MyPageLocationSearch';
@@ -83,6 +84,15 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
           출발지 추가
         </FontText>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <FontAwesomeIcon icon={faCircleExclamation} size={14} color="gray" />
+          <FontText style={{ color: 'gray' }}>
+            현재 미플로의 중간지점 추천 기능은 수도권 지하철역을 중심으로 서비스가 제공되고 있습니다.
+          </FontText>
+        </View>
+        <FontText style={{ color: 'gray', marginVertical: 20 }}>
+          서울, 경기, 인천을 제외한 다른 도시는 조금만 기다려주세요!
+        </FontText>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ height: 36, justifyContent: 'center', marginRight: 10 }}>
             <FontAwesomeIcon icon={faPen} color={'gray'} size={17} />
           </View>
@@ -103,6 +113,7 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
               fontSize: 20,
               marginVertical: 15,
               padding: 0,
+              color: 'black',
             }}
           />
         </View>
@@ -120,12 +131,13 @@ const MyPageLocationEditScreen = ({ route, navigation }) => {
               fontSize: 20,
               marginVertical: 15,
               padding: 0,
+              justifyContent: 'center',
             }}>
             <Text
               style={{
                 fontFamily: 'NanumSquareRoundR',
                 fontSize: 20,
-                color: form?.address ? 'black' : theme.color.disabled,
+                color: form.address ? 'black' : theme.color.disabled,
               }}>
               {form?.address ? form.address : '건물, 지번 또는 도로명 검색'}
             </Text>
