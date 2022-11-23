@@ -33,9 +33,10 @@ const HomeGroupItem = ({ name, photo, memberCount, leaderName, lastSchedule }) =
             backgroundColor: 'rgba(255,255,255,0.83)',
             height,
             top: width - height,
-            justifyContent: 'center',
+            justifyContent: 'space-evenly',
+            paddingBottom: 5,
           }}>
-          <FontText style={{ fontWeight: 'bold', marginHorizontal: 5, fontSize: 15, color: 'gray' }}>{name}</FontText>
+          <FontText style={{ fontWeight: 'bold', marginHorizontal: 5, fontSize: 14, color: 'gray' }}>{name}</FontText>
           <FontText style={{ marginHorizontal: 5, fontSize: 12, color: 'gray' }}>
             {memberCount}명 {lastScheduleDate && ` |  마지막 약속: ${lastScheduleDate}`}
           </FontText>

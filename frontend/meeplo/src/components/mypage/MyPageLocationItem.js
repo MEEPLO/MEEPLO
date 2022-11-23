@@ -69,10 +69,10 @@ const MyPageLocationItem = ({ item, navigation }) => {
       <FontText style={{ marginTop: 5, fontSize: 15, color: 'gray' }}>{item.address}</FontText>
       {!item.defaultLocation ? (
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, height: 20 }}>
-          <TouchableOpacity onPress={onPressDefault} style={{ marginHorizontal: 5 }}>
+          <TouchableOpacity onPress={onPressDefault}>
             <FontText style={{ fontSize: 15, color: 'black' }}>기본 출발지로 설정</FontText>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={onPressDelete}>
+          <TouchableOpacity onPress={onPressDelete}>
             <FontText style={{ fontSize: 15, color: theme.color.alert }}>삭제</FontText>
           </TouchableOpacity>
         </View>

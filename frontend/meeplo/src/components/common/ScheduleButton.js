@@ -27,13 +27,18 @@ const ScheduleButton = props => {
             borderWidth: 3,
           }}>
           <ImageBackground source={picture} style={{ width: imageWidth, height: imageWidth * 0.3 }} resizeMode="cover">
-            <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
-              <View style={{ marginBottom: 5 }}>
+            <View
+              style={{
+                marginHorizontal: 15,
+                height: '100%',
+                justifyContent: 'space-evenly',
+              }}>
+              <View>
                 <FontText style={{ color: theme.font.color, fontWeight: 'bold', fontSize: 18 }}>
                   {props.date} <FontText> {props.place}</FontText>
                 </FontText>
               </View>
-              <View style={{ marginBottom: 5 }}>
+              <View>
                 <FontText>{props.title}</FontText>
               </View>
               <View>
