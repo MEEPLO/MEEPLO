@@ -44,7 +44,7 @@ const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, col
           backgroundColor: theme.color.pale[color],
           justifyContent: 'center',
         }}>
-        <FontText style={{ marginHorizontal: 20, fontSize: 19, color: 'black' }}>{name}</FontText>
+        <FontText style={{ marginHorizontal: 20, fontSize: 17, color: 'black', fontWeight: 'bold' }}>{name}</FontText>
       </View>
       <View
         style={{
@@ -71,11 +71,13 @@ const GroupListItem = ({ name, photo, memberCount, leaderName, lastSchedule, col
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faCrown} size={14} />
-              <FontText style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{leaderName}</FontText>
+              <FontText style={{ fontSize: 13, marginLeft: 5, color: 'black', fontWeight: 'bold' }}>
+                {leaderName}
+              </FontText>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <FontAwesomeIcon icon={faUser} size={14} />
-              <FontText style={{ fontSize: 14, marginLeft: 5, color: 'gray' }}>{memberCount}</FontText>
+              <FontText style={{ fontSize: 13, marginLeft: 5, color: 'gray' }}>{memberCount}</FontText>
             </View>
           </View>
           {lastScheduleDate && (

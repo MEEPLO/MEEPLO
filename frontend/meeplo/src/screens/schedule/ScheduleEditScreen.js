@@ -102,7 +102,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
         </View>
         <View style={{ margin: 20 }}>
           <MapStationInput
-            type="만날 장소"
+            type="만남 장소"
             value={scheduleMeetLocation}
             onValueChange={setScheduleMeetLocation}
             state={schedule}

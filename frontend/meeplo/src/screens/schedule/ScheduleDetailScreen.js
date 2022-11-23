@@ -81,12 +81,12 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
     if (Array.isArray(amuseLocations) && amuseLocations.length > 0) {
       return amuseLocations?.map(amuse => (
         <View key={amuse.id} style={styles.itemContentView}>
-          <Text style={styles.itemContent}> {amuse?.name}</Text>
-          <Text style={styles.itemSubContent}> {amuse?.address}</Text>
+          <FontText style={styles.itemContent}> {amuse?.name}</FontText>
+          <FontText style={styles.itemSubContent}> {amuse?.address}</FontText>
         </View>
       ));
     } else {
-      return <Text style={styles.itemContent}>미정</Text>;
+      return <FontText style={styles.itemContent}>미정</FontText>;
     }
   };
 
@@ -158,10 +158,10 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                   <FontText style={styles.itemTitle}>만남 장소</FontText>
                 </View>
                 <View style={styles.itemContentView}>
-                  <Text style={styles.itemContent}>
+                  <FontText style={styles.itemContent}>
                     {schedule?.meetLocation?.id !== 0 ? schedule?.meetLocation?.name : ''}
-                  </Text>
-                  <Text style={styles.itemSubContent}> {schedule?.meetLocation?.address}</Text>
+                  </FontText>
+                  <FontText style={styles.itemSubContent}> {schedule?.meetLocation?.address}</FontText>
                 </View>
               </View>
 
