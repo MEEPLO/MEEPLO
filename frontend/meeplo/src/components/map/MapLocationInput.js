@@ -8,7 +8,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
-import { getAmuseRecommendation } from '../../redux/recommendationSlice';
+import { getAmuseRecommendation, clearRecommendedAmuses } from '../../redux/recommendationSlice';
 import FontText from '../common/FontText';
 import { BUTTON_TEXT } from '../../assets/constant/string';
 
@@ -88,7 +88,11 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
     setShowModal(true);
     setMapViewPosition();
   };
-  const closeModal = () => setShowModal(false);
+  const closeModal = () => {
+    closeSelectedLocationInfoView();
+    setShowModal(false);
+    dispatch(clearRecommendedAmuses());
+  };
   const openSelectedLocationInfoView = () => {
     setShowSelectedLocationInfoView(true);
   };
