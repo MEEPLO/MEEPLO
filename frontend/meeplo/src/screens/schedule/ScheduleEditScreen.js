@@ -117,6 +117,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
             value={scheduleMeetLocation}
             onValueChange={setScheduleMeetLocation}
             state={schedule}
+            selectedMembers={selectedMembers}
           />
         </View>
         <View style={{ margin: 20 }}>
