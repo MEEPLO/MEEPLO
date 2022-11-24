@@ -7,14 +7,14 @@ import { theme } from '../helper/theme';
 import { MARKER_TYPE, MARKER_COLOR, getMarker } from '../helper/marker';
 
 const NearLocationOverlay = styled.div`
-  background-color: #ffed8c;
-  padding: 0 10px 0 10px;
+  background-color: #fff0b9;
+  padding: 1px 8px 1px 8px;
 
   top: 10px;
 
-  border: 2px solid #585858;
-  border-radius: 10px;
-
+  /* border: 2px solid #585858;
+  border-radius: 7px; */
+  font-size: 14px;
   align-items: center;
   text-align: center;
 `;
@@ -176,7 +176,7 @@ const KakaoMap = () => {
           <MapMarker
             key={location.id}
             position={{ lat: location.lat, lng: location.lng }}
-            image={getMarker(MARKER_TYPE.STORE, MARKER_COLOR.NAVY)}
+            image={getMarker(MARKER_TYPE.STORE, MARKER_COLOR.PURPLE)}
             clickable={true}
             onClick={() => {
               postMessage(createMessage(MESSAGE_TYPE.SELECT_NEAR_LOCATION, location));
@@ -239,7 +239,7 @@ const KakaoMap = () => {
                 lat: time.startLocation.lat,
                 lng: time.startLocation.lng,
               }}
-              image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.BLUE)}
+              image={getMarker(MARKER_TYPE.USER, MARKER_COLOR.ORANGE)}
             />
             <CustomOverlayMap
               position={{
@@ -323,7 +323,7 @@ const KakaoMap = () => {
           <div>
             <MapMarker
               position={{ lat: station.lat, lng: station.lng }}
-              image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.RED)}
+              image={getMarker(MARKER_TYPE.STATION, MARKER_COLOR.NAVY)}
               onClick={() =>
                 postMessage(createMessage(MESSAGE_TYPE.SELECT_SEARCHED_STATION, { ...station, markerType: 'searched' }))
               }
@@ -358,7 +358,7 @@ const KakaoMap = () => {
             <MapMarker
               key={amuse.id}
               position={{ lat: amuse.lat, lng: amuse.lng }}
-              image={getMarker(MARKER_TYPE.STORE, MARKER_COLOR.ORANGE)}
+              image={getMarker(MARKER_TYPE.STORE, MARKER_COLOR.YELLOW)}
               clickable={true}
               onClick={() => {
                 postMessage(createMessage(MESSAGE_TYPE.SELECT_RECOMMENDED_AMUSE, amuse));
