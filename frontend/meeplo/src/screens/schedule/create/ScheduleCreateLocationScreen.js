@@ -8,16 +8,16 @@ import MapStationInput from '../../../components/map/MapStationInput';
 import KeywordsModalInput from '../../../components/schedule/KeywordsModalInput';
 
 const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
-  const [keywords, setKeywords] = useState([]);
-  const [meet, setMeet] = useState({});
-  const [amuse, setAmuse] = useState([]);
+  const [keywords, setKeywords] = useState();
+  const [meet, setMeet] = useState();
+  const [amuse, setAmuse] = useState();
 
   const userInfo = useSelector(state => state.user.info);
 
   useEffect(() => {
-    setMeet(state.meet);
-    setAmuse(state.amuse);
-    setKeywords(state.keywords);
+    if (state.meet && state.meet.id) setMeet(state.meet);
+    if (state.amuse && state.amuse.id) setAmuse(state.amuse);
+    if (state.keywords && Array.isArray(state.keywords)) setKeywords(state.keywords);
   }, [state]);
 
   const onSelectMeetLocation = location => {
