@@ -1,5 +1,5 @@
-import React, { useState, useReducer, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import React, { useState, useReducer, useEffect } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { hideTabBar, showTabBar } from '../../redux/navigationSlice';
 import Toast from 'react-native-toast-message';
