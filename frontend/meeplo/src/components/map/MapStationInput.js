@@ -230,7 +230,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
         <FontText style={{}}>
           {stationData.avgTime ? COMMON_TEXT.MIDDLE_POINT_MODAL_TEXT_1 : COMMON_TEXT.MIDDLE_POINT_MODAL_TEXT_2}
         </FontText>
-        <FontText
+        <View
           style={{
             marginTop: 10,
             marginBottom: 20,
