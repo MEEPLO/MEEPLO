@@ -138,7 +138,9 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                     <View style={styles.itemMemberButtonContent}>
                       <FontText style={{ marginRight: 10, color: 'gray' }}>눌러서 참석자보기</FontText>
                       <FontAwesomeIcon icon={faUser} color={'gray'} size={10} />
-                      <FontText style={{ marginLeft: 3, color: 'gray' }}>{schedule?.members?.length}</FontText>
+                      <FontText style={{ marginLeft: 3, color: 'gray' }}>
+                        {schedule?.members?.filter(member => member.status === 'JOINED').length}
+                      </FontText>
                     </View>
                   </TouchableOpacity>
                 </View>
