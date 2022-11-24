@@ -22,7 +22,9 @@ const DateModalInput = ({ type, required, value, onConfirm }) => {
 
   const onPressConfirm = () => {
     onConfirm(
-      `${date.dateString} ${time.getHours()}:${time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes()}`,
+      `${date.dateString} ${time.getHours() >= 10 ? time.getHours() : '0' + time.getHours()}:${
+        time.getMinutes() >= 10 ? time.getMinutes() : '0' + time.getMinutes()
+      }`,
     );
     closeModal();
   };
