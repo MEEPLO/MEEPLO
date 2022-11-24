@@ -16,7 +16,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
-import { getMiddlePoint } from '../../redux/recommendationSlice';
+import { getMiddlePoint, clearRecommendedStations, clearRecommendedAmuses } from '../../redux/recommendationSlice';
 import { getStationList } from '../../redux/locationSlice';
 
 import ModalCover from '../common/ModalCover';
@@ -102,7 +102,12 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
     setShowModal(true);
     setCurrentPosition();
   };
-  const closeModal = () => setShowModal(false);
+  const closeModal = () => {
+    closeSelectedStationInfo();
+    dispatch(clearRecommendedStations());
+    dispatch(clearRecommendedAmuses());
+    setShowModal(false);
+  };
   const openSelectedStationInfo = () => {
     setShowSelectedStationInfo(true);
   };
@@ -239,7 +244,6 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
           backgroundColor={theme.color.bright.purple}
           onPress={() => {
             onValueChange(stationData);
-            closeSelectedStationInfo();
             closeModal();
           }}
         />
