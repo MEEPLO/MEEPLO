@@ -24,7 +24,10 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
     const actions = [
       {
         type: 'UPDATE_LOCATION',
-        payload: { xpoint: delX * 1.08, ypoint: delY * 1.25, angle: tilt[0] },
+        payload:
+          momentDetail.moment.type === 2
+            ? { xpoint: delX * 1.09, ypoint: delY * 1.48, angle: tilt[0] }
+            : { xpoint: delX * 1.08, ypoint: delY * 1.3, angle: tilt[0] },
       },
     ];
     toNext(actions);
@@ -55,14 +58,30 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             {momentDetail.comments?.map((comment, idx) => (
               <View
                 style={{
-                  width: momentDetail.moment.type === 2 ? '90%' : '40%',
+                  width: momentDetail.moment.type === 2 ? '86%' : '40%',
                   transform: [{ rotate: `${comment.location.angle}deg` }],
                   position: 'absolute',
-                  top: comment.location.ypoint * 0.85,
-                  left: comment.location.xpoint * 0.7,
+                  top: momentDetail.moment.type === 2 ? comment.location.ypoint * 0.5 : comment.location.ypoint * 0.85,
+                  left: momentDetail.moment.type === 2 ? comment.location.xpoint * 0.65 : comment.location.xpoint * 0.7,
                 }}
                 key={idx}>
-                <Text style={{ color: 'gray', fontSize: comment.font === 'gag' ? 18 : 15, fontFamily: comment.font }}>
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontSize:
+                      momentDetail.moment.type === 2
+                        ? comment.font === 'gag'
+                          ? 17
+                          : comment.font === 'NanumSquareRoundR'
+                          ? 11
+                          : 13
+                        : comment.font === 'gag'
+                        ? 18
+                        : comment.font === 'NanumSquareRoundR'
+                        ? 12.5
+                        : 15,
+                    fontFamily: comment.font,
+                  }}>
                   {comment.comment}
                 </Text>
               </View>
@@ -70,7 +89,18 @@ const CommentsSetCoordinate = ({ toNext, toPrev, onFinish, visible, state }) => 
             <Text
               style={{
                 // width: momentDetail.moment.type === 2 ? '90%' : '40%',
-                fontSize: state.font === 'gag' ? 18 : 15,
+                fontSize:
+                  momentDetail.moment.type === 2
+                    ? state.font === 'gag'
+                      ? 17
+                      : state.font === 'NanumSquareRoundR'
+                      ? 11
+                      : 13
+                    : state.font === 'gag'
+                    ? 18
+                    : state.font === 'NanumSquareRoundR'
+                    ? 13
+                    : 15,
                 color: theme.font.color,
                 transform: [{ rotate: `${tilt}deg` }],
                 position: 'absolute',

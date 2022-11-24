@@ -27,7 +27,7 @@ const MomentsListScreen = props => {
         }
       }}>
       <View style={{ height: '100%' }}>
-        <View style={{ marginHorizontal: 20, marginTop: 30, marginBottom: 10 }}>
+        <View style={{ marginHorizontal: 20, marginTop: 25, marginBottom: 10 }}>
           <FontText style={styles.screenTitle}>내 추억 모아보기</FontText>
         </View>
         <View style={{ marginBottom: 30, paddingRight: 20 }}>

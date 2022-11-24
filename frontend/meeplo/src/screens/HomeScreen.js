@@ -48,11 +48,12 @@ const HomeScreen = ({ navigation }) => {
       <View
         style={{
           margin: 20,
+          marginTop: 25,
           justifyContent: 'space-between',
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundB', color: 'black' }}>예정된 약속</FontText>
+        <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundEB', color: 'black' }}>예정된 약속</FontText>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={onPressMoreSchedule}
@@ -70,7 +71,7 @@ const HomeScreen = ({ navigation }) => {
           flexDirection: 'row',
           alignItems: 'baseline',
         }}>
-        <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundB', color: 'black' }}>
+        <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundEB', color: 'black' }}>
           내가 참여하는 그룹
         </FontText>
         <TouchableOpacity
@@ -90,7 +91,7 @@ const HomeScreen = ({ navigation }) => {
             alignItems: 'baseline',
             marginBottom: 10,
           }}>
-          <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundB', color: 'black' }}>추억 남기기</FontText>
+          <FontText style={{ fontSize: 24, fontFamily: 'NanumSquareRoundEB', color: 'black' }}>추억 남기기</FontText>
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={onPressMoreMoment}
