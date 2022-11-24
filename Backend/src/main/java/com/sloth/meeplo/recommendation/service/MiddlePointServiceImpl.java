@@ -55,7 +55,7 @@ public class MiddlePointServiceImpl implements MiddlePointService{
                                 .location(station)
                                 .requiredTimes(startData.getStartLocations().stream()
                                         .map(start -> MiddlePointResponse.StationRoute.builder()
-                                                    .groupMember(groupService.getGroupMemberByGroupAndMemberId(group, start.getMemberId()))
+                                                    .member(memberService.getMemberById(start.getMemberId()))
                                                     .startLocation(MiddlePointResponse.StartLocation.builder()
                                                             .lat(start.getLat())
                                                             .lng(start.getLng())
