@@ -72,6 +72,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
           lat: position?.coords?.latitude,
           lng: position?.coords?.longitude,
         };
+
         setMapCenter(currentPosition);
         postMessage(MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER, currentPosition);
         setIsLoading(false);
@@ -115,8 +116,10 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
     const body = message.messageBody;
     switch (messageType) {
       case MESSAGE_TYPE.INIT_MAP:
-        setMapCenter(body.center);
-        setMapZoomLevel(body.level);
+        if (!meet || !meet.id) {
+          setMapCenter(body.center);
+          setMapZoomLevel(body.level);
+        }
         break;
       case MESSAGE_TYPE.UPDATE_APP_CENTER:
         setMapCenter(body.center);
@@ -296,7 +299,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} onMessageHandler={onMessage} onLoad={onMapViewLoad} />
+          <MapView ref={webViewRef} onMessageHandler={onMessage} onLoadEnd={onMapViewLoad} />
         </View>
 
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
