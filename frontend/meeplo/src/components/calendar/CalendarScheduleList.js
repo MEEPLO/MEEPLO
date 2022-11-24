@@ -4,7 +4,7 @@ import { Tabs } from 'react-native-collapsible-tab-view';
 import FontText from '../common/FontText';
 
 import CalendarScheduleListItem from './CalendarScheduleListItem';
-import { COMMON_MESSAGE } from '../../assets/constant/string';
+import { COMMON_TEXT } from '../../assets/constant/string';
 
 const screen = Dimensions.get('screen');
 
@@ -22,7 +22,7 @@ const CalendarScheduleList = ({ data, onItemPress }) => {
   ) : (
     <Tabs.ScrollView>
       <View style={styles.noDataView}>
-        <FontText>{COMMON_MESSAGE.NO_SHCEDULE_EXISTS}</FontText>
+        <FontText>{COMMON_TEXT.NO_SHCEDULE_EXISTS}</FontText>
       </View>
     </Tabs.ScrollView>
   );
