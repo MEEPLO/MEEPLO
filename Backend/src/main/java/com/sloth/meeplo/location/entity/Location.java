@@ -50,8 +50,14 @@ public class Location extends GeoDataEntity {
 
 
     @Builder
-    Location(String name){
-        this.name = name;
+    Location(LocationType type){
+        this.id = 0L;
+        this.name = "";
+        this.category = "";
+        this.address = "";
+        this.lng = 0.0;
+        this.lat = 0.0;
+        this.type = type;
     }
 
 
