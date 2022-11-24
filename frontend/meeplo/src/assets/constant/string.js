@@ -48,7 +48,7 @@ const COMMON_TEXT = {
 const BUTTON_TEXT = {
   RECOMMENDATE_LOCATION_BUTTON: '키워드 기반 장소 추천 받기',
   RECOMMENDATE_MIDDLE_POINT: '중간 지점 추천 받기',
-  FIND_NEAR_LOCATINO_BUTTON: '현 지도에서 장소 찾기',
+  FIND_NEAR_LOCATION_BUTTON: '현 지도에서 장소 찾기',
 };
 
 export { TOAST_MESSAGE, COMMON_TEXT, ALERT_MESSAGE, BUTTON_TEXT };
