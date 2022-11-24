@@ -13,13 +13,14 @@ import GroupMemberSelectList from '../../../components/Group/GroupMemberSelectLi
 const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }) => {
   const dispatch = useDispatch();
 
-  const [group, setGroup] = useState();
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [groupNameList, setGroupNameList] = useState([]);
+  const [group, setGroup] = useState();
 
   const groupList = useSelector(state => state.groupList);
 
   useEffect(() => {
+    console.log('member', state.members);
     setGroup(state.group);
     setSelectedMembers(state.members);
     dispatch(getGroupList());
@@ -54,7 +55,12 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
     }
   }, [group]);
 
-  const onSelectGroup = groupId => setGroup(groupList.find(g => g.id === groupId));
+  const onSelectGroup = groupId => {
+    if (group.id !== groupId) {
+      setSelectedMembers([userInfo]);
+    }
+    setGroup(groupList.find(g => g.id === groupId));
+  };
 
   const onSelectMember = member => {
     if (selectedMembers.find(m => m.id === member.id)) {
