@@ -7,6 +7,7 @@ import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.group.service.GroupService;
 import com.sloth.meeplo.location.entity.Location;
 import com.sloth.meeplo.location.exception.code.LocationErrorCode;
+import com.sloth.meeplo.location.type.LocationType;
 import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.member.entity.MemberLocation;
 import com.sloth.meeplo.member.exception.code.MemberErrorCode;
@@ -132,7 +133,7 @@ public class GroupResponse {
             this.meetName = schedule.getLocation().getName();
             this.amuseName = schedule.getScheduleLocations().stream().findFirst()
                     .orElseGet(() -> ScheduleLocation.EmptyScheduleLocation()
-                            .location(Location.builder().name("미정").build())
+                            .location(Location.builder().type(LocationType.OTHER_ERR).build())
                             .build())
                     .getLocation().getName();
         }
