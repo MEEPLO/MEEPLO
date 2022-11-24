@@ -43,7 +43,7 @@ const requestPermissions = async () => {
   }
 };
 
-const MapStationInput = ({ type, required, value, onValueChange, state, userInfo }) => {
+const MapStationInput = ({ type, required, value, onValueChange, state, userInfo, selectedMembers }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSelectedStationInfo, setShowSelectedStationInfo] = useState(false);
@@ -178,7 +178,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
       });
     }
 
-    state?.members?.forEach(member => {
+    selectedMembers?.forEach(member => {
       data.startLocations.push({
         lat: member?.lat,
         lng: member?.lng,
