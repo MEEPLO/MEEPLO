@@ -41,7 +41,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
       setScheduleKeywords(schedule?.keywords);
       setScheduleMeetLocation(schedule?.meetLocation ? schedule.meetLocation : { id: 0 });
       setScheduleAmuseLocation(schedule?.amuseLocations?.[0]);
-      setSelectedMembers(schedule?.members);
+      setSelectedMembers(schedule?.members?.filter(member => member.status === 'JOINED'));
     }
   }, [schedule]);
 
