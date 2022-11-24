@@ -68,6 +68,7 @@ const ScheduleCreateLocationScreen = ({ state, toNext, toPrev, onFinish, visible
           onValueChange={onSelectMeetLocation}
           state={state}
           userInfo={userInfo}
+          selectedMembers={state?.members}
         />
       </View>
       <View style={styles.inputViewStyle}>

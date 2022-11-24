@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, Image }
 import { useDispatch, useSelector } from 'react-redux';
 import { getNearLocations } from '../../redux/locationSlice';
 import Geolocation from 'react-native-geolocation-service';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
@@ -16,9 +18,13 @@ import LoadingModal from '../common/LoadingModal';
 
 const screen = Dimensions.get('screen');
 const selectedLocationInfoViewWidth = screen.width * 0.95;
-const selectedLocationInfoViewHeight = screen.height * 0.5;
-const selectedLocationInfoViewUpY = screen.height * 0.6;
+const selectedLocationInfoViewHeight = screen.height * 0.8;
+const selectedLocationInfoViewUpY = screen.height * 0.55;
 const selectedLocationInfoViewDownY = screen.height * 1;
+
+const selectedLocationPrimaryFontSize = screen.height * 0.023;
+const selectedLocationSecondaryFontSize = screen.height * 0.017;
+const selectedLocationPhotoSize = screen.height * 0.1;
 
 const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
   const dispatch = useDispatch();
@@ -29,26 +35,12 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedLocation, setSelectedLocation] = useState();
-  const [showSelectedLocationInfoView, setShowSelectedLocationInfoView] = useState();
+  const [showSelectedLocationInfoView, setShowSelectedLocationInfoView] = useState(false);
 
   const webViewRef = useRef();
   const selectedLocationInfoViewPositionAnim = useRef(new Animated.ValueXY()).current;
   const recommendedAmuses = useSelector(state => state?.recommendation?.recommendedAmuses);
   const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
-
-  useEffect(() => {
-    if (meet && meet.id && meet.id !== 0) {
-      const currentPosition = {
-        lat: meet.lat,
-        lng: meet.lng,
-      };
-      setMapCenter(currentPosition);
-      postMessage(MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER, currentPosition);
-    } else {
-      setCurrentPosition();
-    }
-    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
-  }, [meet, webViewRef.current]);
 
   useEffect(() => {
     if (Array.isArray(recommendedAmuses)) {
@@ -94,6 +86,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
 
   const openModal = () => {
     setShowModal(true);
+    setMapViewPosition();
   };
   const closeModal = () => setShowModal(false);
   const openSelectedLocationInfoView = () => {
@@ -189,6 +182,24 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
     dispatch(getAmuseRecommendation(form));
   };
 
+  const onMapViewLoad = () => {
+    setMapViewPosition();
+  };
+
+  const setMapViewPosition = () => {
+    if (meet && meet.id) {
+      const currentPosition = {
+        lat: meet.lat,
+        lng: meet.lng,
+      };
+      setMapCenter(currentPosition);
+      postMessage(MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER, currentPosition);
+    } else {
+      setCurrentPosition();
+    }
+    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
+  };
+
   const selectedLocationInfoViewUp = useCallback(() => {
     Animated.spring(selectedLocationInfoViewPositionAnim, {
       toValue: { x: 0, y: selectedLocationInfoViewUpY },
@@ -219,11 +230,12 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
+            marginBottom: 10,
           }}>
           <Image
             style={{
-              width: 100,
-              height: 100,
+              width: selectedLocationPhotoSize,
+              height: selectedLocationPhotoSize,
               borderRadius: theme.radius.base,
               borderWidth: 2,
               borderColor: theme.color.border,
@@ -232,13 +244,16 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
               uri: location?.photo,
             }}
           />
-          <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'gray' }}>{location?.name}</FontText>
+          <FontText style={{ fontSize: selectedLocationPrimaryFontSize, fontWeight: 'bold', color: 'gray' }}>
+            {location?.name}
+          </FontText>
         </View>
-        <FontText>{location?.address}</FontText>
-        <FontText>{location?.category}</FontText>
+        <FontText style={{ fontSize: selectedLocationSecondaryFontSize }}>{location?.address}</FontText>
+        <FontText style={{ fontSize: selectedLocationSecondaryFontSize }}>{location?.category}</FontText>
 
         <TouchableOpacity
           style={{
+            height: 45,
             backgroundColor: theme.color.bright.blue,
             marginTop: 30,
             alignItems: 'center',
@@ -250,7 +265,15 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             onValueChange(location);
             closeModal();
           }}>
-          <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>선택</FontText>
+          <FontText
+            style={{
+              fontSize: selectedLocationPrimaryFontSize,
+              lineHeight: 37,
+              fontWeight: 'bold',
+              color: theme.color.border,
+            }}>
+            선택
+          </FontText>
         </TouchableOpacity>
       </View>
     );
@@ -263,13 +286,13 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
       </FontText>
 
       <TouchableOpacity onPress={openModal}>
-        <FontText style={{ color: theme.font.color }}>{value?.name?.length > 0 ? value.name : '미정'}</FontText>
+        <FontText style={{ color: theme.font.color }}>{value?.name?.length > 0 ? value.name : ''}</FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} onMessageHandler={onMessage} />
+          <MapView ref={webViewRef} onMessageHandler={onMessage} onLoad={onMapViewLoad} />
         </View>
 
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
@@ -298,7 +321,8 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             <TouchableOpacity
               style={styles.selectedLocationInfoViewButton}
               onPress={() => closeSelectedLocationInfoView()}>
-              <FontText>X</FontText>
+              {/* <FontText>X</FontText> */}
+              <FontAwesomeIcon icon={faXmark} size={17} style={{ color: '#585858' }} />
             </TouchableOpacity>
 
             {renderSelectedLocationInfoView(selectedLocation)}
@@ -335,8 +359,8 @@ const styles = StyleSheet.create({
   },
   mapSearchNearButton: {
     backgroundColor: theme.color.bright.red,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
 
     borderRadius: theme.radius.base,
     borderWidth: 2,
@@ -344,6 +368,7 @@ const styles = StyleSheet.create({
   },
   mapSearchNearText: {
     color: 'white',
+    fontWeight: 'bold',
   },
   selectedLocationInfoView: {
     position: 'absolute',

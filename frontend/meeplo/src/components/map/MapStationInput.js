@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
@@ -29,9 +31,12 @@ import FontText from '../common/FontText';
 const screen = Dimensions.get('screen');
 const searchInputWidth = screen.width * 0.7;
 const selectedStationInfoWidth = screen.width * 0.95;
-const selectedStationInfoHeight = screen.height * 0.5;
-const selectedStationInfoUpY = screen.height * 0.6;
+const selectedStationInfoHeight = screen.height * 0.8;
+const selectedStationInfoUpY = screen.height * 0.55;
 const selectedStationInfoDownY = screen.height * 1;
+
+const selectedStationPrimaryFontSize = screen.height * 0.023;
+const selectedStationSecondaryFontSize = screen.height * 0.017;
 
 const requestPermissions = async () => {
   if (Platform.OS === 'android') {
@@ -39,7 +44,7 @@ const requestPermissions = async () => {
   }
 };
 
-const MapStationInput = ({ type, required, value, onValueChange, state, userInfo }) => {
+const MapStationInput = ({ type, required, value, onValueChange, state, userInfo, selectedMembers }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showSelectedStationInfo, setShowSelectedStationInfo] = useState(false);
@@ -174,7 +179,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
       });
     }
 
-    state?.members?.forEach(member => {
+    selectedMembers?.forEach(member => {
       data.startLocations.push({
         lat: member?.lat,
         lng: member?.lng,
@@ -188,6 +193,15 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
   const onPressSearchStation = () => {
     setSelectedStation({});
     dispatch(getStationList(searchValue));
+  };
+
+  const onMapViewLoad = () => {
+    setMapViewPosition();
+  };
+
+  const setMapViewPosition = () => {
+    setCurrentPosition();
+    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
   };
 
   const renderSelectedStationInfoView = station => {
@@ -214,24 +228,34 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
         </FontText>
         <FontText
           style={{
-            margin: 10,
-            paddingHorizontal: 24,
-            color: theme.font.color,
-            fontSize: 24,
-
+            marginTop: 10,
+            marginBottom: 20,
+            paddingVertical: 7,
+            paddingHorizontal: 15,
+            height: 45,
             backgroundColor: theme.color.bright.green,
-
             borderWidth: theme.border.thick,
             borderColor: theme.color.border,
             borderRadius: theme.radius.base,
           }}>
-          {stationData.name}역
-        </FontText>
+          <FontText
+            style={{
+              color: theme.font.color,
+              fontSize: selectedStationPrimaryFontSize,
+            }}
+            bold>
+            {stationData.name}역
+          </FontText>
+        </View>
 
         {stationData.avgTime ? (
-          <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
-            <FontText>평균 이동 시간</FontText>
-            <FontText style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>
+          <View style={{ flexDirection: 'row', marginHorizontal: 10, marginBottom: 30, alignItems: 'center' }}>
+            <FontText bold style={{ fontSize: selectedStationSecondaryFontSize }}>
+              평균 이동 시간
+            </FontText>
+            <FontText
+              style={{ fontSize: selectedStationPrimaryFontSize, color: theme.font.color, marginHorizontal: 5 }}
+              bold>
               {parseInt(station.avgTime / 45)}분
             </FontText>
           </View>
@@ -262,7 +286,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
         <View style={styles.mapSearchInputView}>
           <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
           <TouchableOpacity style={styles.mapSearchButton} onPress={onPressSearchStation}>
-            <FontText>역 검색</FontText>
+            <FontText bold>역 검색</FontText>
           </TouchableOpacity>
         </View>
 
@@ -281,7 +305,8 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
             },
           ]}>
           <TouchableOpacity style={styles.selectedStationInfoCloseButton} onPress={() => closeSelectedStationInfo()}>
-            <FontText>X</FontText>
+            {/* <FontText>X</FontText> */}
+            <FontAwesomeIcon icon={faXmark} size={17} style={{ color: '#585858' }} />
           </TouchableOpacity>
           {renderSelectedStationInfoView(selectedStation)}
         </Animated.View>
@@ -302,7 +327,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} onMessageHandler={onMessage} />
+          <MapView ref={webViewRef} onMessageHandler={onMessage} onLoad={onMapViewLoad} />
         </View>
         {!isLoading && renderMapInterface()}
       </ModalCover>
@@ -344,22 +369,22 @@ const styles = StyleSheet.create({
   },
   mapSearchInput: {
     width: searchInputWidth,
-    height: 40,
-    borderWidth: 1,
+    height: 45,
+    borderWidth: 2,
     borderColor: theme.color.border,
     borderRadius: theme.radius.input,
     padding: 10,
     backgroundColor: 'white',
     color: 'gray',
+    fontFamily: 'NanumSquareRoundR',
   },
   mapSearchButton: {
-    backgroundColor: theme.color.bright.red,
+    backgroundColor: theme.color.bright.navy,
     paddingVertical: 10,
     paddingHorizontal: 15,
-
-    borderWidth: theme.border.thin,
+    borderWidth: theme.border.thick,
     borderColor: theme.color.border,
-    borderRadius: theme.radius.base,
+    borderRadius: theme.radius.input,
   },
   selectedStationInfoView: {
     position: 'absolute',
@@ -403,13 +428,13 @@ const styles = StyleSheet.create({
   },
   recommendationButtonText: {
     color: theme.font.color,
-    fontSize: 16,
-    fontWeight: '800',
+    fontSize: 17,
+    fontWeight: 'bold',
   },
   bottomInterfaceView: {
     width: selectedStationInfoWidth,
     height: selectedStationInfoHeight,
-    padding: 20,
+    padding: 10,
     alignItems: 'center',
   },
 });

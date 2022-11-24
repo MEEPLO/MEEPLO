@@ -30,7 +30,6 @@ const SelectDropdown = props => {
             backgroundColor: theme.color.pale.red,
             fontFamily: 'NanumSquareRoundR',
           }}
-          defaultOption={props.default}
           dropdownTextStyles={{ fontSize: 15, fontColor: '#000', lineHeight: 30, fontFamily: 'NanumSquareRoundR' }}
           inputStyles={{ fontFamily: 'NanumSquareRoundR' }}
         />
