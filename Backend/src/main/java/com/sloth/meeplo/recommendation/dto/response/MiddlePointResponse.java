@@ -1,8 +1,8 @@
 package com.sloth.meeplo.recommendation.dto.response;
 
 import com.sloth.meeplo.global.type.DefaultValue;
-import com.sloth.meeplo.group.entity.GroupMember;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.member.entity.Member;
 import com.sloth.meeplo.recommendation.dto.common.Coordinate;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,15 +48,15 @@ public class MiddlePointResponse {
     @Getter
     public static class StationRoute {
         private Long memberId;
-        private String groupMemberName;
+        private String memberName;
         private Integer time;
         private StartLocation startLocation;
         private List<RouteCoordinate> coordinates;
 
         @Builder
-        StationRoute(GroupMember groupMember, StartLocation startLocation, RouteMetaData routeMetaData) {
-            this.memberId = groupMember.getMember().getId();
-            this.groupMemberName = groupMember.getNickname();
+        StationRoute(Member member, StartLocation startLocation, RouteMetaData routeMetaData) {
+            this.memberId = member.getId();
+            this.memberName = member.getUsername();
             this.time = (int) routeMetaData.getTime();
             this.startLocation = startLocation;
             this.coordinates = routeMetaData.getPointCoordinate();
