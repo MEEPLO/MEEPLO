@@ -10,6 +10,7 @@ import com.sloth.meeplo.group.type.GroupMemberStatus;
 import com.sloth.meeplo.location.repository.LocationRepository;
 import com.sloth.meeplo.location.service.LocationService;
 import com.sloth.meeplo.member.entity.Member;
+import com.sloth.meeplo.member.entity.MemberLocation;
 import com.sloth.meeplo.member.exception.code.MemberErrorCode;
 import com.sloth.meeplo.member.repository.MemberRepository;
 import com.sloth.meeplo.member.service.MemberService;
@@ -216,12 +217,21 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleDetailInfo getScheduleDetail(String authorization, Long scheduleId) {
         Member member = memberService.getMemberByAuthorization(authorization);
         Schedule schedule = getScheduleByScheduleId(scheduleId);
 
         groupService.checkMemberInGroup(member,schedule.getGroup());
+
+        // member의 장소값으로 새로 update
+        scheduleMemberRepository.findBySchedule(schedule).stream()
+                .filter(sm->sm.getStatus().equals(ScheduleMemberStatus.JOINED))
+                .forEach(sm-> {
+                    MemberLocation ml = memberService.findMemberLocationByMember(sm.getMember());
+                    sm.updateLocationInfo(ml.getLng(), ml.getLat(), ml.getAddress());
+                    scheduleMemberRepository.save(sm);
+                });
 
         return ScheduleResponse.ScheduleDetailInfo.builder().schedule(schedule).build();
     }

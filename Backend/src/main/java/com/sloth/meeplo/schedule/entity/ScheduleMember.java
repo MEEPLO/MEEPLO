@@ -41,6 +41,11 @@ public class ScheduleMember extends GeoDataEntity {
         this.status = ScheduleMemberStatus.JOINED;
     }
 
+    public void updateLocationInfo(Double lng, Double lat, String address){
+        this.lng = lng;
+        this.lat = lat;
+        this.address = address;
+    }
     @Builder
     ScheduleMember(Schedule schedule, Member member, Role role, MemberLocation memberLocation){
         this.status = ScheduleMemberStatus.JOINED;
