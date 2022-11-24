@@ -41,7 +41,14 @@ const recommendationSlice = createSlice({
     recommendedStations: [],
     recommendedAmuses: [],
   },
-  reducers: {},
+  reducers: {
+    clearRecommendedStations: state => {
+      state.recommendedStations = [];
+    },
+    clearRecommendedAmuses: state => {
+      state.recommendedAmuses = [];
+    },
+  },
   extraReducers: {
     [getMiddlePoint.pending]: (state, { payload }) => {
       state.isLoading = true;
@@ -60,4 +67,5 @@ const recommendationSlice = createSlice({
   },
 });
 
+export const { clearRecommendedStations, clearRecommendedAmuses } = recommendationSlice.actions;
 export { recommendationSlice };

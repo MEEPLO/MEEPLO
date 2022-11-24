@@ -18,7 +18,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
-import { getMiddlePoint } from '../../redux/recommendationSlice';
+import { getMiddlePoint, clearRecommendedStations } from '../../redux/recommendationSlice';
 import { getStationList } from '../../redux/locationSlice';
 import { BUTTON_TEXT, COMMON_TEXT } from '../../assets/constant/string';
 
@@ -108,7 +108,11 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
     setShowModal(true);
     setCurrentPosition();
   };
-  const closeModal = () => setShowModal(false);
+  const closeModal = () => {
+    closeSelectedStationInfo();
+    dispatch(clearRecommendedStations());
+    setShowModal(false);
+  };
   const openSelectedStationInfo = () => {
     setShowSelectedStationInfo(true);
   };
@@ -266,7 +270,6 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
           backgroundColor={theme.color.bright.purple}
           onPress={() => {
             onValueChange(stationData);
-            closeSelectedStationInfo();
             closeModal();
           }}
         />
