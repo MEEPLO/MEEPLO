@@ -30,7 +30,7 @@ const ScheduleEditScreen = ({ route, navigation }) => {
   const [scheduleName, setScheduleName] = useState();
   const [scheduleDate, setScheduleDate] = useState();
   const [scheduleKeywords, setScheduleKeywords] = useState();
-  const [scheduleMeetLocation, setScheduleMeetLocation] = useState({ id: 0 });
+  const [scheduleMeetLocation, setScheduleMeetLocation] = useState();
   const [scheduleAmuseLocation, setScheduleAmuseLocation] = useState();
   const [selectedMembers, setSelectedMembers] = useState();
 

@@ -293,9 +293,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
       </FontText>
 
       <TouchableOpacity onPress={openModal}>
-        <FontText style={{ color: theme.font.color }}>
-          {value?.name} {value?.id === 0 ? null : '역'}
-        </FontText>
+        <FontText style={{ color: theme.font.color }}>{value ? `${value.name}역` : null}</FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 

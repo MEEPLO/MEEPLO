@@ -36,7 +36,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
   const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
 
   useEffect(() => {
-    if (meet && meet.id) {
+    if (meet && meet.id && meet.id !== 0) {
       const currentPosition = {
         lat: meet.lat,
         lng: meet.lng,
