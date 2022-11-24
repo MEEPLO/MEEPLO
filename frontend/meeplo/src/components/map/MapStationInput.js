@@ -18,6 +18,7 @@ import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
 import { getMiddlePoint } from '../../redux/recommendationSlice';
 import { getStationList } from '../../redux/locationSlice';
+import { BUTTON_TEXT, COMMON_TEXT } from '../../assets/constant/string';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
@@ -208,7 +209,9 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
 
     return (
       <View style={styles.bottomInterfaceView}>
-        <FontText style={{}}>{stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}</FontText>
+        <FontText style={{}}>
+          {stationData.avgTime ? COMMON_TEXT.MIDDLE_POINT_MODAL_TEXT_1 : COMMON_TEXT.MIDDLE_POINT_MODAL_TEXT_2}
+        </FontText>
         <FontText
           style={{
             margin: 10,
@@ -264,7 +267,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
         </View>
 
         <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
-          <FontText style={styles.recommendationButtonText}>중간 지점 추천 받기</FontText>
+          <FontText style={styles.recommendationButtonText}>{BUTTON_TEXT.RECOMMENDATE_MIDDLE_POINT}</FontText>
         </TouchableOpacity>
 
         <Animated.View

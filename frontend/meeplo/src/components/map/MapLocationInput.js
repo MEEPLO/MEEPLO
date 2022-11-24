@@ -8,6 +8,7 @@ import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
 import { getAmuseRecommendation } from '../../redux/recommendationSlice';
 import FontText from '../common/FontText';
+import { BUTTON_TEXT } from '../../assets/constant/string';
 
 import ModalCover from '../common/ModalCover';
 import MapView from './MapView';
@@ -274,13 +275,13 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
         <View style={styles.mapInterfaceView} pointerEvents="box-none">
           {showSearchCurrentMapButton ? (
             <TouchableOpacity style={styles.mapSearchNearButton} onPress={onSearchNear}>
-              <FontText style={styles.mapSearchNearText}>현 지도에서 검색</FontText>
+              <FontText style={styles.mapSearchNearText}>{BUTTON_TEXT.FIND_NEAR_LOCATION_BUTTON}</FontText>
             </TouchableOpacity>
           ) : null}
 
           {keywords?.length > 0 ? (
             <TouchableOpacity style={styles.recommendationButton} onPress={onPressRecommendation}>
-              <FontText style={styles.recommendationButtonText}>키워드 기반 놀 곳 추천 받기</FontText>
+              <FontText style={styles.recommendationButtonText}>{BUTTON_TEXT.RECOMMENDATE_LOCATION_BUTTON}</FontText>
             </TouchableOpacity>
           ) : null}
 
