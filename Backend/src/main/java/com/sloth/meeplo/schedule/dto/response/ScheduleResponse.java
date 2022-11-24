@@ -6,6 +6,7 @@ import com.sloth.meeplo.global.exception.code.CommonErrorCode;
 import com.sloth.meeplo.global.type.Role;
 import com.sloth.meeplo.group.entity.Group;
 import com.sloth.meeplo.location.entity.Location;
+import com.sloth.meeplo.location.type.LocationType;
 import com.sloth.meeplo.moment.entity.Moment;
 import com.sloth.meeplo.schedule.entity.Schedule;
 import com.sloth.meeplo.schedule.entity.ScheduleKeyword;
@@ -236,7 +237,7 @@ public class ScheduleResponse {
             this.amuseName = schedule.getScheduleLocations().stream()
                     .findFirst().orElse(ScheduleLocation.EmptyScheduleLocation()
                             .location(Location.builder()
-                                    .name("미정")
+                                    .type(LocationType.OTHER_ERR)
                                     .build())
                             .build())
                     .getLocation()
