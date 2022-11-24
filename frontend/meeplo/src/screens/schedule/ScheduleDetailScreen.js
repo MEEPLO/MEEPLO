@@ -174,7 +174,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
 
               <View style={styles.keywords}>{renderKeywords(schedule?.keywords)}</View>
 
-              {isLeader && (
+              {isLeader && !isDone && (
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 10 }}>
                   <TouchableOpacity
                     onPress={onPressEdit}

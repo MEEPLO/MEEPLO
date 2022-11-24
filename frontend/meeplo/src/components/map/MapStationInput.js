@@ -324,6 +324,7 @@ const styles = StyleSheet.create({
     width: screen.width * 0.9,
     borderColor: theme.color.disabled,
     borderBottomWidth: 1,
+    paddingBottom: 15,
   },
   backgroundMapView: { width: screen.width, height: screen.height, position: 'absolute' },
   mapInterfaceView: {
