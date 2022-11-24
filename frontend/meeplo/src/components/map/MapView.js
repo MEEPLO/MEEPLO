@@ -4,28 +4,17 @@ import { WebView } from 'react-native-webview';
 
 const screen = Dimensions.get('screen');
 
-const MapView = forwardRef(({ onMessageHandler }, ref) => {
-  const [loaded, setLoaded] = useState(false);
-
+const MapView = forwardRef(({ onMessageHandler, onLoadStart, onLoadProgress, onLoad, onLoadEnd }, ref) => {
   return (
     <WebView
       style={styles.webViewStyle}
       source={{ uri: 'http://www.meeplo.co.kr:31111' }}
       ref={ref}
       onMessage={onMessageHandler}
-      onLoadStart={() => {
-        // console.log('Webview load start');
-      }}
-      onLoadProgress={({ nativeEvent }) => {
-        // console.log(`Webview loading ${nativeEvent?.progress}`);
-      }}
-      onLoad={() => {
-        // console.log('Webview load has finished');
-        setLoaded(true);
-      }}
-      onLoadEnd={() => {
-        // console.log('WebView load has ended');
-      }}
+      onLoadStart={onLoadStart}
+      onLoadProgress={onLoadProgress}
+      onLoad={onLoad}
+      onLoadEnd={onLoadEnd}
     />
   );
 });
