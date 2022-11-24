@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, ActivityIndicator, Dimensions } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PacmanIndicator } from 'react-native-indicators';
 import { useNavigation } from '@react-navigation/native';
 import FontText from '../../../components/common/FontText';
@@ -17,6 +17,8 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+
+  const userInfo = useSelector(state => state.user.info);
 
   const openLoadingModal = () => setLoading(true);
   const closeLoadingModal = () => setLoading(false);
@@ -92,21 +94,23 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         <View style={styles.itemTitleView}>
           <FontText style={styles.itemTitle}>멤버</FontText>
         </View>
-        <FontText style={styles.itemText}> {state?.members?.map(member => member.nickname).join(', ')} </FontText>
+        <FontText style={styles.itemText}>
+          {[userInfo.nickname, ...state?.members?.map(member => member.nickname)].join(', ')}
+        </FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
           <FontText style={styles.itemTitle}>만남 장소</FontText>
         </View>
-        <FontText style={styles.itemText}>{state?.meet?.name ? `${state.meet.name}역` : '미정'}</FontText>
+        <FontText style={styles.itemText}>{state?.meet?.name ? `${state.meet.name}역` : ''}</FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
           <FontText style={styles.itemTitle}>약속 장소</FontText>
         </View>
-        <FontText style={styles.itemText}>{state?.amuse?.name ? state.amuse.name : '미정'}</FontText>
+        <FontText style={styles.itemText}>{state?.amuse?.name ? state.amuse.name : ''}</FontText>
       </View>
 
       <View style={styles.navigateViewStyle}>

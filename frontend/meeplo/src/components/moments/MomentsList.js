@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, Text, Dimensions, Pressable, ImageBackground } from 'react-native';
+import { View, Text, Dimensions, Pressable, ImageBackground, Image } from 'react-native';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMomentsList } from '../../redux/momentsSlice';
-import AutoHeightImage from 'react-native-auto-height-image';
 import { theme } from '../../assets/constant/DesignTheme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons/faHeart';
@@ -38,20 +37,20 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
 
   // console.log(currentPage);
 
-  const params = {
-    page: 0,
-    size: 1000,
-    leftSize: momentsList.leftSize,
-    rightSize: momentsList.rightSize,
-    group: null,
-    writer: isMine,
-  };
-
   const linkTo = React.useCallback(nextPage => {
     navigation.push(nextPage);
   }, []);
 
   React.useEffect(() => {
+    const params = {
+      page: 0,
+      size: 1000,
+      leftSize: momentsList.leftSize,
+      rightSize: momentsList.rightSize,
+      group: null,
+      writer: isMine,
+    };
+
     dispatch(getMomentsList(params));
   }, [isMine]);
 
@@ -75,28 +74,30 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                 }}
                 key={index}>
                 <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
-                  <AutoHeightImage
+                  <Image
                     source={{ uri: moment.photo }}
-                    width={imgWidth}
                     style={{
+                      width: imgWidth,
+                      height: viewHeight[moment.type],
                       borderRadius: 5,
                       borderWidth: moment.type === 2 ? 0 : 2,
                       borderColor: theme.color.disabled,
                     }}
                   />
-                  <FontText
+                  <Text
                     style={{
                       position: 'absolute',
-                      right: -10,
-                      fontSize: 14,
-                      top: moment.type === 1 ? 3 : null,
+                      right: -15,
+                      fontSize: 13,
+                      top: moment.type === 1 ? 6 : null,
                       bottom: moment.type === 1 ? null : 10,
                       color: moment.type === 2 ? '#fff' : '#000',
+                      fontFamily: 'NanumSquareRoundR',
                     }}>
                     <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
                     {`  `}
                     {moment.reactionCount}
-                  </FontText>
+                  </Text>
                 </Pressable>
               </View>
             ))}
@@ -112,28 +113,30 @@ const MomentsList = ({ navigation, isMine, currentPage }) => {
                 }}
                 key={index}>
                 <Pressable style={{ width: '80%', position: 'relative' }} onPress={() => openDetailModel(moment.id)}>
-                  <AutoHeightImage
+                  <Image
                     source={{ uri: moment.photo }}
-                    width={imgWidth}
                     style={{
+                      width: imgWidth,
+                      height: viewHeight[moment.type],
                       borderRadius: 5,
                       borderWidth: moment.type === 2 ? 0 : 2,
                       borderColor: theme.color.disabled,
                     }}
                   />
-                  <FontText
+                  <Text
                     style={{
                       position: 'absolute',
-                      right: -10,
-                      fontSize: 14,
-                      top: moment.type === 1 ? 3 : null,
+                      right: -15,
+                      fontSize: 13,
+                      top: moment.type === 1 ? 6 : null,
                       bottom: moment.type === 1 ? null : 10,
                       color: moment.type === 2 ? '#fff' : '#000',
+                      fontFamily: 'NanumSquareRoundR',
                     }}>
                     <FontAwesomeIcon icon={faHeart} color={theme.color.alert} size={13} />
                     {`  `}
                     {moment.reactionCount}
-                  </FontText>
+                  </Text>
                 </Pressable>
               </View>
             ))}

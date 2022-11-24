@@ -12,6 +12,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const fonts = [
+  { value: '나눔스퀘어 라운드', key: 'NanumSquareRoundR' },
   { value: '고딕 아니고 고딩', key: 'gag' },
   { value: '박용준투사회보체', key: 'Pak_Yong_jun' },
   { value: '어비 혜키체', key: 'UhBee_Hyeki' },
@@ -21,7 +22,7 @@ const fonts = [
 
 const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
   const [value, onValueChange] = React.useState('');
-  const [font, setFont] = React.useState('gag');
+  const [font, setFont] = React.useState('NanumSquareRoundR');
 
   const onPressNext = () => {
     const actions = [
@@ -51,7 +52,9 @@ const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
         </View>
         <View style={{ marginBottom: 20 }}>
           <FontText style={{ color: '#000', fontWeight: 'bold', marginBottom: 15 }}>댓글 확인</FontText>
-          <Text style={{ fontFamily: font, fontSize: font === 'gag' ? 26 : 22 }}>{value}</Text>
+          <Text style={{ fontFamily: font, fontSize: font === 'gag' ? 24 : font === 'NanumSquareRoundR' ? 18 : 20 }}>
+            {value}
+          </Text>
         </View>
         <View style={{ width: windowWidth - 80, position: 'absolute', top: 200 }}>
           <SelectDropdown
@@ -59,7 +62,7 @@ const CommentsSetContent = ({ toNext, toPrev, onFinish, visible, state }) => {
             type="폰트"
             data={fonts}
             required={true}
-            default={{ value: '고딕 아니고 고딩', key: 'gag' }}
+            default={{ value: '나눔스퀘어 라운드', key: 'NanumSquareRoundR' }}
           />
         </View>
       </View>
