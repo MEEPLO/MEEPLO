@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Geolocation from 'react-native-geolocation-service';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
@@ -208,27 +210,33 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
 
     return (
       <View style={styles.bottomInterfaceView}>
-        <FontText style={{}}>{stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}</FontText>
-        <FontText
+        <FontText bold>{stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}</FontText>
+        <View
           style={{
-            margin: 10,
-            paddingHorizontal: 24,
-            color: theme.font.color,
-            fontSize: 24,
-
+            marginTop: 10,
+            marginBottom: 20,
+            paddingVertical: 7,
+            paddingHorizontal: 15,
+            height: 45,
             backgroundColor: theme.color.bright.green,
-
             borderWidth: theme.border.thick,
             borderColor: theme.color.border,
             borderRadius: theme.radius.base,
           }}>
-          {stationData.name}역
-        </FontText>
+          <FontText
+            style={{
+              color: theme.font.color,
+              fontSize: 20,
+            }}
+            bold>
+            {stationData.name}역
+          </FontText>
+        </View>
 
         {stationData.avgTime ? (
-          <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center' }}>
-            <FontText>평균 이동 시간</FontText>
-            <FontText style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }}>
+          <View style={{ flexDirection: 'row', marginHorizontal: 10, marginBottom: 30, alignItems: 'center' }}>
+            <FontText bold>평균 이동 시간</FontText>
+            <FontText style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }} bold>
               {parseInt(station.avgTime / 45)}분
             </FontText>
           </View>
@@ -259,7 +267,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
         <View style={styles.mapSearchInputView}>
           <TextInput style={styles.mapSearchInput} value={searchValue} onChangeText={setSearchValue} />
           <TouchableOpacity style={styles.mapSearchButton} onPress={onPressSearchStation}>
-            <FontText>역 검색</FontText>
+            <FontText bold>역 검색</FontText>
           </TouchableOpacity>
         </View>
 
@@ -278,7 +286,8 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
             },
           ]}>
           <TouchableOpacity style={styles.selectedStationInfoCloseButton} onPress={() => closeSelectedStationInfo()}>
-            <FontText>X</FontText>
+            {/* <FontText>X</FontText> */}
+            <FontAwesomeIcon icon={faXmark} size={17} style={{ color: '#585858' }} />
           </TouchableOpacity>
           {renderSelectedStationInfoView(selectedStation)}
         </Animated.View>
@@ -343,22 +352,22 @@ const styles = StyleSheet.create({
   },
   mapSearchInput: {
     width: searchInputWidth,
-    height: 40,
-    borderWidth: 1,
+    height: 45,
+    borderWidth: 2,
     borderColor: theme.color.border,
     borderRadius: theme.radius.input,
     padding: 10,
     backgroundColor: 'white',
     color: 'gray',
+    fontFamily: 'NanumSquareRoundR',
   },
   mapSearchButton: {
-    backgroundColor: theme.color.bright.red,
+    backgroundColor: theme.color.bright.navy,
     paddingVertical: 10,
     paddingHorizontal: 15,
-
-    borderWidth: theme.border.thin,
+    borderWidth: theme.border.thick,
     borderColor: theme.color.border,
-    borderRadius: theme.radius.base,
+    borderRadius: theme.radius.input,
   },
   selectedStationInfoView: {
     position: 'absolute',
@@ -402,13 +411,13 @@ const styles = StyleSheet.create({
   },
   recommendationButtonText: {
     color: theme.font.color,
-    fontSize: 16,
-    fontWeight: '800',
+    fontSize: 17,
+    fontWeight: 'bold',
   },
   bottomInterfaceView: {
     width: selectedStationInfoWidth,
     height: selectedStationInfoHeight,
-    padding: 20,
+    padding: 10,
     alignItems: 'center',
   },
 });
