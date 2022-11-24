@@ -188,14 +188,30 @@ const MomentModal = ({ momentDetailId, setMomentModal, momentModal, navigation }
               {momentDetail.comments?.map((comment, idx) => (
                 <View
                   style={{
-                    width: momentDetail.moment.type === 2 ? '90%' : '55%',
+                    width: momentDetail.moment.type === 2 ? '90%' : '80%',
                     transform: [{ rotate: `${comment.location.angle}deg` }],
                     position: 'absolute',
                     top: comment.location.ypoint * 0.8,
                     left: comment.location.xpoint * 0.8,
                   }}
                   key={idx}>
-                  <Text style={{ fontSize: comment.font === 'gag' ? 19 : 15, color: 'gray', fontFamily: comment.font }}>
+                  <Text
+                    style={{
+                      fontSize:
+                        momentDetail.moment.type === 2
+                          ? comment.font === 'gag'
+                            ? 19
+                            : comment.font === 'NanumSquareRoundR'
+                            ? 14
+                            : 16
+                          : comment.font === 'gag'
+                          ? 18
+                          : comment.font === 'NanumSquareRoundR'
+                          ? 12.5
+                          : 15,
+                      color: 'gray',
+                      fontFamily: comment.font,
+                    }}>
                     {comment.comment}
                   </Text>
                 </View>
