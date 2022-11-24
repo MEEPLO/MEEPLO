@@ -262,7 +262,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
       </FontText>
 
       <TouchableOpacity onPress={openModal}>
-        <FontText style={{ color: theme.font.color }}>{value?.name?.length > 0 ? value.name : '미정'}</FontText>
+        <FontText style={{ color: theme.font.color }}>{value?.name?.length > 0 ? value.name : ''}</FontText>
         <View style={styles.dateInputView} />
       </TouchableOpacity>
 

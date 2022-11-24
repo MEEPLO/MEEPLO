@@ -99,14 +99,14 @@ const ScheduleCreateCheckScreen = ({ state, toNext, toPrev, onFinish, visible })
         <View style={styles.itemTitleView}>
           <FontText style={styles.itemTitle}>만남 장소</FontText>
         </View>
-        <FontText style={styles.itemText}>{state?.meet?.name ? `${state.meet.name}역` : '미정'}</FontText>
+        <FontText style={styles.itemText}>{state?.meet?.name ? `${state.meet.name}역` : ''}</FontText>
       </View>
 
       <View style={styles.itemView}>
         <View style={styles.itemTitleView}>
           <FontText style={styles.itemTitle}>약속 장소</FontText>
         </View>
-        <FontText style={styles.itemText}>{state?.amuse?.name ? state.amuse.name : '미정'}</FontText>
+        <FontText style={styles.itemText}>{state?.amuse?.name ? state.amuse.name : ''}</FontText>
       </View>
 
       <View style={styles.navigateViewStyle}>
