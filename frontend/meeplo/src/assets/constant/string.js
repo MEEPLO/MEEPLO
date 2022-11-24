@@ -32,10 +32,6 @@ const TOAST_MESSAGE = {
   NO_SEARCH_RESULT: '검색 결과가 없습니다!',
 };
 
-const COMMON_MESSAGE = {
-  NO_SHCEDULE_EXISTS: '아무 약속이 없습니다.',
-};
-
 const ALERT_MESSAGE = {
   SCHEDULE_ASK_CANCEL_CREATE_TEXT1: '약속 생성을 취소하시겠습니까?',
   SCHEDULE_ASK_CANCEL_CREATE_TEXT2: '입력 중인 값들이 모두 초기화됩니다.',
@@ -43,4 +39,16 @@ const ALERT_MESSAGE = {
   LEAVE: '나가기',
 };
 
-export { TOAST_MESSAGE, COMMON_MESSAGE, ALERT_MESSAGE };
+const COMMON_TEXT = {
+  NO_SHCEDULE_EXISTS: '아무 약속이 없습니다.',
+  MIDDLE_POINT_MODAL_TEXT_1: '여러분들의 중간 지점은...',
+  MIDDLE_POINT_MODAL_TEXT_2: '선택하신 역은',
+};
+
+const BUTTON_TEXT = {
+  RECOMMENDATE_LOCATION_BUTTON: '키워드 기반 장소 추천 받기',
+  RECOMMENDATE_MIDDLE_POINT: '중간 지점 추천 받기',
+  FIND_NEAR_LOCATINO_BUTTON: '현 지도에서 장소 찾기',
+};
+
+export { TOAST_MESSAGE, COMMON_TEXT, ALERT_MESSAGE, BUTTON_TEXT };
