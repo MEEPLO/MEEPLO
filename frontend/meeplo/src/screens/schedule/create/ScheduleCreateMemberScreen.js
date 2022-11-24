@@ -20,7 +20,6 @@ const ScheduleCreateMemberScreen = ({ state, toNext, toPrev, onFinish, visible }
   const groupList = useSelector(state => state.groupList);
 
   useEffect(() => {
-    console.log('member', state.members);
     setGroup(state.group);
     setSelectedMembers(state.members);
     dispatch(getGroupList());
