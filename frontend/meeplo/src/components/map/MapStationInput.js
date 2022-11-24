@@ -30,9 +30,12 @@ import FontText from '../common/FontText';
 const screen = Dimensions.get('screen');
 const searchInputWidth = screen.width * 0.7;
 const selectedStationInfoWidth = screen.width * 0.95;
-const selectedStationInfoHeight = screen.height * 0.5;
-const selectedStationInfoUpY = screen.height * 0.6;
+const selectedStationInfoHeight = screen.height * 0.8;
+const selectedStationInfoUpY = screen.height * 0.55;
 const selectedStationInfoDownY = screen.height * 1;
+
+const selectedStationPrimaryFontSize = screen.height * 0.023;
+const selectedStationSecondaryFontSize = screen.height * 0.017;
 
 const requestPermissions = async () => {
   if (Platform.OS === 'android') {
@@ -210,7 +213,9 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
 
     return (
       <View style={styles.bottomInterfaceView}>
-        <FontText bold>{stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}</FontText>
+        <FontText bold style={{ fontSize: selectedStationSecondaryFontSize }}>
+          {stationData.avgTime ? '여러분들의 중간 지점은...' : '선택하신 역은'}
+        </FontText>
         <View
           style={{
             marginTop: 10,
@@ -226,7 +231,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
           <FontText
             style={{
               color: theme.font.color,
-              fontSize: 20,
+              fontSize: selectedStationPrimaryFontSize,
             }}
             bold>
             {stationData.name}역
@@ -235,8 +240,12 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
 
         {stationData.avgTime ? (
           <View style={{ flexDirection: 'row', marginHorizontal: 10, marginBottom: 30, alignItems: 'center' }}>
-            <FontText bold>평균 이동 시간</FontText>
-            <FontText style={{ fontSize: 20, color: theme.font.color, marginHorizontal: 5 }} bold>
+            <FontText bold style={{ fontSize: selectedStationSecondaryFontSize }}>
+              평균 이동 시간
+            </FontText>
+            <FontText
+              style={{ fontSize: selectedStationPrimaryFontSize, color: theme.font.color, marginHorizontal: 5 }}
+              bold>
               {parseInt(station.avgTime / 45)}분
             </FontText>
           </View>

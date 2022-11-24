@@ -17,9 +17,13 @@ import LoadingModal from '../common/LoadingModal';
 
 const screen = Dimensions.get('screen');
 const selectedLocationInfoViewWidth = screen.width * 0.95;
-const selectedLocationInfoViewHeight = screen.height * 0.5;
-const selectedLocationInfoViewUpY = screen.height * 0.6;
+const selectedLocationInfoViewHeight = screen.height * 0.8;
+const selectedLocationInfoViewUpY = screen.height * 0.55;
 const selectedLocationInfoViewDownY = screen.height * 1;
+
+const selectedLocationPrimaryFontSize = screen.height * 0.023;
+const selectedLocationSecondaryFontSize = screen.height * 0.017;
+const selectedLocationPhotoSize = screen.height * 0.1;
 
 const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet }) => {
   const dispatch = useDispatch();
@@ -224,8 +228,8 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
           }}>
           <Image
             style={{
-              width: 100,
-              height: 100,
+              width: selectedLocationPhotoSize,
+              height: selectedLocationPhotoSize,
               borderRadius: theme.radius.base,
               borderWidth: 2,
               borderColor: theme.color.border,
@@ -234,10 +238,12 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
               uri: location?.photo,
             }}
           />
-          <FontText style={{ fontSize: 20, fontWeight: 'bold', color: 'gray' }}>{location?.name}</FontText>
+          <FontText style={{ fontSize: selectedLocationPrimaryFontSize, fontWeight: 'bold', color: 'gray' }}>
+            {location?.name}
+          </FontText>
         </View>
-        <FontText>{location?.address}</FontText>
-        <FontText>{location?.category}</FontText>
+        <FontText style={{ fontSize: selectedLocationSecondaryFontSize }}>{location?.address}</FontText>
+        <FontText style={{ fontSize: selectedLocationSecondaryFontSize }}>{location?.category}</FontText>
 
         <TouchableOpacity
           style={{
@@ -253,7 +259,13 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             onValueChange(location);
             closeModal();
           }}>
-          <FontText style={{ fontSize: 22, lineHeight: 37, fontWeight: 'bold', color: theme.color.border }}>
+          <FontText
+            style={{
+              fontSize: selectedLocationPrimaryFontSize,
+              lineHeight: 37,
+              fontWeight: 'bold',
+              color: theme.color.border,
+            }}>
             선택
           </FontText>
         </TouchableOpacity>
