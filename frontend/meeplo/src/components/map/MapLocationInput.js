@@ -6,7 +6,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
-import { getAmuseRecommendation } from '../../redux/recommendationSlice';
+import { getAmuseRecommendation, clearRecommendedAmuses } from '../../redux/recommendationSlice';
 import FontText from '../common/FontText';
 
 import ModalCover from '../common/ModalCover';
@@ -94,7 +94,11 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
   const openModal = () => {
     setShowModal(true);
   };
-  const closeModal = () => setShowModal(false);
+  const closeModal = () => {
+    closeSelectedLocationInfoView();
+    setShowModal(false);
+    dispatch(clearRecommendedAmuses());
+  };
   const openSelectedLocationInfoView = () => {
     setShowSelectedLocationInfoView(true);
   };

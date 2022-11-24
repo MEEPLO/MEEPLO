@@ -16,7 +16,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
-import { getMiddlePoint, clearRecommendedStations, clearRecommendedAmuses } from '../../redux/recommendationSlice';
+import { getMiddlePoint, clearRecommendedStations } from '../../redux/recommendationSlice';
 import { getStationList } from '../../redux/locationSlice';
 
 import ModalCover from '../common/ModalCover';
@@ -105,7 +105,6 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
   const closeModal = () => {
     closeSelectedStationInfo();
     dispatch(clearRecommendedStations());
-    dispatch(clearRecommendedAmuses());
     setShowModal(false);
   };
   const openSelectedStationInfo = () => {
