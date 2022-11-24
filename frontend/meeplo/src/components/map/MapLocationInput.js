@@ -30,26 +30,12 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedLocation, setSelectedLocation] = useState();
-  const [showSelectedLocationInfoView, setShowSelectedLocationInfoView] = useState();
+  const [showSelectedLocationInfoView, setShowSelectedLocationInfoView] = useState(false);
 
   const webViewRef = useRef();
   const selectedLocationInfoViewPositionAnim = useRef(new Animated.ValueXY()).current;
   const recommendedAmuses = useSelector(state => state?.recommendation?.recommendedAmuses);
   const isRecommendationLoading = useSelector(state => state?.recommendation?.isLoading);
-
-  useEffect(() => {
-    if (meet && meet.id) {
-      const currentPosition = {
-        lat: meet.lat,
-        lng: meet.lng,
-      };
-      setMapCenter(currentPosition);
-      postMessage(MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER, currentPosition);
-    } else {
-      setCurrentPosition();
-    }
-    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
-  }, [meet, webViewRef.current]);
 
   useEffect(() => {
     if (Array.isArray(recommendedAmuses)) {
@@ -95,6 +81,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
 
   const openModal = () => {
     setShowModal(true);
+    setMapViewPosition();
   };
   const closeModal = () => setShowModal(false);
   const openSelectedLocationInfoView = () => {
@@ -190,6 +177,24 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
     dispatch(getAmuseRecommendation(form));
   };
 
+  const onMapViewLoad = () => {
+    setMapViewPosition();
+  };
+
+  const setMapViewPosition = () => {
+    if (meet && meet.id) {
+      const currentPosition = {
+        lat: meet.lat,
+        lng: meet.lng,
+      };
+      setMapCenter(currentPosition);
+      postMessage(MESSAGE_TYPE.UPDATE_MAPVIEW_CENTER, currentPosition);
+    } else {
+      setCurrentPosition();
+    }
+    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
+  };
+
   const selectedLocationInfoViewUp = useCallback(() => {
     Animated.spring(selectedLocationInfoViewPositionAnim, {
       toValue: { x: 0, y: selectedLocationInfoViewUpY },
@@ -274,7 +279,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} onMessageHandler={onMessage} />
+          <MapView ref={webViewRef} onMessageHandler={onMessage} onLoad={onMapViewLoad} />
         </View>
 
         <View style={styles.mapInterfaceView} pointerEvents="box-none">

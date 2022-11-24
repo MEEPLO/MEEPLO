@@ -191,6 +191,15 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
     dispatch(getStationList(searchValue));
   };
 
+  const onMapViewLoad = () => {
+    setMapViewPosition();
+  };
+
+  const setMapViewPosition = () => {
+    setCurrentPosition();
+    postMessage(MESSAGE_TYPE.INIT_MAP_HEIGHT, screen.height);
+  };
+
   const renderSelectedStationInfoView = station => {
     if (!station) return null;
 
@@ -310,7 +319,7 @@ const MapStationInput = ({ type, required, value, onValueChange, state, userInfo
 
       <ModalCover visible={showModal} onRequestClose={closeModal}>
         <View style={styles.backgroundMapView}>
-          <MapView ref={webViewRef} onMessageHandler={onMessage} />
+          <MapView ref={webViewRef} onMessageHandler={onMessage} onLoad={onMapViewLoad} />
         </View>
         {!isLoading && renderMapInterface()}
       </ModalCover>
