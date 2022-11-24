@@ -86,7 +86,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
         </View>
       ));
     } else {
-      return <FontText style={styles.itemContent}>미정</FontText>;
+      return <FontText style={styles.itemContent}></FontText>;
     }
   };
 
@@ -159,7 +159,7 @@ const ScheduleDetailScreen = ({ route, navigation }) => {
                 </View>
                 <View style={styles.itemContentView}>
                   <FontText style={styles.itemContent}>
-                    {schedule?.meetLocation?.id !== 0 ? schedule?.meetLocation?.name : '미정'}
+                    {schedule?.meetLocation?.id !== 0 ? schedule?.meetLocation?.name : ''}
                   </FontText>
                   <FontText style={styles.itemSubContent}> {schedule?.meetLocation?.address}</FontText>
                 </View>
