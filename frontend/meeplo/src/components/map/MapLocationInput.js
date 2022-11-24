@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions, Image }
 import { useDispatch, useSelector } from 'react-redux';
 import { getNearLocations } from '../../redux/locationSlice';
 import Geolocation from 'react-native-geolocation-service';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 
 import { theme } from '../../assets/constant/DesignTheme';
 import { MESSAGE_TYPE, createMessage, parseMessage } from '../../helper/message';
@@ -218,6 +220,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
+            marginBottom: 10,
           }}>
           <Image
             style={{
@@ -238,6 +241,7 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
 
         <TouchableOpacity
           style={{
+            height: 45,
             backgroundColor: theme.color.bright.blue,
             marginTop: 30,
             alignItems: 'center',
@@ -249,7 +253,9 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             onValueChange(location);
             closeModal();
           }}>
-          <FontText style={{ fontSize: 24, fontWeight: 'bold', color: 'gray' }}>선택</FontText>
+          <FontText style={{ fontSize: 22, lineHeight: 37, fontWeight: 'bold', color: theme.color.border }}>
+            선택
+          </FontText>
         </TouchableOpacity>
       </View>
     );
@@ -297,7 +303,8 @@ const MapLocationInput = ({ type, required, value, onValueChange, keywords, meet
             <TouchableOpacity
               style={styles.selectedLocationInfoViewButton}
               onPress={() => closeSelectedLocationInfoView()}>
-              <FontText>X</FontText>
+              {/* <FontText>X</FontText> */}
+              <FontAwesomeIcon icon={faXmark} size={17} style={{ color: '#585858' }} />
             </TouchableOpacity>
 
             {renderSelectedLocationInfoView(selectedLocation)}
@@ -334,8 +341,8 @@ const styles = StyleSheet.create({
   },
   mapSearchNearButton: {
     backgroundColor: theme.color.bright.red,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
 
     borderRadius: theme.radius.base,
     borderWidth: 2,
@@ -343,6 +350,7 @@ const styles = StyleSheet.create({
   },
   mapSearchNearText: {
     color: 'white',
+    fontWeight: 'bold',
   },
   selectedLocationInfoView: {
     position: 'absolute',
