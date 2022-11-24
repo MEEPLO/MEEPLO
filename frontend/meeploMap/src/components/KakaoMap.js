@@ -255,7 +255,7 @@ const KakaoMap = () => {
                   padding: 5,
                   borderRadius: 5,
                 }}>
-                {time.groupMemberName}
+                {time.memberName}
               </div>
             </CustomOverlayMap>
 
