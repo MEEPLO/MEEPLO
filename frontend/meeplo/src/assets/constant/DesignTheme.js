@@ -32,7 +32,7 @@ const theme = {
     subColor: '#686868',
   },
   radius: {
-    base: 20,
+    base: 17,
     input: 15,
   },
   border: {

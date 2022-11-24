@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   inputViewStyle: {
-    marginBottom: 20,
+    marginBottom: 30,
   },
   navigateViewStyle: {
     width: '100%',
